@@ -12,7 +12,7 @@
 #' matches the units used in range. If no transformation, NULL.
 #' @param values For `feature_classes()`, a character string of
 #' any subset of "lqpht" (for example, "lh")
-#' @return a `param` object that can be used for tuning.
+#' @returns a `param` object that can be used for tuning.
 #' @examples
 #' regularization_multiplier()
 #' feature_classes()

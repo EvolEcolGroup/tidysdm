@@ -9,6 +9,9 @@ grid_offset(data)
 \arguments{
 \item{data}{a \link[sf:sf]{sf::sf} dataset used to size the grid}
 }
+\value{
+the grid offset
+}
 \description{
 This function facilitates using \link[spatialsample:spatial_block_cv]{spatialsample::spatial_block_cv} multiple
 times in an analysis. \link[spatialsample:spatial_block_cv]{spatialsample::spatial_block_cv} creates a grid

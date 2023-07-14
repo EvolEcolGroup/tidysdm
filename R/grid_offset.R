@@ -9,6 +9,7 @@
 #' full dataset before [spatial_initial_split()]. The resulting cellsize can
 #' be used as an option in [spatialsample::spatial_block_cv].
 #' @param data a [sf::sf] dataset used to size the grid
+#' @returns the grid offset
 #' @export
 
 grid_offset<-function(

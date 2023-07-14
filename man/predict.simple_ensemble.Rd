@@ -46,6 +46,9 @@ column names of the predictions.}
 
 \item{...}{not used in this method.}
 }
+\value{
+a tibble of predictions
+}
 \description{
 Predict for a new dataset by using a simple ensemble. Predictions from individual
 models are combined according to \code{fun}

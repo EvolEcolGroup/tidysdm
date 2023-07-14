@@ -37,6 +37,10 @@
 \item{...}{any other parameters to pass to the \code{data.frame} version of
 the metric.}
 }
+\value{
+A tibble with columns \code{.metric}, \code{.estimator}, and \code{.estimate}
+and 1 row of values.
+}
 \description{
 \code{tidysdm} provides methods to handle \link[sf:sf]{sf::sf} objects for the following
 \link{yardstick} metrics:

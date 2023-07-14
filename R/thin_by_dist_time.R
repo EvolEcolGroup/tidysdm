@@ -26,7 +26,7 @@
 #' @param dist_min Minimum distance between points (in units appropriate for
 #' the projection, or meters for lonlat data).
 #' @param interval_min Minimum time interval between points, in days.
-#' @return An object of class [`sf::sf`] or [`data.frame`], the same as "data".
+#' @returns An object of class [`sf::sf`] or [`data.frame`], the same as "data".
 #' @export
 #' @importFrom rlang :=
 

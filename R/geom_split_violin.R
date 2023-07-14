@@ -13,7 +13,7 @@
 #' and [stat_ydensity()].
 #' @param nudge Add space between the half-violin and the middle of the space
 #' allotted to a given factor on the x-axis.
-#' @return NULL
+#' @returns a [`ggplot2::layer`] object
 #' @examples
 #' data("bradypus", package="maxnet")
 #' bradypus_tb <- tibble::as_tibble(bradypus) %>% dplyr::mutate(presence = relevel(factor(

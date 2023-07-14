@@ -11,6 +11,7 @@
 #' @param data a [sf::sf] dataset used to size the grid
 #' @param n the number of cells in the grid, defaults to c(10,10), which is also
 #' the default for [sf::st_make_grid()]
+#' @returns the cell size
 #' @export
 
 grid_cellsize<-function(

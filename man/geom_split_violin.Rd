@@ -80,6 +80,9 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
+\value{
+a \code{\link[ggplot2:layer]{ggplot2::layer}} object
+}
 \description{
 This geometry displays the density distribution of two groups side by side,
 as two halves of a violin. Note that an empty\code{x} aesthetic has to be provided even

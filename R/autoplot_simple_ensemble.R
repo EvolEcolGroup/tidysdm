@@ -25,7 +25,7 @@
 #'
 #' If multiple resamples are used, confidence bounds are shown for each result
 #' (95% confidence, by default).
-#' @return A ggplot object.
+#' @returns A ggplot object.
 #' @examples
 #'   # we use the two_class_example from `workflowsets`
 #'   two_class_ens <- simple_ensemble() %>%

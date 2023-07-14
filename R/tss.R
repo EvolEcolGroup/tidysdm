@@ -20,7 +20,7 @@
 #' @param na_rm A logical value indicating whether NA values should be stripped before the computation proceeds.
 #' @param case_weights The optional column identifier for case weights. This should be an unquoted column name that evaluates to a numeric column in data. For ⁠_vec()⁠ functions, a numeric vector.
 #' @param event_level A single string. Either "first" or "second" to specify which level of truth to consider as the "event". This argument is only applicable when estimator = "binary". The default is "first".
-#' @return A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
+#' @returns A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 #' For grouped data frames, the number of rows returned will be the same as the
 #' number of groups.
 #' @examples

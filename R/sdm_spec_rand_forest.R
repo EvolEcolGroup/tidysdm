@@ -16,7 +16,7 @@
 #' /item: "custom" passes the options from '...'
 #' /item: "none" does not tune any hyperparameter
 #' }
-#' @return a [parsnip::model_spec] of the model.
+#' @returns a [parsnip::model_spec] of the model.
 #' @examples
 #' test_rf_spec <- sdm_spec_rf(tune="sdm")
 #' test_rf_spec

@@ -8,7 +8,7 @@
 #' @param new_data A rectangular data object, such as a data frame.
 #' @param ... parameters to be passed to [parsnip::predict.model_fit]
 #' customise the model. See the help of that function for details.
-#' @return an appropriate object depending on the type argument, see
+#' @returns an appropriate object depending on the type argument, see
 #' [parsnip::predict.model_fit] for details.
 #' @export
 

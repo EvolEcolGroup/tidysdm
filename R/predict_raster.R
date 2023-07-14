@@ -7,7 +7,7 @@
 #' levels with the same names as the variables used in `object`
 #' @param ... parameters to be passed to the standard `predict()` function
 #' for the appropriate object type.
-#' @return a [`terra::SpatRaster`] with the predictions
+#' @returns a [`terra::SpatRaster`] with the predictions
 #' @export
 #'
 predict_raster <- function (object, raster,...) {

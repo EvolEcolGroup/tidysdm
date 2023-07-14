@@ -7,7 +7,7 @@
 #' @param prop The proportion of data to be retained for modeling/analysis.
 #' @param strategy A sampling strategy from [spatialsample]
 #' @param ... parameters to be passed to the `strategy`
-#' @return An `rsplit` object that can be used with the [rsample::training] and [rsample::testing]
+#' @returns An `rsplit` object that can be used with the [rsample::training] and [rsample::testing]
 #'  functions to extract the data in each split.
 #' @examples
 #' set.seed(123)

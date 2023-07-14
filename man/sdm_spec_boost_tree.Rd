@@ -30,5 +30,7 @@ This function returns a \link[parsnip:model_spec]{parsnip::model_spec} for a Boo
 be used as a classifier of presences and absences in Species Distribution Model.
 }
 \examples{
-test_bt_spec <- sdm_spec_boost_tree()
+standard_bt_spec <- sdm_spec_boost_tree()
+full_bt_spec <- sdm_spec_boost_tree(tune = "all")
+custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune())
 }

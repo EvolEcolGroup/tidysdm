@@ -9,7 +9,7 @@
 #' @param metric A character string (or NULL) for which metric to optimize.
 #' If NULL, the first metric is used.
 #' @param ... not used at the moment.
-#' @return a [simple_ensemble] with additional member(s)
+#' @returns a [simple_ensemble] with additional member(s)
 #' @export
 
 # Note that `add_member` is tested in `test_simple_ensemble.R`

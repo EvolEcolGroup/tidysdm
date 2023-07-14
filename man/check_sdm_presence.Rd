@@ -13,6 +13,9 @@ check_sdm_presence(.data, .col, presence_level = "presence")
 
 \item{presence_level}{the string used to define the presence level of \code{.col}}
 }
+\value{
+TRUE if correctly formatted
+}
 \description{
 In \code{tidysdm}, the string defining presences should be the first level of
 the response factor. This function checks that the column is correctly formatted.

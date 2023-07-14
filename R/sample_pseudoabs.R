@@ -33,7 +33,7 @@
 #' @param class_label the label given to the sampled points. Defaults to `pseudoabs`
 #' @param return_pres return presences together with pseudoabsences/background
 #'  in a single tibble
-#' @return An object of class [tibble::tibble]. If presences are returned, the
+#' @returns An object of class [tibble::tibble]. If presences are returned, the
 #' presence level is set as the reference (to match the expectations in the
 #' `yardstick` package that considers the first level to be the event)
 #' @export
