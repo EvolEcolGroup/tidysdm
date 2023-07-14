@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,14 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
 </form>
 
-      <ul class="navbar-nav"></ul>
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/EvolEcolGroup/tidysdm/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 
     
@@ -72,7 +79,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>application with palaeodata</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/HEAD/vignettes/a1_palaeodata_application.Rmd" class="external-link"><code>vignettes/a1_palaeodata_application.Rmd</code></a></small>
       <div class="d-none name"><code>a1_palaeodata_application.Rmd</code></div>
     </div>
 
@@ -87,7 +94,7 @@ fitted with <code>tidysdm</code> on time-scattered
 samples covering different time periods. We first load
 <code>tidysdm</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://evolecolgroup.github.io/tidysdm/">tidysdm</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: tidymodels</span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ────────────────────────────────────── tidymodels 1.1.0 ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">broom       </span> 1.0.5     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">recipes     </span> 1.0.6</span></span>
@@ -103,7 +110,7 @@ samples covering different time periods. We first load
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Use suppressPackageStartupMessages() to eliminate package startup messages</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Use <span style="color: #00BB00;">tidymodels_prefer()</span> to resolve common conflicts.</span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -323,7 +330,7 @@ but a custom formula can be provided instead.</p>
 <p>We now want to set up a spatial block cross-validation scheme to tune
 and assess our models:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://evolecolgroup.github.io/tidysdm/">tidysdm</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1005</span><span class="op">)</span></span>
 <span><span class="va">horses_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">horses</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">horses_cv</span><span class="op">)</span></span></code></pre></div>
@@ -337,16 +344,16 @@ and assess our models:</p>
 <span>               metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 4 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (720ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (616ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 4 resampling: default_gam</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 resampling: default_gam (1.3s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 resampling: default_gam (976ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 4 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_rf (4.8s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_rf (4.1s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">4 of 4 tuning:     default_gbm</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_gbm (33s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_gbm (29.2s)</span></span></span></code></pre></div>
 <p>Note that <code>workflow_set</code> correctly detects that we have no
 tuning parameters for <em>glm</em> and <em>gam</em>. We can have a look
 at the performance of our models with:</p>
