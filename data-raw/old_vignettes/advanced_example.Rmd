@@ -1,0 +1,597 @@
+---
+title: "Overview"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# SDMs with tidymodels
+
+Species Distribution Modelling relies on a number of algorithms, many of which
+have a number of hyperparameters that require turning. The `tidymodels` universe
+includes a number of packages specifically design to fit, tune and validate
+models. The advantage of `tidymodels` is that the models syntax and the results
+returned to the users are standardised, thus providing a coherent interface to
+modelling. Given the variety of models required for SDM, `tidymodels` provide an
+ideal framework. `tidysdm` provides a number of wrappers and specialised
+functions to facilitate the fitting of SDM with `tidymodels`.
+
+# Preparing your data
+
+We start by reading in a set of locations for leopards covering Africa and
+Eurasia.
+
+```{r}
+library(tidysdm)
+library(stacks)
+library(readr)       # for importing data
+leopards <- read_csv(system.file("extdata/leopard_coords.csv",package="tidysdm"))
+```
+
+Let us look at the data:
+```{r}
+leopards
+```
+
+We now need to extract climatic variables for this species. As we are working on a very large scale,
+we will use reconstructions at 0.5 degree resolution from `pastclim`
+
+```{r}
+library(pastclim)
+# main area relevant 
+leopard_vec<- terra::vect("POLYGON ((0 70, 20.8 72.4,50 80,170 80,170 10,119 2.4,119.2 0.9, 116.1 -7.7,115.3 -9.9,114 -12,100 -40,-25 -40,-17.9 60.9, 0 70))")
+
+# climate variables to consider
+climate_vars <- c("bio01","bio04", "bio05","bio06", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio13", "bio14", "bio16", "bio18","bio17", "bio19","npp", "lai", "rugosity")
+
+climate_present<-pastclim::region_slice(time_bp = 0, 
+                                        bio_variables = climate_vars, 
+                                        data="Beyer2020", 
+                                        crop=leopard_vec)
+```
+
+Environmental variables are often highly correlated, and collinearity is an issue
+for several types of models. For many projects, we will want to subset our data
+to a set of uncorrelated variables. There are a number of approaches to detect
+and remove correlated variables. In `tidysdm`, you can use the function 
+`filter_high_cor` to return a set of variables all with correlations below a given cutoff.
+
+```{r choose_var_cor}
+vars_to_keep <- filter_high_cor(climate_present, cutoff = 0.7)
+vars_to_keep
+```
+
+It is often better to choose variables based on some biology... but for this
+simple example, we will go with this approach:
+
+```{r}
+climate_present<-climate_present[[vars_to_keep]]
+```
+
+Now thin the observations to have a one per cell in the raster (it would be better
+if we had an equal area projection...):
+```{r}
+leopards<-thin_by_cell(leopards, raster = climate_present,
+                      coords=c("Longitude", "Latitude"))
+nrow(leopards)
+```
+
+Now sample background pseudoabsences, selecting as many points as presences
+```{r}
+set.seed(123)
+leopards_all<-sample_pseudoabs(leopards,
+                 n=nrow(leopards), 
+                               raster=climate_present,
+                               coords=c("Longitude", "Latitude"))
+```
+
+
+Now let's get the climate for these location
+```{r climate_for_presences}
+leopards_all <- leopards_all %>%
+  bind_cols(terra::extract(climate_present,
+                              as.matrix(leopards_all[,c("Longitude","Latitude")])),)
+```
+
+# The initial split
+
+Now that we have presences and absences (background), we want to split our data into a
+training set (on which the models will be fitted) and a testing set (which
+will allows to quantify how good we are at predicting data that we haven't
+used to parameterise the models). In `tidymodels`, we call this an `initial_split`.
+For spatial data, we usually want to account for the spatial autocorrelation
+of our data, and sample our data in a geographically structured way. The
+pacakge `spatialsample` provides a number of sampling routines for spatial data.
+We will use a block approach (splitting the data into grid cells, "blocks").
+
+To get the most out of `spatialsamples`, we need to convert our data into an `sf`
+object from the `sf` package:
+```{r}
+library("sf")
+leopards_sf <- st_as_sf(leopards_all, coords = c("Longitude","Latitude"))
+st_crs(leopards_sf) = 4326
+leopards_sf
+```
+
+Let's plot the points quickly:
+```{r}
+library(ggplot2)
+ggplot() + geom_sf(data = leopards_sf, aes(col = class))
+```
+Ok, we are now ready to split our data. It is wise to set the seed of the random
+number generator every time we do any sampling, so that our code is fully 
+repeatable. We will use retain 20% of the data (1/5) for the testing set, and
+use the rest for training.
+
+```{r setup}
+library(tidysdm)
+set.seed(123)
+leopards_initial <- spatial_initial_split(leopards_sf, prop = 1/5, spatial_block_cv)
+# inspect it
+print(leopards_initial)
+```
+
+Let's visualise the split
+```{r}
+autoplot(leopards_initial)
+```
+
+# Use the training data to fit a GLM
+
+We can now extract the training set from our `leopards_initial` split. We will
+use the training set to parameterise our models:
+```{r}
+leopards_training <- training(leopards_initial)
+leopards_training
+```
+
+Next, we need to set up a `recipe` to shape our data. Recipes define predictors
+and outcomes, as well as transforming variables if necessary. In our case, 
+we can use a very simple recipe that only provides a formula (*class* is the outcome,
+all other variables are predictors; note that, for `sf` objects, `geometry` is
+automatically ignored as a predictor):
+```{r}
+leopards_rec <- recipe(leopards_training, formula=class~.)
+leopards_rec
+```
+
+In principle, one could use `step_corr` to remove correlated variables, 
+instead of removing them earlier on as we did. However,
+this can be lead to side effects that might be undesirable. `step_corr` will remove
+variables based on the correlation within a given dataset. As we will use the recipe
+later in multiple subsets of our leopard dataset, the variables selected by
+`step_corr` might vary, and that is incompatible with certain types of models (such
+as *gam*s. So, for many applications, removing variables before a `recipe` will
+be the easier option, but it is not wrong to take the `step_corr` approach (just
+make sure it does what you want, and avoid using it if you plan to fit *gam*s).
+
+Now that we have a recipe, we can start adding it to a workflow, which we will
+be able to reuse for multiple analyses:
+
+```{r}
+base_wkflow <-# new workflow object
+  workflow() %>% # use workflow function
+  add_recipe(leopards_rec) # add the new recipe
+```
+
+We will start by fitting a GLM. In `tidymodel`, we need to create a model
+specification. This includes information about the type of model and the engine
+(package) used to fit it. `tidysdm` has a number of model specifications
+already tailored for SDM. They start with `sdm_spec_*` where "*" is
+substituted for the kind of model that we want to run. So, for a glm, we can
+use the function `sdm_spec_glm()` to fetch the desired model specification:
+```{r}
+sdm_spec_glm()
+```
+
+We can now expand our workflow add the model specification:
+
+```{r}
+glm_wflow <- # new workflow object
+  base_wkflow %>%
+  add_model(sdm_spec_glm())   # add your model spec
+```
+
+The last step is to actually fit the workflow to the data. As glms do not have
+hypeparameters to tune, we can simply run:
+
+```{r}
+glm_res <- 
+  glm_wflow %>% 
+  fit(data=leopards_training)
+```
+
+Let's inspect the results of this model:
+```{r}
+glm_res
+```
+
+# Use the model on the testing dataset
+
+We can now assess how well our model fits by making predictions on the testing 
+dataset. We can do that simply by using our `initial_split` object and feeding
+it to `last_fit`:
+
+```{r}
+glm_test_res <- glm_res %>%
+  last_fit(leopards_initial)
+```
+
+And see how well we have done with:
+
+```{r}
+glm_test_res %>%
+  collect_metrics()
+```
+Accuracy is generally a bad measure to use in SDMs (EXPLAIN). The Area Under 
+the Curve (AUC) is arguably on the better measures, and it is provided
+automatically by `tidymodels`.
+
+We can explore more metrics by making explicit predictions from the fitted glm.
+we can do so with:
+```{r}
+glm_predictions <- glm_test_res %>% 
+  collect_predictions()
+
+glm_predictions
+```
+
+In a glm (as well as in many other models used for SDMs), the 
+predictions are probabilities of belonging to one class or another (in our case,
+being a `presence` or `background`). For any given point we are given the
+probability for beloning to either class. We are also given the predicted
+class, `.pred_class`, but this is simply based on a 0.5 threshold. In SDMs,
+we often want to redefine that threshold (e.g. based on given sensitivity or
+optimising other quantities).
+
+We can now estimate AUC directly with:
+```{r}
+roc_auc(glm_predictions, truth = class,
+    .pred_presence)
+```
+
+Whilst `last_fit` is very convenient, there might be cases when we want to get
+predictions for other dataset. We can do so by using directly `predict` on
+the fitted workflow. Let
+us extract the testing dataset manually, and then use it as a new dataset
+to predict directly form the fitted workflow:
+
+```{r}
+leopards_testing <- testing(leopards_initial)
+
+glm_predictions <- leopards_testing  %>%
+  select(class) %>% # we combine the class observations from the dataset
+  cbind(predict(glm_res, new_data=leopards_testing, type="prob")) # with predicted probabilities
+
+head(glm_predictions)
+```
+Note that the object is an `sf::sf` object, allowing us to plot the predictions
+if we want to. Whilst `metrics` from `yardstick` can not handle `sf::sf` objects natively,
+`tidysdm` expands all probability and class metrics to take `sf::sf` objects,
+as well as providing additional metrics that are useful for sdms (such as Boyce's
+index).
+
+We can assess the goodness of fit using the Area Under the Curve (AUC). This
+metric works on the predicted probabilities, and so obviates the need to
+discretise the predictions with a threshold.
+
+```{r}
+roc_auc(glm_predictions, truth = class,
+    .pred_presence)
+```
+
+# Fitting a gam
+
+Fitting a gam instead of a glm is trivial, and shows the advantages of the 
+standardised interfaces of `tidymodels`. We start by creating a workflow.
+There is, unfortunately, an added twist specific to gams, we need to provide 
+the formula in the `fit` command
+(there is an open issue in `parnsnip` that aims at solving this:
+https://github.com/tidymodels/parsnip/issues/770). Unless something customised
+is needed, we can use the `gam_formula()` to build it for us:
+TODO we could avoid this by creating out own version of `add_model()`
+
+```{r}
+gam_wflow <-
+  base_wkflow %>% 
+  add_model(sdm_spec_gam(), formula = gam_formula(leopards_rec) )   # add your model spec
+```
+
+
+```{r}
+gam_res <- 
+  gam_wflow %>% 
+  fit(data=leopards_training)
+```
+
+Fitting a gam 
+
+```{r}
+gam_test_res <- 
+  gam_res %>% 
+  last_fit(leopards_initial)
+```
+
+We can assess the goodness of this model with:
+```{r}
+gam_test_res %>%
+  collect_metrics()
+```
+
+The added flexibility of the gam provides an AUC that is somehat higher than the
+glm.
+
+# Fitting a Random Forest model
+
+In principle, we can fit a Random Forest with standard parameters following the
+template above:
+
+```{r}
+rf_wflow <-
+  base_wkflow %>% 
+  add_model(sdm_spec_rf(tune="none"))
+rf_res <- 
+  rf_wflow %>% 
+  fit(data=leopards_training)
+```
+
+Random Forest, like many other ML algorithms, has some hyperparameters; RF generally works
+well using default values for hyperparameters, but we might want to do some 
+tuning to fully optimise the algorithm. In this instance, we decide that we want
+to tune `mtry` and `min_n`. First, we need to modify our model specification. 
+We can achieve this by simply using:
+
+```{r}
+rf_tuning_spec <- 
+  sdm_spec_rf(mtry=tune(), min_n=tune(), tune="custom")
+```
+
+And then create a workflow with it:
+```{r}
+rf_tuning_wflow <-
+  base_wkflow %>% 
+  add_model(rf_tuning_spec)
+```
+
+To tune the hyperparameters of a model, we have to split our dataset further. We
+will set up block crossvalidation on our traning set, thus creating multiple
+folds. We want to use the same grid that we used for our initial split, so we
+will prescribe the `cellsize` and `offset` in `spatial_block_cv`; we can use
+the helper functions `grid_cellsize()` and `grid_offset()` applied to the
+original dataset:
+
+```{r}
+set.seed(234)
+leopards_cv <- spatial_block_cv(leopards_training, v = 5,
+                                cellsize = grid_cellsize(leopards_sf),
+                                offset = grid_offset(leopards_sf))
+autoplot(leopards_cv)
+```
+We can clearly see the gaps left by the *testing* set being removed ealier.
+
+We can now tune the hypeparameters. We will chose a grid of 5 combinations of
+parameters (in real life, you will want more than that!):
+```{r}
+doParallel::registerDoParallel(cores=2)
+
+set.seed(345)
+tune_res <- tune_grid(
+  rf_tuning_wflow,
+  resamples = leopards_cv,
+  grid = 5
+)
+tune_res
+```
+
+The message “Creating pre-processing data to finalize unknown parameter: mtry” 
+is due to the fact that the hyperparameters *mtry* depends on the number of
+predictors in the dataset, so `tune_grid()` has to define its range once it
+receives data to fit.
+
+We can now inspect the impact of the tuning paramters on AUC:
+```{r}
+autoplot(tune_res, metric="roc_auc")
+```
+
+We can see that the impacts are pretty minimal (<1% in AUC). This is not
+surprising, RF are well known for doing well without tuning. Other ML algorithms
+are much more demanding. We can generate specification for the best model by
+combining our original specification with the best model based on AUC: 
+
+```{r}
+rf_best_spec <- finalize_model(
+  rf_tuning_spec,
+  select_best(tune_res, "roc_auc")
+)
+
+rf_best_spec
+```
+
+We can now create a workflow with this model:
+```{r}
+rf_best_wflow <-
+  base_wkflow %>% 
+  add_model(rf_best_spec)
+```
+
+Fit it to the training data:
+
+```{r}
+rf_best_res <-
+  rf_best_wflow %>% 
+  fit (data=leopards_training)
+```
+
+And then assess it against the testing data:
+
+```{r}
+rf_test_res <-
+  rf_best_res %>% 
+  last_fit (leopards_initial)
+
+rf_test_res %>% collect_metrics()
+```
+The AUC has not dropped too much compared to the values we were seeing in the
+training set, suggesting that the models are reasonably robust.
+
+# Ensemble modelling
+
+When making predictions with SDMs, we often use ensembles of models. By combining
+models in an ensemble, we can avoid some of the extremes that any given model
+might produce. There are multiple ways of combining models, from simply 
+averaging to more sophisticated
+approaches that weight predictions based on some metric defining the goodness of
+fit (such as AUC). To be able to generate ensembles, we need to process our
+models in identical ways. A major difference between our approach for glm and 
+gam and that for random forests was to use a Cross Validation folds resampling in the latter.
+We used that for hyperparameter tuning, but it also allowed us to assess the model
+fit on the training dataset, before we came to the final assessment on the test dataset.
+If we want to weigh our models according to their performance, we need to take a
+similar approach for gam and glm, so that we have like for like metrics for all
+models on the training set.
+
+`workflowsets` provide an elegant way to fit multiple models in a similar,
+coherent way; `tidysdm` automatically loads this package. Let's build up a
+`workflowset` using our data recipe we created
+above:
+
+```{r}
+leopards_models <- 
+   workflow_set(
+      preproc = list(default = leopards_rec),
+      models = list(glm = sdm_spec_glm(), # the standard glm specs
+                    gam = sdm_spec_gam(), # the standard sdm specs
+                    rf = sdm_spec_rf()), # rf specs with default tuning
+      cross = TRUE # make all combinations of preproc and models
+   )
+
+
+leopards_models
+```
+
+Unfortunately, *gam*s are once again problematic, and we need to update the model
+to include the formula:
+
+```{r}
+leopards_models <- update_workflow_model(leopards_models,
+                                         "default_gam",
+                                         spec = sdm_spec_gam(),
+                                         formula=gam_formula(leopards_rec))
+```
+
+Note that we only have one preprocessing recipe; in principle, we could
+consider different ways to preprocess the data
+(e.g. different transformations). You could create recipes that
+select different predictors. However, that approach will be incompatible with
+*gam*s, as they require a formula to describe the model. If you want to fit
+*gam*s to recipes with different predictors, you will need to have multiple
+`workflow_set`s, one per recipe.
+
+Before we tune the models, we need to edit some controls to store additional information
+that we will use later:
+
+```{r}
+leopards_models  <-
+  leopards_models  %>%
+  option_add(control = control_ensemble_grid())
+
+```
+
+We can now use the block CV folds we built earlier from the training dataset to
+tune and assess the models:
+```{r}
+set.seed(345)
+leopards_models <- 
+   leopards_models %>% 
+   workflow_map("tune_grid", resamples = leopards_cv, grid = 5, 
+                metrics = metric_set(roc_auc), verbose = TRUE)
+```
+
+Note that `workflow_set` correctly detects that we have no tuning parameters for 
+*glm* and *gam*. We can have a look at the performance of our models with:
+
+```{r}
+leopards_models %>% collect_metrics()
+
+```
+And plot it
+```{r}
+autoplot(leopards_models)
+```
+
+We are now ready to build an ensemble. In `tidymodels`, the standard way to
+build ensembles is to use *stacking*. Stacking ensembles in an algorithm that
+learns how to best combine the models to predict the data. We will create our
+stack weights based on our CV resamples (with `blend_predictions`). For models
+that have non-zero weights (and thus non-zero coefficients), we then fit them
+to the full training dataset, so that we are then ready to make predictions
+for other datasets (such as the testing set, and then eventually other time
+periods or regions).
+
+```{r}
+leopards_model_st <- 
+  # initialize the stack
+  stacks() %>%
+  # add candidate members
+  add_candidates(leopards_models) %>%
+  # determine how to combine their predictions
+  blend_predictions() %>%
+  # fit the candidates with nonzero weights (i.e.nonzero stacking coefficients)
+  fit_members()
+
+leopards_model_st
+```
+We can see that the ensemble include two version fo the *random forest*, and the
+*glm* and *gam* models. We can plot the respective weights with:
+
+```{r}
+autoplot(leopards_model_st, type = "weights")
+```
+
+Furthermore, we can visualise the trade-off between minimising the number
+of members (models to be used) and performance with:
+```{r}
+autoplot(leopards_model_st)
+```
+
+And finally, we can make predictions on the testing data with:
+
+```{r}
+leopards_test_pred <- 
+  leopards_testing %>%
+  bind_cols(predict(leopards_model_st, ., type="prob"))
+```
+
+And look at the goodness of fit with AUC
+
+```{r}
+roc_auc(data= leopards_test_pred,truth=class,.pred_presence)
+```
+
+# Projecting to other times
+
+We will project the leopard range to a different time. We will get the climate
+for the Last Glacial Maximum, using the `pastclim` package.
+
+```{r}
+pred_vars <- names(leopards_sf)[2:(length(names(leopards_sf))-1)]
+climate_lgm<-pastclim::region_slice(time_bp = -21000, 
+                                        bio_variables = pred_vars, 
+                                        data="Beyer2020", 
+                                        crop=leopard_vec)
+```
+
+And predict using the ensemble:
+```{r}
+lgm_prediction <- predict_raster(leopards_model_st, climate_lgm, type="prob")
+plot(lgm_prediction)
+```

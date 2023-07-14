@@ -1,0 +1,49 @@
+---
+title: "ensemble work"
+author: "Andrea"
+date: "2023-05-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Ensemble
+
+
+Ideally, for each type of model (i.e. each workflow), we want the best model. We
+can get those with:
+
+```{r}
+rank_results(leopards_models, rank_metric = "roc_auc", select_best = TRUE)
+
+```
+And plot them with:
+```{r}
+autoplot(leopards_models, select_best=TRUE)
+```
+
+We are now ready to finalize the workflow_set, choosing the metric that we want to use:
+```{r}
+leopards_ensemble <- finalize_worflow_set(leopards_models, metric = "roc_auc")
+
+leopards_ensemble <- fit(leopards_ensemble, data=leopards_training)
+
+leopards_testing_preds <-predict(leopards_ensemble, new_data = leopards_testing, type="prob")
+
+# we want to add a last_fit option for ensemble objects
+```
+
+
+
+
+# Troubleshooting
+
+Sometimes, when turing a workflow_set, some individual resamples might fail. This
+will be generally visible when creating summaries, as the n of the resamples will
+be lower. We can investigate the problematic workflow with:
+```{r}
+extract_workflow_set_result(leopards_models, id = "default_gam")
+```
+

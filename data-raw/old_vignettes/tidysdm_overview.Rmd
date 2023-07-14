@@ -1,0 +1,468 @@
+---
+title: "tidysdm overview"
+output: rmarkdown::html_vignette
+#output: rmarkdown::pdf_document
+vignette: >
+  %\VignetteIndexEntry{tidysdm overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# SDMs with `tidymodels`
+
+Species Distribution Modelling relies on a number of algorithms, many of which
+have a number of hyperparameters that require turning. The `tidymodels` universe
+includes a number of packages specifically design to fit, tune and validate
+models. The advantage of `tidymodels` is that the models syntax and the results
+returned to the users are standardised, thus providing a coherent interface to
+modelling. Given the variety of models required for SDM, `tidymodels` is an
+ideal framework. `tidysdm` provides a number of wrappers and specialised
+functions to facilitate the fitting of SDM with `tidymodels`.
+
+When we load `tidysdm`, it automatically loads `tidymodels` and all associated
+packages necessary to fit models:
+```{r}
+library(tidysdm)
+```
+
+
+# Preparing your data
+
+We start by reading in a set of presences for a mosquito, *Anopheles arabiensis* in Africa.
+
+```{r load_presences}
+library(readr)       # for importing data
+arabiensis <- read_csv(system.file("extdata/arabiensis_wk_coordinates.csv",package="tidysdm"))
+```
+
+First, let us visualise our presences by plotting on a map. `tidysdm` works
+with `sf` objects to represent locations, so we will cast our coordinates
+into an `sf` object, and set its projections to standard lonlat (crs = 4326).
+
+```{r cast_to_sf}
+library(sf)
+arabiensis <- st_as_sf(arabiensis, coords = c("longitude","latitude"))
+st_crs(arabiensis) = 4326
+```
+
+It is usually
+advisable to plot the locations directly on the raster that will be used to
+extract climatic variables, to see how the locations fall within the discretised
+space of the raster. For this vignette, we will use WordClim as our source of
+climatic information. We will access the WorldClim data via the library `pastclim`;
+even though this library, as the name suggests, is mostly designed to handle palaeoclimatic
+reconstructions, it also provides convenient functions to access present day
+reconstructions and future projections. `pastclim` has a handy function to get
+the land mask for the available datasets, which we can use as background for our
+locations. For
+plotting, we will take advantage of `tidyterra`, which makes handling of `terra`
+rasters with `ggplot` a breeze:
+
+```{r plot_locations}
+library(pastclim)
+land_mask <- get_land_mask(time_ce=1985, dataset="WorldClim_2.1_10m")
+library(tidyterra)
+ggplot() +
+  geom_spatraster(data=land_mask, aes(fill=land_mask_1985))+
+  geom_sf(data = arabiensis)
+```
+
+As all our data are in Sub-Saharan Africa, it makes sense to cut down our raster
+just to that region. We will exclude remote oceanic islands, for which climate reconstructions are often problematic):
+```{r}
+# SubSaharan Africa
+sub_s_africa <- terra::vect("POLYGON((-19.36 22.12,38.17 22.1,38.96 19.53,40.76 
+                            16.98,43.71 12.12,52.36 13.59,54.3 7.03,54.65 -24.68,
+                            30.39 -34.59,15.28 -36.31,-19.18 13.59,-19.36 22.12))")
+crs(sub_s_africa)<-"lonlat"
+# crop the extent
+land_mask <- crop(land_mask, sub_s_africa)
+# and mask to the polygon
+land_mask <- mask(land_mask, sub_s_africa)
+ggplot() +
+  geom_spatraster(data=land_mask, aes(fill=land_mask_1985))+
+  geom_sf(data = arabiensis)
+
+```
+
+Now thin the observations to have a one per cell in the raster (it would be better
+if we had an equal area projection...), and simultaneously remove locations outside the
+desired area (e.g. remote oceanic islands):
+```{r thin_by_cell}
+set.seed(123)
+arabiensis<-thin_by_cell(arabiensis, raster = land_mask)
+nrow(arabiensis)
+```
+
+Now thin further to remove points that are closer than 70km. However, note that
+the standard map units for a 'lonlat' projection are meters. 'tidysdm' provides
+a convening conversion function to avoid having to write lots of zeroes):
+```{r thin_by_dist}
+set.seed(123)
+arabiensis<-thin_by_dist(arabiensis, dist_min = km2m(70))
+nrow(arabiensis)
+```
+
+Let's see what we have left of our points:
+```{r}
+ggplot() +
+  geom_spatraster(data=land_mask, aes(fill=land_mask_1985))+
+  geom_sf(data = arabiensis)
+```
+
+Now sample pseudoabsences (we will constrain them to be at least 70km away
+from any presences), selecting as 3 times as many points as presences
+```{r}
+set.seed(123)
+arabiensis <- sample_pseudoabs(arabiensis, 
+                               n= 3 * nrow(arabiensis), 
+                               raster=land_mask,
+                               method=c("dist_min", km2m(70)))
+```
+
+Let's see our presences and absences:
+```{r}
+ggplot() +
+  geom_spatraster(data=land_mask, aes(fill=land_mask_1985))+
+  geom_sf(data = arabiensis, aes(col = class))
+```
+
+We now need to extract climatic variables for this species. We can use
+`pastclim` to check what variables are available for the WordClim dataset:
+
+```{r load_climate}
+climate_vars <- get_vars_for_dataset("WorldClim_2.1_10m")
+climate_vars
+```
+
+We first download them:
+```{r eval=FALSE}
+download_dataset("WorldClim_2.1_10m")
+```
+
+And then create a `terra` SpatRaster object. The dataset covers teh period 1970-2000,
+so `pastclim` dates it as 1985 (the midpoint). We can directly crop to Sub-Saharan
+Africa:
+```{r}
+climate_present<-pastclim::region_slice(time_ce = 1985, 
+                                        bio_variables = climate_vars, 
+                                        data="WorldClim_2.1_10m", 
+                                        crop=sub_s_africa)
+```
+
+We start by selecting variables for which presences are markedly different from
+the underlying background. First, let's extact climate for all presences and
+pseudoabsences
+```{r}
+arabiensis <- arabiensis %>% 
+  bind_cols(terra::extract(climate_present, arabiensis, ID=FALSE))
+```
+
+We can use violin plots to contrast the values for presences and pseudoabsences:
+
+```{r fig.height=11, fig.width=8}
+arabiensis %>% plot_pres_vs_bg(class)
+
+```
+
+We want to choose variables for which presences use a values different from the bakground (pseudoabsences).
+We can qualitatively look at the plots, or use a quantitative approach that ranks them based on the
+overlap of the respective density plots:
+```{r}
+arabiensis %>% dist_pres_vs_bg(class)
+```
+
+We could select variables that have at least 20% of non-overlapping distribution
+between presences and pseuodabsences:
+
+```{r}
+vars_to_keep <- arabiensis %>% dist_pres_vs_bg(class)
+vars_to_keep <-names(vars_to_keep[vars_to_keep>0.20])
+arabiensis <-arabiensis %>% select(all_of(c(vars_to_keep, "class")))
+```
+
+Environmental variables are often highly correlated, and collinearity is an issue
+for several types of models. Subset to variables with less than 0.7 correlation
+
+```{r choose_var_cor}
+climate_present<-climate_present[[vars_to_keep]]
+vars_uncor <- filter_high_cor(climate_present, cutoff = 0.7)
+vars_uncor
+```
+
+Subset the dataframe and raster to only include these variables:
+
+```{r}
+arabiensis <-arabiensis %>% select(all_of(c(vars_uncor, "class")))
+climate_present<-climate_present[[vars_uncor]]
+```
+
+
+# Fit the model by crossvalidation
+
+Next, we need to set up a `recipe` to define how to handle our dataset. We don't
+want to do anything to our data in terms of transformations, so we just
+need to define the formula (*class* is the outcome,
+all other variables are predictors; note that, for `sf` objects, `geometry` is
+automatically ignored as a predictor):
+```{r recipe}
+arabiensis_rec <- recipe(arabiensis, formula=class~.)
+arabiensis_rec
+```
+
+We now build a `workflow_set` of different models, defining which 
+hyperparameters we want to tune. We will use *glm*, *gam*, *random forest*,
+*boosted_trees* and *maxent* as
+our models. The latter three have tunable hyperparameters. For the most
+commonly used models, `tidysdm` automatically chooses the most important
+parameters, but it is possible to fully customise model specifications. 
+
+```{r workflow_set}
+arabiensis_models <-
+  # create the workflow_set
+  workflow_set(
+    preproc = list(default = arabiensis_rec),
+    models = list(
+      # the standard glm specs
+      glm = sdm_spec_glm(),
+      # the standard sdm specs
+      gam = sdm_spec_gam(),
+      # rf specs with tuning
+      rf = sdm_spec_rf(),
+      # boosted tree model (gbm) specs with tuning
+      gbm = sdm_spec_boost_tree(),
+      # maxent specs with tuning
+      maxent =sdm_spec_maxent()
+    ),
+    # make all combinations of preproc and models,
+    cross = TRUE
+  ) %>%
+  # set formula for gams
+  update_workflow_model("default_gam",
+                        spec = sdm_spec_gam(),
+                        formula = gam_formula(arabiensis_rec)) %>%
+  # tweak controls to store information needed later to create the ensemble
+  option_add(control = control_ensemble_grid())
+```
+
+Note that *gams* are unusual, as need to specify a formula to define to which
+variables we will fit smooths. By default, `gam_formula()` fits a smooth to every
+continuous predictor, but a custom formula can be provided instead.
+
+We now want to set up a spatial block cross-validation scheme to tune and assess
+our models. We will do an 80:20 split, i.e. create 5 folds.
+
+```{r training_cv}
+library(tidysdm)
+set.seed(1005)
+arabiensis_cv <- spatial_block_cv(arabiensis, v = 5)
+autoplot(arabiensis_cv)
+```
+
+We can now use the block CV folds to
+tune and assess the models (to keep computations fast, we will only explore 3
+combination of hypeparameters per model; that far too little in real life!):
+```{r tune_grid}
+set.seed(123)
+arabiensis_models <- 
+   arabiensis_models %>% 
+   workflow_map("tune_grid", resamples = arabiensis_cv, grid = 3, 
+                metrics = sdm_metric_set(), verbose = TRUE)
+```
+
+Note that `workflow_set` correctly detects that we have no tuning parameters for 
+*glm* and *gam*. We can have a look at the performance of our models with:
+
+```{r}
+autoplot(arabiensis_models)
+```
+
+Now let's create an ensemble, selecting the best set of parameters for each model
+(this is really only relevant for the random forest, as there were not hype-parameters
+to tune for the glm and gam). We will use the Boyce continuous index as our metric
+to choose the best random forest and boosted tree. When adding members to an ensemble, they are
+automatically fitted to the full training dataset, and so ready to make predictions.
+
+```{r}
+arabiensis_ensemble <- simple_ensemble() %>%
+  add_member(arabiensis_models, metric="boyce_cont")
+arabiensis_ensemble
+```
+
+And visualise it
+```{r}
+autoplot(arabiensis_ensemble)
+```
+
+# Projecting to the present
+We can now make predictions with this ensemble (using the default option of taking
+the mean of the predictions from each model).
+
+```{r plot_present}
+prediction_present <- predict_raster(arabiensis_ensemble, climate_present)
+ggplot() +
+  geom_spatraster(data=prediction_present, aes(fill=mean))+
+  scale_fill_terrain_c() +
+  # plot presences used in the model
+  geom_sf(data = arabiensis %>% filter(class=="presence"))
+```
+
+We can subset the ensemble to only use the best models, based on the Boyce continuous index,
+by setting a minimum threshold of 0.7 for that metric. We will also take the 
+median of the available model predictions (instead of the mean, which is the default).
+The plot does not change much (the models are
+quite consistent).
+
+```{r}
+prediction_present_boyce <- predict_raster(arabiensis_ensemble, climate_present,
+                                           metric_thresh = c("boyce_cont", 0.7),
+                                           fun="median")
+ggplot() +
+  geom_spatraster(data=prediction_present_boyce, aes(fill=median))+
+  scale_fill_terrain_c() +
+  geom_sf(data = arabiensis %>% filter(class=="presence"))
+```
+
+Sometimes, it is desirable to have binary predictions (presence vs absence), rather
+than the probability of occurrence. To do so, we first need to calibrate the threshold
+used to convert probabilities into classes (in this case, we optimise the TSS):
+```{r}
+arabiensis_ensemble<-calib_class_thresh(arabiensis_ensemble, 
+                                        class_thresh = "tss_max")
+```
+
+And now we can predict for the whole continent:
+```{r}
+prediction_present_binary <- predict_raster(arabiensis_ensemble, 
+                                            climate_present,
+                                            type="class",
+                                            class_thresh = c("tss_max"))
+ggplot() +
+  geom_spatraster(data=prediction_present_binary, aes(fill=binary_mean))+
+  geom_sf(data = arabiensis %>% filter(class=="presence"))
+```
+
+
+# Projecting to the future
+
+WorlClim has a wide selection of projections for the future based on different
+models and Shared Socio-economic Pathways (SSP). Type `help("WorldClim_2.1")`
+for a full list. We will use predictions based on "HadGEM3-GC31-LL" model for SSP 245 (intermediate green
+house gas emissions) at the same resolution as the present day data (10 arc-minutes). We first download the data:
+```{r eval=FALSE}
+download_dataset("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
+```
+Let's see what times are available:
+```{r}
+get_time_ce_steps("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
+```
+
+We will predict for 2090, the further prediction in the future that is available. 
+
+Let's now check the available variables:
+```{r}
+get_vars_for_dataset("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
+```
+
+Note that future predictions do not include *altitude* (as that does not change with time), so if we needed it, we would have to copy it
+over from the present. However, it is not in our set of uncorrelated variables that
+we used earlier, so we don't need to worry about it.
+```{r}
+climate_future<-pastclim::region_slice(time_ce = 2030, 
+                                        bio_variables = vars_to_keep, 
+                                        data="WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m", 
+                                        crop=sub_s_africa)
+```
+
+And predict using the ensemble:
+```{r plot_future}
+prediction_future <- predict_raster(arabiensis_ensemble, climate_future)
+ggplot() +
+  geom_spatraster(data=prediction_future, aes(fill=mean))+
+  scale_fill_terrain_c()
+```
+
+# Repeated ensembles
+
+The steps of thinning and sampling pseudo-absences can have a bit impact on the
+performance of SDMs. As these steps are stochastic, it is good practice to
+explore their effect by repeating them, and then creating ensembles of models
+over these repeats. In `tidysdm`, it is possible to create `repeat_ensembles`.
+We start by creating a list of `simple_ensembles`, by looping through the
+SDM pipeline. We will just use two fast models to speed up the process.
+
+
+```{r}
+# emtpy object to store the simple ensembles that we will create
+ensemble_list <- list()
+for (i_repeat in 1:3){
+  # thin the data
+ arabiensis_rep<-thin_by_cell(arabiensis, raster = climate_present)
+ arabiensis_rep<-thin_by_dist(arabiensis_rep, dist_min = 70000)
+ # sample pseudoabsences
+  arabiensis_rep <- sample_pseudoabs(arabiensis_rep, 
+                               n=nrow(arabiensis_rep), 
+                               raster=climate_present,
+                               method=c("dist_min", 70000))
+  # get climate
+  arabiensis_rep <- arabiensis_rep %>% 
+  bind_cols(extract(climate_present, arabiensis_rep, ID=FALSE))
+ # create folds
+  arabiensis_rep_cv <- spatial_block_cv(arabiensis_rep, v = 5)
+  # create a recipe
+  arabiensis_rep_rec <- recipe(arabiensis_rep, formula=class~.)
+  # create a workflow_set
+  arabiensis_rep_models <-
+  # create the workflow_set
+  workflow_set(
+    preproc = list(default = arabiensis_rep_rec),
+    models = list(
+      # the standard glm specs
+      glm = sdm_spec_glm(),
+      # the standard sdm specs
+      gam = sdm_spec_gam()
+    ),
+    # make all combinations of preproc and models,
+    cross = TRUE
+  ) %>%
+  # set formula for gams
+  update_workflow_model("default_gam",
+                        spec = sdm_spec_gam(),
+                        formula = gam_formula(arabiensis_rep_rec)) %>%
+  # tweak controls to store information needed later to create the ensemble
+  option_add(control = control_ensemble_grid())
+  
+# train the model
+  arabiensis_rep_models <- 
+   arabiensis_rep_models %>% 
+   workflow_map("tune_grid", resamples = arabiensis_rep_cv, grid = 5, 
+                metrics = sdm_metric_set(), verbose = TRUE)
+  # make an simple ensemble and add it to the list
+ensemble_list[[i_repeat]] <- simple_ensemble() %>%
+  add_member(arabiensis_rep_models, metric="boyce_cont")
+}
+```
+
+Now we can create a `repeat_ensemble` from the list
+```{r}
+arabiensis_rep_ens <- repeat_ensemble() %>% add_repeat(ensemble_list)
+arabiensis_rep_ens
+```
+
+We can then predict in the usual way (we will take the mean and median of all models):
+```{r}
+prediction_repeat_ensemble <- predict_raster(arabiensis_ensemble, climate_present,
+                                     fun=c("mean","median"))
+ggplot() +
+  geom_spatraster(data=prediction_repeat_ensemble, aes(fill=median))+
+  scale_fill_terrain_c()
+
+```
+

@@ -1,0 +1,14 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+ci_dependencies
+.circleci
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^cran-comments.md
+^cran-comments\.md$
+^CRAN-SUBMISSION$
+^codecov.yml
+^data-raw$
