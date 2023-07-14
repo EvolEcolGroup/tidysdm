@@ -54,4 +54,8 @@ devtools::install_github("EvolEcolGroup/pastclim", ref="dev")
 On its dedicated [website](https://evolecolgroup.github.io/pastclim/),
 you can find Articles giving you a step-by-step [overview of the
 fitting SDMs to contemporary species](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html),
-as well as an equivalent [tutorial for using palaeontological data](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html).
+as well as an equivalent [tutorial for using palaeontological data](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html). There is also a [dev
+version](https://evolecolgroup.github.io/tidysdm/dev/) of the site
+updated for the `dev` branch of `tidysdm` (on the top left of the dev
+website, the version number is in red and in the format x.x.x.9xxx,
+indicating it is a development version).
