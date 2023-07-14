@@ -1,6 +1,6 @@
 Package: tidysdm
 Title: Species Distribution Models with tidymodels
-Version: 0.9.0
+Version: 0.9.0.9000
 Authors@R: c(
     person("Andrea", "Manica", , "am315@cam.ac.uk", role = c("aut", "cre")),
     person("Michela", "Leonardi", role = "ctb"),
@@ -8,6 +8,10 @@ Authors@R: c(
 Description: Fit Species Distribution Models using the tidymodels framework.
 License: AGPL (>= 3)
 Encoding: UTF-8
+Language: en-GB
+URL: https://github.com/EvolEcolGroup/tidysdm,
+    https://evolecolgroup.github.io/tidysdm/
+BugReports: https://github.com/EvolEcolGroup/tidysdm/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends:
@@ -50,4 +54,3 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: true
-URL: https://evolecolgroup.github.io/tidysdm/
