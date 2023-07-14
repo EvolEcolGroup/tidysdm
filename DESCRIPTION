@@ -54,4 +54,3 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: true
-URL: https://evolecolgroup.github.io/tidysdm/
