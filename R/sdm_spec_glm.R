@@ -9,7 +9,7 @@
 #' to tune in a *glm*, the only valid option is "none". This parameter is present
 #' for consistency with other `sdm_spec_*` functions, but it does nothing in this
 #' case.
-#' @return a [parsnip::model_spec] of the model.
+#' @returns a [parsnip::model_spec] of the model.
 #' @examples
 #' my_spec_glm <- sdm_spec_glm()
 #' @export

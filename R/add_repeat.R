@@ -8,7 +8,7 @@
 #' @param rep a repeat, as a single [`simple_ensemble`], or a list of
 #' [`simple_ensemble`] objects
 #' @param ... not used at the moment.
-#' @return a [repeat_ensemble] with additional repeat(s)
+#' @returns a [repeat_ensemble] with additional repeat(s)
 #' @export
 
 # Note that `add_repeat` is tested in `test_repeat_ensemble.R`

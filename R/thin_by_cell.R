@@ -21,7 +21,7 @@
 #' and vertical aggregation factor) or three integers (when also aggregating over layers).
 #' Defaults to NULL, which implies no aggregation (i.e. thinning is done on the
 #' grid of `raster`)
-#' @return An object of class [`sf::sf`] or [`data.frame`], the same as "data".
+#' @returns An object of class [`sf::sf`] or [`data.frame`], the same as "data".
 #' @export
 
 thin_by_cell <- function(data, raster, coords=NULL, drop_na = TRUE, agg_fact=NULL){

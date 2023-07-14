@@ -16,9 +16,11 @@
 #' /item: "custom" passes the options from '...'
 #' /item: "none" does not tune any hyperparameter
 #' }
-#' @return a [parsnip::model_spec] of the model.
+#' @returns a [parsnip::model_spec] of the model.
 #' @examples
-#' test_bt_spec <- sdm_spec_boost_tree()
+#' standard_bt_spec <- sdm_spec_boost_tree()
+#' full_bt_spec <- sdm_spec_boost_tree(tune = "all")
+#' custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune())
 #' @export
 
 sdm_spec_boost_tree <- function(..., tune=c("sdm","all","custom","none")){

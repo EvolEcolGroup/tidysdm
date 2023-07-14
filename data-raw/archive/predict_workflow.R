@@ -8,7 +8,7 @@
 #' @param new_data An [sf::sf] data frame.
 #' @param ... parameters to be passed to [workflows::predict.workflow]
 #' to define the type of predictions. See the help of that function for details.
-#' @return an appropriate object depending on the type argument, see
+#' @returns an appropriate object depending on the type argument, see
 #' [workflows::predict.workflow] for details.
 #' @export
 #' @import workflows

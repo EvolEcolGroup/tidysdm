@@ -12,6 +12,9 @@ grid_cellsize(data, n = c(10, 10))
 \item{n}{the number of cells in the grid, defaults to c(10,10), which is also
 the default for \code{\link[sf:st_make_grid]{sf::st_make_grid()}}}
 }
+\value{
+the cell size
+}
 \description{
 This function facilitates using \link[spatialsample:spatial_block_cv]{spatialsample::spatial_block_cv} multiple
 times in an analysis. \link[spatialsample:spatial_block_cv]{spatialsample::spatial_block_cv} creates a grid

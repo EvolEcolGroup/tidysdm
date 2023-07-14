@@ -16,7 +16,7 @@
 #' @param alpha Opacity, passed to [ggplot2::geom_sf()].
 #' Values of alpha range from 0 to 1, with lower values corresponding to more
 #' transparent colors.
-#' @return A ggplot object with each fold assigned a color, made using
+#' @returns A ggplot object with each fold assigned a color, made using
 #' [ggplot2::geom_sf()].
 #'
 #' @examples

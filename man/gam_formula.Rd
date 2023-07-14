@@ -11,6 +11,9 @@ gam_formula(object, k = 10)
 
 \item{k}{the \emph{k} value for the smooth}
 }
+\value{
+a formula
+}
 \description{
 This function takes the formula from a recipe, and turns numeric predictors
 into smooths with a given k

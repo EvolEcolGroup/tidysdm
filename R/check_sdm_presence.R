@@ -6,6 +6,7 @@
 #' @param .data a `data.frame` or `tibble`, or a derived object such as an `sf` data.frame
 #' @param .col the column containing the presences
 #' @param presence_level the string used to define the presence level of `.col`
+#' @returns TRUE if correctly formatted
 #' @export
 
 check_sdm_presence <- function(

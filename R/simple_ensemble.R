@@ -8,7 +8,7 @@
 #'
 #' @param ... not used, this function just creates an empty `simple_ensemble`
 #' object. Members are added with `add_best_candidates()`
-#' @return an empty `simple_ensemble`. This is a tibble with columns:
+#' @returns an empty `simple_ensemble`. This is a tibble with columns:
 #' {/itemize:
 #' /item: `wflow_id`: the name of the workflows for which the best model was
 #' chosen

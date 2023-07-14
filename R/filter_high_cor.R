@@ -18,7 +18,7 @@
 #' @param verbose A boolean for printing the details
 #' @param names a logical; should the column names be returned `TRUE` or
 #' the column index `FALSE`)?
-#' @return A vector of names of columns that are below the correlation threhold
+#' @returns A vector of names of columns that are below the correlation threhold
 #' (when \code{names = TRUE}), otherwise a vector of indeces.
 #'
 #' @export

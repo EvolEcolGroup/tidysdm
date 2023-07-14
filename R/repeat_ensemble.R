@@ -9,7 +9,7 @@
 #'
 #' @param ... not used, this function just creates an empty `repeat_ensemble`
 #' object. Members are added with `add_best_candidates()`
-#' @return an empty `repeat_ensemble`
+#' @returns an empty `repeat_ensemble`
 #' @export
 
 repeat_ensemble <- function(...) {

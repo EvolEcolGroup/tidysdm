@@ -6,6 +6,16 @@
 \usage{
 prob_to_binary(x, thresh, class_levels)
 }
+\arguments{
+\item{x}{a vector of probabilities}
+
+\item{thresh}{the threshold to convert to binary}
+
+\item{class_levels}{the binary levels}
+}
+\value{
+a vector of binary values
+}
 \description{
 simple function to convert probability to binary classes
 }

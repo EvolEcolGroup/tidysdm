@@ -18,7 +18,7 @@
 #' @param event_level A single string. Either "first" or "second" to specify which level of truth to consider as the "event". This argument is only applicable when estimator = "binary". The default uses an internal helper that generally defaults to "first"
 #' @param case_weights The optional column identifier for case weights. This should be an unquoted column name that evaluates to a numeric column in data. For ⁠_vec()⁠ functions, a numeric vector.
 #' @param estimate If truth is binary, a numeric vector of class probabilities corresponding to the "relevant" class. Otherwise, a matrix with as many columns as factor levels of truth. It is assumed that these are in the same order as the levels of truth.
-#' @return A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
+#' @returns A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
 #' For grouped data frames, the number of rows returned will be the same as the
 #' number of groups.
 #' @family class probability metrics

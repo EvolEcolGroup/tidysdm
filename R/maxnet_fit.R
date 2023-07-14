@@ -19,7 +19,7 @@
 #' @param classes character, continuous feature classes desired, either
 #'   "default" or any subset of "lqpht" (for example, "lh")
 #' @param ... currently not used.
-#' @return Maxnet returns an object of class \code{maxnet}, which is a list
+#' @returns Maxnet returns an object of class \code{maxnet}, which is a list
 #'   consisting of a glmnet model with the following elements added:
 #'\describe{
 #'  \item{betas}{ nonzero coefficients of the fitted model }
@@ -78,12 +78,12 @@ maxnet_fit <- function(formula, data, regmult=1.0, classes="default",
 #' `parsnip`. Users are unlikely to use this function directly.  For the
 #'  `parsnip` model specification for MaxEnt, see [maxent()].
 #'
-#'  @param object the [maxnet::maxnet] object
-#'  @param newdata the dataframe of new data
-#'  @param type either "prob" or "class"
-#'  @param maxnet_type the transformation used for the prediction
-#'  @param clamp logical, definign whether clamping to observed ranges should be used
-#'  @returns a tibble of predictions
+#' @param object the [maxnet::maxnet] object
+#' @param newdata the dataframe of new data
+#' @param type either "prob" or "class"
+#' @param maxnet_type the transformation used for the prediction
+#' @param clamp logical, definign whether clamping to observed ranges should be used
+#' @returns a tibble of predictions
 #' @export
 #' @keywords internal
 maxnet_predict <- function(object, newdata, type=c("class", "prob"),

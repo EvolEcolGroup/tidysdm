@@ -13,7 +13,7 @@ check_coords_names(data, coords)
 coordinates, of points is a data.frame and does not use standard names.}
 }
 \value{
-A vector of lenght 2 with the valid names, in the correct order
+A vector of length 2 with the valid names, in the correct order
 }
 \description{
 This internal function checks that coords (as passed to functions) is a valid

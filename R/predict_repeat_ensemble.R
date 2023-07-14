@@ -24,6 +24,7 @@
 #' have the name of the workflow a a prefix, separated by "." from the usual
 #' column names of the predictions.
 #' @param ... not used in this method.
+#' @returns a tibble of predictions
 #' @method predict repeat_ensemble
 #' @export
 predict.repeat_ensemble <-

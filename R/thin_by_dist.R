@@ -19,7 +19,7 @@
 #'  `c("longitude", "latitude")`, or `c("lon", "lat")`
 #' @param dist_min Minimum distance between points (in units appropriate for
 #' the projection, or meters for lonlat data).
-#' @return An object of class [`sf::sf`] or [`data.frame`], the same as "data".
+#' @returns An object of class [`sf::sf`] or [`data.frame`], the same as "data".
 #' @export
 #' @importFrom rlang :=
 

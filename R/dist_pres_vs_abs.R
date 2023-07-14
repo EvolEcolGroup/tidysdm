@@ -10,7 +10,7 @@
 #' `sf`) with values for the bioclimate variables for presences and background
 #' @param .col the column containing the presences; it assumes presences to be
 #' the first level of this factor
-#' @return a name vector of distances
+#' @returns a name vector of distances
 #' @examples
 #' # This should be updatd to use a dataset from tidysdm
 #' data("bradypus", package="maxnet")

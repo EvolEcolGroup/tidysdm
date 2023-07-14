@@ -14,7 +14,7 @@
 #'
 #' These wrappers are equivalent to the ones used in the `stacks` package.
 #'
-#' @return A [tune::control_grid], [tune::control_bayes],
+#' @returns A [tune::control_grid], [tune::control_bayes],
 #' or [tune::control_resamples] object.
 #'
 #' @seealso See the vignettes for examples of these functions used in context.

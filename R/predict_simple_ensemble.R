@@ -24,6 +24,7 @@
 #' have the name of the workflow a a prefix, separated by "." from the usual
 #' column names of the predictions.
 #' @param ... not used in this method.
+#' @returns a tibble of predictions
 #' @method predict simple_ensemble
 #' @export
 predict.simple_ensemble <-
@@ -175,7 +176,10 @@ predict.simple_ensemble <-
 
 
 #' simple function to convert probability to binary classes
-#'
+#' @param x a vector of probabilities
+#' @param thresh the threshold to convert to binary
+#' @param class_levels the binary levels
+#' @returns a vector of binary values
 #' @keywords internal
 
 prob_to_binary <- function(x, thresh, class_levels) {

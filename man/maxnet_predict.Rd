@@ -12,18 +12,24 @@ maxnet_predict(
   clamp = TRUE
 )
 }
+\arguments{
+\item{object}{the \link[maxnet:maxnet]{maxnet::maxnet} object}
+
+\item{newdata}{the dataframe of new data}
+
+\item{type}{either "prob" or "class"}
+
+\item{maxnet_type}{the transformation used for the prediction}
+
+\item{clamp}{logical, definign whether clamping to observed ranges should be used}
+}
+\value{
+a tibble of predictions
+}
 \description{
 This function is a wrapper around the \code{predict} method for \link[maxnet:maxnet]{maxnet::maxnet},
 making the function compatible with
 \code{parsnip}. Users are unlikely to use this function directly.  For the
 \code{parsnip} model specification for MaxEnt, see \code{\link[=maxent]{maxent()}}.
-}
-\details{
-@param object the \link[maxnet:maxnet]{maxnet::maxnet} object
-@param newdata the dataframe of new data
-@param type either "prob" or "class"
-@param maxnet_type the transformation used for the prediction
-@param clamp logical, definign whether clamping to observed ranges should be used
-@returns a tibble of predictions
 }
 \keyword{internal}

@@ -5,6 +5,8 @@
 #' @param data an [sf::sf] object
 #' @param ... any other parameters to pass to the `data.frame` version of
 #' the metric.
+#' @returns A tibble with columns `.metric`, `.estimator`, and `.estimate`
+#'  and 1 row of values.
 #' @import yardstick
 #' @name prob_metrics
 #'

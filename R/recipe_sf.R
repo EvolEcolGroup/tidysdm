@@ -15,7 +15,7 @@
 #'
 #' @param x An [sf::sf] data frame.
 #' @param ... parameters to be passed to [recipes::recipe()]
-#' @return An object of class [recipes::recipe] , see
+#' @returns An object of class [recipes::recipe] , see
 #' the manpage for [recipes::recipe()] for details.
 #' @export
 #' @import recipes

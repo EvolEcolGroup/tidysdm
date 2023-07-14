@@ -6,7 +6,7 @@
 #' @param data a data.frame containing the locations.
 #' @param coords a vector of length two giving the names of the "x" and "y"
 #' coordinates, of points is a data.frame and does not use standard names.
-#' @return A vector of lenght 2 with the valid names, in the correct order
+#' @returns A vector of length 2 with the valid names, in the correct order
 #' @keywords internal
 
 check_coords_names <-function(data, coords){

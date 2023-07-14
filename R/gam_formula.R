@@ -4,6 +4,7 @@
 #' into smooths with a given k
 #' @param object a [recipes::recipe], already trained
 #' @param k the *k* value for the smooth
+#' @returns a formula
 #' @export
 gam_formula<-function(object, k=10){
   base_formula <- object %>% recipes::prep() %>% stats::formula()
