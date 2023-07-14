@@ -1,11 +1,11 @@
 Package: tidysdm
 Title: Species Distribution Models with tidymodels
-Version: 0.0.0.9001
+Version: 0.9.0
 Authors@R: c(
     person("Andrea", "Manica", , "am315@cam.ac.uk", role = c("aut", "cre")),
     person("Michela", "Leonardi", role = "ctb"),
     person("Margherita", "Colucci", role = "ctb"))
-Description: Run Species Distribution Models using the tidymodels framework.
+Description: Fit Species Distribution Models using the tidymodels framework.
 License: AGPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
