@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/EvolEcolGroup/tidysdm/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EvolEcolGroup/tidysdm/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/EvolEcolGroup/tidysdm/branch/main/graph/badge.svg?token=AoYtE9NRSN)](https://codecov.io/gh/EvolEcolGroup/tidysdm)
+[![codecov](https://codecov.io/gh/EvolEcolGroup/tidysdm/branch/main/graph/badge.svg?token=KLOzxJoLBO)](https://codecov.io/gh/EvolEcolGroup/tidysdm)
 <!-- badges: end -->
 
 The goal of `tidysdm` is to implement Species Distribution Models using the
