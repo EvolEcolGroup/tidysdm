@@ -176,7 +176,7 @@ climate_vars <- names(climate_present)
 ```
 
 
-We first download the dataset at the right resolution (here 5 arc-minutes):
+We first download the dataset at the right resolution (here 10 arc-minutes):
 ```{r eval=FALSE}
 download_dataset("WorldClim_2.1_10m")
 ```
