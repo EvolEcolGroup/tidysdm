@@ -29,11 +29,6 @@ When we load `tidysdm`, it automatically loads `tidymodels` and all associated
 packages necessary to fit models:
 ```{r libraries}
 library(tidysdm)
-
-# upload necessary libraries
-library(pastclim)
-library(terra)
-
 ```
 
 # Preparing your data
@@ -265,6 +260,12 @@ lacerta_rec <- recipe(lacerta_thin, formula=class~.)
 lacerta_rec
 ```
 
+In classification models for `tidymodels`, the assumption is that the level of
+interest for the response (in our case, presences) is the reference level. We
+can confirm that we have the data correctly formatted with:
+```{r}
+lacerta_thin %>% check_sdm_presence(class)
+```
 
 We now build a `workflow_set` of different models, defining which 
 hyperparameters we want to tune. We will use *glm*, *random forest*,
