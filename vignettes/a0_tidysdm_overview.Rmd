@@ -115,7 +115,7 @@ ggplot() +
 
 # Thinning step
 
-Now, we thin the observations to have a one per cell in the raster (it would be better
+Now, we thin the observations to have one per cell in the raster (it would be better
 if we had an equal area projection...):
 ```{r thin_by_cell}
 set.seed(1234567)
@@ -146,7 +146,7 @@ ggplot() +
 ```
 
 Now we sample pseudo-absences (we will constrain them to be at least 50km away
-from any presences), selecting as 3 times as many points as presences
+from any presences), selecting as 3 times as many points as presences:
 ```{r sample_pseudoabs}
 set.seed(1234567)
 lacerta_thin <- sample_pseudoabs(lacerta_thin, 
@@ -193,7 +193,7 @@ climate_present<-pastclim::region_slice(time_ce = 1985,
 
 We start by selecting variables for which presences are markedly different from
 the underlying background. First, let's extract climate for all presences and
-pseudo-absences
+pseudo-absences:
 ```{r}
 lacerta_thin <- lacerta_thin %>% 
   bind_cols(terra::extract(climate_present, lacerta_thin, ID=FALSE))
@@ -205,7 +205,7 @@ We can use violin plots to compare the distribution of the climatic variables fo
 lacerta_thin %>% plot_pres_vs_bg(class)
 
 ```
-We want to choose variables for which presences use a values different from the background (pseudo-absences).
+We want to choose variables for which presences use values different from the background (pseudo-absences).
 We can qualitatively look at the plots, or use a quantitative approach that ranks them based on the
 overlap of the respective density plots:
 ```{r}
@@ -307,7 +307,7 @@ autoplot(lacerta_cv)
 
 We can now use the block CV folds to
 tune and assess the models (to keep computations fast, we will only explore 3
-combination of hypeparameters per model; that far too little in real life!):
+combination of hypeparameters per model; this is far too little in real life!):
 ```{r tune_grid}
 set.seed(1234567)
 lacerta_models <- 
@@ -392,7 +392,7 @@ ggplot() +
 WorlClim has a wide selection of projections for the future based on different
 models and Shared Socio-economic Pathways (SSP). Type `help("WorldClim_2.1")`
 for a full list. We will use predictions based on "HadGEM3-GC31-LL" model for SSP 245 (intermediate green
-house gas emissions) at the same resolution as the present day data (5 arc-minutes). We first download the data:
+house gas emissions) at the same resolution as the present day data (10 arc-minutes). We first download the data:
 ```{r eval=FALSE}
 download_dataset("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
 ```
@@ -501,7 +501,7 @@ ensemble_list[[i_repeat]] <- simple_ensemble() %>%
 }
 ```
 
-Now we can create a `repeat_ensemble` from the list
+Now we can create a `repeat_ensemble` from the list:
 ```{r}
 lacerta_thin_rep_ens <- repeat_ensemble() %>% add_repeat(ensemble_list)
 lacerta_thin_rep_ens
