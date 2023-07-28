@@ -15,16 +15,45 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Additional features of `tidymodels`
+# Troubleshooting models that fail
 
-In this vignette, we illustrate how a number of features from `tidymodels` can
-be used to enhance SDMs. We reuse the example on the Iberian lizard that we used
-to give an overview of the features of `tidysdm`.
+In this vignette, we illustrate how to troubleshoot tuning errors. This is not a 
+comprehensive list, but rather an attempt to illustrate how an error 
+can be approached. The major difficulty is that, within a `workflowset`, error
+messages for a given  can be difficult to see 
+
+# list of things to do
+a) check that a recipe works by prepping it and baking it to see what would
+be passed to the model:
+```{r}
+lacerta_rec_uncor %>% prep(training=lacerta_thin) ->foo
+```
+
+b) try fitting the workflow to the full dataset (i.e. get out of workflowsets
+and tuning)
+
+
+c) try tuning the individual workflow, and then fit to the specific split that
+is giving a problem
+
+
+
+b) make sure you don't have missing data
+```{r}
+recipe(Ozone ~ ., data = airquality) %>%
+  step_naomit() %>%
+  prep(airquality, verbose = FALSE) %>%
+  bake(new_data = NULL)
+
+step_na_omit()
+```
+
+
 
 # Preparing your data
 
 Here we quickly shape the dataset as we did in the overview; see that vignette
-for a detailed explantion of the steps.
+for a detailed explanation of the steps.
 
 We start by reading in a set of presences for a species of lizard that inhabits
 the Iberian peninsula, *Lacerta schreiberi*, and cast it as an `sf` object
@@ -124,11 +153,10 @@ variables that are uncorrelated:
 
 ```{r recipe}
 lacerta_rec_all <- recipe(lacerta_thin, formula=class~.)
-lacerta_rec_uncor <- lacerta_rec_all %>% step_select(all_of(c("class","bio05","bio06", "bio13", "bio15")))
+lacerta_rec_uncor <- lacerta_rec_all %>% step_select(bio05,bio06, bio13, bio15)
+lacerta_rec_uncor <- lacerta_rec_all %>% step_select(bio05,bio06)
+
 lacerta_rec_uncor
-
-lacerta_rec_log <- recipe(lacerta_thin, formula=class~.) %>% step_log(bio19)
-
 ```
 
 And now use this in a `workflowset` (we will keep it small for computational time),
@@ -139,7 +167,7 @@ lacerta_models <-
   # create the workflow_set
   workflow_set(
     preproc = list(uncor = lacerta_rec_uncor, # recipe for the glm
-                   all = lacerta_rec_log,  # recipe for the random forest
+                   all = lacerta_rec_all,  # recipe for the random forest
                    all = lacerta_rec_all),
     models = list(
       # the standard glm specs
@@ -153,8 +181,7 @@ lacerta_models <-
     cross = FALSE
   ) %>%
   # tweak controls to store information needed later to create the ensemble
-  # note that we use the bayes version as we will use a Bayes search (see later)
-  option_add(control = control_ensemble_bayes())
+  option_add(control = control_ensemble_grid())
 ```
 
 
@@ -169,17 +196,22 @@ autoplot(lacerta_cv)
 ```
 
 We can now use the block CV folds to
-tune and assess the models. Note that there are multiple tuning approaches,
-besides the standard grid method. Here we will use `tune_bayes`
-(to keep computations fast, we will only explore 3
+tune and assess the models (to keep computations fast, we will only explore 3
 combination of hypeparameters per model; that far too little in real life!):
 ```{r tune_grid}
 set.seed(1234567)
 lacerta_models <- 
    lacerta_models %>% 
-   workflow_map("tune_bayes", resamples = lacerta_cv, initial=8,
+   workflow_map("tune_grid", resamples = lacerta_cv, grid = 3, 
                 metrics = sdm_metric_set(), verbose = TRUE)
 ```
+
+
+
+
+
+
+
 
 We remove the ID column, as it is not relevant:
 ```{r clean_data}
