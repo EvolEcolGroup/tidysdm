@@ -18,7 +18,9 @@ knitr::opts_chunk$set(
 # Additional features of `tidymodels`
 
 In this vignette, we illustrate how a number of features from `tidymodels` can
-be used to enhance SDMs. We reuse the example on the Iberian lizard that we used
+be used to enhance SDMs. We reccomend users first become famliar with `tidymodels`;
+there are a number of excellent tutorials on its dedicated [website](https://www.tidymodels.org/)
+We reuse the example on the Iberian lizard that we used
 to give an overview of the features of `tidysdm`.
 
 # Preparing your data
@@ -115,9 +117,33 @@ lacerta_thin <- lacerta_thin %>%
   bind_cols(terra::extract(climate_present, lacerta_thin, ID=FALSE))
 ```
 
-# Fit the model by crossvalidation
+# The initial split
 
-Only certain type of models (e.g. glm, gams) struggle with correlated variables;
+The standard approach in `tidymodels` is to make an initial split of the data
+into a test and a training set. We will use retain 20% of the data (1/5) for the testing set, and
+use the rest for training.
+
+```{r initial_split}
+set.seed(1005)
+lacerta_initial <- spatial_initial_split(lacerta_thin, prop = 1/5, spatial_block_cv)
+autoplot(lacerta_initial)
+```
+
+# Fit the model to the training set, tuning by crossvalidation
+
+We can now extract the training set from our `lacerta_initial` split, and sample
+folds to set up crossvalidation (we use the same grid we used on the full
+dataset `arabiensis` for the `initial_split`)
+```{r training_cv}
+set.seed(1005)
+lacerta_training <- training(lacerta_initial)
+lacerta_cv <- spatial_block_cv(lacerta_training, v = 5,
+                                cellsize = grid_cellsize(lacerta_thin),
+                                offset = grid_offset(lacerta))
+autoplot(lacerta_cv)
+```
+
+Only certain type of models (e.g. glm, mars) struggle with correlated variables;
 other algorithms, such as random forests, can handle correlated variables. So,
 we will create two recipes, one with all variables, and one only with the
 variables that are uncorrelated:
@@ -125,54 +151,74 @@ variables that are uncorrelated:
 ```{r recipe}
 lacerta_rec_all <- recipe(lacerta_thin, formula=class~.)
 lacerta_rec_uncor <- lacerta_rec_all %>% step_select(all_of(c("class","bio05","bio06", "bio13", "bio15")))
+lacerta_rec_uncor <- lacerta_rec_all %>% step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", "bio17", "bio18", "bio19", "altitude")))
+
+
 lacerta_rec_uncor
-
-lacerta_rec_log <- recipe(lacerta_thin, formula=class~.) %>% step_log(bio19)
-
 ```
 
 And now use this in a `workflowset` (we will keep it small for computational time),
-selection the appropriate recipe for each model:
+selecting the appropriate recipe for each model. We will include a model (multivariate
+adaptive regression splines, or MARS) which does not have a wrapper in `tidysdm`
+for creating a model specificaiton. However, we can use a standard model spec from
+`yardstick`:
 
 ```{r workflow_set}
 lacerta_models <-
   # create the workflow_set
   workflow_set(
     preproc = list(uncor = lacerta_rec_uncor, # recipe for the glm
-                   all = lacerta_rec_log,  # recipe for the random forest
-                   all = lacerta_rec_all),
+                   all = lacerta_rec_all,  # recipe for the random forest
+                   all = lacerta_rec_uncor # recipe for mars
+    ),
     models = list(
       # the standard glm specs
       glm = sdm_spec_glm(),
       # rf specs with tuning
       rf = sdm_spec_rf(),
-      # boosted tree model (gbm) specs with tuning
-      gbm = sdm_spec_boost_tree()
+      # mars specs with tuning
+      mars = parsnip::mars(num_terms=tune()) %>% 
+        parsnip::set_engine("earth") %>%
+        parsnip::set_mode("classification")
     ),
     # make all combinations of preproc and models,
     cross = FALSE
   ) %>%
   # tweak controls to store information needed later to create the ensemble
   # note that we use the bayes version as we will use a Bayes search (see later)
-  option_add(control = control_ensemble_bayes())
+  option_add(control = stacks::control_stack_bayes())
 ```
 
-
-We now want to set up a spatial block cross-validation scheme to tune and assess
-our models. We will do an 80:20 split, by creating 5 folds.
-
-```{r training_cv, fig.width=6, fig.height=4}
-library(tidysdm)
-set.seed(100)
-lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
-autoplot(lacerta_cv)
-```
 
 We can now use the block CV folds to
 tune and assess the models. Note that there are multiple tuning approaches,
 besides the standard grid method. Here we will use `tune_bayes`
 (to keep computations fast, we will only explore 3
-combination of hypeparameters per model; that far too little in real life!):
+combination of hypeparameters per model; that far too little in real life!).
+
+This tuning method (as opposed to use a standard grid) does not allow for
+hyperparameters with unknown limits, but
+`mtry` for random forest and gbm is undefined as its upper range depends on the number of 
+variables in the dataset. So, before tuning, we need to finalise `mtry` by 
+informing the set dials with the actual data:
+
+```{r}
+rf_param <- lacerta_models %>%
+  # extract the rf workflow
+  extract_workflow ("all_rf") %>%
+  # extract its parameters dials (used to tune)
+  extract_parameter_set_dials() %>%
+  # give it the predictors to finalize mtry
+  finalize(x=st_drop_geometry(lacerta_thin) %>% select(-class))
+
+# now update the workflowset with the new parameter info
+lacerta_models <- lacerta_models %>%
+  option_add(param_info=rf_param,id="all_rf")
+
+```
+
+
+And now we can tune the models:
 ```{r tune_grid}
 set.seed(1234567)
 lacerta_models <- 
@@ -181,252 +227,55 @@ lacerta_models <-
                 metrics = sdm_metric_set(), verbose = TRUE)
 ```
 
-We remove the ID column, as it is not relevant:
-```{r clean_data}
-arabiensis <- arabiensis %>% dplyr::select(-ID)
-```
-
-We now need to extract climatic variables for this species. We use the
-present reconstructions from `pastclim`, subsetted to the region of interest
-(Sub Saharan Africa).
-
-```{r load_climate}
-library(pastclim)
-
-# climate variables to consider
-climate_vars <- c("bio01","bio04", "bio05","bio06", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio13", "bio14", "bio16", "bio18","bio17", "bio19","npp", "lai", "rugosity")
-
-# SubSaharan Africa
-sub_s_africa <- terra::vect("POLYGON((-19.36 22.12,38.17 22.10,38.96 19.53,
-                          40.76 16.98,43.71 12.12,52.36 13.59,54.30 7.03,
-                          30.39 -34.59,15.28 -36.31,-19.18 13.59,-19.36 22.12))")
-
-climate_present<-pastclim::region_slice(time_bp = 0, 
-                                        bio_variables = climate_vars, 
-                                        data="Beyer2020", 
-                                        crop=sub_s_africa)
-```
-
-Environmental variables are often highly correlated, and collinearity is an issue
-for several types of models. Subset to variables with less than 0.7 correlation
-
-```{r choose_var_cor}
-vars_to_keep <- filter_high_cor(climate_present, cutoff = 0.7)
-vars_to_keep
-```
-
-Subset the raster to only include these variables (it would be better to use a bit of biology):
+We can have a look at the performance of our models with:
 
 ```{r}
-climate_present<-climate_present[[vars_to_keep]]
-```
-Note that we could do the above in a `tidy` way using `tidyterra`. However,
-using native `terra` commands tends to be more efficient, which can be important
-when using large rasters.
-
-Convert our dataset into an `sf` data.frame so that we can easily plot it
-(here `tidyterra` shines):
-```{r cast to sf}
-library(sf)
-arabiensis <- st_as_sf(arabiensis, coords = c("longitude","latitude"))
-st_crs(arabiensis) = 4326
-library(tidyterra)
-ggplot() +
-  geom_spatraster(data=climate_present, aes(fill=bio01))+
-  scale_fill_terrain_c() +
-  geom_sf(data = arabiensis)
-
-
-```
-
-Now thin the observations to have a one per cell in the raster (it would be better
-if we had an equal area projection...), and remove locations outside the
-desired area (e.g. Madagascar):
-```{r thin_by_cell}
-set.seed(123)
-arabiensis<-thin_by_cell(arabiensis, raster = climate_present)
-nrow(arabiensis)
-```
-
-Now thin further to remove points that are closer than 70km (note that
-the standard map units for a lonlat projection are m!):
-```{r thin_by_dist}
-set.seed(123)
-arabiensis<-thin_by_dist(arabiensis, dist_min = 70000)
-nrow(arabiensis)
-```
-
-Let's see what we have left of our points:
-```{r}
-ggplot() +
-  geom_spatraster(data=climate_present, aes(fill=bio01))+
-  scale_fill_terrain_c() +
-  geom_sf(data = arabiensis)
-```
-
-Now sample pseudoabsences (we will constraint them to be at least 70km away
-from any presences), selecting as many points as presences:
-```{r}
-set.seed(123)
-arabiensis <- sample_pseudoabs(arabiensis, 
-                               n=nrow(arabiensis), 
-                               raster=climate_present,
-                               method=c("dist_min", 70000))
-```
-
-Let's see our presences and absences:
-```{r}
-ggplot() +
-  geom_spatraster(data=climate_present, aes(fill=bio01))+
-  scale_fill_terrain_c() +
-  geom_sf(data = arabiensis, aes(col = class))
-```
-
-Now let's get the climate for these location
-```{r climate_for_locations}
-arabiensis <- arabiensis %>% 
-  bind_cols(extract(climate_present, arabiensis, ID=FALSE))
-```
-
-# The initial split
-
-Ok, we are now ready to split our data. It is wise to set the seed of the random
-number generator every time we do any sampling, so that our code is fully 
-repeatable. We will use retain 20% of the data (1/5) for the testing set, and
-use the rest for training.
-
-```{r initial_split}
-library(tidysdm)
-set.seed(1005)
-arabiensis_initial <- spatial_initial_split(arabiensis, prop = 1/5, spatial_block_cv)
-autoplot(arabiensis_initial)
-```
-
-# Fit the model to the training set
-
-We can now extract the training set from our `arabiensis_initial` split, and sample
-folds to set up crossvalidation (we use the same grid we used on the full
-dataset `arabiensis` for the `initial_split`)
-```{r training_cv}
-set.seed(1005)
-arabiensis_training <- training(arabiensis_initial)
-arabiensis_cv <- spatial_block_cv(arabiensis_training, v = 5,
-                                cellsize = grid_cellsize(arabiensis),
-                                offset = grid_offset(arabiensis))
-autoplot(arabiensis_cv)
-```
-
-Next, we need to set up a `recipe` (*class* is the outcome,
-all other variables are predictors; note that, for `sf` objects, `geometry` is
-automatically ignored as a predictor):
-```{r recipe}
-arabiensis_rec <- recipe(arabiensis_training, formula=class~.)
-arabiensis_rec
-```
-
-Build a `workflow_set` with our models, defining which hyperparameters we want to
-tune.
-
-```{r workflow_set}
-arabiensis_models <-
-  # create the workflow_set
-  workflow_set(
-    preproc = list(default = arabiensis_rec),
-    models = list(
-      # the standard glm specs
-      glm = sdm_spec_glm(),
-      # the standard sdm specs
-      gam = sdm_spec_gam(),
-      # rf specs with tuning
-      rf = sdm_spec_rf()
-    ),
-    # make all combinations of preproc and models,
-    cross = TRUE
-  ) %>%
-  # set formula for gams
-  update_workflow_model("default_gam",
-                        spec = sdm_spec_gam(),
-                        formula = gam_formula(arabiensis_rec)) %>%
-  # tweak controls to store information needed later for stacking
-  option_add(control = control_ensemble_grid())
-```
-
-
-We can now use the block CV folds we built earlier from the training dataset to
-tune and assess the models:
-```{r tune_grid}
-set.seed(1005)
-arabiensis_models <- 
-   arabiensis_models %>% 
-   workflow_map("tune_grid", resamples = arabiensis_cv, grid = 5, 
-                metrics = metric_set(roc_auc), verbose = TRUE)
-```
-
-Note that `workflow_set` correctly detects that we have no tuning parameters for 
-*glm* and *gam*. We can have a look at the performance of our models with:
-
-```{r}
-autoplot(arabiensis_models)
+autoplot(lacerta_models)
 ```
 
 Not let's stack the models to build an ensemble
 
 ```{r build_stack}
+library(stacks)
 set.seed(1005)
-arabiensis_stack <- 
+lacerta_stack <- 
   # initialize the stack
   stacks() %>%
   # add candidate members
-  add_candidates(arabiensis_models) %>%
+  add_candidates(lacerta_models) %>%
   # determine how to combine their predictions
   blend_predictions() %>%
   # fit the candidates with nonzero weights (i.e.nonzero stacking coefficients)
   fit_members()
 
-autoplot(arabiensis_stack, type = "weights")
+autoplot(lacerta_stack, type = "weights")
 ```
 
 And finally, we can make predictions on the testing data with:
 
 ```{r predict_test}
-arabiensis_testing <- testing(arabiensis_initial)
-arabiensis_test_pred <- 
-  arabiensis_testing %>%
-  bind_cols(predict(arabiensis_stack, ., type="prob"))
+lacerta_testing <- testing(lacerta_initial)
+
+lacerta_test_pred <- 
+  lacerta_testing %>%
+  bind_cols(predict(lacerta_stack, ., type="prob"))
 ```
 
 And look at the goodness of fit with AUC
 
 ```{r assess_test}
-roc_auc(data= arabiensis_test_pred,truth=class,.pred_presence)
+roc_auc(data= lacerta_test_pred,truth=class,.pred_presence)
 ```
 
 # Projecting to the present
-```{r plot_present}
-prediction_present <- predict_raster(arabiensis_stack, climate_present, type="prob")
+We can now make predictions with this ensemble (using the default option of taking
+the mean of the predictions from each model).
+
+```{r plot_present, fig.width=6, fig.height=4}
+prediction_present <- predict_raster(lacerta_stack, climate_present, type="prob")
 ggplot() +
   geom_spatraster(data=prediction_present, aes(fill=.pred_presence))+
   scale_fill_terrain_c() +
-  geom_sf(data = arabiensis %>% filter(class=="presence"))
-```
-
-
-# Projecting to other times
-
-We will project the leopard range to a different time. We will get the climate
-for the Last Glacial Maximum, using the `pastclim` package.
-
-```{r get_lgm}
-climate_lgm<-pastclim::region_slice(time_bp = -21000, 
-                                        bio_variables = vars_to_keep, 
-                                        data="Beyer2020", 
-                                        crop=region_outline$Africa)
-```
-
-And predict using the ensemble:
-```{r plot_lgm}
-prediction_lgm <- predict_raster(arabiensis_stack, climate_lgm, type="prob")
-ggplot() +
-  geom_spatraster(data=prediction_lgm, aes(fill=.pred_presence))+
-  scale_fill_terrain_c()
+  # plot presences used in the model
+  geom_sf(data = lacerta_thin %>% filter(class=="presence"))
 ```
