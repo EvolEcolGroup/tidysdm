@@ -20,6 +20,7 @@ prep.recipe<-function (x, training = NULL, fresh = FALSE, verbose = FALSE,
 
 #' @export
 bake.recipe <- function (object, new_data, ..., composition = "tibble") {
-  recipes:::bake.recipe(object=object, ..., new_data = sf::st_drop_geometry(new_data),
+  #recipes:::bake.recipe
+  utils::getFromNamespace("bake.recipe", "recipes") (object=object, ..., new_data = sf::st_drop_geometry(new_data),
                         composition=composition)
 }

@@ -19,6 +19,7 @@
 #' the manpage for [recipes::recipe()] for details.
 #' @export
 #' @import recipes
+#' @importFrom rlang .data
 
 recipe.sf <- function (x, ...) {
   # we should check that all coordinates are points
