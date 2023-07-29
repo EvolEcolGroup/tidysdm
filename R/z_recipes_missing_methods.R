@@ -10,13 +10,16 @@
 prep.recipe<-function (x, training = NULL, fresh = FALSE, verbose = FALSE, 
                        retain = TRUE, log_changes = FALSE, strings_as_factors = TRUE, 
                        ...) {
-  recipes:::prep.recipe(x=x,training=st_drop_geometry(training), fresh=fresh, verbose=FALSE,
-                       retain=retain, log_changes=log_changes,
-                       strings_as_factors =strings_as_factors, ...)
+  #recipes:::prep.recipe
+  utils::getFromNamespace("prep.recipe", "recipes") (
+    x=x,training=sf::st_drop_geometry(training),
+    fresh=fresh, verbose=FALSE,
+    retain=retain, log_changes=log_changes,
+    strings_as_factors =strings_as_factors, ...)
 }
 
 #' @export
 bake.recipe <- function (object, new_data, ..., composition = "tibble") {
-  recipes:::bake.recipe(object=object, ..., new_data = st_drop_geometry(new_data),
+  recipes:::bake.recipe(object=object, ..., new_data = sf::st_drop_geometry(new_data),
                         composition=composition)
 }

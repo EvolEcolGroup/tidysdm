@@ -3,6 +3,7 @@
 \name{tss_max}
 \alias{tss_max}
 \alias{tss_max.data.frame}
+\alias{tss_max.sf}
 \alias{tss_max_vec}
 \title{Maximum TSS - True Skill Statistics}
 \usage{
@@ -17,6 +18,8 @@ tss_max(data, ...)
   event_level = "first",
   case_weights = NULL
 )
+
+\method{tss_max}{sf}(data, ...)
 
 tss_max_vec(
   truth,

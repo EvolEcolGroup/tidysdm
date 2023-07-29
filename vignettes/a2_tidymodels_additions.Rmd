@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 # Additional features of `tidymodels`
 
 In this vignette, we illustrate how a number of features from `tidymodels` can
-be used to enhance SDMs. We reccomend users first become famliar with `tidymodels`;
+be used to enhance a conventional SDM pipeline. We recommend users first become familiar with `tidymodels`;
 there are a number of excellent tutorials on its dedicated [website](https://www.tidymodels.org/)
 We reuse the example on the Iberian lizard that we used
 to give an overview of the features of `tidysdm`.
@@ -233,7 +233,10 @@ We can have a look at the performance of our models with:
 autoplot(lacerta_models)
 ```
 
-Not let's stack the models to build an ensemble
+Instead of building a simple ensemble with the best version of each model type, we
+can build a stack ensemble, as implemented in the package `stacks`. Stacking
+uses a meta-learning algorithm to learn how to best combine multiple models, including
+multiple versions of the same algorithm with different hyperparameters.
 
 ```{r build_stack}
 library(stacks)
@@ -251,7 +254,10 @@ lacerta_stack <-
 autoplot(lacerta_stack, type = "weights")
 ```
 
-And finally, we can make predictions on the testing data with:
+We can see that two versions of the random forest and one of mars were selected;
+the stacking coefficients give an indication of the weight each model carries
+within the ensemble. We can now use the ensemble to make predictions about the
+testing data:
 
 ```{r predict_test}
 lacerta_testing <- testing(lacerta_initial)
@@ -261,10 +267,12 @@ lacerta_test_pred <-
   bind_cols(predict(lacerta_stack, ., type="prob"))
 ```
 
-And look at the goodness of fit with AUC
+And look at the goodness of fit using some commonly used sdm metrics. Note that
+`sdm_metric_set` is first invoked to generate a function (with empty `()`) that is then used
+on the data.
 
 ```{r assess_test}
-roc_auc(data= lacerta_test_pred,truth=class,.pred_presence)
+sdm_metric_set()(data= lacerta_test_pred,truth=class,.pred_presence)
 ```
 
 # Projecting to the present

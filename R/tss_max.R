@@ -59,6 +59,13 @@ tss_max.data.frame <- function(data,
   )
 }
 
+#' @rdname tss_max
+#' @export
+tss_max.sf <- function(data,...){
+  data %>% dplyr::as_tibble() %>% tss_max(...)
+}
+
+
 #' @export
 #' @rdname tss_max
 tss_max_vec <- function(truth,
