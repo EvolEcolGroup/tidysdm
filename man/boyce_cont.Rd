@@ -3,6 +3,7 @@
 \name{boyce_cont}
 \alias{boyce_cont}
 \alias{boyce_cont.data.frame}
+\alias{boyce_cont.sf}
 \alias{boyce_cont_vec}
 \title{Boyce continuous index (BCI)}
 \usage{
@@ -17,6 +18,8 @@ boyce_cont(data, ...)
   event_level = "first",
   case_weights = NULL
 )
+
+\method{boyce_cont}{sf}(data, ...)
 
 boyce_cont_vec(
   truth,

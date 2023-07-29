@@ -65,6 +65,13 @@ boyce_cont.data.frame <- function(data,
   )
 }
 
+#' @rdname boyce_cont
+#' @export
+boyce_cont.sf <- function(data,...){
+  data %>% dplyr::as_tibble() %>% boyce_cont(...)
+}
+
+
 #' @export
 #' @rdname boyce_cont
 boyce_cont_vec <- function(truth,
