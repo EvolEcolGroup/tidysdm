@@ -276,8 +276,7 @@ sdm_metric_set()(data= lacerta_test_pred,truth=class,.pred_presence)
 ```
 
 # Projecting to the present
-We can now make predictions with this ensemble (using the default option of taking
-the mean of the predictions from each model).
+We can now make predictions with this ensemble:
 
 ```{r plot_present, fig.width=6, fig.height=4}
 prediction_present <- predict_raster(lacerta_stack, climate_present, type="prob")
