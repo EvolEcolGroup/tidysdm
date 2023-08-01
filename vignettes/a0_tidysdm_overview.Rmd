@@ -25,6 +25,11 @@ modelling. Given the variety of models required for SDM, `tidymodels` is an
 ideal framework. `tidysdm` provides a number of wrappers and specialised
 functions to facilitate the fitting of SDM with `tidymodels`.
 
+This article provides an overview of the how `tidysdm` facilitates fitting
+SDMs. As `tidysdm` relies on `tidymodels`, users are advised to familiarise 
+themselves with the introductory
+tutorials on the [`tidymodels` website](https://www.tidymodels.org/start/).
+
 When we load `tidysdm`, it automatically loads `tidymodels` and all associated
 packages necessary to fit models:
 ```{r libraries}
@@ -270,9 +275,11 @@ lacerta_thin %>% check_sdm_presence(class)
 We now build a `workflow_set` of different models, defining which 
 hyperparameters we want to tune. We will use *glm*, *random forest*,
 *boosted_trees* and *maxent* as
-our models. The latter three have tunable hyperparameters. For the most
+our models (for more details on how
+to use `workflow_set`s, see [this tutorial](https://workflowsets.tidymodels.org/articles/tuning-and-comparing-models.html)). The latter three models have tunable hyperparameters. For the most
 commonly used models, `tidysdm` automatically chooses the most important
-parameters, but it is possible to fully customise model specifications. 
+parameters, but it is possible to fully customise model specifications (e.g. see the
+help for `sdm_spec_rf`). 
 
 ```{r workflow_set}
 lacerta_models <-

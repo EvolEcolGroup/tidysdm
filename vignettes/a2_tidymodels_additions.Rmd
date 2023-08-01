@@ -19,9 +19,9 @@ knitr::opts_chunk$set(
 
 In this vignette, we illustrate how a number of features from `tidymodels` can
 be used to enhance a conventional SDM pipeline. We recommend users first become familiar with `tidymodels`;
-there are a number of excellent tutorials on its dedicated [website](https://www.tidymodels.org/)
+there are a number of excellent tutorials (both introductory and advanced) on its dedicated [website](https://www.tidymodels.org/)
 We reuse the example on the Iberian lizard that we used
-to give an overview of the features of `tidysdm`.
+in the "`tidysdm` overview" article.
 
 # Preparing your data
 
