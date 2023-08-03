@@ -1,9 +1,9 @@
 ---
-title: "Example of additional tidymodels features"
+title: "Examples of additional tidymodels features"
 output: rmarkdown::html_vignette
 #output: rmarkdown::pdf_document
 vignette: >
-  %\VignetteIndexEntry{Example of additional tidymodels features}
+  %\VignetteIndexEntry{Examples of additional tidymodels features}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -131,8 +131,6 @@ lacerta_initial <- spatial_initial_split(lacerta_thin, prop = 1/5, spatial_block
 autoplot(lacerta_initial)
 ```
 
-# Fit the model to the training set, tuning by crossvalidation
-
 We can now extract the training set from our `lacerta_initial` split, and sample
 folds to set up crossvalidation (we use the same grid we used on the full
 dataset `lacerta_thin` for the `initial_split`)
@@ -145,6 +143,8 @@ lacerta_cv <- spatial_block_cv(lacerta_training, v = 5,
 autoplot(lacerta_cv)
 ```
 
+# Different recipes for certain models
+
 Only certain type of models (e.g. glm, mars) struggle with correlated variables;
 other algorithms, such as random forests, can handle correlated variables. So,
 we will create two recipes, one with all variables, and one only with the
@@ -152,9 +152,7 @@ variables that are uncorrelated:
 
 ```{r recipe}
 lacerta_rec_all <- recipe(lacerta_thin, formula=class~.)
-lacerta_rec_uncor <- lacerta_rec_all %>% step_select(all_of(c("class","bio05","bio06", "bio13", "bio15")))
 lacerta_rec_uncor <- lacerta_rec_all %>% step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", "bio17", "bio18", "bio19", "altitude")))
-
 
 lacerta_rec_uncor
 ```
@@ -235,6 +233,8 @@ We can have a look at the performance of our models with:
 autoplot(lacerta_models)
 ```
 
+# Stack ensembles
+
 Instead of building a simple ensemble with the best version of each model type, we
 can build a stack ensemble, as implemented in the package `stacks`. Stacking
 uses a meta-learning algorithm to learn how to best combine multiple models, including
@@ -277,7 +277,6 @@ on the data.
 sdm_metric_set()(data= lacerta_test_pred,truth=class,.pred_presence)
 ```
 
-# Projecting to the present
 We can now make predictions with this ensemble:
 
 ```{r plot_present, fig.width=6, fig.height=4}

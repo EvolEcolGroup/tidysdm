@@ -1,9 +1,9 @@
 ---
-title: "application with palaeodata"
+title: "Application with palaeodata"
 output: rmarkdown::html_vignette
 #output: rmarkdown::pdf_document
 vignette: >
-  %\VignetteIndexEntry{application with palaeodata}
+  %\VignetteIndexEntry{Application with palaeodata}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
