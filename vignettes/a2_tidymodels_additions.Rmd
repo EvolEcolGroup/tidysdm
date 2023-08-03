@@ -1,9 +1,9 @@
 ---
-title: "Example of additional tidymodels features"
+title: "Examples of additional tidymodels features"
 output: rmarkdown::html_vignette
 #output: rmarkdown::pdf_document
 vignette: >
-  %\VignetteIndexEntry{Example of additional tidymodels features}
+  %\VignetteIndexEntry{Examples of additional tidymodels features}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

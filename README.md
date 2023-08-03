@@ -54,8 +54,34 @@ devtools::install_github("EvolEcolGroup/pastclim", ref="dev")
 On its dedicated [website](https://evolecolgroup.github.io/tidysdm/),
 you can find Articles giving you a step-by-step [overview of the
 fitting SDMs to contemporary species](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html),
-as well as an equivalent [tutorial for using palaeontological data](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html). There is also a [dev
+as well as an equivalent [tutorial for using palaeontological data](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html).
+Furthermore, there is an [Article with examples of how to leverage various
+features of tidymodels](https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html) that are not commonly adopted in SDM pipelines
+
+There is also a [dev
 version](https://evolecolgroup.github.io/tidysdm/dev/) of the site
 updated for the `dev` branch of `tidysdm` (on the top left of the dev
 website, the version number is in red and in the format x.x.x.9xxx,
 indicating it is a development version).
+
+## When something does not work
+
+What should you do if you get an error when trying to fit a model? `tidysdm`
+is a relatively new package, so it might well be that, when you get an
+error, you might have encountered a bug. However, it is also possible that you
+have mispecified your model (and so the error comes from `tidymodels`, because
+your model is not valid). We have prepared an [Article on how to diagnose failing
+models] (https://evolecolgroup.github.io/tidysdm/articles/a3_troubleshooting.html).
+It is not a fully comprehensive list of everything that could go wrong, but it will
+hopefully give you ideas on how to dig deeper in what is wrong. You should also
+check the [issues on
+GitHub](https://github.com/EvolEcolGroup/tidysdm/issues) to see whether
+the problem has already been reported. 
+
+If you are convinced
+that the problem is a bug in `tidysdm`, feel free to create an
+new issue. Please make sure you have updated to the latest version of
+`tidysdm`, as well as updating all other packages on your
+system, and provide [a reproducible
+example](https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example)
+for the developers to investigate the problem.
