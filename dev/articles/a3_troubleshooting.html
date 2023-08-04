@@ -114,7 +114,7 @@ NA:</p>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Use suppressPackageStartupMessages() to eliminate package startup messages</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Search for functions across packages at <span style="color: #00BB00;">https://www.tidymodels.org/find/</span></span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span>
 <span><span class="co">#&gt; Registered S3 methods overwritten by 'tidysdm':</span></span>
 <span><span class="co">#&gt;   method      from   </span></span>
@@ -151,12 +151,11 @@ NA:</p>
 <span>                metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (617ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (675ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
 <span><span class="co">#&gt; → <span style="color: #BB0000; font-weight: bold;">A</span> | <span style="color: #BB0000;">error</span>:   Missing data in columns: bio05.</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x1</span></span>
-<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x7</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x15</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
@@ -186,7 +185,7 @@ diagnosing problems:</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Variables removed: <span style="color: #0000BB;">bio01</span>, <span style="color: #0000BB;">bio02</span>, <span style="color: #0000BB;">bio03</span>, <span style="color: #0000BB;">bio04</span>, <span style="color: #0000BB;">bio07</span>, <span style="color: #0000BB;">bio08</span>, ... | <span style="font-style: italic;">Trained</span></span></span></code></pre></div>
 <p>Note that, in the training information, we were warned that 1 row was
 incomplete. You could use <code>step_naomit</code> to deal with this
-programatically, or ascertain why you are generating missing data (we
+programmatically, or ascertain why you are generating missing data (we
 prefer the latter, as a good SDM pipeline should not generate
 observations, presences or pseudoabsences, with missing data).</p>
 </div>
@@ -205,7 +204,8 @@ predictions.</p>
 selecting variables of interest. This can happen if we use
 <code>step_select</code> to choose variables of interest, and the error
 is less than clear:</p>
-<p>Let’s load the data and create a recipe with step selet:</p>
+<p>Let’s load the data and create a recipe with
+<code>step_select</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_sf.RDS"</span>,</span>
 <span>                               package<span class="op">=</span><span class="st">"tidysdm"</span><span class="op">)</span><span class="op">)</span></span>
@@ -245,7 +245,7 @@ is less than clear:</p>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
 <span><span class="co">#&gt; → <span style="color: #BB0000; font-weight: bold;">A</span> | <span style="color: #BB0000;">error</span>:   subscript out of bounds</span></span>
-<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x7</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x1</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x15</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.</span></span>
@@ -278,7 +278,7 @@ not show anything obvious:</p>
 <span><span class="co">#&gt; ── Operations</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> Variables selected: <span style="color: #0000BB;">bio05</span>, <span style="color: #0000BB;">bio06</span>, <span style="color: #0000BB;">bio13</span>, <span style="color: #0000BB;">bio14</span>, <span style="color: #0000BB;">bio15</span> | <span style="font-style: italic;">Trained</span></span></span></code></pre></div>
 <p>In this case, it is a process of exclusion. Everything seems fine,
-but the models don’t work. Then ask yourself if the outcome varialbe
+but the models don’t work. Then ask yourself if the outcome variable
 might be problematic. As a general rule, we have found it easier to rely
 on <code>step_rm</code> to remove variables (e.g. correlated
 variables).</p>
@@ -324,10 +324,10 @@ wants to fit a standard smooth to every continuous predictor.</p>
 <span>                metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (530ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (602ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 resampling: default_gam</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 resampling: default_gam (1.6s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 resampling: default_gam (1.9s)</span></span></span></code></pre></div>
 <p>Note that the step of defining a formula is incompatible with using
 <code>step_cor</code> in a recipe. <code>step_cor</code> removes
 correlated variables in recipes, using a similar algorithm to
