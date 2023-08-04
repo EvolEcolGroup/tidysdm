@@ -1,6 +1,6 @@
 #' Thin point dataset to have 1 observation per raster cell
 #'
-#' This function thinss a dataset so that only one observation per cell
+#' This function thins a dataset so that only one observation per cell
 #' is retained.
 #'
 #' Further thinning can be achieved by aggregating cells in the raster

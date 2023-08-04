@@ -11,7 +11,7 @@
 #' to be included in the visualization.
 #' @param std_errs The number of standard errors to plot (if the standard error
 #' exists).
-#' @param ... Other options to pass to `autoplot()`. Currenly unused.
+#' @param ... Other options to pass to `autoplot()`. Currently unused.
 #' @details
 #' This function is intended to produce a default plot to visualize helpful
 #'  information across all possible applications of a [`simple_ensemble`]. More

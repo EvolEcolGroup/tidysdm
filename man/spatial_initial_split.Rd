@@ -9,7 +9,7 @@ spatial_initial_split(data, prop, strategy, ...)
 \arguments{
 \item{data}{A dataset (data.frame or tibble)}
 
-\item{prop}{The proportion of data to be retained for modeling/analysis.}
+\item{prop}{The proportion of data to be retained for modelling/analysis.}
 
 \item{strategy}{A sampling strategy from \link{spatialsample}}
 

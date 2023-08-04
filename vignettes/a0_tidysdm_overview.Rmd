@@ -58,7 +58,7 @@ st_crs(lacerta) = 4326
 It is usually
 advisable to plot the locations directly on the raster that will be used to
 extract climatic variables, to see how the locations fall within the discrete
-space of the raster. For this vignette, we will use WordClim as our source of
+space of the raster. For this vignette, we will use WorldClim as our source of
 climatic information. We will access the WorldClim data via the library `pastclim`;
 even though this library, as the name suggests, is mostly designed to handle palaeoclimatic
 reconstructions, it also provides convenient functions to access present day
@@ -164,7 +164,7 @@ ggplot() +
 ```
 
 Generally, we can use `pastclim` to check what variables are 
-available for the WordClim dataset:
+available for the WorldClim dataset:
 ```{r load_climate, eval=FALSE}
 climate_vars <- get_vars_for_dataset("WorldClim_2.1_10m")
 ```
@@ -315,7 +315,7 @@ autoplot(lacerta_cv)
 
 We can now use the block CV folds to
 tune and assess the models (to keep computations fast, we will only explore 3
-combination of hypeparameters per model; this is far too little in real life!):
+combination of hyperparameters per model; this is far too little in real life!):
 ```{r tune_grid}
 set.seed(1234567)
 lacerta_models <- 
@@ -397,7 +397,7 @@ ggplot() +
 ```
 
 # Projecting to the future
-WorlClim has a wide selection of projections for the future based on different
+WorldClim has a wide selection of projections for the future based on different
 models and Shared Socio-economic Pathways (SSP). Type `help("WorldClim_2.1")`
 for a full list. We will use predictions based on "HadGEM3-GC31-LL" model for SSP 245 (intermediate green
 house gas emissions) at the same resolution as the present day data (10 arc-minutes). We first download the data:

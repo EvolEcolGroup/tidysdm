@@ -17,12 +17,12 @@ filter_high_cor(x, cutoff = 0.7, verbose = FALSE, names = TRUE)
 the column index \code{FALSE})?}
 }
 \value{
-A vector of names of columns that are below the correlation threhold
-(when \code{names = TRUE}), otherwise a vector of indeces.
+A vector of names of columns that are below the correlation threshold
+(when \code{names = TRUE}), otherwise a vector of indices.
 }
 \description{
 This function estimates the correlation matrix among variables in a
-\link[terra:SpatRaster-class]{terra::SpatRaster} and then returns a vector of variable names or indeces
+\link[terra:SpatRaster-class]{terra::SpatRaster} and then returns a vector of variable names or indices
 that are below a certain cutoff.
 The algorithm is based on \code{caret::findCorrelation}, using the \code{exact} option.
 The absolute values of pair-wise correlations are considered. If two

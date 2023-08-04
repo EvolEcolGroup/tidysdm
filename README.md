@@ -69,7 +69,7 @@ indicating it is a development version).
 What should you do if you get an error when trying to fit a model? `tidysdm`
 is a relatively new package, so it might well be that, when you get an
 error, you might have encountered a bug. However, it is also possible that you
-have mispecified your model (and so the error comes from `tidymodels`, because
+have misspecified your model (and so the error comes from `tidymodels`, because
 your model is not valid). We have prepared an [Article on how to diagnose failing
 models](https://evolecolgroup.github.io/tidysdm/articles/a3_troubleshooting.html).
 It is not a fully comprehensive list of everything that could go wrong, but it will

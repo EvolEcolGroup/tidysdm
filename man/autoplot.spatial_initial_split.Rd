@@ -28,7 +28,7 @@ This method provides a good visualization method for a spatial initial rsplit.
 }
 \details{
 This plot method is a wrapper around the standard \code{spatial_rsplit} method,
-but it relables the folds as \emph{Testing} and \emph{Traning} following the convention
+but it re-labels the folds as \emph{Testing} and \emph{Training} following the convention
 for a standard \code{initial_split} object
 }
 \examples{

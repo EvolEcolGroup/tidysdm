@@ -160,7 +160,7 @@ lacerta_rec_uncor
 And now use this in a `workflowset` (we will keep it small for computational time),
 selecting the appropriate recipe for each model. We will include a model (multivariate
 adaptive regression splines, or MARS) which does not have a wrapper in `tidysdm`
-for creating a model specificaiton. However, we can use a standard model spec from
+for creating a model specification. However, we can use a standard model spec from
 `yardstick`:
 
 ```{r workflow_set}
@@ -194,7 +194,7 @@ We can now use the block CV folds to
 tune and assess the models. Note that there are multiple tuning approaches,
 besides the standard grid method. Here we will use `tune_bayes`
 (to keep computations fast, we will only explore 3
-combination of hypeparameters per model; this is far too little in real life!).
+combination of hyperparameters per model; this is far too little in real life!).
 
 This tuning method (as opposed to use a standard grid) does not allow for
 hyperparameters with unknown limits, but

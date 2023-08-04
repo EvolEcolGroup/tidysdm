@@ -1,7 +1,7 @@
 #' Filter to retain only variables below a given correlation threshold
 #'
 #' This function estimates the correlation matrix among variables in a
-#' [terra::SpatRaster] and then returns a vector of variable names or indeces
+#' [terra::SpatRaster] and then returns a vector of variable names or indices
 #' that are below a certain cutoff.
 #' The algorithm is based on `caret::findCorrelation`, using the `exact` option.
 #' The absolute values of pair-wise correlations are considered. If two
@@ -18,8 +18,8 @@
 #' @param verbose A boolean for printing the details
 #' @param names a logical; should the column names be returned `TRUE` or
 #' the column index `FALSE`)?
-#' @returns A vector of names of columns that are below the correlation threhold
-#' (when \code{names = TRUE}), otherwise a vector of indeces.
+#' @returns A vector of names of columns that are below the correlation threshold
+#' (when \code{names = TRUE}), otherwise a vector of indices.
 #'
 #' @export
 
@@ -113,7 +113,7 @@ filter_high_cor <-
       passed_filter <- names(x)[newOrder][!deletecol]
       attr(passed_filter, "to_remove")<- names(x)[!names(x) %in% passed_filter]
     } else {
-      # return their indeces
+      # return their indices
       passed_filter <- newOrder[!deletecol]
       attr(passed_filter, "to_remove")<- (1:length(newOrder))[!(1:length(newOrder)) %in% passed_filter]
     }
