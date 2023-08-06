@@ -23,5 +23,5 @@ blockcv2rsample <- function(x, data){
   splits<-lapply(x$folds_list,
                  function(this_fold){names(this_fold)<-c("analysis","assessment")
                  rsample::make_splits(this_fold, data=data)})
-  manual_rset(splits,ids=paste0("Fold",seq(1:length(splits))))
+  rsample::manual_rset(splits,ids=paste0("Fold",seq(1:length(splits))))
 }
