@@ -1,6 +1,6 @@
 Package: tidysdm
 Title: Species Distribution Models with tidymodels
-Version: 0.9.0.9001
+Version: 0.9.0.9002
 Authors@R: c(
     person("Michela", "Leonardi", role = "aut"),
     person("Margherita", "Colucci", role = "aut"),
@@ -40,6 +40,7 @@ Imports:
     workflowsets,
     yardstick
 Suggests:
+    blockCV,
     doParallel,
     earth,
     knitr,

@@ -304,7 +304,12 @@ lacerta_models <-
 ```
 
 We now want to set up a spatial block cross-validation scheme to tune and assess
-our models. We will do an 80:20 split, by creating 5 folds.
+our models. We will do an 80:20 split, by creating 5 folds. We use the 
+`spatial_block_cv` function from the package `spatialsample`. `spatialsample`
+offers a number of sampling approaches for spatial data; it is also possible to
+convert objects created with `blockCV` (which offers further features
+for spatial sampling) into an `rsample` object suitable to `tisysdm` with the
+function `blockcv2rsample`.
 
 ```{r training_cv, fig.width=6, fig.height=4}
 library(tidysdm)
