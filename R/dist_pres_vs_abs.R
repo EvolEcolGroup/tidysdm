@@ -12,7 +12,7 @@
 #' the first level of this factor
 #' @returns a name vector of distances
 #' @examples
-#' # This should be updatd to use a dataset from tidysdm
+#' # This should be updated to use a dataset from tidysdm
 #' data("bradypus", package="maxnet")
 #' bradypus_tb <- tibble::as_tibble(bradypus) %>% dplyr::mutate(presence = relevel(factor(
 #'   dplyr::case_match (presence, 1~"presence",0 ~"absence")),

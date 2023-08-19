@@ -24,7 +24,7 @@ candidates for SDMs, as species occurrences are confined to a subset
 of the available background.
 }
 \examples{
-# This should be updatd to use a dataset from tidysdm
+# This should be updated to use a dataset from tidysdm
 data("bradypus", package="maxnet")
 bradypus_tb <- tibble::as_tibble(bradypus) \%>\% dplyr::mutate(presence = relevel(factor(
   dplyr::case_match (presence, 1~"presence",0 ~"absence")),
