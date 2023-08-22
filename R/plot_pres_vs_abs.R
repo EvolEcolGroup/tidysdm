@@ -3,8 +3,8 @@
 #' Create a composite plots contrasting the distribution of multiple variables
 #' for presences vs the background.
 #'
-#' @param .data a `data.frame` (or derived object, such as `tibble`, or
-#' `sf`) with values for the bioclimate variables for presences and background
+#' @param .data a [`data.frame`] (or derived object, such as [`tibble::tibble`], or
+#' [`sf::st_sf`]) with values for the bioclimate variables for presences and background
 #' @param .col the column containing the presences; it assumes presences to be
 #' the first level of this factor
 #' @returns a `patchwork` composite plot
