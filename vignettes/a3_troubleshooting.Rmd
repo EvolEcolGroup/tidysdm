@@ -197,10 +197,11 @@ is a known issue of how GAMs are implemented in `tidymodels`.
 
 In the examples above, all the splits used for cross-validation of a given algorithms failed. However, it
 is also possible that failures occur only on some splits for certain
-algorithms (technically, specific `rset` within certain `workflows`). When this type of
+algorithms (technically, a specific `rsplit` within certain `workflows`). When this type of
 problem occurs, it is best to extract the problematic workflow, and potentially
-investigate fitting the model to each `rset`.
+investigate fitting it to the specific `rsplit`.
 
+We generate a problematic dataset by subsampling the lacerta dataset:
 
 ```{r}
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
@@ -208,8 +209,10 @@ lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
 set.seed(123)
 lacerta_thin <- lacerta_thin[sample(1:nrow(lacerta_thin),nrow(lacerta_thin)/5),]
 
-lacerta_rec <- recipe(lacerta_thin, formula=class~.) %>% step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", "bio17", "bio18", "bio19", "altitude")))
-
+lacerta_rec <- recipe(lacerta_thin, formula=class~.) %>% 
+  step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", 
+                    "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", 
+                    "bio17", "bio18", "bio19", "altitude")))
 
 lacerta_models <-
   # create the workflow_set
@@ -219,7 +222,9 @@ lacerta_models <-
       # the standard glm specs
       glm = sdm_spec_glm(),
       # the standard gam specs
-      gam = sdm_spec_gam()
+      gam = sdm_spec_gam(),
+      # rf specs with tuning
+      rf = sdm_spec_rf()
     ),
     # make all combinations of preproc and models,
     cross = TRUE
@@ -232,6 +237,7 @@ lacerta_models <-
   option_add(control = control_ensemble_grid())
 ```
 
+We then create 3 folds and attempt to fit the models:
 
 ```{r}
 set.seed(100)
@@ -242,7 +248,44 @@ lacerta_models <-
                 metrics = sdm_metric_set(), verbose = TRUE)
 ```
 
+We see that one of the folds gives us an error when using GAMs. The error 
+("Fitting terminated with step failure - check results carefully") comes from the
+gam function in the package `mgcv`. A quick google on StackOverflow[https://stats.stackexchange.com/questions/576273/gam-model-warning-message-step-failure-in-theta-estimation] gives us
+an idea of where this error comes from.
+
+We start by extracting the results of the gam fits:
+
 ```{r}
-faulty_gams <- extract_workflow(lacerta_models,id = "default_gam")
-tune_grid(faulty_gams,)
+gam_results <- extract_workflow_set_result(lacerta_models,id = "default_gam")
+gam_results
 ```
+
+We see that, in the `.notes` column, the second item is not empty (it does not
+have zero rows). We can check that it indeed contains the error that we wanted:
+
+```{r}
+gam_results$.notes[2]
+```
+
+We can now get the problmatic data split, and extract the training data:
+
+```{r}
+problem_split <- gam_results$splits[2][[1]]
+summary(training(problem_split))
+```
+
+In this case, there is nothing too obvious that leads to the error (an important
+check is to make sure that you have enough presences in a split; too few presences will
+generally lead to errors).
+
+We can now extract the workflow and refit it to the split to confirm that we
+have isolated the problem:
+
+```{r}
+gam_workflow <- extract_workflow(lacerta_models,id = "default_gam")
+faulty_gam <- fit(gam_workflow,training(problem_split))
+```
+
+The next step would be to dig deeper into the data, trying to understand whether
+there are some outliers that are problematic. The specific steps will depend on the
+algorithm that is giving problems.
