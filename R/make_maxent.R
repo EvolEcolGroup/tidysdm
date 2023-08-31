@@ -18,8 +18,6 @@ make_maxent <- function() {
     eng = "maxnet",
     parsnip = "feature_classes",
     original = "classes",
-    # TODO this should be sorted out for tuning
-    #func = list(pkg = "foo", fun = "bar"),
     func = list(pkg = "tidysdm", fun = "feature_classes"),
     has_submodel = FALSE
   )
@@ -29,8 +27,6 @@ make_maxent <- function() {
     eng = "maxnet",
     parsnip = "regularization_multiplier",
     original = "regmult",
-    # TODO this should be sorted out for tuning
-    #func = list(pkg = "foo", fun = "bar"),
     func = list(pkg = "tidysdm", fun = "regularization_multiplier"),
     has_submodel = FALSE
   )

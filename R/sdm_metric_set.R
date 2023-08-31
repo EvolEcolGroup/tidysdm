@@ -14,5 +14,5 @@
 #' @export
 
 sdm_metric_set <- function(...){
-  metric_set(roc_auc, boyce_cont, tss_max, ...)
+  metric_set(boyce_cont, roc_auc, tss_max, ...)
 }
