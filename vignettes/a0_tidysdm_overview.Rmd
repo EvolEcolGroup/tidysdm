@@ -25,6 +25,11 @@ modelling. Given the variety of models required for SDM, `tidymodels` is an
 ideal framework. `tidysdm` provides a number of wrappers and specialised
 functions to facilitate the fitting of SDM with `tidymodels`.
 
+This article provides an overview of the how `tidysdm` facilitates fitting
+SDMs. As `tidysdm` relies on `tidymodels`, users are advised to familiarise 
+themselves with the introductory
+tutorials on the [`tidymodels` website](https://www.tidymodels.org/start/).
+
 When we load `tidysdm`, it automatically loads `tidymodels` and all associated
 packages necessary to fit models:
 ```{r libraries}
@@ -53,7 +58,7 @@ st_crs(lacerta) = 4326
 It is usually
 advisable to plot the locations directly on the raster that will be used to
 extract climatic variables, to see how the locations fall within the discrete
-space of the raster. For this vignette, we will use WordClim as our source of
+space of the raster. For this vignette, we will use WorldClim as our source of
 climatic information. We will access the WorldClim data via the library `pastclim`;
 even though this library, as the name suggests, is mostly designed to handle palaeoclimatic
 reconstructions, it also provides convenient functions to access present day
@@ -110,7 +115,7 @@ ggplot() +
 
 # Thinning step
 
-Now, we thin the observations to have a one per cell in the raster (it would be better
+Now, we thin the observations to have one per cell in the raster (it would be better
 if we had an equal area projection...):
 ```{r thin_by_cell}
 set.seed(1234567)
@@ -141,7 +146,7 @@ ggplot() +
 ```
 
 Now we sample pseudo-absences (we will constrain them to be at least 50km away
-from any presences), selecting as 3 times as many points as presences
+from any presences), selecting as 3 times as many points as presences:
 ```{r sample_pseudoabs}
 set.seed(1234567)
 lacerta_thin <- sample_pseudoabs(lacerta_thin, 
@@ -159,7 +164,7 @@ ggplot() +
 ```
 
 Generally, we can use `pastclim` to check what variables are 
-available for the WordClim dataset:
+available for the WorldClim dataset:
 ```{r load_climate, eval=FALSE}
 climate_vars <- get_vars_for_dataset("WorldClim_2.1_10m")
 ```
@@ -171,7 +176,7 @@ climate_vars <- names(climate_present)
 ```
 
 
-We first download the dataset at the right resolution (here 5 arc-minutes):
+We first download the dataset at the right resolution (here 10 arc-minutes):
 ```{r eval=FALSE}
 download_dataset("WorldClim_2.1_10m")
 ```
@@ -188,7 +193,7 @@ climate_present<-pastclim::region_slice(time_ce = 1985,
 
 We start by selecting variables for which presences are markedly different from
 the underlying background. First, let's extract climate for all presences and
-pseudo-absences
+pseudo-absences:
 ```{r}
 lacerta_thin <- lacerta_thin %>% 
   bind_cols(terra::extract(climate_present, lacerta_thin, ID=FALSE))
@@ -200,7 +205,7 @@ We can use violin plots to compare the distribution of the climatic variables fo
 lacerta_thin %>% plot_pres_vs_bg(class)
 
 ```
-We want to choose variables for which presences use a values different from the background (pseudo-absences).
+We want to choose variables for which presences use values different from the background (pseudo-absences).
 We can qualitatively look at the plots, or use a quantitative approach that ranks them based on the
 overlap of the respective density plots:
 ```{r}
@@ -270,9 +275,11 @@ lacerta_thin %>% check_sdm_presence(class)
 We now build a `workflow_set` of different models, defining which 
 hyperparameters we want to tune. We will use *glm*, *random forest*,
 *boosted_trees* and *maxent* as
-our models. The latter three have tunable hyperparameters. For the most
+our models (for more details on how
+to use `workflow_set`s, see [this tutorial](https://workflowsets.tidymodels.org/articles/tuning-and-comparing-models.html)). The latter three models have tunable hyperparameters. For the most
 commonly used models, `tidysdm` automatically chooses the most important
-parameters, but it is possible to fully customise model specifications. 
+parameters, but it is possible to fully customise model specifications (e.g. see the
+help for `sdm_spec_rf`). 
 
 ```{r workflow_set}
 lacerta_models <-
@@ -297,7 +304,12 @@ lacerta_models <-
 ```
 
 We now want to set up a spatial block cross-validation scheme to tune and assess
-our models. We will do an 80:20 split, by creating 5 folds.
+our models. We will do an 80:20 split, by creating 5 folds. We use the 
+`spatial_block_cv` function from the package `spatialsample`. `spatialsample`
+offers a number of sampling approaches for spatial data; it is also possible to
+convert objects created with `blockCV` (which offers further features
+for spatial sampling) into an `rsample` object suitable to `tisysdm` with the
+function `blockcv2rsample`.
 
 ```{r training_cv, fig.width=6, fig.height=4}
 library(tidysdm)
@@ -308,7 +320,7 @@ autoplot(lacerta_cv)
 
 We can now use the block CV folds to
 tune and assess the models (to keep computations fast, we will only explore 3
-combination of hypeparameters per model; that far too little in real life!):
+combination of hyperparameters per model; this is far too little in real life!):
 ```{r tune_grid}
 set.seed(1234567)
 lacerta_models <- 
@@ -390,10 +402,10 @@ ggplot() +
 ```
 
 # Projecting to the future
-WorlClim has a wide selection of projections for the future based on different
+WorldClim has a wide selection of projections for the future based on different
 models and Shared Socio-economic Pathways (SSP). Type `help("WorldClim_2.1")`
 for a full list. We will use predictions based on "HadGEM3-GC31-LL" model for SSP 245 (intermediate green
-house gas emissions) at the same resolution as the present day data (5 arc-minutes). We first download the data:
+house gas emissions) at the same resolution as the present day data (10 arc-minutes). We first download the data:
 ```{r eval=FALSE}
 download_dataset("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
 ```
@@ -502,7 +514,7 @@ ensemble_list[[i_repeat]] <- simple_ensemble() %>%
 }
 ```
 
-Now we can create a `repeat_ensemble` from the list
+Now we can create a `repeat_ensemble` from the list:
 ```{r}
 lacerta_thin_rep_ens <- repeat_ensemble() %>% add_repeat(ensemble_list)
 lacerta_thin_rep_ens

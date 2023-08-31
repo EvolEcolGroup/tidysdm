@@ -72,7 +72,7 @@ lacerta_prep
 ```
 
 Note that, in the training information, we were warned that 1 row was incomplete.
-You could use `step_naomit` to deal with this programatically, or ascertain why
+You could use `step_naomit` to deal with this programmatically, or ascertain why
 you are generating missing data (we prefer the latter, as a good SDM pipeline
 should not generate observations, presences or pseudoabsences, with missing data).
 
@@ -89,7 +89,7 @@ Another potential mistake is to remove the response variable when selecting
 variables of interest. This can happen if we use `step_select` to choose
 variables of interest, and the error is less than clear:
 
-Let's load the data and create a recipe with step selet:
+Let's load the data and create a recipe with `step_select`:
 ```{r}
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
                                package="tidysdm"))

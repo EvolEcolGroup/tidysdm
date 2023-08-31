@@ -25,7 +25,7 @@ to be included in the visualization.}
 \item{std_errs}{The number of standard errors to plot (if the standard error
 exists).}
 
-\item{...}{Other options to pass to \code{autoplot()}. Currenly unused.}
+\item{...}{Other options to pass to \code{autoplot()}. Currently unused.}
 }
 \value{
 A ggplot object.

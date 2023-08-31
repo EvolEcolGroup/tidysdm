@@ -2,12 +2,25 @@
 % Please edit documentation in R/filter_high_cor.R
 \name{filter_high_cor}
 \alias{filter_high_cor}
+\alias{filter_high_cor.default}
+\alias{filter_high_cor.SpatRaster}
+\alias{filter_high_cor.matrix}
+\alias{filter_high_cor.data.frame}
 \title{Filter to retain only variables below a given correlation threshold}
 \usage{
 filter_high_cor(x, cutoff = 0.7, verbose = FALSE, names = TRUE)
+
+\method{filter_high_cor}{default}(x, cutoff = 0.7, verbose = FALSE, names = TRUE)
+
+\method{filter_high_cor}{SpatRaster}(x, cutoff = 0.7, verbose = FALSE, names = TRUE)
+
+\method{filter_high_cor}{matrix}(x, cutoff = 0.7, verbose = FALSE, names = TRUE)
+
+\method{filter_high_cor}{data.frame}(x, cutoff = 0.7, verbose = FALSE, names = TRUE)
 }
 \arguments{
-\item{x}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object}
+\item{x}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object, a data.frame (with only numeric
+variables), or a correlation matrix}
 
 \item{cutoff}{A numeric value for the pair-wise absolute correlation cutoff}
 
@@ -17,13 +30,14 @@ filter_high_cor(x, cutoff = 0.7, verbose = FALSE, names = TRUE)
 the column index \code{FALSE})?}
 }
 \value{
-A vector of names of columns that are below the correlation threhold
-(when \code{names = TRUE}), otherwise a vector of indeces.
+A vector of names of columns that are below the correlation threshold
+(when \code{names = TRUE}), otherwise a vector of indices.
 }
 \description{
-This function estimates the correlation matrix among variables in a
-\link[terra:SpatRaster-class]{terra::SpatRaster} and then returns a vector of variable names or indeces
-that are below a certain cutoff.
+This method finds a subset of variable such that all have a correlation
+below a certain cutoff. There are methods for \code{\link[terra:SpatRaster-class]{terra::SpatRaster}},
+\code{\link{data.frame}}, and to work directly on a correlation matrix that was
+previously estimated.
 The algorithm is based on \code{caret::findCorrelation}, using the \code{exact} option.
 The absolute values of pair-wise correlations are considered. If two
 variables have a high correlation, the function looks at the mean absolute
@@ -31,7 +45,7 @@ correlation of each variable and removes the variable with the largest mean
 absolute correlation.
 }
 \details{
-There are several function in the \code{subselect}
+There are several function in the package \code{subselect}
 that can also be used to accomplish
 the same goal but tend to retain more predictors.
 }

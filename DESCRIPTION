@@ -1,10 +1,10 @@
 Package: tidysdm
 Title: Species Distribution Models with tidymodels
-Version: 0.9.0.9001
+Version: 0.9.0.9003
 Authors@R: c(
-    person("Andrea", "Manica", , "am315@cam.ac.uk", role = c("aut", "cre")),
-    person("Michela", "Leonardi", role = "ctb"),
-    person("Margherita", "Colucci", role = "ctb"))
+    person("Michela", "Leonardi", role = "aut"),
+    person("Margherita", "Colucci", role = "aut"),
+    person("Andrea", "Manica", , "am315@cam.ac.uk", role = c("aut", "cre")))
 Description: Fit Species Distribution Models using the tidymodels framework.
 License: AGPL (>= 3)
 Encoding: UTF-8
@@ -40,6 +40,7 @@ Imports:
     workflowsets,
     yardstick
 Suggests:
+    blockCV,
     doParallel,
     earth,
     knitr,

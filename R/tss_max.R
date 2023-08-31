@@ -83,7 +83,6 @@ tss_max_vec <- function(truth,
 
   if (na_rm) {
     result <- yardstick::yardstick_remove_missing(truth, estimate, case_weights)
-
     truth <- result$truth
     estimate <- result$estimate
     case_weights <- result$case_weights
@@ -119,6 +118,11 @@ tss_max_estimator_impl <- function(truth,
   presences <- estimate[truth==pres_level]
   absences <- estimate[truth==absence_level]
 
+  # TODO we could implement case weights by properly fitting TSS
+  if (!is.null(case_weights)){
+    stop("tss_max with case_weights has not been implemented yet")
+  }
+  
   conf_matrix_df <- conf_matrix_df(presences, absences)
   sens = (conf_matrix_df$tp / (conf_matrix_df$tp + conf_matrix_df$fn))
   spec = (conf_matrix_df$tn / (conf_matrix_df$tn + conf_matrix_df$fp))

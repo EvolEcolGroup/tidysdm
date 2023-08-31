@@ -1,4 +1,4 @@
-#' Convert years BP from pastclim to lubridate date, or viceversa
+#' Convert years BP from pastclim to lubridate date, or vice versa
 #'
 #' These functions convert between years BP as used by pastclim (negative numbers going into
 #' the past, positive into the future) and standard

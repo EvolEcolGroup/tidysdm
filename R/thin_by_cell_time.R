@@ -43,15 +43,15 @@ thin_by_cell_time <- function(data, raster, coords=NULL, time_col="time",
   if ( terra::timeInfo(raster)[1,2]=="years"){
     time_steps <- lubridate::date_decimal(time_steps)
   }
-  # convert time_lub dates into indeces for the SpatRasterDatset
-  time_indeces <-
+  # convert time_lub dates into indices for the SpatRasterDatset
+  time_indices <-
     sapply(time_lub, function(a, b) {
       which.min(abs(a - b))
     }, time_steps)
   data_thin<-NULL
-  for (i_index in unique(time_indeces)){
+  for (i_index in unique(time_indices)){
     # get data for this time_index, we remove coordinates as we don't need them
-    data_sub <- data %>% dplyr::filter(time_indeces==i_index)
+    data_sub <- data %>% dplyr::filter(time_indices==i_index)
     raster_sub <- raster[[1]][[i_index]]
     data_sub <- thin_by_cell(data_sub, raster_sub,
                              drop_na = drop_na, agg_fact=agg_fact)

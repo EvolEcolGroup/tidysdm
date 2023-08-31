@@ -19,14 +19,14 @@ knitr::opts_chunk$set(
 
 In this vignette, we illustrate how a number of features from `tidymodels` can
 be used to enhance a conventional SDM pipeline. We recommend users first become familiar with `tidymodels`;
-there are a number of excellent tutorials on its dedicated [website](https://www.tidymodels.org/). 
+there are a number of excellent tutorials (both introductory and advanced) on its dedicated [website](https://www.tidymodels.org/)
 We reuse the example on the Iberian lizard that we used
-to give an overview of the features of `tidysdm`.
+in the "`tidysdm` overview" article.
 
 # Preparing your data
 
 Here we quickly shape the dataset as we did in the overview; see that vignette
-for a detailed explantion of the steps.
+for a detailed explanation of the steps.
 
 We start by reading in a set of presences for a species of lizard that inhabits
 the Iberian peninsula, *Lacerta schreiberi*, and cast it as an `sf` object
@@ -99,6 +99,8 @@ Let's extract the climate for the variables of interest
 
 ```{r eval=FALSE}
 download_dataset("WorldClim_2.1_10m")
+climate_vars <-c("bio01", "bio10", "bio12")
+
 climate_present<-pastclim::region_slice(time_ce = 1985, 
                                         bio_variables = climate_vars, 
                                         data="WorldClim_2.1_10m", 
@@ -131,7 +133,7 @@ autoplot(lacerta_initial)
 
 We can now extract the training set from our `lacerta_initial` split, and sample
 folds to set up crossvalidation (we use the same grid we used on the full
-dataset `arabiensis` for the `initial_split`)
+dataset `lacerta_thin` for the `initial_split`)
 ```{r training_cv}
 set.seed(1005)
 lacerta_training <- training(lacerta_initial)
@@ -158,7 +160,7 @@ lacerta_rec_uncor
 And now use this in a `workflowset` (we will keep it small for computational time),
 selecting the appropriate recipe for each model. We will include a model (multivariate
 adaptive regression splines, or MARS) which does not have a wrapper in `tidysdm`
-for creating a model specificaiton. However, we can use a standard model spec from
+for creating a model specification. However, we can use a standard model spec from
 `yardstick`:
 
 ```{r workflow_set}
@@ -192,7 +194,7 @@ We can now use the block CV folds to
 tune and assess the models. Note that there are multiple tuning approaches,
 besides the standard grid method. Here we will use `tune_bayes`
 (to keep computations fast, we will only explore 3
-combination of hypeparameters per model; that far too little in real life!).
+combination of hyperparameters per model; this is far too little in real life!).
 
 This tuning method (as opposed to use a standard grid) does not allow for
 hyperparameters with unknown limits, but

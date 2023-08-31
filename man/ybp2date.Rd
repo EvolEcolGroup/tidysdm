@@ -3,7 +3,7 @@
 \name{ybp2date}
 \alias{ybp2date}
 \alias{date2ybp}
-\title{Convert years BP from pastclim to lubridate date, or viceversa}
+\title{Convert years BP from pastclim to lubridate date, or vice versa}
 \usage{
 ybp2date(x)
 
