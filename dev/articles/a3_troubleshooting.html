@@ -100,12 +100,12 @@ NA:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: tidymodels</span></span>
-<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ────────────────────────────────────── tidymodels 1.1.0 ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">broom       </span> 1.0.5     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">recipes     </span> 1.0.7</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dials       </span> 1.2.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rsample     </span> 1.1.1</span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ────────────────────────────────────── tidymodels 1.1.1 ──</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">broom       </span> 1.0.5     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">recipes     </span> 1.0.8</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dials       </span> 1.2.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rsample     </span> 1.2.0</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr       </span> 1.1.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble      </span> 3.2.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2     </span> 3.4.3     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr       </span> 1.3.0</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">infer       </span> 1.0.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tune        </span> 1.1.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">infer       </span> 1.0.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tune        </span> 1.1.2</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">modeldata   </span> 1.2.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflows   </span> 1.1.3</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">parsnip     </span> 1.1.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflowsets</span> 1.0.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr       </span> 1.0.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">yardstick   </span> 1.2.0</span></span>
@@ -114,7 +114,7 @@ NA:</p>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Learn how to get started at <span style="color: #00BB00;">https://www.tidymodels.org/start/</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Use suppressPackageStartupMessages() to eliminate package startup messages</span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span>
 <span><span class="co">#&gt; Registered S3 methods overwritten by 'tidysdm':</span></span>
 <span><span class="co">#&gt;   method      from   </span></span>
@@ -151,12 +151,12 @@ NA:</p>
 <span>                metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (608ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (561ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
 <span><span class="co">#&gt; → <span style="color: #BB0000; font-weight: bold;">A</span> | <span style="color: #BB0000;">error</span>:   Missing data in columns: bio05.</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x1</span></span>
-<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x6</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x12</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x15</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
@@ -246,9 +246,6 @@ is less than clear:</p>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
 <span><span class="co">#&gt; → <span style="color: #BB0000; font-weight: bold;">A</span> | <span style="color: #BB0000;">error</span>:   subscript out of bounds</span></span>
-<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x9</span></span>
-<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x15</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.</span></span>
 <span><span class="co">#&gt; Unknown or uninitialised column: `.notes`.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #000000;">2 of 2 tuning:     default_rf failed with </span></span></span></code></pre></div>
@@ -325,15 +322,15 @@ wants to fit a standard smooth to every continuous predictor.</p>
 <span>                metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (525ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (475ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 resampling: default_gam</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 resampling: default_gam (1.6s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 resampling: default_gam (1.5s)</span></span></span></code></pre></div>
 <p>Note that the step of defining a formula is incompatible with using
 <code>step_cor</code> in a recipe. <code>step_cor</code> removes
 correlated variables in recipes, using a similar algorithm to
 <code>filter_high_cor</code>. However, the algorithm is fitted to each
-data split when crossvalidating. This means that different variables
+data split when cross-validating. This means that different variables
 will eventually be presented to the model when it is fitted for each
 split, leading to an error as there will be a mismatch between the
 formula and the available variables. This is a known issue of how GAMs
@@ -342,12 +339,161 @@ are implemented in <code>tidymodels</code>.</p>
 <div class="section level2">
 <h2 id="when-only-some-splits-fail">When only some splits fail<a class="anchor" aria-label="anchor" href="#when-only-some-splits-fail"></a>
 </h2>
-<p>In the examples above, all the splits used for crossvalidation of a
+<p>In the examples above, all the splits used for cross-validation of a
 given algorithms failed. However, it is also possible that failures
-occur only on some splits for certain algorithms (technically, specific
-<code>rset</code> within certain <code>workflows</code>). When this type
-of problem occurs, it is best to extract the problematic workflow, and
-potentially investigate fitting the model to each <code>rset</code>.</p>
+occur only on some splits for certain algorithms (technically, a
+specific <code>rsplit</code> within certain <code>workflows</code>).
+When this type of problem occurs, it is best to extract the problematic
+workflow, and potentially investigate fitting it to the specific
+<code>rsplit</code>.</p>
+<p>We generate a problematic dataset by subsampling the lacerta
+dataset:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_sf.RDS"</span>,</span>
+<span>                               package<span class="op">=</span><span class="st">"tidysdm"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span>,<span class="op">]</span></span>
+<span></span>
+<span><span class="va">lacerta_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula<span class="op">=</span><span class="va">class</span><span class="op">~</span><span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bio01"</span>, <span class="st">"bio02"</span>, <span class="st">"bio03"</span>, <span class="st">"bio04"</span>, <span class="st">"bio07"</span>, <span class="st">"bio08"</span>, </span>
+<span>                    <span class="st">"bio09"</span>, <span class="st">"bio10"</span>, <span class="st">"bio11"</span>, <span class="st">"bio12"</span>, <span class="st">"bio14"</span>, <span class="st">"bio16"</span>, </span>
+<span>                    <span class="st">"bio17"</span>, <span class="st">"bio18"</span>, <span class="st">"bio19"</span>, <span class="st">"altitude"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
+<span>  <span class="co"># create the workflow_set</span></span>
+<span>  <span class="fu">workflow_set</span><span class="op">(</span></span>
+<span>    preproc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>default <span class="op">=</span> <span class="va">lacerta_rec</span><span class="op">)</span>,</span>
+<span>    models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      <span class="co"># the standard glm specs</span></span>
+<span>      glm <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_glm.html">sdm_spec_glm</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      <span class="co"># the standard gam specs</span></span>
+<span>      gam <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_gam.html">sdm_spec_gam</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      <span class="co"># rf specs with tuning</span></span>
+<span>      rf <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_rand_forest.html">sdm_spec_rf</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="co"># make all combinations of preproc and models,</span></span>
+<span>    cross <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="co"># set formula for gams</span></span>
+<span>  <span class="fu">update_workflow_model</span><span class="op">(</span><span class="st">"default_gam"</span>,</span>
+<span>                        spec <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_gam.html">sdm_spec_gam</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                        formula <span class="op">=</span> <span class="fu"><a href="../reference/gam_formula.html">gam_formula</a></span><span class="op">(</span><span class="va">lacerta_rec</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="co"># tweak controls to store information needed later to create the ensemble</span></span>
+<span>  <span class="fu">option_add</span><span class="op">(</span>control <span class="op">=</span> <span class="fu"><a href="../reference/control_ensemble.html">control_ensemble_grid</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>We then create 3 folds and attempt to fit the models:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">lacerta_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">lacerta_thin</span>, v <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">lacerta_models</span> <span class="op">&lt;-</span> </span>
+<span>   <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>   <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>, resamples <span class="op">=</span> <span class="va">lacerta_cv</span>, grid <span class="op">=</span> <span class="fl">3</span>, </span>
+<span>                metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 3 resampling: default_glm</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: default_glm (329ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 3 resampling: default_gam</span></span></span>
+<span><span class="co">#&gt; → <span style="color: #BBBB00; font-weight: bold;">A</span> | <span style="color: #BBBB00;">warning</span>: Fitting terminated with step failure - check results carefully</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x1</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 resampling: default_gam (1.7s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 3 tuning:     default_rf</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     default_rf (773ms)</span></span></span></code></pre></div>
+<p>We see that one of the folds gives us an error when using GAMs. The
+error (“Fitting terminated with step failure - check results carefully”)
+comes from the gam function in the package <code>mgcv</code>. A quick
+google on StackOverflow[<a href="https://stats.stackexchange.com/questions/576273/gam-model-warning-message-step-failure-in-theta-estimation" class="external-link uri">https://stats.stackexchange.com/questions/576273/gam-model-warning-message-step-failure-in-theta-estimation</a>]
+gives us an idea of where this error comes from.</p>
+<p>We start by extracting the results of the gam fits:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gam_results</span> <span class="op">&lt;-</span> <span class="fu">extract_workflow_set_result</span><span class="op">(</span><span class="va">lacerta_models</span>,id <span class="op">=</span> <span class="st">"default_gam"</span><span class="op">)</span></span>
+<span><span class="va">gam_results</span></span>
+<span><span class="co">#&gt; # Resampling results</span></span>
+<span><span class="co">#&gt; # 3-fold spatial block cross-validation </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
+<span><span class="co">#&gt;   splits          id    .metrics         .notes           .predictions     </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">&lt;split [54/36]&gt;</span> Fold1 <span style="color: #949494;">&lt;tibble [3 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [0 × 3]&gt;</span> <span style="color: #949494;">&lt;tibble [36 × 5]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">&lt;split [63/27]&gt;</span> Fold2 <span style="color: #949494;">&lt;tibble [3 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [1 × 3]&gt;</span> <span style="color: #949494;">&lt;tibble [27 × 5]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">&lt;split [64/26]&gt;</span> Fold3 <span style="color: #949494;">&lt;tibble [3 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [0 × 3]&gt;</span> <span style="color: #949494;">&lt;tibble [26 × 5]&gt;</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; There were issues with some computations:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   - Warning(s) x1: Fitting terminated with step failure - check results carefully</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Run `show_notes(.Last.tune.result)` for more information.</span></span></code></pre></div>
+<p>We see that, in the <code>.notes</code> column, the second item is
+not empty (it does not have zero rows). We can check that it indeed
+contains the error that we wanted:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gam_results</span><span class="op">$</span><span class="va">.notes</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
+<span><span class="co">#&gt;   location                    type    note                                      </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> preprocessor 1/1, model 1/1 warning Fitting terminated with step failure - ch…</span></span></code></pre></div>
+<p>We can now get the problmatic data split, and extract the training
+data:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">problem_split</span> <span class="op">&lt;-</span> <span class="va">gam_results</span><span class="op">$</span><span class="va">splits</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">training</span><span class="op">(</span><span class="va">problem_split</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        class             geometry      bio01           bio02       </span></span>
+<span><span class="co">#&gt;  presence :18   POINT        :63   Min.   : 4.74   Min.   : 6.737  </span></span>
+<span><span class="co">#&gt;  pseudoabs:45   epsg:4326    : 0   1st Qu.:11.81   1st Qu.: 9.336  </span></span>
+<span><span class="co">#&gt;                 +proj=long...: 0   Median :13.09   Median :10.937  </span></span>
+<span><span class="co">#&gt;                                    Mean   :12.88   Mean   :11.052  </span></span>
+<span><span class="co">#&gt;                                    3rd Qu.:14.82   3rd Qu.:12.649  </span></span>
+<span><span class="co">#&gt;                                    Max.   :17.87   Max.   :14.037  </span></span>
+<span><span class="co">#&gt;      bio03           bio04           bio05           bio06        </span></span>
+<span><span class="co">#&gt;  Min.   :34.30   Min.   :341.2   Min.   :19.90   Min.   :-6.2732  </span></span>
+<span><span class="co">#&gt;  1st Qu.:39.30   1st Qu.:500.8   1st Qu.:24.91   1st Qu.:-0.6787  </span></span>
+<span><span class="co">#&gt;  Median :40.55   Median :610.8   Median :28.59   Median : 1.1918  </span></span>
+<span><span class="co">#&gt;  Mean   :40.54   Mean   :584.6   Mean   :28.57   Mean   : 1.2175  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:42.19   3rd Qu.:656.1   3rd Qu.:32.31   3rd Qu.: 3.5664  </span></span>
+<span><span class="co">#&gt;  Max.   :46.98   Max.   :756.7   Max.   :35.31   Max.   : 8.2344  </span></span>
+<span><span class="co">#&gt;      bio07           bio08            bio09            bio10      </span></span>
+<span><span class="co">#&gt;  Min.   :16.40   Min.   : 1.922   Min.   : 1.588   Min.   :12.86  </span></span>
+<span><span class="co">#&gt;  1st Qu.:23.32   1st Qu.: 7.716   1st Qu.:16.995   1st Qu.:18.53  </span></span>
+<span><span class="co">#&gt;  Median :27.88   Median : 9.668   Median :19.828   Median :20.51  </span></span>
+<span><span class="co">#&gt;  Mean   :27.35   Mean   : 9.450   Mean   :18.938   Mean   :20.48  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:31.49   3rd Qu.:11.341   3rd Qu.:22.607   3rd Qu.:23.08  </span></span>
+<span><span class="co">#&gt;  Max.   :35.27   Max.   :16.882   Max.   :25.470   Max.   :25.71  </span></span>
+<span><span class="co">#&gt;      bio11            bio12            bio13           bio14      </span></span>
+<span><span class="co">#&gt;  Min.   :-2.060   Min.   : 249.0   Min.   : 36.0   Min.   : 2.00  </span></span>
+<span><span class="co">#&gt;  1st Qu.: 4.968   1st Qu.: 452.0   1st Qu.: 59.0   1st Qu.: 8.00  </span></span>
+<span><span class="co">#&gt;  Median : 6.236   Median : 628.0   Median : 91.0   Median :17.00  </span></span>
+<span><span class="co">#&gt;  Mean   : 6.268   Mean   : 757.8   Mean   :101.5   Mean   :21.97  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: 8.455   3rd Qu.:1016.5   3rd Qu.:119.0   3rd Qu.:30.50  </span></span>
+<span><span class="co">#&gt;  Max.   :11.795   Max.   :1622.0   Max.   :248.0   Max.   :74.00  </span></span>
+<span><span class="co">#&gt;      bio15           bio16           bio17            bio18      </span></span>
+<span><span class="co">#&gt;  Min.   :13.44   Min.   : 96.0   Min.   : 17.00   Min.   : 22.0  </span></span>
+<span><span class="co">#&gt;  1st Qu.:30.07   1st Qu.:157.0   1st Qu.: 43.00   1st Qu.: 47.0  </span></span>
+<span><span class="co">#&gt;  Median :38.97   Median :249.0   Median : 71.00   Median : 78.0  </span></span>
+<span><span class="co">#&gt;  Mean   :41.58   Mean   :280.3   Mean   : 88.08   Mean   : 96.0  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:54.30   3rd Qu.:334.0   3rd Qu.:109.50   3rd Qu.:117.5  </span></span>
+<span><span class="co">#&gt;  Max.   :71.59   Max.   :714.0   Max.   :253.00   Max.   :253.0  </span></span>
+<span><span class="co">#&gt;      bio19          altitude     </span></span>
+<span><span class="co">#&gt;  Min.   : 68.0   Min.   :  38.0  </span></span>
+<span><span class="co">#&gt;  1st Qu.:128.5   1st Qu.: 319.5  </span></span>
+<span><span class="co">#&gt;  Median :225.0   Median : 689.0  </span></span>
+<span><span class="co">#&gt;  Mean   :252.5   Mean   : 685.5  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:319.5   3rd Qu.: 855.0  </span></span>
+<span><span class="co">#&gt;  Max.   :714.0   Max.   :1926.0</span></span></code></pre></div>
+<p>In this case, there is nothing too obvious that leads to the error
+(an important check is to make sure that you have enough presences in a
+split; too few presences will generally lead to errors).</p>
+<p>We can now extract the workflow and refit it to the split to confirm
+that we have isolated the problem:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gam_workflow</span> <span class="op">&lt;-</span> <span class="fu">extract_workflow</span><span class="op">(</span><span class="va">lacerta_models</span>,id <span class="op">=</span> <span class="st">"default_gam"</span><span class="op">)</span></span>
+<span><span class="va">faulty_gam</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">gam_workflow</span>,<span class="fu">training</span><span class="op">(</span><span class="va">problem_split</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,</span></span>
+<span><span class="co">#&gt; : Fitting terminated with step failure - check results carefully</span></span></code></pre></div>
+<p>The next step would be to dig deeper into the data, trying to
+understand whether there are some outliers that are problematic. The
+specific steps will depend on the algorithm that is giving problems.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
