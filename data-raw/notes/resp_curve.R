@@ -1,7 +1,10 @@
 library(tidysdm)
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
                                     package="tidysdm"))
-lacerta_rec <- recipe(lacerta_thin, formula=class~.) %>% step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", "bio17", "bio18", "bio19", "altitude")))
+lacerta_thin <- lacerta_thin %>% select(-c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", 
+                                           "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", 
+                                           "bio17", "bio18", "bio19", "altitude"))
+lacerta_rec <- recipe(lacerta_thin, formula=class~.)
 
 lacerta_models <-
   # create the workflow_set
@@ -30,7 +33,19 @@ lacerta_ensemble
 
 
 
-x<-lacerta_ensemble
+bio05_prof <- lacerta_rec %>% 
+  step_profile(-bio05, profile=vars(bio05)) %>%
+  prep(training = lacerta_thin)
+
+bio05_data <- bake(bio05_prof, new_data = NULL)
+
+bio05_data <- bio05_data %>%
+  mutate(
+    pred = predict(lacerta_ensemble, bio05_data)$mean
+  )
+
+ggplot(bio05_data, aes(x = bio05, y = pred)) +
+  geom_point(alpha = .5, cex = 1)
 
 # check the variable is present in the workflows of interest
 

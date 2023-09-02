@@ -458,6 +458,35 @@ ggplot() +
    
 ```
 
+# Visualising the contribution of individual variables
+
+It is sometimes of interest to understand the relative contribution of
+individual variables to the prediction. This is a complex task, especially if
+there are interactions among variables. For simpler linear models, it is possible
+to obtain marginal response curves (which show the effect of a variable whilst
+keeping all other variables to their mean) using `step_profile()` from the
+`recipes` package. We use `step_profile()` to define a new recipe which we
+can then bake to generate the appropriate dataset
+to make the marginal prediction. We can then plot the predictions
+against the values of the variable of interest. For example,
+to investigate the contribution of `bio05`, we would:
+
+```{r}
+bio05_prof <- lacerta_rec %>% 
+  step_profile(-bio05, profile=vars(bio05)) %>%
+  prep(training = lacerta_thin)
+
+bio05_data <- bake(bio05_prof, new_data = NULL)
+
+bio05_data <- bio05_data %>%
+  mutate(
+    pred = predict(lacerta_ensemble, bio05_data)$mean
+  )
+
+ggplot(bio05_data, aes(x = bio05, y = pred)) +
+  geom_point(alpha = .5, cex = 1)
+```
+
 # Repeated ensembles
 
 The steps of thinning and sampling pseudo-absences can have a bit impact on the
