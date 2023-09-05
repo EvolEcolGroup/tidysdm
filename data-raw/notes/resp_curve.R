@@ -52,7 +52,7 @@ ggplot(bio05_data, aes(x = bio05, y = pred)) +
 # with DALEX
 library(DALEXtra)
 data_train <- extract_mold(lacerta_ensemble$workflow[[1]])$predictors
-data_response <- as.numeric(extract_mold(lacerta_ensemble$workflow[[1]])$outcomes %>% pull())
+data_response <- as.numeric(extract_mold(lacerta_ensemble$workflow[[1]])$outcomes %>% pull())-1
 
 explainer_wkflow <- 
   explain_tidymodels(
@@ -68,3 +68,16 @@ plot(vip_wkflow)
 
 ## could create a plot function for a list of model parts with the function at
 ## https://www.tmwr.org/explain
+
+custom_predict <- function(X.model, newdata) {
+  predict(X.model, newdata)$mean
+}
+
+explainer_ensemble <- explain(lacerta_ensemble, 
+                              data = data_train,
+                              y = (data_response-1)*-1,
+                              predict_function = custom_predict,
+                              predict_function_target_column = 1,
+                              type = "classification")
+vip_ensemble <- model_parts(explainer = explainer_ensemble)
+plot(vip_ensemble)
