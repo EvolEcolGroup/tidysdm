@@ -32,7 +32,7 @@ lacerta_ensemble <- simple_ensemble() %>%
 lacerta_ensemble
 
 
-
+## simple profile with recipes
 bio05_prof <- lacerta_rec %>% 
   step_profile(-bio05, profile=vars(bio05)) %>%
   prep(training = lacerta_thin)
@@ -47,14 +47,24 @@ bio05_data <- bio05_data %>%
 ggplot(bio05_data, aes(x = bio05, y = pred)) +
   geom_point(alpha = .5, cex = 1)
 
-# check the variable is present in the workflows of interest
 
-# for each workflow, get the range of the variable of interest, and the mean of
-# all other continuous predictors (and the reference of any categorical predictor)
+########
+# with DALEX
+library(DALEXtra)
+data_train <- extract_mold(lacerta_ensemble$workflow[[1]])$predictors
+data_response <- as.numeric(extract_mold(lacerta_ensemble$workflow[[1]])$outcomes %>% pull())
 
-# predict that data.table
+explainer_wkflow <- 
+  explain_tidymodels(
+    lacerta_ensemble$workflow[[1]], 
+    data= data_train,
+    y=data_response,
+    label = lacerta_ensemble$wflow_id[[1]])
+
+vip_wkflow <- model_parts(explainer = explainer_wkflow)
+plot(vip_wkflow)
 
 
-for (i in 1:nrow(x)){
-  this_predictors <- workflowsets::extract_mold(x$workflow[[i]])$predictors
-}
+
+## could create a plot function for a list of model parts with the function at
+## https://www.tmwr.org/explain
