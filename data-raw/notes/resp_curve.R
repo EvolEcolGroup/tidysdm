@@ -77,7 +77,6 @@ explainer_ensemble <- explain(lacerta_ensemble,
                               data = data_train,
                               y = (data_response-1)*-1,
                               predict_function = custom_predict,
-                              predict_function_target_column = 1,
                               type = "classification")
 vip_ensemble <- model_parts(explainer = explainer_ensemble)
 plot(vip_ensemble)
