@@ -57,12 +57,16 @@ predict.simple_ensemble <-
 
       # check that we have an entry for this calibration
       ref_calib_tb <- attr(object,"class_thresholds")
-      if (is.null(ref_calib_tb) |
-       (!any(unlist(lapply(ref_calib_tb %>% dplyr::pull("metric_thresh"),identical, metric_thresh)) &
-                unlist(lapply(ref_calib_tb %>% dplyr::pull("class_thresh"),identical, class_thresh))))){
+     # browser()
+      if (is.null(ref_calib_tb)) {
         stop("this model needs to be first calibrated before classes can be produced\n",
              paste("use 'calib_class_thresh' first"))
-      }
+        # the next check fails if ref_calib_tb is null
+      } else if (!any(unlist(lapply(ref_calib_tb %>% dplyr::pull("metric_thresh"),identical, metric_thresh)) &
+                            unlist(lapply(ref_calib_tb %>% dplyr::pull("class_thresh"),identical, class_thresh)))){
+        stop("this model needs to be first calibrated before classes can be produced\n",
+             paste("use 'calib_class_thresh' first"))        
+        }
 
 
       # subset the calibration thresholds
