@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict_repeat_ensemble.R
 \name{predict.repeat_ensemble}
 \alias{predict.repeat_ensemble}
-\title{Predict for a simple ensemble set}
+\title{Predict for a repeat ensemble set}
 \usage{
 \method{predict}{repeat_ensemble}(
   object,
@@ -16,9 +16,9 @@
 )
 }
 \arguments{
-\item{object}{an simple_ensemble object}
+\item{object}{an repeat_ensemble object}
 
-\item{new_data}{the data to fit to (usually the full training dataset)}
+\item{new_data}{a data frame in which to look for variables with which to predict.}
 
 \item{type}{the type of prediction, "prob" or "class".}
 
@@ -50,6 +50,6 @@ column names of the predictions.}
 a tibble of predictions
 }
 \description{
-Predict for a new dataset by using a simple ensemble. Predictions from individual
+Predict for a new dataset by using a repeat ensemble. Predictions from individual
 models are combined according to \code{fun}
 }

@@ -14,7 +14,8 @@ lacerta_models <-
       # the standard glm specs
       glm = sdm_spec_glm(),
       # rf specs with tuning
-      rf = sdm_spec_rf()
+      rf = sdm_spec_rf(),
+      
     ),
     # make all combinations of preproc and models,
     cross = TRUE
