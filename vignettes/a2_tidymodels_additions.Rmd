@@ -23,7 +23,7 @@ there are a number of excellent tutorials (both introductory and advanced) on it
 We reuse the example on the Iberian lizard that we used
 in the "`tidysdm` overview" article.
 
-# Exploring models with DALEX
+# Exploring models with `DALEX`
 
 An issue with machine learning algorithms is that it is not easy to undestand the
 role of different variables in giving the final prediction. A number of packages

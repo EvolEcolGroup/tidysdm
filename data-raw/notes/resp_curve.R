@@ -157,3 +157,23 @@ plot(vip_ensemble)
 pdp_bio05 <- model_profile(explainer_lacerta_ens, N = 500, variables = "bio05")
 plot(pdp_bio05)
 
+
+
+#########
+library(DALEXtra)
+model <- lacerta_ensemble
+explainer_list <- list()
+for (i in 1:nrow(model)){
+  data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
+  data_response <- as.numeric(workflowsets::extract_mold(model$workflow[[i]])$outcomes %>% dplyr::pull())-1
+  explainer_list[[i]] <- 
+    DALEXtra::explain_tidymodels(
+      model$workflow[[i]], 
+      data= data_train,
+      y=data_response,
+      label = model$wflow_id[[i]])
+}
+
+
+
+

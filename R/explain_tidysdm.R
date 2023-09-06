@@ -7,7 +7,7 @@
 #' @return explainer object [`DALEX::explain`] ready to work with DALEX
 #' @export
 #' @examples
-#' lacerta_explainer <- explain_tidysdm(lacerta_ensemble)
+#' lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
 #' 
 
 explain_tidysdm <- function(
@@ -31,11 +31,11 @@ explain_tidysdm <- function(
     stop("this function currently only works with simple_ensembles from tidysdm")
   }
   if (is.null(data)){
-    data = extract_mold(lacerta_ensemble$workflow[[1]])$predictors
+    data = workflowsets::extract_mold(model$workflow[[1]])$predictors
   }
   if (is.null(y)){
     # note that we need presences to be 1 and absences to be zero
-    y <- (as.numeric(extract_mold(lacerta_ensemble$workflow[[1]])$outcomes %>% pull())-2)*-1
+    y <- (as.numeric(workflowsets::extract_mold(model$workflow[[1]])$outcomes %>% dplyr::pull())-2)*-1
   } else {
     if (!is.factor(y)){
       stop("y should be a factor with presences as reference levels")
@@ -48,7 +48,7 @@ explain_tidysdm <- function(
   }
   if (is.null(predict_function)){
     predict_function <- function(model, newdata) {
-      predict(model, newdata)$mean
+      stats::predict(model, newdata)$mean
     }
   }
   
@@ -92,3 +92,54 @@ model_info.simple_ensemble<- function(model, is_multiclass=FALSE,...){
   class(model_info) <- "model_info"
   model_info
 }
+
+
+explain_simple_ensemble_by_workflow <- function(
+    model,
+    data = NULL,
+    y = NULL,
+    predict_function = NULL,
+    predict_function_target_column = NULL,
+    residual_function = NULL,
+    ...,
+    label = NULL,
+    verbose = TRUE,
+    precalculate = TRUE,
+    colorize = !isTRUE(getOption("knitr.in.progress")),
+    model_info = NULL,
+    type = "classification"
+) {
+  if (type!="classification"){
+    stop("type has to be classification for a tidysdm ensemble")
+  }
+  explainer_list <- list()
+  for (i in 1:nrow(model)){
+    if (is.null(data)){
+      data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
+    } else {
+      data_train = data
+    }
+    if (is.null(y)){
+      data_response <- as.numeric(workflowsets::extract_mold(model$workflow[[i]])$outcomes %>% dplyr::pull())-1
+    } else {
+      data_response <- y
+    }
+    
+    explainer_list[[i]] <- 
+      DALEXtra::explain_tidymodels(
+        model$workflow[[i]], 
+        data= data_train,
+        y=data_response,
+        predict_function = predict_function,
+        predict_function_target_column = predict_function_target_column,
+        residual_function = residual_function,
+        label = model$wflow_id[[i]],
+        verbose = verbose,
+        precalculate = precalculate,
+        colorize = colorize,
+        model_info = model_info,
+        type = "classification")
+  }
+  return(explainer_list)
+}
+

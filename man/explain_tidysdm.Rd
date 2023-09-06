@@ -49,10 +49,14 @@ This will happen also if \code{verbose} is TRUE. Set both \code{verbose} and \co
 \item{type}{type of a model, either \code{classification} or \code{regression}. If not specified then \code{type} will be extracted from \code{model_info}.}
 }
 \value{
-explainer object \link[DALEX:explain]{DALEX::explain} ready to work with DALEX
+explainer object \code{\link[DALEX:explain]{DALEX::explain}} ready to work with DALEX
 }
 \description{
 DALEX is designed to explore and explain the behaviour of Machine Learning
 methods. This function creates a DALEX explainer (see \code{\link[DALEX:explain]{DALEX::explain()}}), which can then be queried
 by multiple function to create explanations of the model.
+}
+\examples{
+lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
+
 }
