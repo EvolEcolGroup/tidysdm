@@ -4,13 +4,110 @@
 #' methods. This function creates a DALEX explainer (see [DALEX::explain()]), which can then be queried
 #' by multiple function to create explanations of the model.
 #' @inheritParams DALEX::explain
+#' @param by_workflow boolean determing whether a list of explainer, one per model,
+#' should be returned instead of a single explainer for the ensemble
 #' @return explainer object [`DALEX::explain`] ready to work with DALEX
 #' @export
 #' @examples
+#' # using the whole ensemble
 #' lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
+#' # by workflow
+#' explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, 
+#'   by_workflow = TRUE)
 #' 
 
-explain_tidysdm <- function(
+explain_tidysdm <- function (model,
+                             data,
+                             y,
+                             predict_function,
+                             predict_function_target_column,
+                             residual_function,
+                             ...,
+                             label,
+                             verbose,
+                             precalculate,
+                             colorize,
+                             model_info,
+                             type,
+                             by_workflow) {
+  UseMethod("explain_tidysdm", object = model)
+}
+
+#' @rdname explain_tidysdm
+#' @export
+explain_tidysdm.default <- function(
+    model,
+    data = NULL,
+    y = NULL,
+    predict_function = NULL,
+    predict_function_target_column = NULL,
+    residual_function = NULL,
+    ...,
+    label = NULL,
+    verbose = TRUE,
+    precalculate = TRUE,
+    colorize = !isTRUE(getOption("knitr.in.progress")),
+    model_info = NULL,
+    type = "classification",
+    by_workflow = FALSE
+)
+{
+  stop("no method defined for this object type")
+}
+
+#' @rdname explain_tidysdm
+#' @export
+explain_tidysdm.simple_ensemble <- function(
+    model,
+    data = NULL,
+    y = NULL,
+    predict_function = NULL,
+    predict_function_target_column = NULL,
+    residual_function = NULL,
+    ...,
+    label = NULL,
+    verbose = TRUE,
+    precalculate = TRUE,
+    colorize = !isTRUE(getOption("knitr.in.progress")),
+    model_info = NULL,
+    type = "classification",
+    by_workflow = FALSE
+) {
+  if (by_workflow){
+    explain_simple_ensemble_by_workflow(
+      model = model,
+      data = data,
+      y = y,
+      predict_function = predict_function,
+      predict_function_target_column = predict_function_target_column,
+      residual_function = residual_function,
+      weights = NULL,
+      label = label,
+      verbose = verbose,
+      precalculate = precalculate,
+      colorize = colorize,
+      model_info = model_info,
+      type = type)
+    } else {
+      explain_simple_ensemble(
+        model = model,
+        data = data,
+        y = y,
+        predict_function = predict_function,
+        predict_function_target_column = predict_function_target_column,
+        residual_function = residual_function,
+        weights = NULL,
+        label = label,
+        verbose = verbose,
+        precalculate = precalculate,
+        colorize = colorize,
+        model_info = model_info,
+        type = type)      
+    }
+  }
+
+
+explain_simple_ensemble <- function(
     model,
     data = NULL,
     y = NULL,
@@ -24,11 +121,9 @@ explain_tidysdm <- function(
     colorize = !isTRUE(getOption("knitr.in.progress")),
     model_info = NULL,
     type = "classification"
-    #,
-    #by_workflow = FALSE
 ) {
-  if (!inherits(model,"simple_ensemble")){
-    stop("this function currently only works with simple_ensembles from tidysdm")
+  if (type!="classification"){
+    stop("type has to be classification for a tidysdm ensemble")
   }
   if (is.null(data)){
     data = workflowsets::extract_mold(model$workflow[[1]])$predictors
@@ -43,19 +138,12 @@ explain_tidysdm <- function(
       y <- (as.numeric(y)-2)*-1
     }
   }
-  if (type!="classification"){
-    stop("type has to be classification for a tidysdm ensemble")
-  }
   if (is.null(predict_function)){
     predict_function <- function(model, newdata) {
       stats::predict(model, newdata)$mean
     }
   }
-  
-#  model_info <- list(package = "tidysdm",
-#                     ver = utils::packageVersion("tidysdm"),
-#                     type = "classification")
-  
+
   DALEX::explain(
     model = model,
     data = data,
@@ -77,7 +165,7 @@ explain_tidysdm <- function(
 #' @importFrom DALEX model_info
 #' @export
 #' @method model_info simple_ensemble
-model_info.simple_ensemble<- function(model, is_multiclass=FALSE,...){
+model_info.simple_ensemble<- function(model, is_multiclass = FALSE, ...){
   if (is_multiclass){
     stop("tidysdm simple_ensembles can not be multiclass")
   }

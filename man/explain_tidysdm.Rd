@@ -2,9 +2,28 @@
 % Please edit documentation in R/explain_tidysdm.R
 \name{explain_tidysdm}
 \alias{explain_tidysdm}
+\alias{explain_tidysdm.default}
+\alias{explain_tidysdm.simple_ensemble}
 \title{Create explainer from your tidysdm ensembles.}
 \usage{
 explain_tidysdm(
+  model,
+  data,
+  y,
+  predict_function,
+  predict_function_target_column,
+  residual_function,
+  ...,
+  label,
+  verbose,
+  precalculate,
+  colorize,
+  model_info,
+  type,
+  by_workflow
+)
+
+\method{explain_tidysdm}{default}(
   model,
   data = NULL,
   y = NULL,
@@ -17,7 +36,25 @@ explain_tidysdm(
   precalculate = TRUE,
   colorize = !isTRUE(getOption("knitr.in.progress")),
   model_info = NULL,
-  type = "classification"
+  type = "classification",
+  by_workflow = FALSE
+)
+
+\method{explain_tidysdm}{simple_ensemble}(
+  model,
+  data = NULL,
+  y = NULL,
+  predict_function = NULL,
+  predict_function_target_column = NULL,
+  residual_function = NULL,
+  ...,
+  label = NULL,
+  verbose = TRUE,
+  precalculate = TRUE,
+  colorize = !isTRUE(getOption("knitr.in.progress")),
+  model_info = NULL,
+  type = "classification",
+  by_workflow = FALSE
 )
 }
 \arguments{
@@ -47,6 +84,9 @@ This will happen also if \code{verbose} is TRUE. Set both \code{verbose} and \co
 \item{model_info}{a named list (\code{package}, \code{version}, \code{type}) containing information about model. If \code{NULL}, \code{DALEX} will seek for information on it's own.}
 
 \item{type}{type of a model, either \code{classification} or \code{regression}. If not specified then \code{type} will be extracted from \code{model_info}.}
+
+\item{by_workflow}{boolean determing whether a list of explainer, one per model,
+should be returned instead of a single explainer for the ensemble}
 }
 \value{
 explainer object \code{\link[DALEX:explain]{DALEX::explain}} ready to work with DALEX
@@ -57,6 +97,10 @@ methods. This function creates a DALEX explainer (see \code{\link[DALEX:explain]
 by multiple function to create explanations of the model.
 }
 \examples{
+# using the whole ensemble
 lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
+# by workflow
+explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, 
+  by_workflow = TRUE)
 
 }

@@ -1,6 +1,6 @@
 Package: tidysdm
 Title: Species Distribution Models with tidymodels
-Version: 0.9.0.9003
+Version: 0.9.0.9004
 Authors@R: c(
     person("Michela", "Leonardi", role = "aut"),
     person("Margherita", "Colucci", role = "aut"),
@@ -21,6 +21,7 @@ Depends:
 Imports:
     dials,
     DALEX,
+    DALEXtra,
     dplyr,
     ggplot2,
     lubridate,

@@ -21,15 +21,18 @@ In this vignette, we illustrate how a number of features from `tidymodels` can
 be used to enhance a conventional SDM pipeline. We recommend users first become familiar with `tidymodels`;
 there are a number of excellent tutorials (both introductory and advanced) on its dedicated [website](https://www.tidymodels.org/)
 We reuse the example on the Iberian lizard that we used
-in the "`tidysdm` overview" article.
+in the 
+[`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article.
 
 # Exploring models with `DALEX`
 
 An issue with machine learning algorithms is that it is not easy to undestand the
 role of different variables in giving the final prediction. A number of packages
-have been created to explore and explain the beahviour of ML algorithms, such as those
-used in `tidysdm`. Here we demonstrate how to use DALEX, an excellent package
-that has a methods to deal with `tidymodels`. `tidysdm` contains some methods that
+have been created to explore and explain the behaviour of ML algorithms, such as those
+used in `tidysdm`. In the [`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article, we illustrated how to use `recipes` to create profiles.
+
+Here we demonstrate how to use [DALEX](https://modeloriented.github.io/DALEX/), an excellent package
+that has a methods to deal with `tidymodels`. `tidysdm` contains additional functions that
 allow use to use the DALEX functions directly on `tidysdm` ensembles. 
 
 We will use a simple ensemble that we built in the 
@@ -63,6 +66,19 @@ plot(pdp_bio05)
 There are many other functions in DALEX that can be applied to the explainer to
 further explore the behaviour of the model; see
 several tutorial on https://modeloriented.github.io/DALEX/
+
+It is also possible to explore the individual models that make up the ensemble:
+```{r}
+explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
+```
+
+The resulting list can be then used to build lists of explanations, which can
+then be plotted.
+
+```{r}
+profile_list <- lapply(explainer_list,model_profile, N = 500, variables = "bio05")
+plot(profile_list)
+```
 
 
 # Preparing your data

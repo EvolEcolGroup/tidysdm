@@ -487,6 +487,11 @@ ggplot(bio05_data, aes(x = bio05, y = pred)) +
   geom_point(alpha = .5, cex = 1)
 ```
 
+It is also possible to use [DALEX](https://modeloriented.github.io/DALEX/),to
+explore `tidysdm` models; see more details in the [tidymodels additions](https://evolecolgroup.github.io/tidysdm/dev/articles/a2_tidymodels_additions.html)
+article.
+
+
 # Repeated ensembles
 
 The steps of thinning and sampling pseudo-absences can have a bit impact on the
