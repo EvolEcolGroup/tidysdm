@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.0.9003</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.0.9004</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,17 +96,24 @@
 pipeline. We recommend users first become familiar with
 <code>tidymodels</code>; there are a number of excellent tutorials (both
 introductory and advanced) on its dedicated <a href="https://www.tidymodels.org/" class="external-link">website</a> We reuse the example on
-the Iberian lizard that we used in the “<code>tidysdm</code> overview”
-article.</p>
+the Iberian lizard that we used in the <a href="https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html"><code>tidysdm</code>
+overview</a> article.</p>
 </div>
 <div class="section level2">
-<h2 id="preparing-your-data">Preparing your data<a class="anchor" aria-label="anchor" href="#preparing-your-data"></a>
+<h2 id="exploring-models-with-dalex">Exploring models with <code>DALEX</code><a class="anchor" aria-label="anchor" href="#exploring-models-with-dalex"></a>
 </h2>
-<p>Here we quickly shape the dataset as we did in the overview; see that
-vignette for a detailed explanation of the steps.</p>
-<p>We start by reading in a set of presences for a species of lizard
-that inhabits the Iberian peninsula, <em>Lacerta schreiberi</em>, and
-cast it as an <code>sf</code> object</p>
+<p>An issue with machine learning algorithms is that it is not easy to
+undestand the role of different variables in giving the final
+prediction. A number of packages have been created to explore and
+explain the behaviour of ML algorithms, such as those used in
+<code>tidysdm</code>. In the <a href="https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html"><code>tidysdm</code>
+overview</a> article, we illustrated how to use <code>recipes</code> to
+create profiles.</p>
+<p>Here we demonstrate how to use <a href="https://modeloriented.github.io/DALEX/" class="external-link">DALEX</a>, an excellent
+package that has a methods to deal with <code>tidymodels</code>.
+<code>tidysdm</code> contains additional functions that allow use to use
+the DALEX functions directly on <code>tidysdm</code> ensembles.</p>
+<p>We will use a simple ensemble that we built in the</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: tidymodels</span></span>
@@ -124,19 +131,153 @@ cast it as an <code>sf</code> object</p>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Use suppressPackageStartupMessages() to eliminate package startup messages</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Search for functions across packages at <span style="color: #00BB00;">https://www.tidymodels.org/find/</span></span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span>
 <span><span class="co">#&gt; Registered S3 methods overwritten by 'tidysdm':</span></span>
 <span><span class="co">#&gt;   method      from   </span></span>
 <span><span class="co">#&gt;   bake.recipe recipes</span></span>
 <span><span class="co">#&gt;   prep.recipe recipes</span></span>
+<span><span class="va">lacerta_ensemble</span></span>
+<span><span class="co">#&gt; A simple_ensemble of models</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Members:</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> default_glm</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> default_rf</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> default_gbm</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> default_maxent</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Available metrics:</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> boyce_cont</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> roc_auc</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> tss_max</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Metric used to tune workflows:</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> boyce_cont</span></span></code></pre></div>
+<p>The first step in DALEX is to create an explainer object, which can
+then be queried by different functions in the package, to turn the
+explainer into an explanation (following the DALEX lingo). As a first
+setp, we use the custom function <code>explain_tidysdm</code> to
+generate our explainer:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">explainer_lacerta_ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/explain_tidysdm.html">explain_tidysdm</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
+<span><span class="co">#&gt;   -&gt; model label       :  data.frame  (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; data              :  452  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  452  values </span></span>
+<span><span class="co">#&gt;   -&gt; predict function  :  predict_function </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  package tidysdm , ver. 0.9.0.9004 , task classification (  default  ) </span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.0004084954 , mean =  0.238296 , max =  0.9561616  </span></span>
+<span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.5010351 , mean =  0.01170401 , max =  0.6113744  </span></span>
+<span><span class="co">#&gt;   A new explainer has been created!</span></span></code></pre></div>
+<p>Now that we have our explainer, we can explore variable importance
+for the ensemble:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://modeloriented.github.io/DALEX/" class="external-link">DALEX</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Welcome to DALEX (version: 2.4.3).</span></span>
+<span><span class="co">#&gt; Find examples and detailed introduction at: http://ema.drwhy.ai/</span></span>
+<span><span class="co">#&gt; Additional features will be available after installation of: ggpubr.</span></span>
+<span><span class="co">#&gt; Use 'install_dependencies()' to get all suggested dependencies</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'DALEX'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:dplyr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     explain</span></span>
+<span><span class="va">vip_ensemble</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/model_parts.html" class="external-link">model_parts</a></span><span class="op">(</span>explainer <span class="op">=</span> <span class="va">explainer_lacerta_ens</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">vip_ensemble</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a2_tidymodels_additions_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p>Or generate partial dependency plots for a given variable
+(e.g. bio05):</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pdp_bio05</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/model_profile.html" class="external-link">model_profile</a></span><span class="op">(</span><span class="va">explainer_lacerta_ens</span>, N <span class="op">=</span> <span class="fl">500</span>, variables <span class="op">=</span> <span class="st">"bio05"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pdp_bio05</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a2_tidymodels_additions_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p>There are many other functions in DALEX that can be applied to the
+explainer to further explore the behaviour of the model; see several
+tutorial on <a href="https://modeloriented.github.io/DALEX/" class="external-link uri">https://modeloriented.github.io/DALEX/</a></p>
+<p>It is also possible to explore the individual models that make up the
+ensemble:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">explainer_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/explain_tidysdm.html">explain_tidysdm</a></span><span class="op">(</span><span class="fu">tidysdm</span><span class="fu">::</span><span class="va"><a href="../reference/lacerta_ensemble.html">lacerta_ensemble</a></span>, by_workflow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
+<span><span class="co">#&gt;   -&gt; model label       :  default_glm </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  452  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  452  values </span></span>
+<span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.1.1 , task classification (  default  ) </span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.004906125 , mean =  0.75 , max =  0.9990497  </span></span>
+<span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9678673 , mean =  -1.202865e-17 , max =  0.953622  </span></span>
+<span><span class="co">#&gt;   A new explainer has been created!  </span></span>
+<span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
+<span><span class="co">#&gt;   -&gt; model label       :  default_rf </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  452  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  452  values </span></span>
+<span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.1.1 , task classification (  default  ) </span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0 , mean =  0.7509861 , max =  1  </span></span>
+<span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.5503262 , mean =  -0.0009860672 , max =  0.5657683  </span></span>
+<span><span class="co">#&gt;   A new explainer has been created!  </span></span>
+<span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
+<span><span class="co">#&gt;   -&gt; model label       :  default_gbm </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  452  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  452  values </span></span>
+<span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.1.1 , task classification (  default  ) </span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  2.861023e-06 , mean =  0.7500019 , max =  0.9999918  </span></span>
+<span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.1819368 , mean =  -1.920316e-06 , max =  0.08649289  </span></span>
+<span><span class="co">#&gt;   A new explainer has been created!  </span></span>
+<span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
+<span><span class="co">#&gt;   -&gt; model label       :  default_maxent </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  452  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  452  values </span></span>
+<span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.1.1 , task classification (  default  ) </span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.1350514 , mean =  0.795828 , max =  0.9995933  </span></span>
+<span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.8946667 , mean =  -0.04582804 , max =  0.561125  </span></span>
+<span><span class="co">#&gt;   A new explainer has been created!</span></span></code></pre></div>
+<p>The resulting list can be then used to build lists of explanations,
+which can then be plotted.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">profile_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">explainer_list</span>,<span class="va">model_profile</span>, N <span class="op">=</span> <span class="fl">500</span>, variables <span class="op">=</span> <span class="st">"bio05"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">profile_list</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a2_tidymodels_additions_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="preparing-your-data">Preparing your data<a class="anchor" aria-label="anchor" href="#preparing-your-data"></a>
+</h2>
+<p>Here we quickly shape the dataset as we did in the overview; see that
+vignette for a detailed explanation of the steps.</p>
+<p>We start by reading in a set of presences for a species of lizard
+that inhabits the Iberian peninsula, <em>Lacerta schreiberi</em>, and
+cast it as an <code>sf</code> object</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">lacerta</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
 <span><span class="va">lacerta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">lacerta</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>,<span class="st">"latitude"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">lacerta</span><span class="op">)</span> <span class="op">=</span> <span class="fl">4326</span></span></code></pre></div>
 <p>Get the appropriate land mask</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/pastclim" class="external-link">pastclim</a></span><span class="op">)</span></span>
 <span><span class="va">land_mask</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/get_land_mask.html" class="external-link">get_land_mask</a></span><span class="op">(</span>time_ce <span class="op">=</span> <span class="fl">1985</span>, dataset <span class="op">=</span> <span class="st">"WorldClim_2.1_10m"</span><span class="op">)</span></span>
@@ -167,7 +308,7 @@ cast it as an <code>sf</code> object</p>
 <span><span class="co">#&gt;     rescale</span></span></code></pre>
 <p>and then thin the presences (we reset the seed before each operation
 to match what we had in the original vignette):</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234567</span><span class="op">)</span></span>
 <span><span class="va">lacerta</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/thin_by_cell.html">thin_by_cell</a></span><span class="op">(</span><span class="va">lacerta</span>, raster <span class="op">=</span> <span class="va">land_mask</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234567</span><span class="op">)</span></span>
@@ -178,7 +319,7 @@ to match what we had in the original vignette):</p>
 <span>                               raster <span class="op">=</span> <span class="va">land_mask</span>,</span>
 <span>                               method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dist_min"</span>, <span class="fu"><a href="../reference/km2m.html">km2m</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Quickly plot them:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dieghernan.github.io/tidyterra/" class="external-link">tidyterra</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'tidyterra'</span></span>
@@ -190,7 +331,7 @@ to match what we had in the original vignette):</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_thin</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">class</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a2_tidymodels_additions_files/figure-html/plot_sample_pseudoabs-1.png" width="576"></p>
 <p>Let’s extract the climate for the variables of interest</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/download_dataset.html" class="external-link">download_dataset</a></span><span class="op">(</span><span class="st">"WorldClim_2.1_10m"</span><span class="op">)</span></span>
 <span><span class="va">climate_vars</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bio01"</span>, <span class="st">"bio10"</span>, <span class="st">"bio12"</span><span class="op">)</span></span>
 <span></span>
@@ -198,7 +339,7 @@ to match what we had in the original vignette):</p>
 <span>                                        bio_variables <span class="op">=</span> <span class="va">climate_vars</span>, </span>
 <span>                                        data<span class="op">=</span><span class="st">"WorldClim_2.1_10m"</span>, </span>
 <span>                                        crop<span class="op">=</span><span class="va">iberia_poly</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">climate_present</span>, <span class="va">lacerta_thin</span>, ID<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -209,7 +350,15 @@ to match what we had in the original vignette):</p>
 initial split of the data into a test and a training set. We will use
 retain 20% of the data (1/5) for the testing set, and use the rest for
 training.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>We start by loading a set of presences and absences and their
+associated climate, analogous to the one that we generated in the
+Overview vignette:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<span><span class="co">#lacerta_thin &lt;- readRDS(system.file("extdata/lacerta_climate_sf.RDS",</span></span>
+<span><span class="co">#                                    package="tidysdm"))</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1005</span><span class="op">)</span></span>
 <span><span class="va">lacerta_initial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spatial_initial_split.html">spatial_initial_split</a></span><span class="op">(</span><span class="va">lacerta_thin</span>, prop <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">5</span>, <span class="va">spatial_block_cv</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_initial</span><span class="op">)</span></span></code></pre></div>
@@ -218,7 +367,7 @@ training.</p>
 <code>lacerta_initial</code> split, and sample folds to set up
 crossvalidation (we use the same grid we used on the full dataset
 <code>lacerta_thin</code> for the <code>initial_split</code>)</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1005</span><span class="op">)</span></span>
 <span><span class="va">lacerta_training</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">lacerta_initial</span><span class="op">)</span></span>
 <span><span class="va">lacerta_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">lacerta_training</span>, v <span class="op">=</span> <span class="fl">5</span>,</span>
@@ -234,7 +383,7 @@ crossvalidation (we use the same grid we used on the full dataset
 variables; other algorithms, such as random forests, can handle
 correlated variables. So, we will create two recipes, one with all
 variables, and one only with the variables that are uncorrelated:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_rec_all</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula<span class="op">=</span><span class="va">class</span><span class="op">~</span><span class="va">.</span><span class="op">)</span></span>
 <span><span class="va">lacerta_rec_uncor</span> <span class="op">&lt;-</span> <span class="va">lacerta_rec_all</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">step_rm</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bio01"</span>, <span class="st">"bio02"</span>, <span class="st">"bio03"</span>, <span class="st">"bio04"</span>, <span class="st">"bio07"</span>, <span class="st">"bio08"</span>, <span class="st">"bio09"</span>, <span class="st">"bio10"</span>, <span class="st">"bio11"</span>, <span class="st">"bio12"</span>, <span class="st">"bio14"</span>, <span class="st">"bio16"</span>, <span class="st">"bio17"</span>, <span class="st">"bio18"</span>, <span class="st">"bio19"</span>, <span class="st">"altitude"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -257,7 +406,7 @@ model. We will include a model (multivariate adaptive regression
 splines, or MARS) which does not have a wrapper in <code>tidysdm</code>
 for creating a model specification. However, we can use a standard model
 spec from <code>yardstick</code>:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
 <span>  <span class="co"># create the workflow_set</span></span>
 <span>  <span class="fu">workflow_set</span><span class="op">(</span></span>
@@ -292,7 +441,7 @@ random forest and gbm is undefined as its upper range depends on the
 number of variables in the dataset. So, before tuning, we need to
 finalise <code>mtry</code> by informing the set dials with the actual
 data:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rf_param</span> <span class="op">&lt;-</span> <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># extract the rf workflow</span></span>
 <span>  <span class="fu">extract_workflow</span> <span class="op">(</span><span class="st">"all_rf"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -305,62 +454,64 @@ data:</p>
 <span><span class="va">lacerta_models</span> <span class="op">&lt;-</span> <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">option_add</span><span class="op">(</span>param_info<span class="op">=</span><span class="va">rf_param</span>,id<span class="op">=</span><span class="st">"all_rf"</span><span class="op">)</span></span></code></pre></div>
 <p>And now we can tune the models:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234567</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>lacerta_models <span class="ot">&lt;-</span> </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>   lacerta_models <span class="sc">%&gt;%</span> </span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">workflow_map</span>(<span class="st">"tune_bayes"</span>, <span class="at">resamples =</span> lacerta_cv, <span class="at">initial=</span><span class="dv">8</span>,</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">metrics =</span> <span class="fu">sdm_metric_set</span>(), <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [34mi [39m   [30mNo tuning parameters. `fit_resamples()` will be attempted [39m</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [34mi [39m  [30m1 of 3 resampling: uncor_glm [39m</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m✔ [39m  [30m1 of 3 resampling: uncor_glm [39m [30m (786ms) [39m</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [34mi [39m  [30m2 of 3 tuning:     all_rf [39m</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m✔ [39m  [30m2 of 3 tuning:     all_rf [39m [30m (30s) [39m</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [34mi [39m  [30m3 of 3 tuning:     all_mars [39m</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; →  [31m [1mA [22m [39m |  [31merror [39m:   `num_terms` should be &gt;= 1.</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; There were issues with some computations    [1m [31mA [39m [22m: x1</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; no non-missing arguments to max; returning -Inf</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; There were issues with some computations    [1m [31mA [39m [22m: x6</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; no non-missing arguments to max; returning -Inf</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; There were issues with some computations    [1m [31mA [39m [22m: x16</span></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; no non-missing arguments to max; returning -Inf</span></span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; There were issues with some computations    [1m [31mA [39m [22m: x28</span></span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.</span></span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; no non-missing arguments to max; returning -Inf</span></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; There were issues with some computations    [1m [31mA [39m [22m: x40</span></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.</span></span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; no non-missing arguments to max; returning -Inf</span></span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [33m! [39m No improvement for 10 iterations; returning current results.</span></span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; There were issues with some computations    [1m [31mA [39m [22m: x40</span></span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>There were issues with some computations    [1m [31mA [39m [22m<span class="sc">:</span> x50</span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m✔ [39m  [30m3 of 3 tuning:     all_mars [39m [30m (15.1s) [39m</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234567</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>lacerta_models <span class="ot">&lt;-</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>   lacerta_models <span class="sc">%&gt;%</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">workflow_map</span>(<span class="st">"tune_bayes"</span>, <span class="at">resamples =</span> lacerta_cv, <span class="at">initial=</span><span class="dv">8</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">metrics =</span> <span class="fu">sdm_metric_set</span>(), <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [34mi [39m   [30mNo tuning parameters. `fit_resamples()` will be attempted [39m</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [34mi [39m  [30m1 of 3 resampling: uncor_glm [39m</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m✔ [39m  [30m1 of 3 resampling: uncor_glm [39m [30m (499ms) [39m</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [34mi [39m  [30m2 of 3 tuning:     all_rf [39m</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m✔ [39m  [30m2 of 3 tuning:     all_rf [39m [30m (20.9s) [39m</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [34mi [39m  [30m3 of 3 tuning:     all_mars [39m</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; →  [31m [1mA [22m [39m |  [31merror [39m:   `num_terms` should be &gt;= 1.</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; There were issues with some computations    [1m [31mA [39m [22m: x1</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; no non-missing arguments to max; returning -Inf</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; There were issues with some computations    [1m [31mA [39m [22m: x19</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; no non-missing arguments to max; returning -Inf</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; There were issues with some computations    [1m [31mA [39m [22m: x36</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.</span></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; no non-missing arguments to max; returning -Inf</span></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in max(grid[[nm]], na.rm = TRUE): no non-missing arguments to max;</span></span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; returning -Inf</span></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; information.</span></span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [33m! [39m No improvement for 10 iterations; returning current results.</span></span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; There were issues with some computations    [1m [31mA [39m [22m: x36</span></span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>There were issues with some computations    [1m [31mA [39m [22m<span class="sc">:</span> x50</span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [32m✔ [39m  [30m3 of 3 tuning:     all_mars [39m [30m (9.2s) [39m</span></span></code></pre></div>
 <p>We can have a look at the performance of our models with:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_models</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a2_tidymodels_additions_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="a2_tidymodels_additions_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="stack-ensembles">Stack ensembles<a class="anchor" aria-label="anchor" href="#stack-ensembles"></a>
@@ -370,7 +521,7 @@ model type, we can build a stack ensemble, as implemented in the package
 <code>stacks</code>. Stacking uses a meta-learning algorithm to learn
 how to best combine multiple models, including multiple versions of the
 same algorithm with different hyperparameters.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://stacks.tidymodels.org/" class="external-link">stacks</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1005</span><span class="op">)</span></span>
 <span><span class="va">lacerta_stack</span> <span class="op">&lt;-</span> </span>
@@ -389,7 +540,7 @@ same algorithm with different hyperparameters.</p>
 were selected; the stacking coefficients give an indication of the
 weight each model carries within the ensemble. We can now use the
 ensemble to make predictions about the testing data:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_testing</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">lacerta_initial</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lacerta_test_pred</span> <span class="op">&lt;-</span> </span>
@@ -398,7 +549,7 @@ ensemble to make predictions about the testing data:</p>
 <p>And look at the goodness of fit using some commonly used sdm metrics.
 Note that <code>sdm_metric_set</code> is first invoked to generate a
 function (with empty <code>()</code>) that is then used on the data.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span><span class="op">(</span>data<span class="op">=</span> <span class="va">lacerta_test_pred</span>,truth<span class="op">=</span><span class="va">class</span>,<span class="va">.pred_presence</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 3</span></span></span>
 <span><span class="co">#&gt;   .metric    .estimator .estimate</span></span>
@@ -406,8 +557,8 @@ function (with empty <code>()</code>) that is then used on the data.</p>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> boyce_cont binary         0.708</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> roc_auc    binary         0.993</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> tss_max    binary         0.932</span></span></code></pre></div>
-<p>We can now make predictions with this ensemble:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<p>We can now make predictions with this stacked ensemble:</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prediction_present</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_stack</span>, <span class="va">climate_present</span>, type<span class="op">=</span><span class="st">"prob"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">prediction_present</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill<span class="op">=</span><span class="va">.pred_presence</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>

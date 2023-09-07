@@ -64,6 +64,9 @@
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/dist_pres_vs_bg.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/explain_tidysdm.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/filter_high_cor.html</loc>
   </url>
   <url>
@@ -92,6 +95,9 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/lacerta.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/lacerta_ensemble.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/maxent.html</loc>
