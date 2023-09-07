@@ -81,103 +81,6 @@ plot(profile_list)
 ```
 
 
-# Preparing your data
-
-Here we quickly shape the dataset as we did in the overview; see that vignette
-for a detailed explanation of the steps.
-
-We start by reading in a set of presences for a species of lizard that inhabits
-the Iberian peninsula, *Lacerta schreiberi*, and cast it as an `sf` object
-```{r load_presences}
-library(tidysdm)
-data(lacerta)
-library(sf)
-lacerta <- st_as_sf(lacerta, coords = c("longitude","latitude"))
-st_crs(lacerta) = 4326
-```
-
-Get the appropriate land mask
-
-```{r land_mask, eval=FALSE}
-library(pastclim)
-land_mask <-
-  get_land_mask(time_ce = 1985, dataset = "WorldClim_2.1_10m")
-
-# Iberia peninsula extension
-iberia_poly <-
-  terra::vect(
-    "POLYGON((-9.8 43.3,-7.8 44.1,-2.0 43.7,3.6 42.5,3.8 41.5,1.3 40.8,0.3 39.5,
-     0.9 38.6,-0.4 37.5,-1.6 36.7,-2.3 36.3,-4.1 36.4,-4.5 36.4,-5.0 36.1,
-    -5.6 36.0,-6.3 36.0,-7.1 36.9,-9.5 36.6,-9.4 38.0,-10.6 38.9,-9.5 40.8,
-    -9.8 43.3))"
-  )
-
-crs(iberia_poly) <- "lonlat"
-# crop the extent
-land_mask <- crop(land_mask, iberia_poly)
-# and mask to the polygon
-land_mask <- mask(land_mask, iberia_poly)
-```
-
-```{r echo=FALSE, results='hide'}
-library(pastclim)
-set_data_path(on_CRAN = TRUE)
-# Iberia peninsula extension
-iberia_poly <- terra::vect("POLYGON((-9.8 43.3,-7.8 44.1,-2.0 43.7,3.6 42.5,3.8 41.5,1.3 40.8,0.3 39.5,0.9 38.6,-0.4 37.5,-1.6 36.7,-2.3 36.3,-4.1 36.4,-4.5 36.4,-5.0 36.1,-5.6 36.0,-6.3 36.0,-7.1 36.9,-9.5 36.6,-9.4 38.0,-10.6 38.9,-9.5 40.8,-9.8 43.3))")
-
-crs(iberia_poly)<-"lonlat"
-gdal(warn=3)
-land_mask<-rast(system.file("extdata/lacerta_land_mask.nc", package="tidysdm"))
-```
-
-and then thin the presences (we reset the seed before each operation to match
-what we had in the original vignette):
-```{r thin}
-set.seed(1234567)
-lacerta<-thin_by_cell(lacerta, raster = land_mask)
-set.seed(1234567)
-lacerta_thin<-thin_by_dist(lacerta, dist_min = km2m(20))
-set.seed(1234567)
-lacerta_thin <- sample_pseudoabs(lacerta_thin, 
-                               n = 3 * nrow(lacerta_thin), 
-                               raster = land_mask,
-                               method = c("dist_min", km2m(50)))
-```
-
-Quickly plot them:
-```{r plot_sample_pseudoabs, fig.width=6, fig.height=4}
-library(tidyterra)
-ggplot() +
-  geom_spatraster(data=land_mask, aes(fill=land_mask_1985))+
-  geom_sf(data = lacerta_thin, aes(col = class))
-
-```
-
-Let's extract the climate for the variables of interest
-
-```{r eval=FALSE}
-download_dataset("WorldClim_2.1_10m")
-climate_vars <-c("bio01", "bio10", "bio12")
-
-climate_present<-pastclim::region_slice(time_ce = 1985, 
-                                        bio_variables = climate_vars, 
-                                        data="WorldClim_2.1_10m", 
-                                        crop=iberia_poly)
-```
-
-```{r echo=FALSE, results='hide'}
-gdal(warn=3)
-climate_present<-rast(system.file("extdata/lacerta_climate_present_10m.nc", package="tidysdm"))
-climate_vars <- names(climate_present)
-```
-
-
-```{r}
-lacerta_thin <- lacerta_thin %>% 
-  bind_cols(terra::extract(climate_present, lacerta_thin, ID=FALSE))
-```
-
-
 
 # The initial split
 
@@ -191,8 +94,8 @@ analogous to the one that we generated in the Overview vignette:
 ```{r}
 library(tidysdm)
 library(sf)
-#lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
-#                                    package="tidysdm"))
+lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+                                    package="tidysdm"))
 ```
 
 ```{r initial_split}
@@ -206,10 +109,11 @@ folds to set up crossvalidation (we use the same grid we used on the full
 dataset `lacerta_thin` for the `initial_split`)
 ```{r training_cv}
 set.seed(1005)
+library(sf)
 lacerta_training <- training(lacerta_initial)
 lacerta_cv <- spatial_block_cv(lacerta_training, v = 5,
                                 cellsize = grid_cellsize(lacerta_thin),
-                                offset = grid_offset(lacerta))
+                                offset = grid_offset(lacerta_thin))
 autoplot(lacerta_cv)
 ```
 
@@ -347,10 +251,31 @@ on the data.
 sdm_metric_set()(data= lacerta_test_pred,truth=class,.pred_presence)
 ```
 
-We can now make predictions with this stacked ensemble:
+We can now make predictions with this stacked ensemble. We start by extracting the climate for the variables of interest
+
+```{r eval=FALSE}
+download_dataset("WorldClim_2.1_10m")
+climate_vars <-lacerta_rec_all$var_info %>% filter(role=="predictor") %>% pull(variable)
+
+climate_present<-pastclim::region_slice(time_ce = 1985, 
+                                        bio_variables = climate_vars, 
+                                        data="WorldClim_2.1_10m", 
+                                        crop=iberia_poly)
+```
+
+```{r echo=FALSE, results='hide'}
+gdal(warn=3)
+climate_present<-rast(system.file("extdata/lacerta_climate_present_10m.nc", package="tidysdm"))
+climate_vars <- lacerta_rec_all$var_info %>% filter(role=="predictor") %>% pull(variable)
+if (!all(climate_vars %in% names(climate_present))){
+  stop("mismatched variables in the raster")
+}
+```
+
 
 ```{r plot_present, fig.width=6, fig.height=4}
 prediction_present <- predict_raster(lacerta_stack, climate_present, type="prob")
+library(tidyterra)
 ggplot() +
   geom_spatraster(data=prediction_present, aes(fill=.pred_presence))+
   scale_fill_terrain_c() +
