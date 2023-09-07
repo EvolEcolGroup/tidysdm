@@ -25,7 +25,6 @@
 #'
 #' @export
 
-## TODO create methods for data.frame, and for using directly the correlation matrix
 filter_high_cor <- function (x, 
                              cutoff = 0.7,
                              verbose = FALSE,

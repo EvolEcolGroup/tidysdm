@@ -21,7 +21,65 @@ In this vignette, we illustrate how a number of features from `tidymodels` can
 be used to enhance a conventional SDM pipeline. We recommend users first become familiar with `tidymodels`;
 there are a number of excellent tutorials (both introductory and advanced) on its dedicated [website](https://www.tidymodels.org/)
 We reuse the example on the Iberian lizard that we used
-in the "`tidysdm` overview" article.
+in the 
+[`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article.
+
+# Exploring models with `DALEX`
+
+An issue with machine learning algorithms is that it is not easy to undestand the
+role of different variables in giving the final prediction. A number of packages
+have been created to explore and explain the behaviour of ML algorithms, such as those
+used in `tidysdm`. In the [`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article, we illustrated how to use `recipes` to create profiles.
+
+Here we demonstrate how to use [DALEX](https://modeloriented.github.io/DALEX/), an excellent package
+that has a methods to deal with `tidymodels`. `tidysdm` contains additional functions that
+allow use to use the DALEX functions directly on `tidysdm` ensembles. 
+
+We will use a simple ensemble that we built in the 
+
+```{r}
+library(tidysdm)
+lacerta_ensemble
+```
+
+The first step in DALEX is to create an explainer object, which can then be
+queried by different functions in the package, to turn the explainer into an
+explanation (following the DALEX lingo). As a first setp, we use the
+custom function `explain_tidysdm` to generate our explainer:
+```{r}
+explainer_lacerta_ens <- explain_tidysdm(lacerta_ensemble)
+```
+Now that we have our explainer, we can explore variable importance for the ensemble:
+
+```{r}
+library(DALEX)
+vip_ensemble <- model_parts(explainer = explainer_lacerta_ens)
+plot(vip_ensemble)
+```
+
+Or generate partial dependency plots for a given variable (e.g. bio05):
+```{r}
+pdp_bio05 <- model_profile(explainer_lacerta_ens, N = 500, variables = "bio05")
+plot(pdp_bio05)
+```
+
+There are many other functions in DALEX that can be applied to the explainer to
+further explore the behaviour of the model; see
+several tutorial on https://modeloriented.github.io/DALEX/
+
+It is also possible to explore the individual models that make up the ensemble:
+```{r}
+explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
+```
+
+The resulting list can be then used to build lists of explanations, which can
+then be plotted.
+
+```{r}
+profile_list <- lapply(explainer_list,model_profile, N = 500, variables = "bio05")
+plot(profile_list)
+```
+
 
 # Preparing your data
 
@@ -119,11 +177,23 @@ lacerta_thin <- lacerta_thin %>%
   bind_cols(terra::extract(climate_present, lacerta_thin, ID=FALSE))
 ```
 
+
+
 # The initial split
 
 The standard approach in `tidymodels` is to make an initial split of the data
 into a test and a training set. We will use retain 20% of the data (1/5) for the testing set, and
 use the rest for training.
+
+We start by loading a set of presences and absences and their associated climate,
+analogous to the one that we generated in the Overview vignette:
+
+```{r}
+library(tidysdm)
+library(sf)
+#lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+#                                    package="tidysdm"))
+```
 
 ```{r initial_split}
 set.seed(1005)
@@ -277,7 +347,7 @@ on the data.
 sdm_metric_set()(data= lacerta_test_pred,truth=class,.pred_presence)
 ```
 
-We can now make predictions with this ensemble:
+We can now make predictions with this stacked ensemble:
 
 ```{r plot_present, fig.width=6, fig.height=4}
 prediction_present <- predict_raster(lacerta_stack, climate_present, type="prob")
@@ -287,3 +357,5 @@ ggplot() +
   # plot presences used in the model
   geom_sf(data = lacerta_thin %>% filter(class=="presence"))
 ```
+
+
