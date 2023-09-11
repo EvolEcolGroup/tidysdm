@@ -265,7 +265,7 @@ climate_present<-pastclim::region_slice(time_ce = 1985,
 
 ```{r echo=FALSE, results='hide'}
 terra::gdal(warn=3)
-climate_present<-rast(system.file("extdata/lacerta_climate_present_10m.nc", package="tidysdm"))
+climate_present<-terra::rast(system.file("extdata/lacerta_climate_present_10m.nc", package="tidysdm"))
 climate_vars <- lacerta_rec_all$var_info %>% filter(role=="predictor") %>% pull(variable)
 if (!all(climate_vars %in% names(climate_present))){
   stop("mismatched variables in the raster")
