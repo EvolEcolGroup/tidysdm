@@ -56,7 +56,7 @@ you can find Articles giving you a step-by-step [overview of the
 fitting SDMs to contemporary species](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html),
 as well as an equivalent [tutorial for using palaeontological data](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html).
 Furthermore, there is an [Article with examples of how to leverage various
-features of tidymodels](https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html) that are not commonly adopted in SDM pipelines
+features of tidymodels](https://evolecolgroup.github.io/tidysdm/dev/articles/a2_tidymodels_additions.html) that are not commonly adopted in SDM pipelines
 
 There is also a [dev
 version](https://evolecolgroup.github.io/tidysdm/dev/) of the site
@@ -71,7 +71,7 @@ is a relatively new package, so it might well be that, when you get an
 error, you might have encountered a bug. However, it is also possible that you
 have misspecified your model (and so the error comes from `tidymodels`, because
 your model is not valid). We have prepared an [Article on how to diagnose failing
-models](https://evolecolgroup.github.io/tidysdm/articles/a3_troubleshooting.html).
+models](https://evolecolgroup.github.io/tidysdm/dev/articles/a3_troubleshooting.html).
 It is not a fully comprehensive list of everything that could go wrong, but it will
 hopefully give you ideas on how to dig deeper in what is wrong. You should also
 check the [issues on
