@@ -129,7 +129,7 @@ models:</p>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Search for functions across packages at <span style="color: #00BB00;">https://www.tidymodels.org/find/</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Use suppressPackageStartupMessages() to eliminate package startup messages</span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span>
 <span><span class="co">#&gt; Registered S3 methods overwritten by 'tidysdm':</span></span>
 <span><span class="co">#&gt;   method      from   </span></span>
@@ -427,10 +427,10 @@ hyperparameters per model; this is far too little in real life!):</p>
 <span>                metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 4 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (567ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (578ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 4 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 tuning:     default_rf (2.1s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 tuning:     default_rf (2.2s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm (10s)</span></span></span>
@@ -651,9 +651,9 @@ will just use two fast models to speed up the process.</p>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (498ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (495ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (12.3s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (12.4s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (500ms)</span></span></span>
@@ -661,7 +661,7 @@ will just use two fast models to speed up the process.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (12.1s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (505ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (490ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (12.1s)</span></span></span></code></pre></div>
 <p>Now we can create a <code>repeat_ensemble</code> from the list:</p>
