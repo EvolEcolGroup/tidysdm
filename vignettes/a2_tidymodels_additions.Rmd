@@ -32,7 +32,7 @@ have been created to explore and explain the behaviour of ML algorithms, such as
 used in `tidysdm`. In the [`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article, we illustrated how to use `recipes` to create profiles.
 
 Here we demonstrate how to use [DALEX](https://modeloriented.github.io/DALEX/), an excellent package
-that has a methods to deal with `tidymodels`. `tidysdm` contains additional functions that
+that has methods to deal with `tidymodels`. `tidysdm` contains additional functions that
 allow use to use the DALEX functions directly on `tidysdm` ensembles. 
 
 We will use a simple ensemble that we built in the 
@@ -89,7 +89,7 @@ into a test and a training set. We will use retain 20% of the data (1/5) for the
 use the rest for training.
 
 We start by loading a set of presences and absences and their associated climate,
-analogous to the one that we generated in the Overview vignette:
+analogous to the one that we generated in the [`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article:
 
 ```{r}
 library(tidysdm)
@@ -98,6 +98,9 @@ lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
                                     package="tidysdm"))
 ```
 
+We then use `spatial_initial_split` to do the split, using a `spatial_block_cv`
+scheme to partition the data:
+
 ```{r initial_split}
 set.seed(1005)
 lacerta_initial <- spatial_initial_split(lacerta_thin, prop = 1/5, spatial_block_cv)
@@ -105,8 +108,9 @@ autoplot(lacerta_initial)
 ```
 
 We can now extract the training set from our `lacerta_initial` split, and sample
-folds to set up crossvalidation (we use the same grid we used on the full
-dataset `lacerta_thin` for the `initial_split`)
+folds to set up crossvalidation (note that we set the `cellsize` and `offset`
+based on the full dataset, `lacerta_thin`; this allows us to use the same grid 
+we used for the `initial_split`).
 ```{r training_cv}
 set.seed(1005)
 library(sf)
@@ -131,7 +135,7 @@ lacerta_rec_uncor <- lacerta_rec_all %>% step_rm(all_of( c("bio01", "bio02", "bi
 lacerta_rec_uncor
 ```
 
-And now use this in a `workflowset` (we will keep it small for computational time),
+And now use these two recipes in a `workflowset` (we will keep it small for computational time),
 selecting the appropriate recipe for each model. We will include a model (multivariate
 adaptive regression splines, or MARS) which does not have a wrapper in `tidysdm`
 for creating a model specification. However, we can use a standard model spec from
