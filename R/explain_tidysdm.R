@@ -106,6 +106,47 @@ explain_tidysdm.simple_ensemble <- function(
     }
   }
 
+#' @rdname explain_tidysdm
+#' @export
+explain_tidysdm.repeated_ensemble <- function(
+    model,
+    data = NULL,
+    y = NULL,
+    predict_function = NULL,
+    predict_function_target_column = NULL,
+    residual_function = NULL,
+    ...,
+    label = NULL,
+    verbose = TRUE,
+    precalculate = TRUE,
+    colorize = !isTRUE(getOption("knitr.in.progress")),
+    model_info = NULL,
+    type = "classification",
+    by_workflow = FALSE
+) {
+  message("this function is not yet thoroughly tested")
+  # we change the names of the workflows to combine with the repeat ids
+  model$workflow_id <- paste(model$rep_id,model$wflow_id, sep=".")
+  class(model)[1] <- "simple_ensemble"
+  explain_tidysdm (
+    model = model,
+    data = data,
+    y = y,
+    predict_function = predict_function,
+    predict_function_target_column = predict_function_target_column,
+    residual_function = residual_function,
+    ... = ...,
+    label = label,
+    verbose = verbose,
+    precalculate = precalculate,
+    colorize = colorize,
+    model_info = model_info,
+    type = type,
+    by_workflow = by_workflow)
+}
+
+
+
 
 explain_simple_ensemble <- function(
     model,
