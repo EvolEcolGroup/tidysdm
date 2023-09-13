@@ -25,18 +25,25 @@
 dist_pres_vs_bg <- function(
     .data,
     .col){
-  .col = rlang::enquo(.col) %>% rlang::quo_get_expr() %>% rlang::as_string()
-  if (inherits(.data, "sf")){
-    .data <- .data %>% sf::st_drop_geometry()
+  
+  if(requireNamespace("overlapping", quietly = TRUE)) {
+    
+    .col = rlang::enquo(.col) %>% rlang::quo_get_expr() %>% rlang::as_string()
+    if (inherits(.data, "sf")){
+      .data <- .data %>% sf::st_drop_geometry()
+    }
+    # subset to only columns which are numeric
+    num_vars <- names(.data)[!names(.data)%in%.col]
+    dist_vec<- numeric()
+    for (i_var in num_vars){
+      vals_list <- list(.data[[i_var]][.data[[.col]]==levels(.data[[.col]])[1]],
+                        .data[[i_var]][.data[[.col]]==levels(.data[[.col]])[2]])
+      dist_vec <- c(dist_vec, 1-overlapping::overlap(vals_list)$OV)
+    }
+    names(dist_vec)<- num_vars
+    dist_vec[order(dist_vec, decreasing = TRUE)]
+  } else {
+    stop("to use this function, first install package 'overlapping' with\n",
+         "install.packages('overlapping')")
   }
-  # subset to only columns which are numeric
-  num_vars <- names(.data)[!names(.data)%in%.col]
-  dist_vec<- numeric()
-  for (i_var in num_vars){
-    vals_list <- list(.data[[i_var]][.data[[.col]]==levels(.data[[.col]])[1]],
-                       .data[[i_var]][.data[[.col]]==levels(.data[[.col]])[2]])
-    dist_vec <- c(dist_vec, 1-overlapping::overlap(vals_list)$OV)
-  }
-  names(dist_vec)<- num_vars
-  dist_vec[order(dist_vec, decreasing = TRUE)]
 }

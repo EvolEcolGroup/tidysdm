@@ -1,11 +1,10 @@
-#' Maximum TSS - True Skill Statistics
+#' Maximum Cohen's Kappa
 #'
-#' The True Skills Statistic, which is defined as
+#' Cohen's Kappa ([yardstick::kap()]) is a measure similar to [yardstick::accuracy()], but it normalises
+#' the observed accuracy by the value that would be expected by chance (this
+#' helps for unbalanced cases when one class is predominant).
 #'
-#' *sensitivity*+*specificity* +1
-#'
-#' This function calibrates the probability threshold to classify presences to maximise the
-#' TSS.
+#' This function calibrates the probability threshold to classify presences to maximises kappa.
 #'
 #' There is no multiclass version of this function, it only operates on binary
 #' predictions (e.g. presences and absences in SDMs).
@@ -24,22 +23,30 @@
 #' For grouped data frames, the number of rows returned will be the same as the
 #' number of groups.
 #' @family class probability metrics
+#' 
+#' @references
+#'   Cohen, J. (1960). "A coefficient of agreement for nominal
+#'   scales". _Educational and Psychological Measurement_. 20 (1): 37-46.
+#'
+#'   Cohen, J. (1968). "Weighted kappa: Nominal scale agreement provision for
+#'   scaled disagreement or partial credit". _Psychological
+#'   Bulletin_. 70 (4): 213-220.
 #'
 #' @examples
-#' tss_max(two_class_example, truth, Class1)
+#' kap_max(two_class_example, truth, Class1)
 #'
 #' @export
-tss_max <- function(data, ...) {
-  UseMethod("tss_max")
+kap_max <- function(data, ...) {
+  UseMethod("kap_max")
 }
-tss_max <- new_prob_metric(
-  tss_max,
+kap_max <- new_prob_metric(
+  kap_max,
   direction = "maximize"
 )
 
-#' @rdname tss_max
+#' @rdname kap_max
 #' @export
-tss_max.data.frame <- function(data,
+kap_max.data.frame <- function(data,
                                truth,
                                ...,
                                estimator = NULL,
@@ -47,8 +54,8 @@ tss_max.data.frame <- function(data,
                                event_level = "first",
                                case_weights = NULL) {
   prob_metric_summarizer(
-    name = "tss_max",
-    fn = tss_max_vec,
+    name = "kap_max",
+    fn = kap_max_vec,
     data = data,
     truth = !!rlang::enquo(truth),
     ...,
@@ -59,16 +66,16 @@ tss_max.data.frame <- function(data,
   )
 }
 
-#' @rdname tss_max
+#' @rdname kap_max
 #' @export
-tss_max.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% tss_max(...)
+kap_max.sf <- function(data,...){
+  data %>% dplyr::as_tibble() %>% kap_max(...)
 }
 
 
 #' @export
-#' @rdname tss_max
-tss_max_vec <- function(truth,
+#' @rdname kap_max
+kap_max_vec <- function(truth,
                                   estimate,
                                   estimator = NULL,
                                   na_rm = TRUE,
@@ -77,7 +84,7 @@ tss_max_vec <- function(truth,
                                   ...) {
   utils::getFromNamespace("abort_if_class_pred", "yardstick")(truth)
 
-  estimator <- yardstick::finalize_estimator(truth, estimator, "tss_max")
+  estimator <- yardstick::finalize_estimator(truth, estimator, "kap_max")
 
   yardstick::check_prob_metric(truth, estimate, case_weights, estimator)
 
@@ -90,7 +97,7 @@ tss_max_vec <- function(truth,
     return(NA_real_)
   }
 
-  tss_max_estimator_impl(
+  kap_max_estimator_impl(
     truth = truth,
     estimate = estimate,
     estimator = estimator,
@@ -99,13 +106,13 @@ tss_max_vec <- function(truth,
   )
 }
 
-tss_max_estimator_impl <- function(truth,
+kap_max_estimator_impl <- function(truth,
                                              estimate,
                                              estimator,
                                              event_level,
                                              case_weights) {
   if (!utils::getFromNamespace("is_binary", "yardstick")(estimator)) {
-    stop("tss_max is only available for binary classes; multiclass is not supported")
+    stop("kap_max is only available for binary classes; multiclass is not supported")
   }
   # separate estimates into presences and background
   if (identical(event_level, "first")) {
@@ -118,17 +125,20 @@ tss_max_estimator_impl <- function(truth,
   presences <- estimate[truth==pres_level]
   absences <- estimate[truth==absence_level]
 
-  # TODO we could implement case weights by properly fitting TSS from yardstick
+  # TODO we could implement case weights by properly fitting kap from yardstick
   if (!is.null(case_weights)){
-    stop("tss_max with case_weights has not been implemented yet")
+    stop("kap_max with case_weights has not been implemented yet")
   }
   
   conf_matrix_df <- conf_matrix_df(presences, absences)
-  sens = (conf_matrix_df$tp / (conf_matrix_df$tp + conf_matrix_df$fn))
-  spec = (conf_matrix_df$tn / (conf_matrix_df$tn + conf_matrix_df$fp))
-
-  tss = (sens + spec) - 1
-  max(tss) ## return the maximum TSS
+  n <- rowSums(conf_matrix_df[,2:5])
+  obs_accuracy <- (conf_matrix_df$tp + conf_matrix_df$tn) / n
+  exp_accuracy <- (((conf_matrix_df$tn + conf_matrix_df$fp) *
+                     (conf_matrix_df$tn + conf_matrix_df$fn) /n ) +
+    ((conf_matrix_df$tp + conf_matrix_df$fn) *
+       (conf_matrix_df$tp + conf_matrix_df$fp) /n ))/n
+  kap = (obs_accuracy - exp_accuracy)/(1 - exp_accuracy)
+  max(kap) ## return the maximum kap
 }
 
 

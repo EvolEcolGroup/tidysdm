@@ -26,7 +26,7 @@ in the
 
 # Exploring models with `DALEX`
 
-An issue with machine learning algorithms is that it is not easy to undestand the
+An issue with machine learning algorithms is that it is not easy to understand the
 role of different variables in giving the final prediction. A number of packages
 have been created to explore and explain the behaviour of ML algorithms, such as those
 used in `tidysdm`. In the [`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article, we illustrated how to use `recipes` to create profiles.
@@ -44,21 +44,21 @@ lacerta_ensemble
 
 The first step in DALEX is to create an explainer object, which can then be
 queried by different functions in the package, to turn the explainer into an
-explanation (following the DALEX lingo). As a first setp, we use the
+explanation (following the DALEX lingo). As a first step, we use the
 custom function `explain_tidysdm` to generate our explainer:
 ```{r}
 explainer_lacerta_ens <- explain_tidysdm(lacerta_ensemble)
 ```
 Now that we have our explainer, we can explore variable importance for the ensemble:
 
-```{r}
+```{r vip, fig.width=6, fig.height=4}
 library(DALEX)
 vip_ensemble <- model_parts(explainer = explainer_lacerta_ens)
 plot(vip_ensemble)
 ```
 
 Or generate partial dependency plots for a given variable (e.g. bio05):
-```{r}
+```{r pdp, fig.width=6, fig.height=4}
 pdp_bio05 <- model_profile(explainer_lacerta_ens, N = 500, variables = "bio05")
 plot(pdp_bio05)
 ```
@@ -75,7 +75,7 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
 The resulting list can be then used to build lists of explanations, which can
 then be plotted.
 
-```{r}
+```{r profile, fig.width=6, fig.height=4}
 profile_list <- lapply(explainer_list,model_profile, N = 500, variables = "bio05")
 plot(profile_list)
 ```
@@ -101,17 +101,17 @@ lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
 We then use `spatial_initial_split` to do the split, using a `spatial_block_cv`
 scheme to partition the data:
 
-```{r initial_split}
+```{r initial_split, fig.width=6, fig.height=4}
 set.seed(1005)
 lacerta_initial <- spatial_initial_split(lacerta_thin, prop = 1/5, spatial_block_cv)
 autoplot(lacerta_initial)
 ```
 
 We can now extract the training set from our `lacerta_initial` split, and sample
-folds to set up crossvalidation (note that we set the `cellsize` and `offset`
+folds to set up cross validation (note that we set the `cellsize` and `offset`
 based on the full dataset, `lacerta_thin`; this allows us to use the same grid 
 we used for the `initial_split`).
-```{r training_cv}
+```{r training_cv, fig.width=6, fig.height=4}
 set.seed(1005)
 library(sf)
 lacerta_training <- training(lacerta_initial)
@@ -123,7 +123,7 @@ autoplot(lacerta_cv)
 
 # Different recipes for certain models
 
-Only certain type of models (e.g. glm, mars) struggle with correlated variables;
+Only certain type of models (e.g. glm, svm) struggle with correlated variables;
 other algorithms, such as random forests, can handle correlated variables. So,
 we will create two recipes, one with all variables, and one only with the
 variables that are uncorrelated:
@@ -136,8 +136,8 @@ lacerta_rec_uncor
 ```
 
 And now use these two recipes in a `workflowset` (we will keep it small for computational time),
-selecting the appropriate recipe for each model. We will include a model (multivariate
-adaptive regression splines, or MARS) which does not have a wrapper in `tidysdm`
+selecting the appropriate recipe for each model. We will include a model (polynomial
+support vector machines, or SVM) which does not have a wrapper in `tidysdm`
 for creating a model specification. However, we can use a standard model spec from
 `yardstick`:
 
@@ -147,16 +147,17 @@ lacerta_models <-
   workflow_set(
     preproc = list(uncor = lacerta_rec_uncor, # recipe for the glm
                    all = lacerta_rec_all,  # recipe for the random forest
-                   all = lacerta_rec_uncor # recipe for mars
+                   all = lacerta_rec_uncor # recipe for svm
     ),
     models = list(
       # the standard glm specs
       glm = sdm_spec_glm(),
       # rf specs with tuning
       rf = sdm_spec_rf(),
-      # mars specs with tuning
-      mars = parsnip::mars(num_terms=tune()) %>% 
-        parsnip::set_engine("earth") %>%
+      # svm specs with tuning
+     svm = parsnip::svm_poly(cost = tune(),
+                               degree = tune()) %>% 
+        parsnip::set_engine("kernlab") %>%
         parsnip::set_mode("classification")
     ),
     # make all combinations of preproc and models,
@@ -170,13 +171,15 @@ lacerta_models <-
 
 We can now use the block CV folds to
 tune and assess the models. Note that there are multiple tuning approaches,
-besides the standard grid method. Here we will use `tune_bayes`
-(to keep computations fast, we will only explore 3
-combination of hyperparameters per model; this is far too little in real life!).
+besides the standard grid method. Here we will use `tune_bayes` from the
+`tune` package (see its
+help page to see how a Gaussian Process model is used to choose parameter
+combinations).
+
 
 This tuning method (as opposed to use a standard grid) does not allow for
-hyperparameters with unknown limits, but
-`mtry` for random forest and gbm is undefined as its upper range depends on the number of 
+hyper-parameters with unknown limits, but
+`mtry` for random forest is undefined as its upper range depends on the number of 
 variables in the dataset. So, before tuning, we need to finalise `mtry` by 
 informing the set dials with the actual data:
 
@@ -216,9 +219,9 @@ autoplot(lacerta_models)
 Instead of building a simple ensemble with the best version of each model type, we
 can build a stack ensemble, as implemented in the package `stacks`. Stacking
 uses a meta-learning algorithm to learn how to best combine multiple models, including
-multiple versions of the same algorithm with different hyperparameters.
+multiple versions of the same algorithm with different hyper-parameters.
 
-```{r build_stack}
+```{r build_stack, fig.width=6, fig.height=4}
 library(stacks)
 set.seed(1005)
 lacerta_stack <- 
@@ -228,13 +231,13 @@ lacerta_stack <-
   add_candidates(lacerta_models) %>%
   # determine how to combine their predictions
   blend_predictions() %>%
-  # fit the candidates with nonzero weights (i.e.nonzero stacking coefficients)
+  # fit the candidates with non-zero weights (i.e.non-zero stacking coefficients)
   fit_members()
 
 autoplot(lacerta_stack, type = "weights")
 ```
 
-We can see that two versions of the random forest and one of mars were selected;
+We can see that three versions of the SVM and one of the random forests were selected;
 the stacking coefficients give an indication of the weight each model carries
 within the ensemble. We can now use the ensemble to make predictions about the
 testing data:
