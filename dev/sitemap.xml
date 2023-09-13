@@ -91,6 +91,9 @@
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/kap_max.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/km2m.html</loc>
   </url>
   <url>
@@ -113,6 +116,9 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/optim_thresh.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/optim_thresh_kap_max.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/optim_thresh_sens.html</loc>
