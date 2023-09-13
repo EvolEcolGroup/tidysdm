@@ -21,6 +21,9 @@ with [`pastclim`](https://evolecolgroup.github.io/pastclim/dev/index.html),
 which helps downloading and manipulating present day data,
 future predictions, and palaeoclimate reconstructions.
 
+An overviewof the capabilities of `tidysdm` is given in [Leonardi et al.
+(2023)](https://doi.org/10.1101/2023.07.24.550358).
+
 ## Installation
 
 `tidysdm` is still at the **beta** stage of development, and there is no official release on
