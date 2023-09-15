@@ -117,6 +117,24 @@ by multiple function to create explanations of the model.</p>
 <span>  model_info <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"classification"</span>,</span>
 <span>  by_workflow <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for repeat_ensemble</span></span>
+<span><span class="fu">explain_tidysdm</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict_function <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict_function_target_column <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  residual_function <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  precalculate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  colorize <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/Logic.html" class="external-link">isTRUE</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"knitr.in.progress"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  model_info <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"classification"</span>,</span>
+<span>  by_workflow <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
