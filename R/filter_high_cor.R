@@ -171,7 +171,7 @@ filter_high_cor_algorithm <-
     for (i in 1:(var_num - 1)) {
       if (!any(x2[!is.na(x2)] > cutoff)) {
         if (verbose)
-          cat("All correlations <=", cutoff, "\n")
+          message("All correlations <=", cutoff, "\n")
         break()
       }
       if (col_to_delete[i])

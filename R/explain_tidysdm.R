@@ -224,7 +224,7 @@ model_info.simple_ensemble<- function(model, is_multiclass = FALSE, ...){
 #' @method model_info repeat_ensemble
 model_info.repeat_ensemble<- function(model, is_multiclass = FALSE, ...){
   if (is_multiclass){
-    stop("tidysdm simple_ensembles can not be multiclass")
+    stop("tidysdm repeat_ensembles can not be multiclass")
   }
   package <- "tidysdm"
   type <- "classification"

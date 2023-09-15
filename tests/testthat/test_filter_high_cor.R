@@ -6,7 +6,7 @@ test_that("filter correlated variables", {
   expect_true(all(c("bio02","bio19","altitude","bio15","bio08","bio09","bio03")
                   %in% to_keep))
   expect_true(all(is.numeric(filter_high_cor(lacerta_thin, names=FALSE))))
-  verbose_test <- suppressMessages(filter_high_cor(lacerta_thin), verbose)
+  verbose_test <- suppressMessages(filter_high_cor(lacerta_thin, verbose=TRUE))
   expect_error(filter_high_cor(lacerta_thin, to_keep="blah"),
                "to_keep should only include numeric")
   # error if forced variables are too correlated
