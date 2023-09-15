@@ -4,6 +4,7 @@
 \alias{explain_tidysdm}
 \alias{explain_tidysdm.default}
 \alias{explain_tidysdm.simple_ensemble}
+\alias{explain_tidysdm.repeat_ensemble}
 \title{Create explainer from your tidysdm ensembles.}
 \usage{
 explain_tidysdm(
@@ -41,6 +42,23 @@ explain_tidysdm(
 )
 
 \method{explain_tidysdm}{simple_ensemble}(
+  model,
+  data = NULL,
+  y = NULL,
+  predict_function = NULL,
+  predict_function_target_column = NULL,
+  residual_function = NULL,
+  ...,
+  label = NULL,
+  verbose = TRUE,
+  precalculate = TRUE,
+  colorize = !isTRUE(getOption("knitr.in.progress")),
+  model_info = NULL,
+  type = "classification",
+  by_workflow = FALSE
+)
+
+\method{explain_tidysdm}{repeat_ensemble}(
   model,
   data = NULL,
   y = NULL,

@@ -147,7 +147,7 @@ contBoyce <- function(
     autoWindow = TRUE,
     method = 'spearman',
     dropZeros = TRUE,
-    graph = FALSE,
+    #graph = FALSE,
     na.rm = FALSE,
     ...
 ) {
@@ -222,15 +222,15 @@ contBoyce <- function(
   E <- freqContrast / sum(contrastWeight, na.rm=TRUE)
   PE <- P / E
 
-  # plot (transfer the code to a boyce_curve function in the future)
-  if (graph) {
-    graphics::par(mfrow=c(1, 2))
-    lims <- c(0, max(P, E, na.rm=TRUE))
-    plot(E, P, col='white', xlab='Expected', ylab='Predicted', main='P/E\nNumbered from lowest to highest class', xlim=lims, ylim=lims)
-    graphics::text(E, P, labels=1:numBins, col=1:20)
-    plot(meanPred, PE, type='l', xlab='Mean Prediction in Bin', ylab='P/E Ratio', main='CBI\nNumbered from lowest to highest class')
-    graphics::text(meanPred, PE, labels=1:numBins, col='blue')
-  }
+  # # plot (transfer the code to a boyce_curve function in the future)
+  # if (graph) {
+  #   graphics::par(mfrow=c(1, 2))
+  #   lims <- c(0, max(P, E, na.rm=TRUE))
+  #   plot(E, P, col='white', xlab='Expected', ylab='Predicted', main='P/E\nNumbered from lowest to highest class', xlim=lims, ylim=lims)
+  #   graphics::text(E, P, labels=1:numBins, col=1:20)
+  #   plot(meanPred, PE, type='l', xlab='Mean Prediction in Bin', ylab='P/E Ratio', main='CBI\nNumbered from lowest to highest class')
+  #   graphics::text(meanPred, PE, labels=1:numBins, col='blue')
+  # }
 
   # remove NAs
   na_in_either <- (is.na(meanPred) | is.na(PE))

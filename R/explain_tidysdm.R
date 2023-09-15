@@ -108,7 +108,7 @@ explain_tidysdm.simple_ensemble <- function(
 
 #' @rdname explain_tidysdm
 #' @export
-explain_tidysdm.repeated_ensemble <- function(
+explain_tidysdm.repeat_ensemble <- function(
     model,
     data = NULL,
     y = NULL,
@@ -124,7 +124,6 @@ explain_tidysdm.repeated_ensemble <- function(
     type = "classification",
     by_workflow = FALSE
 ) {
-  message("this function is not yet thoroughly tested")
   # we change the names of the workflows to combine with the repeat ids
   model$workflow_id <- paste(model$rep_id,model$wflow_id, sep=".")
   class(model)[1] <- "simple_ensemble"
@@ -144,9 +143,6 @@ explain_tidysdm.repeated_ensemble <- function(
     type = type,
     by_workflow = by_workflow)
 }
-
-
-
 
 explain_simple_ensemble <- function(
     model,
@@ -207,6 +203,26 @@ explain_simple_ensemble <- function(
 #' @export
 #' @method model_info simple_ensemble
 model_info.simple_ensemble<- function(model, is_multiclass = FALSE, ...){
+  if (is_multiclass){
+    stop("tidysdm simple_ensembles can not be multiclass")
+  }
+  package <- "tidysdm"
+  type <- "classification"
+  ver <- try(as.character(utils::packageVersion(package)), 
+             silent = TRUE)
+  if (inherits(ver, "try-error")) {
+    ver <- "Unknown"
+  }
+  model_info <- list(package = package, ver = ver, type = type)
+  class(model_info) <- "model_info"
+  model_info
+}
+
+# method for model info to work on simple ensemble
+#' @importFrom DALEX model_info
+#' @export
+#' @method model_info repeat_ensemble
+model_info.repeat_ensemble<- function(model, is_multiclass = FALSE, ...){
   if (is_multiclass){
     stop("tidysdm simple_ensembles can not be multiclass")
   }
