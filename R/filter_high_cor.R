@@ -21,15 +21,21 @@
 #' @param verbose A boolean for printing the details
 #' @param names a logical; should the column names be returned `TRUE` or
 #' the column index `FALSE`)?
+#' @param to_keep A vector of variable names that we want to force in the set
+#' (note that the function will return an error if the correlation among any of
+#' those varialbes is higher thna the cutoff).
 #' @returns A vector of names of columns that are below the correlation threshold
-#' (when \code{names = TRUE}), otherwise a vector of indices.
+#' (when \code{names = TRUE}), otherwise a vector of indices. Note that the indeces
+#' are only for numeric variables (i.e. if factors are present, the indeces do
+#' not take them into account).
 #'
 #' @export
 
 filter_high_cor <- function (x, 
                              cutoff = 0.7,
                              verbose = FALSE,
-                             names = TRUE) {
+                             names = TRUE,
+                             to_keep = NULL) {
   UseMethod("filter_high_cor", object = x)
 }
 
@@ -37,7 +43,8 @@ filter_high_cor <- function (x,
 #' @export
 filter_high_cor.default <- function(x, cutoff = 0.7,
                                     verbose = FALSE,
-                                    names = TRUE){
+                                    names = TRUE,
+                                    to_keep = NULL){
   stop("no method available for this object type")
 }
 
@@ -48,30 +55,96 @@ filter_high_cor.SpatRaster <-
   function (x,
             cutoff = 0.7,
             verbose = FALSE,
-            names = TRUE) {
+            names = TRUE,
+            to_keep = NULL) {
       cor_matrix <- terra::layerCor(x, "pearson", na.rm = TRUE)$pearson
       dimnames(cor_matrix) <- list(names(x), names(x))
       filter_high_cor(x = cor_matrix,
                       cutoff = cutoff,
                       verbose = verbose,
-                      names = names) 
+                      names = names,
+                      to_keep) 
 }    
     
+
+#' @rdname filter_high_cor
+#' @export
+filter_high_cor.data.frame <-
+  function (x,
+            cutoff = 0.7,
+            verbose = FALSE,
+            names = TRUE,
+            to_keep = NULL) {
+    x <- x %>% dplyr::select(dplyr::where(is.numeric)) %>%
+      sf::st_drop_geometry()
+    cor_matrix <- stats::cor(x)
+    filter_high_cor(x = cor_matrix,
+                    cutoff = cutoff,
+                    verbose = verbose,
+                    names = names,
+                    to_keep = to_keep)
+  }    
+
 #' @rdname filter_high_cor
 #' @export
 filter_high_cor.matrix <-
+  function (x,
+            cutoff = 0.7,
+            verbose = FALSE,
+            names = TRUE,
+            to_keep = NULL) {    
+    
+    if (!isTRUE(all.equal(x, t(x))))
+      stop("correlation matrix is not symmetric")
+    if (dim(x)[1] == 1)
+      stop("only one variable given")
+    
+    var_names <- dimnames(x)[[1]]
+    # if we have some variables to force in
+    if (!is.null(to_keep)){
+      if (!any(to_keep %in% var_names)){
+        stop ("to_keep should only include numeric variables in x")
+      }
+      if (length(to_keep)>1){
+        x_keep <- x[to_keep, to_keep]
+        diag(x_keep)<-NA
+        if (any(x_keep>cutoff, na.rm = TRUE)){
+          stop("some variables in `to_keep` have a correlation higher than the `cutoff`")
+        }        
+      }
+      x <- x[!var_names %in% to_keep, !var_names %in% to_keep]
+    }
+    filter_output <- filter_high_cor_algorithm(x = x,
+                                               cutoff = cutoff,
+                                               verbose = verbose)      
+    if (!is.null(to_keep)){
+      to_remove <- attr(filter_output, "to_remove")
+      filter_output <- c(to_keep, filter_output)
+      attr(filter_output, "to_remove")<- to_remove
+    }
+    
+
+  if (!names){
+    # return their indices
+    to_remove <- match(attr(filter_output, "to_remove"), var_names)
+    filter_output <- match(filter_output, var_names)
+    attr(filter_output, "to_remove")<- to_remove
+  }
+  return(filter_output)
+    
+}
+
+#' @rdname filter_high_cor
+#' @export
+# this funciton is only ever called from the cor.matrix method
+filter_high_cor_algorithm <-
       function (x,
                 cutoff = 0.7,
-                verbose = FALSE,
-                names = TRUE) {    
+                verbose = FALSE) {    
+
 
     var_num <- dim(x)[1]
     var_names <- dimnames(x)[[1]]
-
-    if (!isTRUE(all.equal(x, t(x))))
-      stop("correlation matrix is not symmetric")
-    if (var_num == 1)
-      stop("only one variable given")
 
     x <- abs(x)
 
@@ -138,32 +211,10 @@ filter_high_cor.matrix <-
         }
       }
     }
-    # should we sort these variables?
-    if (names) {
+    
       # return variable names
       passed_filter <- var_names[newOrder][!col_to_delete]
       attr(passed_filter, "to_remove")<- var_names[!var_names %in% passed_filter]
-    } else {
-      # return their indices
-      passed_filter <- newOrder[!col_to_delete]
-      attr(passed_filter, "to_remove")<- (1:length(newOrder))[!(1:length(newOrder)) %in% passed_filter]
-    }
 
     return(passed_filter)
       }
-
-#' @rdname filter_high_cor
-#' @export
-filter_high_cor.data.frame <-
-  function (x,
-            cutoff = 0.7,
-            verbose = FALSE,
-            names = TRUE) {
-    x <- x %>% select(where(is.numeric)) %>%
-      sf::st_drop_geometry()
-    cor_matrix <- stats::cor(x)
-    filter_high_cor(x = cor_matrix,
-                    cutoff = cutoff,
-                    verbose = verbose,
-                    names = names)
-  }    
