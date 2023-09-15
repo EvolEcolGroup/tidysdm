@@ -3,7 +3,8 @@
 #' This method finds a subset of variable such that all have a correlation 
 #' below a certain cutoff. There are methods for [`terra::SpatRaster`],
 #' [`data.frame`], and to work directly on a correlation matrix that was
-#' previously estimated.
+#' previously estimated. For `data.frame`, only numeric variables will be
+#' considered.
 #' The algorithm is based on `caret::findCorrelation`, using the `exact` option.
 #' The absolute values of pair-wise correlations are considered. If two
 #' variables have a high correlation, the function looks at the mean absolute
@@ -108,7 +109,7 @@ filter_high_cor.matrix <-
             mn1 <- mean(x2[i, ], na.rm = TRUE)
             mn2 <- mean(x2[-j, ], na.rm = TRUE)
             if (verbose)
-              cat(
+              message(
                 "Compare row",
                 newOrder[i],
                 " and column ",
@@ -118,20 +119,20 @@ filter_high_cor.matrix <-
                 "\n"
               )
             if (verbose)
-              cat("  Means: ", round(mn1, 3), "vs", round(mn2, 3))
+              message("  Means: ", round(mn1, 3), "vs", round(mn2, 3))
             if (mn1 > mn2) {
               col_to_delete[i] <- TRUE
               x2[i,] <- NA
               x2[, i] <- NA
               if (verbose)
-                cat(" so flagging column", newOrder[i], "\n")
+                message(" so flagging column", newOrder[i], "\n")
             }
             else {
               col_to_delete[j] <- TRUE
               x2[j,] <- NA
               x2[, j] <- NA
               if (verbose)
-                cat(" so flagging column", newOrder[j], "\n")
+                message(" so flagging column", newOrder[j], "\n")
             }
           }
         }
@@ -158,6 +159,8 @@ filter_high_cor.data.frame <-
             cutoff = 0.7,
             verbose = FALSE,
             names = TRUE) {
+    x <- x %>% select(where(is.numeric)) %>%
+      sf::st_drop_geometry()
     cor_matrix <- stats::cor(x)
     filter_high_cor(x = cor_matrix,
                     cutoff = cutoff,
