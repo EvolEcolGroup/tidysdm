@@ -1,21 +1,16 @@
 library(tidymodels)
 two_rec <- recipe(Class~.,data=two_class_dat)
-
 mars_spec <- parsnip::mars() %>% 
   parsnip::set_engine("earth") %>%
   parsnip::set_mode("classification")
-
 mars_tune_spec <- parsnip::mars(num_terms=tune()) %>% 
   parsnip::set_engine("earth") %>%
   parsnip::set_mode("classification")
-
 two_tune_wkflow <-# new workflow object
   workflow() %>% # use workflow function
   add_recipe(two_rec) %>% # add the new recipe
   add_model(mars_tune_spec)
-
 two_cv <- vfold_cv(two_class_dat, v=3)
-
 
 two_bayer_res <- tune_bayes(two_tune_wkflow,
                             resamples = two_cv, initial=8)
