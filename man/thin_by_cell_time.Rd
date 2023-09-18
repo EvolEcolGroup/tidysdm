@@ -19,7 +19,8 @@ thin_by_cell_time(
 These can be defined in \code{coords}, unless they have standard names
 (see details below).}
 
-\item{raster}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object that defined the grid}
+\item{raster}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object that defines the grid. The object must have
+\code{\link[terra:time]{terra::time}} set as POSIXt for all layers.}
 
 \item{coords}{a vector of length two giving the names of the "x" and "y"
 coordinates, as found in \code{data}. If left to NULL, the function will
