@@ -23,9 +23,12 @@
 
 recipe.sf <- function (x, ...) {
   # we should check that all coordinates are points
+  if (any (c("X","Y") %in% names(x))){
+    x <- x %>% dplyr::rename(X = X_orig, Y = Y_orig)
+  } # or do we just throw an error and say that X and Y are restricted???
+
   x<-x %>% dplyr::bind_cols(sf::st_coordinates(x)) %>% sf::st_drop_geometry()
-  recipe(x, ...) %>% add_role(dplyr::any_of(c("X","Y")),new_role="coords") %>%
-    update_role_requirements("coords", bake = FALSE) 
+  recipe(x, ...)  %>% step_dummy_coords() %>% update_role(dplyr::any_of(c("X","Y")),new_role="coords")
 }
 
 ## This breaks as X and Y might or might not be there
