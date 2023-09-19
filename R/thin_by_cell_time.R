@@ -1,16 +1,24 @@
 #' Thin point dataset to have 1 observation per raster cell per time slice
 #'
 #' This function thins a dataset so that only one observation per cell per time
-#' slice is retained.
+#' slice is retained. We use a raster with layers as time slices to define the
+#' data cube on which thinning is enforced (see details below on how time should be
+#' formatted).
 #'
-#' Further thinning can be achieved by aggregating cells in the raster
+#' Further spatial thinning can be achieved by aggregating cells in the raster
 #' before thinning, as achieved by setting `agg_fact` > 1 (aggregation works in a
 #' manner equivalent to [terra::aggregate()]).
 #'
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
-#' @param raster A [`terra::SpatRaster`] object that defined the grid
+#' @param raster A [`terra::SpatRaster`] object that defined the grid with layers
+#' corresponding to the time slices (times should be set as either POSIXlt or
+#'  "years", see [terra::time()] for details), or a [`terra::SpatRasterDataset`]
+#'   where the first dataset will be
+#'  used (again, times for that dataset should be set as eitehr POSIXlt or
+#'  "years")
+#' `terra::time()`
 #' @param coords a vector of length two giving the names of the "x" and "y"
 #' coordinates, as found in `data`. If left to NULL, the function will
 #' try to guess the columns based on standard names `c("x", "y")`, `c("X","Y")`,
@@ -33,17 +41,23 @@ thin_by_cell_time <- function(data, raster, coords=NULL, time_col="time",
   # there should be no pattern
   data <- data[sample(1:nrow(data)),]
   # create a vector of times formatted as proper dates
-  time_lub <- data[,time_col] %>% as.data.frame() %>% dplyr::select(dplyr::all_of(time_col))
-  time_lub <- lubridate_fun(time_lub[,time_col])
+  time_lub <- lubridate_fun(data %>% dplyr::pull(dplyr::all_of(time_col)))
   if (!inherits(time_lub,"POSIXct")){
     stop("time is not a date (or cannot be coerced to one)")
   }
-  # get the time steps from the SpatRasterDataset
-  time_steps <- terra::time(raster)[[1]]
+  # if we have a SpatRasterDataset, ge thte first dataset
+  if (inherits(raster, "SpatRasterDataset")){
+    raster <- raster [[1]]
+  }
+  time_steps <- terra::time(raster)
+  
+  if (any(is.na(time_steps))){
+    stop("`raster` does not have a time dimension; use `terra::time()` to set it")
+  }
   if ( terra::timeInfo(raster)[1,2]=="years"){
     time_steps <- lubridate::date_decimal(time_steps)
   }
-  # convert time_lub dates into indices for the SpatRasterDatset
+  # convert time_lub dates into indices for the SpatRasterDataset
   time_indices <-
     sapply(time_lub, function(a, b) {
       which.min(abs(a - b))
@@ -52,7 +66,7 @@ thin_by_cell_time <- function(data, raster, coords=NULL, time_col="time",
   for (i_index in unique(time_indices)){
     # get data for this time_index, we remove coordinates as we don't need them
     data_sub <- data %>% dplyr::filter(time_indices==i_index)
-    raster_sub <- raster[[1]][[i_index]]
+    raster_sub <- raster[[i_index]]
     data_sub <- thin_by_cell(data_sub, raster_sub,
                              drop_na = drop_na, agg_fact=agg_fact)
       data_thin <- data_thin %>% dplyr::bind_rows(data_sub)
