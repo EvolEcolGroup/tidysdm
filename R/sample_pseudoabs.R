@@ -45,8 +45,12 @@ sample_pseudoabs <- function (data, raster, n, coords = NULL,
 {
   return_sf <- FALSE # flag whether we need to return an sf object
   if (inherits(data,"sf")) {
-    if (!all(c("X", "Y") %in% names(data))) {
-    data <- data %>% dplyr::bind_cols(sf::st_coordinates(data))
+    bind_col <- TRUE
+    if (all(c("X", "Y") %in% names(data)) & all.equal(as.tibble(sf::st_coordinates(data)), st_drop_geometry(data[, c("X", "Y")]))) {
+      bind_col <- FALSE
+    }
+    if (bind_col) {
+      data <- data %>% dplyr::bind_cols(sf::st_coordinates(data))
     }
     crs_from_sf <- sf::st_crs(data)
     return_sf <- TRUE
