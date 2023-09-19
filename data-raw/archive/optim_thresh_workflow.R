@@ -32,7 +32,7 @@ calib_class_thresh <- function(object, class_thresh, metric_thresh=NULL){
     )
   }
 
-  # now store the new threholds
+  # now store the new thresholds
   if (!is.null(attr(object, "class_thresholds"))) {
     attr(object, "class_thresholds") <- calib_tb
   } else {

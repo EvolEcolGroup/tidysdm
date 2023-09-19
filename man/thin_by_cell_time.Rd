@@ -19,8 +19,13 @@ thin_by_cell_time(
 These can be defined in \code{coords}, unless they have standard names
 (see details below).}
 
-\item{raster}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object that defines the grid. The object must have
-\code{\link[terra:time]{terra::time}} set as POSIXt for all layers.}
+\item{raster}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object that defined the grid with layers
+corresponding to the time slices (times should be set as either POSIXlt or
+"years", see \code{\link[terra:time]{terra::time()}} for details), or a \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}}
+where the first dataset will be
+used (again, times for that dataset should be set as eitehr POSIXlt or
+"years")
+\code{terra::time()}}
 
 \item{coords}{a vector of length two giving the names of the "x" and "y"
 coordinates, as found in \code{data}. If left to NULL, the function will
@@ -45,7 +50,9 @@ An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link{data.frame}}, the 
 }
 \description{
 This function thins a dataset so that only one observation per cell per time
-slice is retained.
+slice is retained. We use a raster with layers as time slices to define the
+grid on which thinning is enforced (see details below on how time should be
+formatted).
 }
 \details{
 Further thinning can be achieved by aggregating cells in the raster

@@ -1,9 +1,9 @@
 ---
-title: "application with palaeodata"
+title: "Application with palaeodata"
 output: rmarkdown::html_vignette
 #output: rmarkdown::pdf_document
 vignette: >
-  %\VignetteIndexEntry{application with palaeodata}
+  %\VignetteIndexEntry{Application with palaeodata}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,8 +17,10 @@ knitr::opts_chunk$set(
 
 # SDMs with tidymodels for palaeo data
 
-In this vignette, we show how a Species Distribution Model can be fitted with
-`tidysdm` on time-scattered (i.e.palaeontological, archaeozoological, archaeological) data, with samples covering different time periods.
+In this article, we show how a Species Distribution Model can be fitted with
+`tidysdm` on time-scattered (i.e.palaeontological, archaeozoological, archaeological) data, with samples covering different time periods. We recommend users first read the "tidysdm overview" article,
+which introduces a number of functions and concepts that will be used in the present article.
+
 We first load `tidysdm`:
 
 ```{r}

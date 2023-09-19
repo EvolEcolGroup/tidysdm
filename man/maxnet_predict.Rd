@@ -21,7 +21,7 @@ maxnet_predict(
 
 \item{maxnet_type}{the transformation used for the prediction}
 
-\item{clamp}{logical, definign whether clamping to observed ranges should be used}
+\item{clamp}{logical, defining whether clamping to observed ranges should be used}
 }
 \value{
 a tibble of predictions

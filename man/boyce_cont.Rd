@@ -3,6 +3,7 @@
 \name{boyce_cont}
 \alias{boyce_cont}
 \alias{boyce_cont.data.frame}
+\alias{boyce_cont.sf}
 \alias{boyce_cont_vec}
 \title{Boyce continuous index (BCI)}
 \usage{
@@ -17,6 +18,8 @@ boyce_cont(data, ...)
   event_level = "first",
   case_weights = NULL
 )
+
+\method{boyce_cont}{sf}(data, ...)
 
 boyce_cont_vec(
   truth,
@@ -76,6 +79,7 @@ species presences. Ecol. Model., 199, 142-152.
 }
 \seealso{
 Other class probability metrics: 
+\code{\link{kap_max}()},
 \code{\link{tss_max}()}
 }
 \concept{class probability metrics}

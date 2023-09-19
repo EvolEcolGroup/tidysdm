@@ -3,7 +3,7 @@
 #' Predict for a new dataset by using a simple ensemble. Predictions from individual
 #' models are combined according to `fun`
 #' @param object an simple_ensemble object
-#' @param new_data the data to fit to (usually the full training dataset)
+#' @param new_data a data frame in which to look for variables with which to predict.
 #' @param type the type of prediction, "prob" or "class".
 #' @param fun string defining the aggregating function. It can take values
 #' `mean`, `median`, `weighted_mean`, `weighted_median` and `none`. It is possible
@@ -57,12 +57,16 @@ predict.simple_ensemble <-
 
       # check that we have an entry for this calibration
       ref_calib_tb <- attr(object,"class_thresholds")
-      if (is.null(ref_calib_tb) |
-       (!any(unlist(lapply(ref_calib_tb %>% dplyr::pull("metric_thresh"),identical, metric_thresh)) &
-                unlist(lapply(ref_calib_tb %>% dplyr::pull("class_thresh"),identical, class_thresh))))){
+     # browser()
+      if (is.null(ref_calib_tb)) {
         stop("this model needs to be first calibrated before classes can be produced\n",
              paste("use 'calib_class_thresh' first"))
-      }
+        # the next check fails if ref_calib_tb is null
+      } else if (!any(unlist(lapply(ref_calib_tb %>% dplyr::pull("metric_thresh"),identical, metric_thresh)) &
+                            unlist(lapply(ref_calib_tb %>% dplyr::pull("class_thresh"),identical, class_thresh)))){
+        stop("this model needs to be first calibrated before classes can be produced\n",
+             paste("use 'calib_class_thresh' first"))        
+        }
 
 
       # subset the calibration thresholds

@@ -1,11 +1,12 @@
 Package: tidysdm
 Title: Species Distribution Models with tidymodels
-Version: 0.9.0
+Version: 0.9.0.9004
 Authors@R: c(
     person("Michela", "Leonardi", role = "aut"),
     person("Margherita", "Colucci", role = "aut"),
     person("Andrea", "Manica", , "am315@cam.ac.uk", role = c("aut", "cre")))
-Description: Fit Species Distribution Models using the tidymodels framework.
+Description: Fit Species Distribution Models using the tidymodels framework, as described
+  in Leonardi et al. (2023) <doi:10.1101/2023.07.24.550358>.
 License: AGPL (>= 3)
 Encoding: UTF-8
 Language: en-GB
@@ -17,15 +18,16 @@ RoxygenNote: 7.2.3
 Depends:
     tidymodels,
     spatialsample,
-    R (>= 2.10)
+    R (>= 3.50)
 Imports:
     dials,
+    DALEX,
+    DALEXtra,
     dplyr,
     ggplot2,
     lubridate,
     magrittr,
     maxnet,
-    overlapping,
     parsnip,
     patchwork,
     recipes,
@@ -40,9 +42,12 @@ Imports:
     workflowsets,
     yardstick
 Suggests:
+    blockCV,
     doParallel,
     earth,
+    kernlab,
     knitr,
+    overlapping,
     pastclim,
     ranger,
     readr,

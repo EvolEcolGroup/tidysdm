@@ -1,7 +1,8 @@
 #' Create a formula for gam
 #'
 #' This function takes the formula from a recipe, and turns numeric predictors
-#' into smooths with a given k
+#' into smooths with a given k. This formula can be passed to a workflow or
+#' workflow set when fitting a gam.
 #' @param object a [recipes::recipe], already trained
 #' @param k the *k* value for the smooth
 #' @returns a formula

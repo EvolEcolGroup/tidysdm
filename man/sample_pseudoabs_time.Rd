@@ -58,10 +58,10 @@ not overlap with the presences. The following methods are implemented:
 /item: 'random': pseudo-absences/background randomly sampled from the region covered by the
 raster (i.e. not NAs).
 /item: 'dist_min': pseudo-absences/background randomly sampled from the region excluding a buffer
-of 'dist_min' from presences (distances in 'm' for latlong rasters, and in map
+of 'dist_min' from presences (distances in 'm' for lonlat rasters, and in map
 units for projected rasters).
 /item: 'dist_max': pseudo-absences/background randomly sampled from the unioned buffers
-of 'dist_max' from presences (distances in 'm' for latlong rasters, and in map
+of 'dist_max' from presences (distances in 'm' for lonlat rasters, and in map
 units for projected rasters). Using the union of buffers means that areas that
 are in multiple buffers are not oversampled. This is also referred to as "thickening".
 /item: 'dist_disc': pseudo-absences/background randomly sampled from the unioned discs around presences
