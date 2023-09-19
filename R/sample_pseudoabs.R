@@ -41,11 +41,13 @@
 
 sample_pseudoabs <- function (data, raster, n, coords = NULL,
                               method="random", class_label = "pseudoabs",
-                              return_pres=TRUE)
+                              return_pres = TRUE)
 {
   return_sf <- FALSE # flag whether we need to return an sf object
-  if (inherits(data,"sf")){
+  if (inherits(data,"sf")) {
+    if (!all(c("X", "Y") %in% names(data))) {
     data <- data %>% dplyr::bind_cols(sf::st_coordinates(data))
+    }
     crs_from_sf <- sf::st_crs(data)
     return_sf <- TRUE
   }
@@ -88,8 +90,8 @@ sample_pseudoabs <- function (data, raster, n, coords = NULL,
   if (length(cell_id)>n){
     cell_id <- sample(x= cell_id, size = n)
   } else {
-    warning("there are fewer available cells in the raster than the requested n points.\n",
-            "only ", length(cell_id), " will be returned.")
+    warning("There are fewer available cells in the raster than the requested ", n, " points.\n",
+            "Only ", length(cell_id), " will be returned.")
   }
   pseudoabsences <- as.data.frame (terra::xyFromCell(sampling_raster, cell_id))
   # fix the coordinate names to be the same we started with
