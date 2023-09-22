@@ -35,17 +35,19 @@ prep.spatial_recipe<-function (x, training = NULL, fresh = FALSE, verbose = FALS
 #' @export
 bake.spatial_recipe <- function (object, new_data, ..., composition = "tibble") {
   ## convert_geometry_column
-  if ("geometry" %in% names(new_data)){
-    ## convert_geometry_column
-    training <- training %>%
-      dplyr::bind_cols(sf::st_coordinates(new_data$geometry)) %>%
-      sf::st_drop_geometry()
+  if (!is.null(new_data)){
+    if ("geometry" %in% names(new_data)){
+      ## convert_geometry_column
+      new_data <- new_data %>%
+        dplyr::bind_cols(sf::st_coordinates(new_data$geometry)) %>%
+        sf::st_drop_geometry()
+    }
+    # Add dummy X and Y if they are not already present
+    if (!all(c("X","Y") %in% names(new_data))){
+      new_data <- new_data %>% dplyr::mutate(X=NA, Y=NA)
+    }    
   }
-  # Add dummy X and Y if they are not already present
-  if (!all(c("X","Y") %in% names(new_data))){
-    new_data <- new_data %>% dplyr::mutate(X=NA, Y=NA)
-  }
-  #recipes:::bake.recipe
+  ## TODO the st_drop_geometry below should be redundant given line 43
   utils::getFromNamespace("bake.recipe", "recipes") (object=object, ..., 
                         new_data = sf::st_drop_geometry(new_data),
                         composition=composition)
