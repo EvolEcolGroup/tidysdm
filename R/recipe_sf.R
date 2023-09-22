@@ -29,13 +29,7 @@ recipe.sf <- function (x, ...) {
 
   x<-x %>% dplyr::bind_cols(sf::st_coordinates(x)) %>% sf::st_drop_geometry()
   rec <- recipe(x, ...)  %>% 
-    #step_dummy_coords() %>% 
     update_role(dplyr::any_of(c("X","Y")),new_role="coords")
   class(rec) <- c("spatial_recipe", class(rec))
   rec
 }
-
-## This breaks as X and Y might or might not be there
-## The best option for an sf object is possibly to create a step_add_dummy_coords()
-## which, if needed, will add the X and Y coordinates to the dataset, so that we can then set their
-## role without an issue.

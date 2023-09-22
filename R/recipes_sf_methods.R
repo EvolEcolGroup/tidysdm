@@ -15,8 +15,11 @@ prep.spatial_recipe<-function (x, training = NULL, fresh = FALSE, verbose = FALS
     # if we have a geometry
     if ("geometry" %in% names(training)){
       ## convert_geometry_column
-      training <- training %>% sf::st_drop_geometry()
+      training <- training %>%
+        dplyr::bind_cols(sf::st_coordinates(training$geometry)) %>%
+        sf::st_drop_geometry()
     }
+    # Add dummy X and Y if they are not already present
     if (!all(c("X","Y") %in% names(training))){
       training <- training %>% dplyr::mutate(X=NA, Y=NA)
     }
@@ -31,7 +34,14 @@ prep.spatial_recipe<-function (x, training = NULL, fresh = FALSE, verbose = FALS
 
 #' @export
 bake.spatial_recipe <- function (object, new_data, ..., composition = "tibble") {
-  #browser()
+  ## convert_geometry_column
+  if ("geometry" %in% names(new_data)){
+    ## convert_geometry_column
+    training <- training %>%
+      dplyr::bind_cols(sf::st_coordinates(new_data$geometry)) %>%
+      sf::st_drop_geometry()
+  }
+  # Add dummy X and Y if they are not already present
   if (!all(c("X","Y") %in% names(new_data))){
     new_data <- new_data %>% dplyr::mutate(X=NA, Y=NA)
   }
