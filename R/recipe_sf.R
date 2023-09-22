@@ -28,7 +28,11 @@ recipe.sf <- function (x, ...) {
   } # or do we just throw an error and say that X and Y are restricted???
 
   x<-x %>% dplyr::bind_cols(sf::st_coordinates(x)) %>% sf::st_drop_geometry()
-  recipe(x, ...)  %>% step_dummy_coords() %>% update_role(dplyr::any_of(c("X","Y")),new_role="coords")
+  rec <- recipe(x, ...)  %>% 
+    #step_dummy_coords() %>% 
+    update_role(dplyr::any_of(c("X","Y")),new_role="coords")
+  class(rec) <- c("spatial_recipe", class(rec))
+  rec
 }
 
 ## This breaks as X and Y might or might not be there

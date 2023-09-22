@@ -7,9 +7,20 @@
 # foo <- prep(foo, lacerta_thin)
 # bake (foo, lacerta_thin)
 #' @export
-prep.recipe<-function (x, training = NULL, fresh = FALSE, verbose = FALSE, 
+prep.spatial_recipe<-function (x, training = NULL, fresh = FALSE, verbose = FALSE, 
                        retain = TRUE, log_changes = FALSE, strings_as_factors = TRUE, 
                        ...) {
+ # browser()
+  if (!is.null(training)){
+    # if we have a geometry
+    if ("geometry" %in% names(training)){
+      ## convert_geometry_column
+      training <- training %>% sf::st_drop_geometry()
+    }
+    if (!all(c("X","Y") %in% names(training))){
+      training <- training %>% dplyr::mutate(X=NA, Y=NA)
+    }
+  }
   #recipes:::prep.recipe
   utils::getFromNamespace("prep.recipe", "recipes") (
     x=x,training=sf::st_drop_geometry(training),
@@ -19,8 +30,15 @@ prep.recipe<-function (x, training = NULL, fresh = FALSE, verbose = FALSE,
 }
 
 #' @export
-bake.recipe <- function (object, new_data, ..., composition = "tibble") {
+bake.spatial_recipe <- function (object, new_data, ..., composition = "tibble") {
+  #browser()
+  if (!all(c("X","Y") %in% names(new_data))){
+    new_data <- new_data %>% dplyr::mutate(X=NA, Y=NA)
+  }
   #recipes:::bake.recipe
-  utils::getFromNamespace("bake.recipe", "recipes") (object=object, ..., new_data = sf::st_drop_geometry(new_data),
+  utils::getFromNamespace("bake.recipe", "recipes") (object=object, ..., 
+                        new_data = sf::st_drop_geometry(new_data),
                         composition=composition)
 }
+
+
