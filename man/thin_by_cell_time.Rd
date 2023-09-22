@@ -51,11 +51,11 @@ An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link{data.frame}}, the 
 \description{
 This function thins a dataset so that only one observation per cell per time
 slice is retained. We use a raster with layers as time slices to define the
-grid on which thinning is enforced (see details below on how time should be
+data cube on which thinning is enforced (see details below on how time should be
 formatted).
 }
 \details{
-Further thinning can be achieved by aggregating cells in the raster
+Further spatial thinning can be achieved by aggregating cells in the raster
 before thinning, as achieved by setting \code{agg_fact} > 1 (aggregation works in a
 manner equivalent to \code{\link[terra:aggregate]{terra::aggregate()}}).
 }
