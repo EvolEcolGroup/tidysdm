@@ -12,7 +12,8 @@
 \item{...}{parameters to be passed to \code{\link[recipes:recipe]{recipes::recipe()}}}
 }
 \value{
-An object of class \link[recipes:recipe]{recipes::recipe} , see
+An object of class \code{spatial_recipe}, which is a derived version of
+\link[recipes:recipe]{recipes::recipe} , see
 the manpage for \code{\link[recipes:recipe]{recipes::recipe()}} for details.
 }
 \description{
@@ -24,8 +25,10 @@ used in Species Distribution Model.
 \link{recipes} are not natively compatible with \link[sf:sf]{sf::sf} objects. The problem is that
 the \code{geometry} column of \link[sf:sf]{sf::sf} objects is a list, which is incompatible with
 the translation of formulae in \link{recipe}. This method strips the \code{geometry}
-column from the \link{data.frame} before any further operations, thus allowing
-the usual processing by \code{\link[=recipe]{recipe()}} to succeed.
+column from the \link{data.frame} and replaces it with a simple \code{X} and \code{Y} columns
+before any further operations, thus allowing
+the usual processing by \code{\link[=recipe]{recipe()}} to succeed (\code{X} and \code{Y} are give the role
+of coords ina spatial recipe).
 NOTE that order matters! You need to use the syntax
 \code{recipe(x=sf_obj, formula=class~.)} for the method to successfully detect
 the \link[sf:sf]{sf::sf} object. Starting with \code{formula} will fail.

@@ -6,4 +6,6 @@
 #' @name tidysdm
 #' @import tidymodels
 #' @import spatialsample
+#' @importFrom rlang .data
+
 NULL

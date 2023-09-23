@@ -1,16 +1,9 @@
-# foo<-workflow(
-#   preprocessor = lacerta_rec_uncor,
-#   spec = sdm_spec_glm()
-# )
-# 
-# foo<-lacerta_rec_uncor %>% prep(st_drop_geometry(lacerta_thin))
-# foo <- prep(foo, lacerta_thin)
-# bake (foo, lacerta_thin)
+
+
 #' @export
 prep.spatial_recipe<-function (x, training = NULL, fresh = FALSE, verbose = FALSE, 
                        retain = TRUE, log_changes = FALSE, strings_as_factors = TRUE, 
                        ...) {
- # browser()
   if (!is.null(training)){
     # if we have a geometry
     if ("geometry" %in% names(training)){
