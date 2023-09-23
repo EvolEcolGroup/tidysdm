@@ -13,8 +13,13 @@ test_that("filter correlated variables", {
   expect_error(filter_high_cor(lacerta_thin, to_keep=c("bio01","bio06")),
                  "some variables in")
   # keep variables in if they are reasonable
+  set.seed(123)
+  vars_kept <- filter_high_cor(lacerta_thin, to_keep=c("bio01","bio09"))
   expect_true(all(c("bio01","bio09") %in% 
-        filter_high_cor(lacerta_thin, to_keep=c("bio01","bio09"))))
+                    vars_kept))
+  vars_kept_cor <- cor(lacerta_thin[,vars_kept] %>% sf::st_drop_geometry())
+  diag(vars_kept_cor)<-NA
+  expect_true(max(abs(vars_kept_cor),na.rm=TRUE)<0.7)
   # keep variables in if they are reasonable
   expect_true(all(c("bio01") %in% 
                     filter_high_cor(lacerta_thin, to_keep=c("bio01"))))

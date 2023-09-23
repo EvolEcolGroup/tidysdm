@@ -100,6 +100,7 @@ filter_high_cor.matrix <-
       stop("only one variable given")
     
     var_names <- dimnames(x)[[1]]
+    diag(x)<-NA
     # if we have some variables to force in
     if (!is.null(to_keep)){
       if (!any(to_keep %in% var_names)){
@@ -107,12 +108,20 @@ filter_high_cor.matrix <-
       }
       if (length(to_keep)>1){
         x_keep <- x[to_keep, to_keep]
-        diag(x_keep)<-NA
+        #diag(x_keep)<-NA
         if (any(x_keep>cutoff, na.rm = TRUE)){
           stop("some variables in `to_keep` have a correlation higher than the `cutoff`")
-        }        
+        }
+        max_cor_vs_keep <- apply(abs(x[,to_keep]),1,max,na.rm=TRUE)
+      } else { # if only 1 var to keep, we just need to take the abs value of correlations
+        max_cor_vs_keep <- abs(x[,to_keep])
       }
-      x <- x[!var_names %in% to_keep, !var_names %in% to_keep]
+      # remove variables that are too highly correlated with variables to keep
+      
+      x <- x[!var_names %in% names(which(max_cor_vs_keep > cutoff)),
+             !var_names %in% names(which(max_cor_vs_keep > cutoff))]
+      x <- x[!dimnames(x)[[1]] %in% to_keep, !dimnames(x)[[1]] %in% to_keep]
+      
     }
     filter_output <- filter_high_cor_algorithm(x = x,
                                                cutoff = cutoff,
