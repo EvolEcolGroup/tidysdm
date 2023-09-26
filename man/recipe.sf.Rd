@@ -2,9 +2,12 @@
 % Please edit documentation in R/recipe_sf.R
 \name{recipe.sf}
 \alias{recipe.sf}
+\alias{spatial_recipe}
 \title{Recipe for \code{sf} objects}
 \usage{
 \method{recipe}{sf}(x, ...)
+
+spatial_recipe(x, ...)
 }
 \arguments{
 \item{x}{An \link[sf:sf]{sf::sf} data frame.}
@@ -19,7 +22,7 @@ the manpage for \code{\link[recipes:recipe]{recipes::recipe()}} for details.
 \description{
 This method for \code{\link[recipes:recipe]{recipes::recipe()}} handles the
 case when \code{x} is an \link[sf:sf]{sf::sf} object, as commonly
-used in Species Distribution Model.
+used in Species Distribution Model, and generates a \code{spatial_recipe}.
 }
 \details{
 \link{recipes} are not natively compatible with \link[sf:sf]{sf::sf} objects. The problem is that
@@ -28,7 +31,10 @@ the translation of formulae in \link{recipe}. This method strips the \code{geome
 column from the \link{data.frame} and replaces it with a simple \code{X} and \code{Y} columns
 before any further operations, thus allowing
 the usual processing by \code{\link[=recipe]{recipe()}} to succeed (\code{X} and \code{Y} are give the role
-of coords ina spatial recipe).
+of coords ina spatial recipe). When prepping and baking a \code{spatial_recipe},
+if a data.frame or tibble without coordinates is used as \code{training} or
+\code{new_data}, dummy \code{X} and \code{Y} columns
+are generated and filled with NAs.
 NOTE that order matters! You need to use the syntax
 \code{recipe(x=sf_obj, formula=class~.)} for the method to successfully detect
 the \link[sf:sf]{sf::sf} object. Starting with \code{formula} will fail.

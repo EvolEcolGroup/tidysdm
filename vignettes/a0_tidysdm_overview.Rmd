@@ -257,9 +257,10 @@ climate_present<-climate_present[[vars_uncor]]
 
 Next, we need to set up a `recipe` to define how to handle our dataset. We don't
 want to do anything to our data in terms of transformations, so we just
-need to define the formula (*class* is the outcome,
-all other variables are predictors; note that, for `sf` objects, `geometry` is
-automatically ignored as a predictor):
+need to define the formula (*class* is the `outcome`,
+all other variables are `predictor`s; note that, for `sf` objects, `geometry` is
+automatically replaced by `X` and `Y` columns which are assigned a role of
+`coords`, and thus not used as predictors):
 ```{r recipe}
 lacerta_rec <- recipe(lacerta_thin, formula=class~.)
 lacerta_rec
