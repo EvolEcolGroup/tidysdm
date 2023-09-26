@@ -1,8 +1,8 @@
 #' Find threshold that optimises a given metric
 #'
 #' This function returns the threshold to turn probabilities into binary classes
-#' whilst optimising a given metric. Currently available for tss_max and
-#' sensitivity (for which a target sensitivity is required).
+#' whilst optimising a given metric. Currently available for [`tss_max`], [`kap_max`] and
+#' `sensitivity` (for which a target sensitivity is required).
 #' @param truth The column identifier for the true class results (that is a 
 #' factor). This should be an unquoted column name although this argument is
 #' passed by expression and supports quasiquotation (you can unquote column

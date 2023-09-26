@@ -505,6 +505,7 @@ SDM pipeline. We will just use two fast models to speed up the process.
 ```{r}
 # empty object to store the simple ensembles that we will create
 ensemble_list <- list()
+set.seed(123) # make sure you set the seed OUTSIDE the loop
 for (i_repeat in 1:3){
   # thin the data
  lacerta_thin_rep<-thin_by_cell(lacerta, raster = climate_present)
