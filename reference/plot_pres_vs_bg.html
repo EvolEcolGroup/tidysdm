@@ -12,7 +12,7 @@ for presences vs the background."><meta property="og:image" content="https://evo
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,8 +27,13 @@ for presences vs the background."><meta property="og:image" content="https://evo
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/a0_tidysdm_overview.html">tidysdm overview</a>
-    <a class="dropdown-item" href="../articles/a1_palaeodata_application.html">application with palaeodata</a>
+    <a class="dropdown-item" href="../articles/a1_palaeodata_application.html">Application with palaeodata</a>
+    <a class="dropdown-item" href="../articles/a2_tidymodels_additions.html">Examples of additional tidymodels features</a>
+    <a class="dropdown-item" href="../articles/a3_troubleshooting.html">Troubleshooting models that fail</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -64,8 +69,8 @@ for presences vs the background.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>.data</dt>
-<dd><p>a <code>data.frame</code> (or derived object, such as <code>tibble</code>, or
-<code>sf</code>) with values for the bioclimate variables for presences and background</p></dd>
+<dd><p>a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> (or derived object, such as <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble::tibble</a></code>, or
+<code><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::st_sf</a></code>) with values for the bioclimate variables for presences and background</p></dd>
 
 
 <dt>.col</dt>

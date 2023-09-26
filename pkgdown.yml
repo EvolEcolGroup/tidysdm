@@ -4,7 +4,9 @@ pkgdown_sha: ~
 articles:
   a0_tidysdm_overview: a0_tidysdm_overview.html
   a1_palaeodata_application: a1_palaeodata_application.html
-last_built: 2023-07-28T08:25Z
+  a2_tidymodels_additions: a2_tidymodels_additions.html
+  a3_troubleshooting: a3_troubleshooting.html
+last_built: 2023-09-26T16:25Z
 urls:
   reference: https://evolecolgroup.github.io/tidysdm/reference
   article: https://evolecolgroup.github.io/tidysdm/articles

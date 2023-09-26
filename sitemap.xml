@@ -13,6 +13,12 @@
     <loc>https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/articles/a3_troubleshooting.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/articles/index.html</loc>
   </url>
   <url>
@@ -20,6 +26,9 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/index.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/news/index.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/add_member.html</loc>
@@ -34,6 +43,9 @@
     <loc>https://evolecolgroup.github.io/tidysdm/reference/autoplot.spatial_initial_split.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/blockcv2rsample.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/boyce_cont.html</loc>
   </url>
   <url>
@@ -46,6 +58,9 @@
     <loc>https://evolecolgroup.github.io/tidysdm/reference/check_sdm_presence.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/check_splits_balance.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/conf_matrix_df.html</loc>
   </url>
   <url>
@@ -53,6 +68,9 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/dist_pres_vs_bg.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/explain_tidysdm.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/filter_high_cor.html</loc>
@@ -79,10 +97,16 @@
     <loc>https://evolecolgroup.github.io/tidysdm/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/kap_max.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/km2m.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta_ensemble.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/maxent.html</loc>
@@ -98,6 +122,9 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh_kap_max.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh_sens.html</loc>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,8 +25,13 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/a0_tidysdm_overview.html">tidysdm overview</a>
-    <a class="dropdown-item" href="../articles/a1_palaeodata_application.html">application with palaeodata</a>
+    <a class="dropdown-item" href="../articles/a1_palaeodata_application.html">Application with palaeodata</a>
+    <a class="dropdown-item" href="../articles/a2_tidymodels_additions.html">Examples of additional tidymodels features</a>
+    <a class="dropdown-item" href="../articles/a3_troubleshooting.html">Troubleshooting models that fail</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -80,6 +85,11 @@
         <dd>Create a ggplot for a spatial initial rsplit.</dd>
       </dl><dl><dt>
           
+          <code><a href="blockcv2rsample.html">blockcv2rsample()</a></code> 
+        </dt>
+        <dd>Convert an object created with <code>blockCV</code> to an <code>rsample</code> object</dd>
+      </dl><dl><dt>
+          
           <code><a href="boyce_cont.html">boyce_cont()</a></code> <code><a href="boyce_cont.html">boyce_cont_vec()</a></code> 
         </dt>
         <dd>Boyce continuous index (BCI)</dd>
@@ -95,6 +105,11 @@
         <dd>Check that the column with presences is correctly formatted</dd>
       </dl><dl><dt>
           
+          <code><a href="check_splits_balance.html">check_splits_balance()</a></code> 
+        </dt>
+        <dd>Check the balance of presences vs pseudoabsences among splits</dd>
+      </dl><dl><dt>
+          
           <code><a href="control_ensemble.html">control_ensemble_grid()</a></code> <code><a href="control_ensemble.html">control_ensemble_resamples()</a></code> <code><a href="control_ensemble.html">control_ensemble_bayes()</a></code> 
         </dt>
         <dd>Control wrappers</dd>
@@ -105,7 +120,12 @@
         <dd>Distance between the distribution of climate values for presences vs background</dd>
       </dl><dl><dt>
           
-          <code><a href="filter_high_cor.html">filter_high_cor()</a></code> 
+          <code><a href="explain_tidysdm.html">explain_tidysdm()</a></code> 
+        </dt>
+        <dd>Create explainer from your tidysdm ensembles.</dd>
+      </dl><dl><dt>
+          
+          <code><a href="filter_high_cor.html">filter_high_cor()</a></code> <code><a href="filter_high_cor.html">filter_high_cor_algorithm()</a></code> 
         </dt>
         <dd>Filter to retain only variables below a given correlation threshold</dd>
       </dl><dl><dt>
@@ -135,6 +155,11 @@
         <dd>Coordinates of radiocarbon dates for horses</dd>
       </dl><dl><dt>
           
+          <code><a href="kap_max.html">kap_max()</a></code> <code><a href="kap_max.html">kap_max_vec()</a></code> 
+        </dt>
+        <dd>Maximum Cohen's Kappa</dd>
+      </dl><dl><dt>
+          
           <code><a href="km2m.html">km2m()</a></code> 
         </dt>
         <dd>Convert a geographic distance from km to m</dd>
@@ -143,6 +168,11 @@
           <code><a href="lacerta.html">lacerta</a></code> 
         </dt>
         <dd>Coordinates of presences for Iberian emerald lizard</dd>
+      </dl><dl><dt>
+          
+          <code><a href="lacerta_ensemble.html">lacerta_ensemble</a></code> 
+        </dt>
+        <dd>A simple ensemble for the lacerta data</dd>
       </dl><dl><dt>
           
           <code><a href="maxent.html">maxent()</a></code> 
@@ -167,7 +197,7 @@
           
           <code><a href="predict.repeat_ensemble.html">predict(<i>&lt;repeat_ensemble&gt;</i>)</a></code> 
         </dt>
-        <dd>Predict for a simple ensemble set</dd>
+        <dd>Predict for a repeat ensemble set</dd>
       </dl><dl><dt>
           
           <code><a href="predict.simple_ensemble.html">predict(<i>&lt;simple_ensemble&gt;</i>)</a></code> 
@@ -185,7 +215,7 @@
         <dd>Probability metrics for <code>sf</code> objects</dd>
       </dl><dl><dt>
           
-          <code><a href="recipe.sf.html">recipe(<i>&lt;sf&gt;</i>)</a></code> 
+          <code><a href="recipe.sf.html">recipe(<i>&lt;sf&gt;</i>)</a></code> <code><a href="recipe.sf.html">spatial_recipe()</a></code> 
         </dt>
         <dd>Recipe for <code>sf</code> objects</dd>
       </dl><dl><dt>
@@ -287,7 +317,7 @@
           
           <code><a href="ybp2date.html">ybp2date()</a></code> <code><a href="ybp2date.html">date2ybp()</a></code> 
         </dt>
-        <dd>Convert years BP from pastclim to lubridate date, or viceversa</dd>
+        <dd>Convert years BP from pastclim to lubridate date, or vice versa</dd>
       </dl></div>
   </main></div>
 

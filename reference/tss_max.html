@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,8 +25,13 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/a0_tidysdm_overview.html">tidysdm overview</a>
-    <a class="dropdown-item" href="../articles/a1_palaeodata_application.html">application with palaeodata</a>
+    <a class="dropdown-item" href="../articles/a1_palaeodata_application.html">Application with palaeodata</a>
+    <a class="dropdown-item" href="../articles/a2_tidymodels_additions.html">Examples of additional tidymodels features</a>
+    <a class="dropdown-item" href="../articles/a3_troubleshooting.html">Troubleshooting models that fail</a>
   </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -67,6 +72,9 @@
 <span>  event_level <span class="op">=</span> <span class="st">"first"</span>,</span>
 <span>  case_weights <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sf</span></span>
+<span><span class="fu">tss_max</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tss_max_vec</span><span class="op">(</span></span>
 <span>  <span class="va">truth</span>,</span>
@@ -134,7 +142,8 @@ predictions (e.g. presences and absences in SDMs).</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other class probability metrics: 
-<code><a href="boyce_cont.html">boyce_cont</a>()</code></p></div>
+<code><a href="boyce_cont.html">boyce_cont</a>()</code>,
+<code><a href="kap_max.html">kap_max</a>()</code></p></div>
     </div>
 
     <div class="section level2">
