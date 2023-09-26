@@ -1,4 +1,4 @@
-# `tidysdm` (development version)
+# `tidysdm` 0.9.1
 
 * Add a `spatial_recipe` class. This is a BREAKING change that makes previously
 saved objects unusable, but old code will work as expected.
