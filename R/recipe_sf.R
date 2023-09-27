@@ -28,11 +28,19 @@
 
 recipe.sf <- function (x, ...) {
   # we should check that all coordinates are points
-  if (any (c("X","Y") %in% names(x))){
-    x <- x %>% dplyr::rename(!!"X_orig" := !!"X", !!"Y_orig" := !!"Y")
-  } # or do we just throw an error and say that X and Y are restricted???
-
-  x<-x %>% dplyr::bind_cols(sf::st_coordinates(x)) %>% sf::st_drop_geometry()
+#  browser()
+  if (all(c("X", "Y") %in% names(x))) {
+   if (all(sf::st_drop_geometry(x[, c("X", "Y")]) == sf::st_coordinates(x))) {
+     x<-x %>% sf::st_drop_geometry()
+    } else {
+      stop("sf object `x` contains `X` and `Y` coordinates that do not match the sf point geometry")
+    }
+  } else {
+    x<-x %>% dplyr::bind_cols(sf::st_coordinates(x)) %>% sf::st_drop_geometry()
+  }
+  
+  
+  
   rec <- recipe(x, ...)  %>% 
     update_role(dplyr::any_of(c("X","Y")),new_role="coords")
   class(rec) <- c("spatial_recipe", class(rec))

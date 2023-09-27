@@ -1,5 +1,5 @@
 library(sf)
-test_that("sdm_spec_gam", {
+test_that("sdm_recipe_sf", {
   lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
                                     package="tidysdm"))
   lacerta_rec <- recipe(lacerta_thin, formula=class~.)
@@ -10,10 +10,15 @@ test_that("sdm_spec_gam", {
                               formula=class~.),
                "x should be an `sf` object")
   lacerta_xy <- lacerta_thin %>% dplyr::mutate(X=1,Y=2)
-  # recoding old X and Y variable
-  lacerta_rec_xy <- recipe(lacerta_xy, formula=class~.)
-  expect_true (all(c("X_orig","Y_orig") %in% lacerta_rec_xy$term_info$variable))
-  expect_false (all(c("X_orig","Y_orig") %in% lacerta_rec$term_info$variable))
+  # deal with X and Y coordinates
+  expect_error(recipe(lacerta_xy, formula=class~.),
+               "sf object")
+  lacerta_xy <- lacerta_thin %>% dplyr::bind_cols(sf::st_coordinates(lacerta_thin)) 
+  lacerta_xy_rec <- recipe(lacerta_xy, formula=class~.)
+  expect_true(identical(lacerta_xy_rec,lacerta_rec))
+  lacerta_xy$X[3]<-190
+  expect_error(recipe(lacerta_xy, formula=class~.),
+               "sf object")
   #check prep methods
   lacerta_rec_prep <- prep(lacerta_rec)
   expect_true (recipes::fully_trained(lacerta_rec_prep))
