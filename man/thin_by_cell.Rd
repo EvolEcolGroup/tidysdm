@@ -30,7 +30,7 @@ grid of \code{raster})}
 An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link{data.frame}}, the same as "data".
 }
 \description{
-This function thinss a dataset so that only one observation per cell
+This function thins a dataset so that only one observation per cell
 is retained.
 }
 \details{

@@ -77,6 +77,24 @@ test_that("sample_pseudoabs samples in the right places", {
                "method has to be")
 })
 
+test_that("handling of data frames and sf objects", {
+  locations_sf <-  sf::st_as_sf(locations, coords=c("lon","lat")) %>% sf::st_set_crs(4326)
+  expect_error(sample_pseudoabs(locations_sf, coords = c("x", "y"), raster = grid_raster),
+               "There are no recognised coordinate columns")
+  expect_warning(sample_pseudoabs(locations_sf, raster = grid_raster, n = 100),
+                 "There are fewer available cells in the raster than the requested 100 points")
+  locations_sf <- locations_sf %>% dplyr::bind_cols(sf::st_coordinates(.))
+  expect_no_error(sample_pseudoabs(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25))
+  locations_sf$X <- rep(0, 3)
+  locations_sf$Y <- rep(0, 3)
+  expect_error(sample_pseudoabs(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25),
+               "sf object contains X and Y coordinates that do not match the sf point geometry")
+  locations_sf$X <- rep(NA, 3)
+  locations_sf$Y <- rep(NA, 3)
+  expect_error(sample_pseudoabs(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25),
+               "sf object contains NA values in the X and Y coordinates")
+})
+
 # sample code to plot points in and buffers
 # plot(grid_raster,colNA="darkgray")
 # polys(terra::as.polygons(grid_raster))

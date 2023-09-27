@@ -4,7 +4,7 @@
 #'
 #' @details
 #' This plot method is a wrapper around the standard `spatial_rsplit` method,
-#' but it relables the folds as *Testing* and *Traning* following the convention
+#' but it re-labels the folds as *Testing* and *Training* following the convention
 #' for a standard `initial_split` object
 #'
 #' @param object A `spatial_initial_rsplit` object.

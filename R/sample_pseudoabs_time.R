@@ -8,10 +8,10 @@
 #' /item: 'random': pseudo-absences/background randomly sampled from the region covered by the
 #' raster (i.e. not NAs).
 #' /item: 'dist_min': pseudo-absences/background randomly sampled from the region excluding a buffer
-#' of 'dist_min' from presences (distances in 'm' for latlong rasters, and in map
+#' of 'dist_min' from presences (distances in 'm' for lonlat rasters, and in map
 #' units for projected rasters).
 #' /item: 'dist_max': pseudo-absences/background randomly sampled from the unioned buffers
-#' of 'dist_max' from presences (distances in 'm' for latlong rasters, and in map
+#' of 'dist_max' from presences (distances in 'm' for lonlat rasters, and in map
 #' units for projected rasters). Using the union of buffers means that areas that
 #' are in multiple buffers are not oversampled. This is also referred to as "thickening".
 #' /item: 'dist_disc': pseudo-absences/background randomly sampled from the unioned discs around presences
@@ -58,16 +58,16 @@ sample_pseudoabs_time <- function (data, raster, n_per_presence, coords = NULL,t
   if ( terra::timeInfo(raster)[1,2]=="years"){
     time_steps <- lubridate::date_decimal(time_steps)
   }
-  # convert time_lub dates into indeces for the SpatRasterDatset
-  time_indeces <-
+  # convert time_lub dates into indices for the SpatRasterDatset
+  time_indices <-
     sapply(time_lub, function(a, b) {
       which.min(abs(a - b))
     }, time_steps)
   pseudoabsences<-NULL
-  for (i_index in unique(time_indeces)){
+  for (i_index in unique(time_indices)){
     #browser()
     # get data for this time_index, we remove coordinates as we don't need them
-    data_sub <- data %>% dplyr::filter(time_indeces==i_index)
+    data_sub <- data %>% dplyr::filter(time_indices==i_index)
     # slice the region series based on the index;
     raster_sub <- pastclim::slice_region_series(raster, time_bp=pastclim::time_bp(raster)[i_index])
     data_sub <- sample_pseudoabs (data= data_sub,

@@ -7,14 +7,21 @@
 optim_thresh(truth, estimate, metric, event_level = "first")
 }
 \arguments{
-\item{truth}{The column identifier for the true class results (that is a factor). This should be an unquoted column name although this argument is passed by expression and supports quasiquotation (you can unquote column names). For ⁠_vec()⁠ functions, a factor vector.}
+\item{truth}{The column identifier for the true class results (that is a
+factor). This should be an unquoted column name although this argument is
+passed by expression and supports quasiquotation (you can unquote column
+names). For ⁠_vec()⁠ functions, a factor vector.}
 
 \item{estimate}{the predicted probability for the event}
 
-\item{metric}{character of metric to be optimised. Currently only "tss_max", and "sensitivity" with a given target
+\item{metric}{character of metric to be optimised. Currently only "tss_max",
+"kap_max", and "sensitivity" with a given target
 (e.g. c("sensitivity",0.8))}
 
-\item{event_level}{A single string. Either "first" or "second" to specify which level of truth to consider as the "event". This argument is only applicable when estimator = "binary". The default uses an internal helper that generally defaults to "first"}
+\item{event_level}{A single string. Either "first" or "second" to specify
+which level of truth to consider as the "event". This argument is only
+applicable when estimator = "binary". The default uses an internal helper
+that generally defaults to "first"}
 }
 \value{
 the probability threshold for the event

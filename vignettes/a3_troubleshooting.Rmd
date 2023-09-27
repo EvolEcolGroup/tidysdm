@@ -1,0 +1,291 @@
+---
+title: "Troubleshooting models that fail"
+output: rmarkdown::html_vignette
+#output: rmarkdown::pdf_document
+vignette: >
+  %\VignetteIndexEntry{Troubleshooting models that fail}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In this vignette, we illustrate how to troubleshoot tuning errors. This is not a 
+comprehensive list (yet), but rather an attempt to illustrate how an error 
+can be approached.
+
+# NAs in the data
+
+Most algorithms do not allow NAs. We can generate a problematic dataset by
+loading the *Lacerta* dataset, and manually add an NA:
+```{r}
+library(tidysdm)
+lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+                               package="tidysdm"))
+lacerta_thin$bio05[37]<-NA
+```
+
+Let us set up a recipe and fit workflow_set
+```{r}
+lacerta_rec <- recipe(lacerta_thin, formula=class~.) %>% step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", "bio17", "bio18", "bio19", "altitude")))
+
+lacerta_models <-
+  # create the workflow_set
+  workflow_set(
+    preproc = list(default = lacerta_rec),
+    models = list(
+      # the standard glm specs
+      glm = sdm_spec_glm(),
+      # rf specs with tuning
+      rf = sdm_spec_rf()
+    ),
+    # make all combinations of preproc and models,
+    cross = TRUE
+  ) %>%
+  # tweak controls to store information needed later to create the ensemble
+  option_add(control = control_ensemble_grid())
+```
+
+```{r error=TRUE}
+set.seed(100)
+lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
+lacerta_models <- 
+   lacerta_models %>% 
+   workflow_map("tune_grid", resamples = lacerta_cv, grid = 3, 
+                metrics = sdm_metric_set(), verbose = TRUE)
+```
+
+We can see that the error is self-explanatory. Also, note that the error impacts
+all data splits (technically, `rset` objects): error A is repeated 15 times (5
+splits for 3 hyperparameter values).
+
+Prepping the recipe (which trains it on the dataset) can help diagnosing
+problems:
+```{r}
+lacerta_prep <- lacerta_rec %>% prep(lacerta_thin)
+lacerta_prep
+```
+
+Note that, in the training information, we were warned that 1 row was incomplete.
+You could use `step_naomit` to deal with this programmatically, or ascertain why
+you are generating missing data (we prefer the latter, as a good SDM pipeline
+should not generate observations, presences or pseudoabsences, with missing data).
+
+# Recipes and the response variable
+
+The response variable is treated in a special way in `recipes`, and this can
+lead to problems. It is best not to manipulate (e.g. transform character into
+factor) the response variable in a recipe, since that response variable will
+only be available when we train and test models, but not when we make projections.
+If we hard-coded a step in a recipe that includes the response variable, the model
+will fit, but then it will fail when we start making predictions.
+
+Another potential mistake is to remove the response variable when selecting
+variables of interest. This can happen if we use `step_select` to choose
+variables of interest, and the error is less than clear:
+
+Let's load the data and create a recipe with `step_select`:
+```{r}
+lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+                               package="tidysdm"))
+suggested_vars <- c("bio05","bio06", "bio13", "bio14", "bio15")
+lacerta_rec_sel <- recipe(lacerta_thin, formula=class~.) %>% step_select(all_of( suggested_vars))
+```
+
+Now we create the workflow set and fit it:
+```{r error=TRUE}
+lacerta_models <-
+  # create the workflow_set
+  workflow_set(
+    preproc = list(default = lacerta_rec_sel),
+    models = list(
+      # the standard glm specs
+      glm = sdm_spec_glm(),
+      # rf specs with tuning
+      rf = sdm_spec_rf()
+    ),
+    # make all combinations of preproc and models,
+    cross = TRUE
+  ) %>%
+  # tweak controls to store information needed later to create the ensemble
+  option_add(control = control_ensemble_grid())
+
+set.seed(100)
+lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
+lacerta_models <- 
+   lacerta_models %>% 
+   workflow_map("tune_grid", resamples = lacerta_cv, grid = 3, 
+                metrics = sdm_metric_set(), verbose = TRUE)
+```
+The errors are not very intuitive. However, all models have failed for all algorithms,
+which suggests that the problem lies with the data preparation side (either the data
+themselves, or what we did with the recipe).
+
+Ideally, you should have already had a look at your data (with `summary` or `glimpse`).
+So, in this case, we know that the data are fine. Whilst prepping (and sometimes baking) the recipe is generally informative for predictor variables, it is hard to
+diagnose problems with the outcome variable in a recipe. Prepping will not
+show anything obvious:
+
+```{r}
+lacerta_prep_sel <- lacerta_rec_sel %>% prep(lacerta_thin)
+lacerta_prep_sel
+```
+
+In this case, it is a process of exclusion. Everything seems fine, but the models
+don't work. Then ask yourself if the outcome variable might be problematic. As
+a general rule, we have found it easier to rely on `step_rm` to remove variables
+(e.g. correlated variables).
+
+# Using the desired formula with GAM
+
+General Additive Models have an unusual syntax, as the user has to define
+which variables are fitted with splines. `tidysdm` has some functions to
+simplify this process, assuming that the user just wants to fit a standard smooth
+to every continuous predictor.
+
+```{r}
+lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+                               package="tidysdm"))
+
+lacerta_rec <- recipe(lacerta_thin, formula=class~.) %>% step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", "bio17", "bio18", "bio19", "altitude")))
+
+lacerta_models <-
+  # create the workflow_set
+  workflow_set(
+    preproc = list(default = lacerta_rec),
+    models = list(
+      # the standard glm specs
+      glm = sdm_spec_glm(),
+      # the standard gam specs
+      gam = sdm_spec_gam()
+    ),
+    # make all combinations of preproc and models,
+    cross = TRUE
+  ) %>%
+  # set formula for gams
+  update_workflow_model("default_gam",
+                        spec = sdm_spec_gam(),
+                        formula = gam_formula(lacerta_rec)) %>%
+  # tweak controls to store information needed later to create the ensemble
+  option_add(control = control_ensemble_grid())
+```
+
+
+```{r}
+set.seed(100)
+lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
+lacerta_models <- 
+   lacerta_models %>% 
+   workflow_map("tune_grid", resamples = lacerta_cv, grid = 3, 
+                metrics = sdm_metric_set(), verbose = TRUE)
+```
+
+Note that the step of defining a formula is incompatible with using `step_cor`
+in a recipe. `step_cor` removes correlated variables in recipes, using a similar
+algorithm to `filter_high_cor`. However, the algorithm is fitted to each data
+split when cross-validating. This means that different variables will eventually
+be presented to the model when it is fitted for each split, leading to an error
+as there will be a mismatch between the formula and the available variables. This
+is a known issue of how GAMs are implemented in `tidymodels`.
+
+# When only some splits fail
+
+In the examples above, all the splits used for cross-validation of a given algorithms failed. However, it
+is also possible that failures occur only on some splits for certain
+algorithms (technically, a specific `rsplit` within certain `workflows`). When this type of
+problem occurs, it is best to extract the problematic workflow, and potentially
+investigate fitting it to the specific `rsplit`.
+
+We generate a problematic dataset by subsampling the lacerta dataset:
+
+```{r}
+lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+                               package="tidysdm"))
+set.seed(123)
+lacerta_thin <- lacerta_thin[sample(1:nrow(lacerta_thin),nrow(lacerta_thin)/5),]
+
+lacerta_rec <- recipe(lacerta_thin, formula=class~.) %>% 
+  step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", 
+                    "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", 
+                    "bio17", "bio18", "bio19", "altitude")))
+
+lacerta_models <-
+  # create the workflow_set
+  workflow_set(
+    preproc = list(default = lacerta_rec),
+    models = list(
+      # the standard glm specs
+      glm = sdm_spec_glm(),
+      # the standard gam specs
+      gam = sdm_spec_gam(),
+      # rf specs with tuning
+      rf = sdm_spec_rf()
+    ),
+    # make all combinations of preproc and models,
+    cross = TRUE
+  ) %>%
+  # set formula for gams
+  update_workflow_model("default_gam",
+                        spec = sdm_spec_gam(),
+                        formula = gam_formula(lacerta_rec)) %>%
+  # tweak controls to store information needed later to create the ensemble
+  option_add(control = control_ensemble_grid())
+```
+
+We then create 3 folds and attempt to fit the models:
+
+```{r}
+set.seed(100)
+lacerta_cv <- spatial_block_cv(lacerta_thin, v = 3)
+lacerta_models <- 
+   lacerta_models %>% 
+   workflow_map("tune_grid", resamples = lacerta_cv, grid = 3, 
+                metrics = sdm_metric_set(), verbose = TRUE)
+```
+
+We see that one of the folds gives us an error when using GAMs. The error 
+("Fitting terminated with step failure - check results carefully") comes from the
+gam function in the package `mgcv`. A quick google on StackOverflow[https://stats.stackexchange.com/questions/576273/gam-model-warning-message-step-failure-in-theta-estimation] gives us
+an idea of where this error comes from.
+
+We start by extracting the results of the gam fits:
+
+```{r}
+gam_results <- extract_workflow_set_result(lacerta_models,id = "default_gam")
+gam_results
+```
+
+We see that, in the `.notes` column, the second item is not empty (it does not
+have zero rows). We can check that it indeed contains the error that we wanted:
+
+```{r}
+gam_results$.notes[2]
+```
+
+We can now get the problmatic data split, and extract the training data:
+
+```{r}
+problem_split <- gam_results$splits[2][[1]]
+summary(training(problem_split))
+```
+
+In this case, there is nothing too obvious that leads to the error (an important
+check is to make sure that you have enough presences in a split; too few presences will
+generally lead to errors).
+
+We can now extract the workflow and refit it to the split to confirm that we
+have isolated the problem:
+
+```{r}
+gam_workflow <- extract_workflow(lacerta_models,id = "default_gam")
+faulty_gam <- fit(gam_workflow,training(problem_split))
+```
+
+The next step would be to dig deeper into the data, trying to understand whether
+there are some outliers that are problematic. The specific steps will depend on the
+algorithm that is giving problems.

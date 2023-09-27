@@ -6,7 +6,7 @@
 #' Geographic distances are measured in the appropriate units for the projection used. In case
 #' of raw latitude and longitude (e.g. as provided in a data.frame), the crs is set
 #' to WGS84, and units are set to meters. Time interval are estimated in days. Note that for
-#' very long time period, the simple converstion x years = 365 * x days might lead
+#' very long time period, the simple conversion x years = 365 * x days might lead
 #' to slightly shorter intervals than expected, as it ignores leap years. The function
 #' [y2d()] provides a closer approximation.
 #'

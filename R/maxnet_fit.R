@@ -82,7 +82,7 @@ maxnet_fit <- function(formula, data, regmult=1.0, classes="default",
 #' @param newdata the dataframe of new data
 #' @param type either "prob" or "class"
 #' @param maxnet_type the transformation used for the prediction
-#' @param clamp logical, definign whether clamping to observed ranges should be used
+#' @param clamp logical, defining whether clamping to observed ranges should be used
 #' @returns a tibble of predictions
 #' @export
 #' @keywords internal

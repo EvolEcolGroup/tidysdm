@@ -1,9 +1,9 @@
-#' Predict for a simple ensemble set
+#' Predict for a repeat ensemble set
 #'
-#' Predict for a new dataset by using a simple ensemble. Predictions from individual
+#' Predict for a new dataset by using a repeat ensemble. Predictions from individual
 #' models are combined according to `fun`
-#' @param object an simple_ensemble object
-#' @param new_data the data to fit to (usually the full training dataset)
+#' @param object an repeat_ensemble object
+#' @param new_data a data frame in which to look for variables with which to predict.
 #' @param type the type of prediction, "prob" or "class".
 #' @param fun string defining the aggregating function. It can take values
 #' `mean`, `median`, `weighted_mean`, `weighted_median` and `none`. It is possible

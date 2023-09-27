@@ -55,7 +55,7 @@ st_crs(arabiensis) = 4326
 It is usually
 advisable to plot the locations directly on the raster that will be used to
 extract climatic variables, to see how the locations fall within the discretised
-space of the raster. For this vignette, we will use WordClim as our source of
+space of the raster. For this vignette, we will use WorldClim as our source of
 climatic information. We will access the WorldClim data via the library `pastclim`;
 even though this library, as the name suggests, is mostly designed to handle palaeoclimatic
 reconstructions, it also provides convenient functions to access present day
@@ -135,7 +135,7 @@ ggplot() +
 ```
 
 We now need to extract climatic variables for this species. We can use
-`pastclim` to check what variables are available for the WordClim dataset:
+`pastclim` to check what variables are available for the WorldClim dataset:
 
 ```{r load_climate}
 climate_vars <- get_vars_for_dataset("WorldClim_2.1_10m")
@@ -268,7 +268,7 @@ autoplot(arabiensis_cv)
 
 We can now use the block CV folds to
 tune and assess the models (to keep computations fast, we will only explore 3
-combination of hypeparameters per model; that far too little in real life!):
+combination of hyperparameters per model; that far too little in real life!):
 ```{r tune_grid}
 set.seed(123)
 arabiensis_models <- 
@@ -352,7 +352,7 @@ ggplot() +
 
 # Projecting to the future
 
-WorlClim has a wide selection of projections for the future based on different
+WorldClim has a wide selection of projections for the future based on different
 models and Shared Socio-economic Pathways (SSP). Type `help("WorldClim_2.1")`
 for a full list. We will use predictions based on "HadGEM3-GC31-LL" model for SSP 245 (intermediate green
 house gas emissions) at the same resolution as the present day data (10 arc-minutes). We first download the data:

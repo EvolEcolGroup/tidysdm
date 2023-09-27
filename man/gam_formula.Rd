@@ -16,5 +16,6 @@ a formula
 }
 \description{
 This function takes the formula from a recipe, and turns numeric predictors
-into smooths with a given k
+into smooths with a given k. This formula can be passed to a workflow or
+workflow set when fitting a gam.
 }

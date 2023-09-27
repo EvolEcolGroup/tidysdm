@@ -1,6 +1,6 @@
 #' Thin point dataset to have 1 observation per raster cell
 #'
-#' This function thinss a dataset so that only one observation per cell
+#' This function thins a dataset so that only one observation per cell
 #' is retained.
 #'
 #' Further thinning can be achieved by aggregating cells in the raster
@@ -56,7 +56,7 @@ thin_by_cell <- function(data, raster, coords=NULL, drop_na = TRUE, agg_fact=NUL
   }
   # remove X and Y that were added to the sf object
   if (return_sf){
-    data_thin <- data_thin %>% dplyr::select(-coords)
+    data_thin <- data_thin %>% dplyr::select(-dplyr::any_of(coords))
   }
   return(data_thin)
 }

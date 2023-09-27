@@ -18,7 +18,7 @@
 \arguments{
 \item{object}{an simple_ensemble object}
 
-\item{new_data}{the data to fit to (usually the full training dataset)}
+\item{new_data}{a data frame in which to look for variables with which to predict.}
 
 \item{type}{the type of prediction, "prob" or "class".}
 

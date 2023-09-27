@@ -11,7 +11,7 @@ calib_class_thresh(object, class_thresh, metric_thresh = NULL)
 
 \item{class_thresh}{probability threshold used to convert probabilities into
 classes. It can be a number (between 0 and 1), or a character metric (currently
-"tss_max" or "sensitivity"). For sensitivity, an additional target value is passed
+"tss_max", "kap_max" or "sensitivity"). For sensitivity, an additional target value is passed
 along as a second element of a vector, e.g. c("sensitivity",0.8).}
 
 \item{metric_thresh}{a vector of length 2 giving a metric and its threshold,
@@ -30,5 +30,6 @@ models are combined according to \code{fun}
 \examples{
 test_ens <- simple_ensemble() \%>\% add_member(two_class_res[1:3, ], metric="roc_auc")
 test_ens <- calib_class_thresh(test_ens, class_thresh="tss_max")
+test_ens <- calib_class_thresh(test_ens, class_thresh="kap_max")
 test_ens <- calib_class_thresh(test_ens, class_thresh=c("sens",0.9))
 }

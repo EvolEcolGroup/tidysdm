@@ -52,3 +52,15 @@ test_that("simple_ensemble predictions", {
                         fun=c("mean", "median"))
   expect_true(inherits(pred_class[,1], "factor"))
 })
+
+
+test_that("simple_ensemble prediction errors", {
+  ## now add some models (the first 3) using default metric
+  test_ens <- simple_ensemble() %>% add_member(two_class_res[1:3, ], metric="roc_auc")
+  # default mean prediction across the 3 models
+  expect_error(predict(test_ens, new_data = two_class_dat,type="blah"),
+                       "'type' can only take")
+  expect_error(predict(test_ens, new_data = two_class_dat,type="class", fun="none"),
+                       "classes can be generated only if")
+})
+  

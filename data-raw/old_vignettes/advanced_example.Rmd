@@ -202,7 +202,7 @@ glm_wflow <- # new workflow object
 ```
 
 The last step is to actually fit the workflow to the data. As glms do not have
-hypeparameters to tune, we can simply run:
+hyperparameters to tune, we can simply run:
 
 ```{r}
 glm_res <- 
@@ -363,7 +363,7 @@ rf_tuning_wflow <-
 ```
 
 To tune the hyperparameters of a model, we have to split our dataset further. We
-will set up block crossvalidation on our traning set, thus creating multiple
+will set up block crossvalidation on our Training set, thus creating multiple
 folds. We want to use the same grid that we used for our initial split, so we
 will prescribe the `cellsize` and `offset` in `spatial_block_cv`; we can use
 the helper functions `grid_cellsize()` and `grid_offset()` applied to the
@@ -378,7 +378,7 @@ autoplot(leopards_cv)
 ```
 We can clearly see the gaps left by the *testing* set being removed ealier.
 
-We can now tune the hypeparameters. We will chose a grid of 5 combinations of
+We can now tune the hyperparameters. We will chose a grid of 5 combinations of
 parameters (in real life, you will want more than that!):
 ```{r}
 doParallel::registerDoParallel(cores=2)
