@@ -333,9 +333,10 @@ lacerta_models <-
 Note that `workflow_set` correctly detects that we have no tuning parameters for 
 *glm*. We can have a look at the performance of our models with:
 
-```{r autoplot_models, fig.width=6, fig.height=4}
+```{r autoplot_models, fig.width=7, fig.height=4}
 autoplot(lacerta_models)
 ```
+
 Now let's create an ensemble, selecting the best set of parameters for each model
 (this is really only relevant for the random forest, as there were not hype-parameters
 to tune for the glm and gam). We will use the Boyce continuous index as our metric
@@ -349,7 +350,7 @@ lacerta_ensemble
 ```
 
 And visualise it
-```{r autoplot_ens, fig.width=6, fig.height=4}
+```{r autoplot_ens, fig.width=7, fig.height=4}
 autoplot(lacerta_ensemble)
 ```
 
