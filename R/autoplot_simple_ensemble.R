@@ -1,7 +1,7 @@
 #' Plot the results of a simple ensemble
 #'
-#' This `autoplot()` method plots performance metrics that have been ranked using
-#' a metric.
+#' This `autoplot()` method plots performance metrics that have been
+#'  ranked using a metric.
 #'
 #' @param object A [`simple_ensemble`] whose elements have results.
 #' @param rank_metric A character string for which metric should be used to rank
@@ -15,7 +15,8 @@
 #' @details
 #' This function is intended to produce a default plot to visualize helpful
 #'  information across all possible applications of a [`simple_ensemble`]. More
-#'  sophisticated plots can be produced using standard `ggplot2` code for plotting.
+#'  sophisticated plots can be produced using standard `ggplot2` code for
+#'  plotting.
 #'
 #' The x-axis is the workflow rank in the set (a value of one being the best)
 #' versus the performance metric(s) on the y-axis. With multiple metrics, there
@@ -66,20 +67,24 @@ autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
     dplyr::filter(.data$.metric == rank_metric) %>%
     dplyr::arrange(mean)
 
-  res$rank <- (1:nrow(res_rank_metric))[match(res$wflow_id, res_rank_metric$wflow_id)]
+  res$rank <- (1:nrow(res_rank_metric))[match(res$wflow_id, 
+                                              res_rank_metric$wflow_id)]
 
   # relevel the .metric factor to show first the rank metric
-  res <- res %>% dplyr::mutate(.metric = stats::relevel(factor(res$.metric), ref = rank_metric))
+  res <- res %>% 
+    dplyr::mutate(.metric = stats::relevel(factor(res$.metric),
+                                           ref = rank_metric))
 
   num_metrics <- length(unique(res$.metric))
   has_std_error <- !all(is.na(res$std_err))
 
   p <-
-    ggplot2::ggplot(res, ggplot2::aes(x = .data$rank, y = .data$mean, col = .data$wflow_id)) +
+    ggplot2::ggplot(res, ggplot2::aes(x = .data$rank,
+                                      y = .data$mean,
+                                      col = .data$wflow_id)) +
     ggplot2::geom_point(ggplot2::aes(shape = .data$wflow_id))
 
   if (num_metrics > 1) {
-    # res$.metric <- factor(as.character(res$.metric)) #, levels = metrics$metric)
     p <-
       p +
       ggplot2::facet_wrap(~ .data$.metric, scales = "free_y", as.table = FALSE) +
