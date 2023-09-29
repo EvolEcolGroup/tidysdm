@@ -13,8 +13,10 @@
 #' @export
 
 predict.model_fit <- function(object, new_data, ...) {
-  if (inherits(new_data, "sf")){
-    new_data<-new_data %>% dplyr::as_tibble() %>% dplyr::select(-geometry)
+  if (inherits(new_data, "sf")) {
+    new_data <- new_data %>%
+      dplyr::as_tibble() %>%
+      dplyr::select(-geometry)
   }
-  predict(object, new_data=new_data, ...)
+  predict(object, new_data = new_data, ...)
 }

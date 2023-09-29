@@ -46,12 +46,12 @@ boyce_cont <- new_prob_metric(
 #' @rdname boyce_cont
 #' @export
 boyce_cont.data.frame <- function(data,
-                               truth,
-                               ...,
-                               estimator = NULL,
-                               na_rm = TRUE,
-                               event_level = "first",
-                               case_weights = NULL) {
+                                  truth,
+                                  ...,
+                                  estimator = NULL,
+                                  na_rm = TRUE,
+                                  event_level = "first",
+                                  case_weights = NULL) {
   prob_metric_summarizer(
     name = "boyce_cont",
     fn = boyce_cont_vec,
@@ -67,20 +67,22 @@ boyce_cont.data.frame <- function(data,
 
 #' @rdname boyce_cont
 #' @export
-boyce_cont.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% boyce_cont(...)
+boyce_cont.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    boyce_cont(...)
 }
 
 
 #' @export
 #' @rdname boyce_cont
 boyce_cont_vec <- function(truth,
-                                  estimate,
-                                  estimator = NULL,
-                                  na_rm = TRUE,
-                                  event_level = "first",
-                                  case_weights = NULL,
-                                  ...) {
+                           estimate,
+                           estimator = NULL,
+                           na_rm = TRUE,
+                           event_level = "first",
+                           case_weights = NULL,
+                           ...) {
   utils::getFromNamespace("abort_if_class_pred", "yardstick")(truth)
 
   estimator <- yardstick::finalize_estimator(truth, estimator, "boyce_cont")
@@ -107,10 +109,10 @@ boyce_cont_vec <- function(truth,
 }
 
 boyce_cont_estimator_impl <- function(truth,
-                                             estimate,
-                                             estimator,
-                                             event_level,
-                                             case_weights) {
+                                      estimate,
+                                      estimator,
+                                      event_level,
+                                      case_weights) {
   if (!utils::getFromNamespace("is_binary", "yardstick")(estimator)) {
     stop("boyce_cont is only available for binary classes; multiclass is not supported")
   }
@@ -122,14 +124,14 @@ boyce_cont_estimator_impl <- function(truth,
     pres_level <- levels(truth)[2]
     contrast_level <- levels(truth)[1]
   }
-  pres <- estimate[truth==pres_level]
-  contrast <- estimate[truth==contrast_level]
-  if (!is.null(case_weights)){
-  presWeight <- case_weights[truth==pres_level]
-  contrastWeight <- case_weights[truth==contrast_level]
+  pres <- estimate[truth == pres_level]
+  contrast <- estimate[truth == contrast_level]
+  if (!is.null(case_weights)) {
+    presWeight <- case_weights[truth == pres_level]
+    contrastWeight <- case_weights[truth == contrast_level]
   } else {
-    presWeight = rep(1, length(pres))
-    contrastWeight = rep(1, length(contrast))
+    presWeight <- rep(1, length(pres))
+    contrastWeight <- rep(1, length(contrast))
   }
   contBoyce(pres = pres, contrast = contrast, presWeight = presWeight, contrastWeight = contrastWeight)
 }
@@ -145,15 +147,15 @@ contBoyce <- function(
     numBins = 101,
     binWidth = 0.1,
     autoWindow = TRUE,
-    method = 'spearman',
+    method = "spearman",
     dropZeros = TRUE,
-    #graph = FALSE,
+    # graph = FALSE,
     na.rm = FALSE,
-    ...
-) {
-
+    ...) {
   # if all NAs
-  if (all(is.na(pres)) | all(is.na(contrast)) | all(is.na(presWeight)) | all(is.na(contrastWeight))) return(NA)
+  if (all(is.na(pres)) | all(is.na(contrast)) | all(is.na(presWeight)) | all(is.na(contrastWeight))) {
+    return(NA)
+  }
 
   # catch errors
   if (binWidth > 1 | binWidth <= 0) stop('Argument "binWidth" must be between 0 and 1.')
@@ -161,15 +163,23 @@ contBoyce <- function(
   eps <- .Machine$double.eps
 
   # right hand side of each class (assumes max value is >0)
-  lowest <- if (autoWindow) { min(c(pres, contrast), na.rm=na.rm) } else { 0 }
-  highest <- if (autoWindow) { max(c(pres, contrast), na.rm=na.rm) + eps } else { 1 + eps }
+  lowest <- if (autoWindow) {
+    min(c(pres, contrast), na.rm = na.rm)
+  } else {
+    0
+  }
+  highest <- if (autoWindow) {
+    max(c(pres, contrast), na.rm = na.rm) + eps
+  } else {
+    1 + eps
+  }
 
 
 
   windowWidth <- binWidth * (highest - lowest)
 
-  lows <- seq(lowest, highest - windowWidth, length.out=numBins)
-  highs <- seq(lowest + windowWidth + eps, highest, length.out=numBins)
+  lows <- seq(lowest, highest - windowWidth, length.out = numBins)
+  highs <- seq(lowest + windowWidth + eps, highest, length.out = numBins)
 
   ##########
   ## MAIN ##
@@ -180,17 +190,15 @@ contBoyce <- function(
 
   ### tally proportion of test presences/background sites in each class
   for (countClass in 1:numBins) {
-
     # number of presence predictions in this class
     presInBin <- pres >= lows[countClass] & pres < highs[countClass]
     presInBin <- presInBin * presWeight
-    freqPres[countClass] <- sum(presInBin, na.rm=na.rm)
+    freqPres[countClass] <- sum(presInBin, na.rm = na.rm)
 
     # number of background predictions in this class
     bgInBin <- contrast >= lows[countClass] & contrast < highs[countClass]
     bgInBin <- bgInBin * contrastWeight
-    freqContrast[countClass] <- sum(bgInBin, na.rm=na.rm)
-
+    freqContrast[countClass] <- sum(bgInBin, na.rm = na.rm)
   } # next predicted value class
 
   # mean bin prediction
@@ -218,8 +226,8 @@ contBoyce <- function(
     freqContrast[zeros] <- NA
   }
 
-  P <- freqPres / sum(presWeight, na.rm=TRUE)
-  E <- freqContrast / sum(contrastWeight, na.rm=TRUE)
+  P <- freqPres / sum(presWeight, na.rm = TRUE)
+  E <- freqContrast / sum(contrastWeight, na.rm = TRUE)
   PE <- P / E
 
   # # plot (transfer the code to a boyce_curve function in the future)
@@ -238,8 +246,6 @@ contBoyce <- function(
   PE <- PE[!na_in_either]
 
   # calculate continuous Boyce index (cbi)
-  cbi <- stats::cor(x=meanPred, y=PE, method=method)
+  cbi <- stats::cor(x = meanPred, y = PE, method = method)
   cbi
-
 }
-

@@ -16,23 +16,27 @@
 #' }
 #' @returns a [parsnip::model_spec] of the model.
 #' @examples
-#' test_maxent_spec <- sdm_spec_maxent(tune="sdm")
+#' test_maxent_spec <- sdm_spec_maxent(tune = "sdm")
 #' test_maxent_spec
 #' # setting specific values
-#' sdm_spec_maxent(tune="custom", feature_classes="lq")
+#' sdm_spec_maxent(tune = "custom", feature_classes = "lq")
 #' @export
 
-sdm_spec_maxent <- function(..., tune=c("sdm","all","custom","none")){
- tune <- rlang::arg_match(tune)
-  if (tune=="sdm"){
-    base_spec <- maxent(feature_classes = tune(),
-                                 regularization_multiplier = tune(),
-                                     ...)
-  } else if (tune=="all"){
-    base_spec <- maxent(feature_classes = tune(),
-                                 regularization_multiplier = tune(),
-                                 ...)
-  } else if ((tune=="custom") | (tune=="none")){
+sdm_spec_maxent <- function(..., tune = c("sdm", "all", "custom", "none")) {
+  tune <- rlang::arg_match(tune)
+  if (tune == "sdm") {
+    base_spec <- maxent(
+      feature_classes = tune(),
+      regularization_multiplier = tune(),
+      ...
+    )
+  } else if (tune == "all") {
+    base_spec <- maxent(
+      feature_classes = tune(),
+      regularization_multiplier = tune(),
+      ...
+    )
+  } else if ((tune == "custom") | (tune == "none")) {
     base_spec <- maxent(...)
   }
   base_spec

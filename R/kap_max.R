@@ -23,7 +23,7 @@
 #' For grouped data frames, the number of rows returned will be the same as the
 #' number of groups.
 #' @family class probability metrics
-#' 
+#'
 #' @references
 #'   Cohen, J. (1960). "A coefficient of agreement for nominal
 #'   scales". _Educational and Psychological Measurement_. 20 (1): 37-46.
@@ -68,20 +68,22 @@ kap_max.data.frame <- function(data,
 
 #' @rdname kap_max
 #' @export
-kap_max.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% kap_max(...)
+kap_max.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    kap_max(...)
 }
 
 
 #' @export
 #' @rdname kap_max
 kap_max_vec <- function(truth,
-                                  estimate,
-                                  estimator = NULL,
-                                  na_rm = TRUE,
-                                  event_level = "first",
-                                  case_weights = NULL,
-                                  ...) {
+                        estimate,
+                        estimator = NULL,
+                        na_rm = TRUE,
+                        event_level = "first",
+                        case_weights = NULL,
+                        ...) {
   utils::getFromNamespace("abort_if_class_pred", "yardstick")(truth)
 
   estimator <- yardstick::finalize_estimator(truth, estimator, "kap_max")
@@ -107,10 +109,10 @@ kap_max_vec <- function(truth,
 }
 
 kap_max_estimator_impl <- function(truth,
-                                             estimate,
-                                             estimator,
-                                             event_level,
-                                             case_weights) {
+                                   estimate,
+                                   estimator,
+                                   event_level,
+                                   case_weights) {
   if (!utils::getFromNamespace("is_binary", "yardstick")(estimator)) {
     stop("kap_max is only available for binary classes; multiclass is not supported")
   }
@@ -122,23 +124,21 @@ kap_max_estimator_impl <- function(truth,
     pres_level <- levels(truth)[2]
     absence_level <- levels(truth)[1]
   }
-  presences <- estimate[truth==pres_level]
-  absences <- estimate[truth==absence_level]
+  presences <- estimate[truth == pres_level]
+  absences <- estimate[truth == absence_level]
 
   # TODO we could implement case weights by properly fitting kap from yardstick
-  if (!is.null(case_weights)){
+  if (!is.null(case_weights)) {
     stop("kap_max with case_weights has not been implemented yet")
   }
-  
+
   conf_matrix_df <- conf_matrix_df(presences, absences)
-  n <- rowSums(conf_matrix_df[,2:5])
+  n <- rowSums(conf_matrix_df[, 2:5])
   obs_accuracy <- (conf_matrix_df$tp + conf_matrix_df$tn) / n
   exp_accuracy <- (((conf_matrix_df$tn + conf_matrix_df$fp) *
-                     (conf_matrix_df$tn + conf_matrix_df$fn) /n ) +
+    (conf_matrix_df$tn + conf_matrix_df$fn) / n) +
     ((conf_matrix_df$tp + conf_matrix_df$fn) *
-       (conf_matrix_df$tp + conf_matrix_df$fp) /n ))/n
-  kap = (obs_accuracy - exp_accuracy)/(1 - exp_accuracy)
+      (conf_matrix_df$tp + conf_matrix_df$fp) / n)) / n
+  kap <- (obs_accuracy - exp_accuracy) / (1 - exp_accuracy)
   max(kap) ## return the maximum kap
 }
-
-

@@ -15,62 +15,80 @@ NULL
 #' @description [yardstick::average_precision()]
 #' @export
 #' @rdname prob_metrics
-average_precision.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% yardstick::average_precision(...)
+average_precision.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    yardstick::average_precision(...)
 }
 
 #' @description [yardstick::brier_class()]
 #' @export
 #' @rdname prob_metrics
-brier_class.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% yardstick::brier_class(...)
+brier_class.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    yardstick::brier_class(...)
 }
 
 #' @description [yardstick::classification_cost()]
 #' @export
 #' @rdname prob_metrics
-classification_cost.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% yardstick::classification_cost(...)
+classification_cost.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    yardstick::classification_cost(...)
 }
 
 #' @description [yardstick::gain_capture()]
 #' @export
 #' @rdname prob_metrics
-gain_capture.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% yardstick::gain_capture(...)
+gain_capture.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    yardstick::gain_capture(...)
 }
 
 #' @description [yardstick::mn_log_loss()]
 #' @export
 #' @rdname prob_metrics
-mn_log_loss.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% yardstick::mn_log_loss(...)
+mn_log_loss.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    yardstick::mn_log_loss(...)
 }
 
 #' @description [yardstick::pr_auc()]
 #' @export
 #' @rdname prob_metrics
-pr_auc.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% yardstick::pr_auc(...)
+pr_auc.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    yardstick::pr_auc(...)
 }
 
 #' @description [yardstick::roc_auc()]
 #' @export
 #' @rdname prob_metrics
-roc_auc.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% yardstick::roc_auc(...)
+roc_auc.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    yardstick::roc_auc(...)
 }
 
 #' @description [yardstick::roc_aunp()]
 #' @export
 #' @rdname prob_metrics
-roc_aunp.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% yardstick::roc_aunp(...)
+roc_aunp.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    yardstick::roc_aunp(...)
 }
 
 #' @description [yardstick::roc_aunu()]
 #' @export
 #' @rdname prob_metrics
-roc_aunu.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% yardstick::roc_aunu(...)
+roc_aunu.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    yardstick::roc_aunu(...)
 }

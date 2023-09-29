@@ -13,47 +13,46 @@
 
 # Note that `add_repeat` is tested in `test_repeat_ensemble.R`
 
-add_repeat <- function (x, rep, ...) {
+add_repeat <- function(x, rep, ...) {
   UseMethod("add_repeat", object = rep)
 }
 
 #' @rdname add_repeat
 #' @export
-add_repeat.default <- function(x, rep, ...){
+add_repeat.default <- function(x, rep, ...) {
   stop("no method available for this object type")
 }
 
 #' @rdname add_repeat
 #' @export
-add_repeat.simple_ensemble <- function(x, rep, ...){
+add_repeat.simple_ensemble <- function(x, rep, ...) {
   # if the repeated ensemble is empty
-  if (nrow(x)==0){
-    attr(x,"best_metric") <- attr(rep,"best_metric")
-    attr(x,"metrics") <- attr(rep,"metrics")
+  if (nrow(x) == 0) {
+    attr(x, "best_metric") <- attr(rep, "best_metric")
+    attr(x, "metrics") <- attr(rep, "metrics")
     new_rep <- "rep_01"
   } else { # check that the new rep is compatible
     # check that metrics match
-    if (attr(x,"best_metric") !=attr(rep,"best_metric")){
-      stop ("the best metric in the repeated ensemble differs from the repeat being added")
+    if (attr(x, "best_metric") != attr(rep, "best_metric")) {
+      stop("the best metric in the repeated ensemble differs from the repeat being added")
     }
-    if (all(attr(x,"metrics") !=attr(rep,"metrics"))){
-      stop ("the metrics in the repeated ensemble differ from the repeat being added")
+    if (all(attr(x, "metrics") != attr(rep, "metrics"))) {
+      stop("the metrics in the repeated ensemble differ from the repeat being added")
     }
-    rep_number <- max(as.numeric(substr(x$rep_id,5, nchar(x$rep_id))))+1
-    new_rep <- paste0("rep_",sprintf("%02d", rep_number))
-    if (!setequal(unique(x$wflow_id),rep$wflow_id)){
+    rep_number <- max(as.numeric(substr(x$rep_id, 5, nchar(x$rep_id)))) + 1
+    new_rep <- paste0("rep_", sprintf("%02d", rep_number))
+    if (!setequal(unique(x$wflow_id), rep$wflow_id)) {
       stop("the models in the repeated ensemble differ from the repeat being added")
     }
   }
-  rep<-rep %>% dplyr::mutate(rep_id=new_rep, .before = "wflow_id")
+  rep <- rep %>% dplyr::mutate(rep_id = new_rep, .before = "wflow_id")
   x %>% dplyr::bind_rows(rep)
-
 }
 
 #' @rdname add_repeat
 #' @export
-add_repeat.list <- function(x, rep, ...){
-  for (i in seq_along(rep)){
+add_repeat.list <- function(x, rep, ...) {
+  for (i in seq_along(rep)) {
     x <- x %>% add_repeat(rep[[i]])
   }
   x

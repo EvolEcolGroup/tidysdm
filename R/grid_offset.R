@@ -12,9 +12,8 @@
 #' @returns the grid offset
 #' @export
 
-grid_offset<-function(
-  data
-){
+grid_offset <- function(
+    data) {
   # TODO check that this is an sf object
   grid_box <- sf::st_bbox(data)
   if (utils::getFromNamespace("is_longlat", "spatialsample")(data)) {

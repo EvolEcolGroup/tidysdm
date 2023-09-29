@@ -51,8 +51,8 @@ into an `sf` object, and set its projections to standard lonlat (crs = 4326).
 
 ```{r cast_to_sf}
 library(sf)
-lacerta <- st_as_sf(lacerta, coords = c("longitude","latitude"))
-st_crs(lacerta) = 4326
+lacerta <- st_as_sf(lacerta, coords = c("longitude", "latitude"))
+st_crs(lacerta) <- 4326
 ```
 
 It is usually
@@ -95,9 +95,9 @@ set_data_path(on_CRAN = TRUE)
 # Iberia peninsula extension
 iberia_poly <- terra::vect("POLYGON((-9.8 43.3,-7.8 44.1,-2.0 43.7,3.6 42.5,3.8 41.5,1.3 40.8,0.3 39.5,0.9 38.6,-0.4 37.5,-1.6 36.7,-2.3 36.3,-4.1 36.4,-4.5 36.4,-5.0 36.1,-5.6 36.0,-6.3 36.0,-7.1 36.9,-9.5 36.6,-9.4 38.0,-10.6 38.9,-9.5 40.8,-9.8 43.3))")
 
-crs(iberia_poly)<-"lonlat"
-gdal(warn=3)
-land_mask<-rast(system.file("extdata/lacerta_land_mask.nc", package="tidysdm"))
+crs(iberia_poly) <- "lonlat"
+gdal(warn = 3)
+land_mask <- rast(system.file("extdata/lacerta_land_mask.nc", package = "tidysdm"))
 ```
 
 For
@@ -108,9 +108,8 @@ rasters with `ggplot` a breeze.
 library(tidyterra)
 library(ggplot2)
 ggplot() +
-  geom_spatraster(data=land_mask, aes(fill=land_mask_1985))+
+  geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
   geom_sf(data = lacerta)
-
 ```
 
 # Thinning step
@@ -119,13 +118,13 @@ Now, we thin the observations to have one per cell in the raster (it would be be
 if we had an equal area projection...):
 ```{r thin_by_cell}
 set.seed(1234567)
-lacerta<-thin_by_cell(lacerta, raster = land_mask)
+lacerta <- thin_by_cell(lacerta, raster = land_mask)
 nrow(lacerta)
 ```
 
 ```{r plot_thin_by_cell, fig.width=6, fig.height=4}
 ggplot() +
-  geom_spatraster(data=land_mask, aes(fill=land_mask_1985))+
+  geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
   geom_sf(data = lacerta)
 ```
 
@@ -134,14 +133,14 @@ the standard map units for a 'lonlat' projection are meters. `tidysdm` provides
 a convening conversion function, `km2m()`, to avoid having to write lots of zeroes):
 ```{r thin_by_dist}
 set.seed(1234567)
-lacerta_thin<-thin_by_dist(lacerta, dist_min = km2m(20))
+lacerta_thin <- thin_by_dist(lacerta, dist_min = km2m(20))
 nrow(lacerta_thin)
 ```
 
 Let's see what we have left of our points:
 ```{r plot_thin_by_dist, fig.width=6, fig.height=4}
 ggplot() +
-  geom_spatraster(data=land_mask, aes(fill=land_mask_1985))+
+  geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
   geom_sf(data = lacerta_thin)
 ```
 
@@ -149,18 +148,18 @@ Now we sample pseudo-absences (we will constrain them to be at least 50km away
 from any presences), selecting as 3 times as many points as presences:
 ```{r sample_pseudoabs}
 set.seed(1234567)
-lacerta_thin <- sample_pseudoabs(lacerta_thin, 
-                               n = 3 * nrow(lacerta_thin), 
-                               raster = land_mask,
-                               method = c("dist_min", km2m(50)))
+lacerta_thin <- sample_pseudoabs(lacerta_thin,
+  n = 3 * nrow(lacerta_thin),
+  raster = land_mask,
+  method = c("dist_min", km2m(50))
+)
 ```
 
 Let's see our presences and absences:
 ```{r plot_sample_pseudoabs, fig.width=6, fig.height=4}
 ggplot() +
-  geom_spatraster(data=land_mask, aes(fill=land_mask_1985))+
+  geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
   geom_sf(data = lacerta_thin, aes(col = class))
-
 ```
 
 Generally, we can use `pastclim` to check what variables are 
@@ -170,8 +169,8 @@ climate_vars <- get_vars_for_dataset("WorldClim_2.1_10m")
 ```
 
 ```{r echo=FALSE, results='hide'}
-gdal(warn=3)
-climate_present<-rast(system.file("extdata/lacerta_climate_present_10m.nc", package="tidysdm"))
+gdal(warn = 3)
+climate_present <- rast(system.file("extdata/lacerta_climate_present_10m.nc", package = "tidysdm"))
 climate_vars <- names(climate_present)
 ```
 
@@ -185,25 +184,26 @@ And then create a `terra` SpatRaster object. The dataset covers the period 1970-
 so `pastclim` dates it as 1985 (the midpoint). 
 We can directly crop to the Iberian peninsula:
 ```{r climate_worldclim, eval=FALSE}
-climate_present<-pastclim::region_slice(time_ce = 1985, 
-                                        bio_variables = climate_vars, 
-                                        data="WorldClim_2.1_10m", 
-                                        crop=iberia_poly)
+climate_present <- pastclim::region_slice(
+  time_ce = 1985,
+  bio_variables = climate_vars,
+  data = "WorldClim_2.1_10m",
+  crop = iberia_poly
+)
 ```
 
 We start by selecting variables for which presences are markedly different from
 the underlying background. First, let's extract climate for all presences and
 pseudo-absences:
 ```{r}
-lacerta_thin <- lacerta_thin %>% 
-  bind_cols(terra::extract(climate_present, lacerta_thin, ID=FALSE))
+lacerta_thin <- lacerta_thin %>%
+  bind_cols(terra::extract(climate_present, lacerta_thin, ID = FALSE))
 ```
 
 We can use violin plots to compare the distribution of the climatic variables for presences and pseudo-absences:
 
 ```{r fig.height=11, fig.width=7}
 lacerta_thin %>% plot_pres_vs_bg(class)
-
 ```
 We want to choose variables for which presences use values different from the background (pseudo-absences).
 We can qualitatively look at the plots, or use a quantitative approach that ranks them based on the
@@ -217,8 +217,8 @@ between presences and pseudo-absences:
 
 ```{r}
 vars_to_keep <- lacerta_thin %>% dist_pres_vs_bg(class)
-vars_to_keep <-names(vars_to_keep[vars_to_keep>0.30])
-lacerta_thin <-lacerta_thin %>% select(all_of(c(vars_to_keep, "class")))
+vars_to_keep <- names(vars_to_keep[vars_to_keep > 0.30])
+lacerta_thin <- lacerta_thin %>% select(all_of(c(vars_to_keep, "class")))
 vars_to_keep
 ```
 
@@ -227,7 +227,7 @@ to be important for the distribution of the species of interest. Based on
 this paper (https://doi.org/10.1007/s10531-010-9865-2), we are interested in:
 
 ```{r climate_variables}
-suggested_vars <- c("bio05","bio06", "bio13", "bio14", "bio15")
+suggested_vars <- c("bio05", "bio06", "bio13", "bio14", "bio15")
 ```
 
 Environmental variables are often highly correlated, and collinearity is an issue
@@ -240,7 +240,7 @@ We can see that some variables have rather high correlation (e.g. bio05 vs bio14
 We can subset to variables below a certain threshold correlation (e.g. 0.7) with:
 
 ```{r choose_var_cor_keep}
-climate_present<-climate_present[[suggested_vars]]
+climate_present <- climate_present[[suggested_vars]]
 vars_uncor <- filter_high_cor(climate_present, cutoff = 0.7)
 vars_uncor
 ```
@@ -248,8 +248,8 @@ vars_uncor
 So, removing bio14 leaves us with a set of uncorrelated variables.
 
 ```{r}
-lacerta_thin <-lacerta_thin %>% select(all_of(c(vars_uncor, "class")))
-climate_present<-climate_present[[vars_uncor]]
+lacerta_thin <- lacerta_thin %>% select(all_of(c(vars_uncor, "class")))
+climate_present <- climate_present[[vars_uncor]]
 ```
 
 
@@ -262,7 +262,7 @@ all other variables are `predictor`s; note that, for `sf` objects, `geometry` is
 automatically replaced by `X` and `Y` columns which are assigned a role of
 `coords`, and thus not used as predictors):
 ```{r recipe}
-lacerta_rec <- recipe(lacerta_thin, formula=class~.)
+lacerta_rec <- recipe(lacerta_thin, formula = class ~ .)
 lacerta_rec
 ```
 
@@ -295,7 +295,7 @@ lacerta_models <-
       # boosted tree model (gbm) specs with tuning
       gbm = sdm_spec_boost_tree(),
       # maxent specs with tuning
-      maxent =sdm_spec_maxent()
+      maxent = sdm_spec_maxent()
     ),
     # make all combinations of preproc and models,
     cross = TRUE
@@ -324,10 +324,12 @@ tune and assess the models (to keep computations fast, we will only explore 3
 combination of hyperparameters per model; this is far too little in real life!):
 ```{r tune_grid}
 set.seed(1234567)
-lacerta_models <- 
-   lacerta_models %>% 
-   workflow_map("tune_grid", resamples = lacerta_cv, grid = 3, 
-                metrics = sdm_metric_set(), verbose = TRUE)
+lacerta_models <-
+  lacerta_models %>%
+  workflow_map("tune_grid",
+    resamples = lacerta_cv, grid = 3,
+    metrics = sdm_metric_set(), verbose = TRUE
+  )
 ```
 
 Note that `workflow_set` correctly detects that we have no tuning parameters for 
@@ -345,7 +347,7 @@ automatically fitted to the full training dataset, and so ready to make predicti
 
 ```{r}
 lacerta_ensemble <- simple_ensemble() %>%
-  add_member(lacerta_models, metric="boyce_cont")
+  add_member(lacerta_models, metric = "boyce_cont")
 lacerta_ensemble
 ```
 
@@ -361,10 +363,10 @@ the mean of the predictions from each model).
 ```{r plot_present, fig.width=6, fig.height=4}
 prediction_present <- predict_raster(lacerta_ensemble, climate_present)
 ggplot() +
-  geom_spatraster(data=prediction_present, aes(fill=mean))+
+  geom_spatraster(data = prediction_present, aes(fill = mean)) +
   scale_fill_terrain_c() +
   # plot presences used in the model
-  geom_sf(data = lacerta_thin %>% filter(class=="presence"))
+  geom_sf(data = lacerta_thin %>% filter(class == "presence"))
 ```
 
 We can subset the ensemble to only use the best models, based on the Boyce continuous index,
@@ -375,32 +377,33 @@ quite consistent).
 
 ```{r plot_present_best, fig.width=6, fig.height=4}
 prediction_present_boyce <- predict_raster(lacerta_ensemble, climate_present,
-                                           metric_thresh = c("boyce_cont", 0.8),
-                                           fun="median")
+  metric_thresh = c("boyce_cont", 0.8),
+  fun = "median"
+)
 ggplot() +
-  geom_spatraster(data=prediction_present_boyce, aes(fill=median))+
+  geom_spatraster(data = prediction_present_boyce, aes(fill = median)) +
   scale_fill_terrain_c() +
-  geom_sf(data = lacerta_thin %>% filter(class=="presence"))
-
+  geom_sf(data = lacerta_thin %>% filter(class == "presence"))
 ```
 Sometimes, it is desirable to have binary predictions (presence vs absence), rather
 than the probability of occurrence. To do so, we first need to calibrate the threshold
 used to convert probabilities into classes (in this case, we optimise the TSS):
 ```{r}
-lacerta_ensemble<-calib_class_thresh(lacerta_ensemble, 
-                                        class_thresh = "tss_max")
+lacerta_ensemble <- calib_class_thresh(lacerta_ensemble,
+  class_thresh = "tss_max"
+)
 ```
 
 And now we can predict for the whole continent:
 ```{r, fig.width=6, fig.height=4}
-prediction_present_binary <- predict_raster(lacerta_ensemble, 
-                                            climate_present,
-                                            type="class",
-                                            class_thresh = c("tss_max"))
+prediction_present_binary <- predict_raster(lacerta_ensemble,
+  climate_present,
+  type = "class",
+  class_thresh = c("tss_max")
+)
 ggplot() +
-  geom_spatraster(data=prediction_present_binary, aes(fill=binary_mean))+
-  geom_sf(data = lacerta_thin %>% filter(class=="presence"))
-
+  geom_spatraster(data = prediction_present_binary, aes(fill = binary_mean)) +
+  geom_sf(data = lacerta_thin %>% filter(class == "presence"))
 ```
 
 # Projecting to the future
@@ -429,7 +432,6 @@ get_vars_for_dataset("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
 
 ```{r echo=FALSE}
 climate_vars[-length(climate_vars)]
-
 ```
 
 Note that future predictions do not include *altitude* (as that does not change with time), 
@@ -437,16 +439,19 @@ so if we needed it, we would have to copy it over from the present.
 However, it is not in our set of uncorrelated variables that
 we used earlier, so we don't need to worry about it.
 ```{r eval=FALSE}
-climate_future<-pastclim::region_slice(time_ce = 2090, 
-                                       bio_variables = vars_uncor,
-                                       data="WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m", 
-                                       crop=iberia_poly)
+climate_future <- pastclim::region_slice(
+  time_ce = 2090,
+  bio_variables = vars_uncor,
+  data = "WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m",
+  crop = iberia_poly
+)
 ```
 
 ```{r echo=FALSE, results='asis'}
-gdal(warn=3)
+gdal(warn = 3)
 climate_future <- rast(system.file("extdata/lacerta_climate_future_10m.nc",
-                          package="tidysdm"))
+  package = "tidysdm"
+))
 ```
 
 
@@ -455,9 +460,8 @@ And predict using the ensemble:
 prediction_future <- predict_raster(lacerta_ensemble, climate_future)
 
 ggplot() +
-  geom_spatraster(data=prediction_future, aes(fill=mean))+
+  geom_spatraster(data = prediction_future, aes(fill = mean)) +
   scale_fill_terrain_c()
-   
 ```
 
 # Visualising the contribution of individual variables
@@ -474,8 +478,8 @@ against the values of the variable of interest. For example,
 to investigate the contribution of `bio05`, we would:
 
 ```{r}
-bio05_prof <- lacerta_rec %>% 
-  step_profile(-bio05, profile=vars(bio05)) %>%
+bio05_prof <- lacerta_rec %>%
+  step_profile(-bio05, profile = vars(bio05)) %>%
   prep(training = lacerta_thin)
 
 bio05_data <- bake(bio05_prof, new_data = NULL)
@@ -507,47 +511,50 @@ SDM pipeline. We will just use two fast models to speed up the process.
 # empty object to store the simple ensembles that we will create
 ensemble_list <- list()
 set.seed(123) # make sure you set the seed OUTSIDE the loop
-for (i_repeat in 1:3){
+for (i_repeat in 1:3) {
   # thin the data
- lacerta_thin_rep<-thin_by_cell(lacerta, raster = climate_present)
- lacerta_thin_rep<-thin_by_dist(lacerta_thin_rep, dist_min = 20000)
- # sample pseudo-absences
+  lacerta_thin_rep <- thin_by_cell(lacerta, raster = climate_present)
+  lacerta_thin_rep <- thin_by_dist(lacerta_thin_rep, dist_min = 20000)
+  # sample pseudo-absences
   lacerta_thin_rep <- sample_pseudoabs(lacerta_thin_rep,
-                               n=3*nrow(lacerta_thin_rep),
-                               raster=climate_present,
-                               method=c("dist_min", 50000))
+    n = 3 * nrow(lacerta_thin_rep),
+    raster = climate_present,
+    method = c("dist_min", 50000)
+  )
   # get climate
   lacerta_thin_rep <- lacerta_thin_rep %>%
-  bind_cols(terra::extract(climate_present, lacerta_thin_rep, ID=FALSE))
- # create folds
+    bind_cols(terra::extract(climate_present, lacerta_thin_rep, ID = FALSE))
+  # create folds
   lacerta_thin_rep_cv <- spatial_block_cv(lacerta_thin_rep, v = 5)
   # create a recipe
-  lacerta_thin_rep_rec <- recipe(lacerta_thin_rep, formula=class~.)
+  lacerta_thin_rep_rec <- recipe(lacerta_thin_rep, formula = class ~ .)
   # create a workflow_set
   lacerta_thin_rep_models <-
-  # create the workflow_set
-  workflow_set(
-    preproc = list(default = lacerta_thin_rep_rec),
-    models = list(
-      # the standard glm specs
-      glm = sdm_spec_glm(),
-      # maxent specs with tuning
-      maxent =sdm_spec_maxent()
-    ),
-    # make all combinations of preproc and models,
-    cross = TRUE
-  ) %>%
-  # tweak controls to store information needed later to create the ensemble
-  option_add(control = control_ensemble_grid())
+    # create the workflow_set
+    workflow_set(
+      preproc = list(default = lacerta_thin_rep_rec),
+      models = list(
+        # the standard glm specs
+        glm = sdm_spec_glm(),
+        # maxent specs with tuning
+        maxent = sdm_spec_maxent()
+      ),
+      # make all combinations of preproc and models,
+      cross = TRUE
+    ) %>%
+    # tweak controls to store information needed later to create the ensemble
+    option_add(control = control_ensemble_grid())
 
-# train the model
+  # train the model
   lacerta_thin_rep_models <-
-   lacerta_thin_rep_models %>%
-   workflow_map("tune_grid", resamples = lacerta_thin_rep_cv, grid = 10,
-                metrics = sdm_metric_set(), verbose = TRUE)
+    lacerta_thin_rep_models %>%
+    workflow_map("tune_grid",
+      resamples = lacerta_thin_rep_cv, grid = 10,
+      metrics = sdm_metric_set(), verbose = TRUE
+    )
   # make an simple ensemble and add it to the list
-ensemble_list[[i_repeat]] <- simple_ensemble() %>%
-  add_member(lacerta_thin_rep_models, metric="boyce_cont")
+  ensemble_list[[i_repeat]] <- simple_ensemble() %>%
+    add_member(lacerta_thin_rep_models, metric = "boyce_cont")
 }
 ```
 
@@ -560,9 +567,9 @@ lacerta_thin_rep_ens
 We can then predict in the usual way (we will take the mean and median of all models):
 ```{r, fig.width=6, fig.height=4}
 lacerta_thin_rep_ens <- predict_raster(lacerta_thin_rep_ens, climate_present,
-                                     fun=c("mean","median"))
+  fun = c("mean", "median")
+)
 ggplot() +
-  geom_spatraster(data=lacerta_thin_rep_ens, aes(fill=median))+
+  geom_spatraster(data = lacerta_thin_rep_ens, aes(fill = median)) +
   scale_fill_terrain_c()
-
 ```

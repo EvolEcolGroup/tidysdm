@@ -14,18 +14,18 @@
 #'
 #' @export
 
-ybp2date <- function(x){
-  if (!is.numeric(x)){
+ybp2date <- function(x) {
+  if (!is.numeric(x)) {
     stop("x should be numeric")
   }
-  lubridate::date_decimal(x+1950)
+  lubridate::date_decimal(x + 1950)
 }
 
 #' @rdname ybp2date
 #' @export
-date2ybp <- function(x){
-  if(!inherits(x,"POSIXct")){
+date2ybp <- function(x) {
+  if (!inherits(x, "POSIXct")) {
     stop("x should be a POSIXct object")
   }
-  lubridate::year(x)-1950
+  lubridate::year(x) - 1950
 }

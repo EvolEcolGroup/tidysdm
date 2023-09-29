@@ -24,7 +24,7 @@
 #' For grouped data frames, the number of rows returned will be the same as the
 #' number of groups.
 #' @examples
-#' #Two class
+#' # Two class
 #' data("two_class_example")
 #' tss(two_class_example, truth, predicted)
 #' # Multiclass
@@ -32,8 +32,8 @@
 #' data(hpc_cv)
 #' # Groups are respected
 #' hpc_cv %>%
-#'  group_by(Resample) %>%
-#'  tss(obs, pred)
+#'   group_by(Resample) %>%
+#'   tss(obs, pred)
 #' @export
 tss <- function(data, ...) {
   UseMethod("tss")
@@ -46,13 +46,13 @@ tss <- new_class_metric(
 #' @rdname tss
 #' @export
 tss.data.frame <- function(data,
-                               truth,
-                               estimate,
-                               estimator = NULL,
-                               na_rm = TRUE,
-                               case_weights = NULL,
-                               event_level = "first",
-                               ...) {
+                           truth,
+                           estimate,
+                           estimator = NULL,
+                           na_rm = TRUE,
+                           case_weights = NULL,
+                           event_level = "first",
+                           ...) {
   class_metric_summarizer(
     name = "tss",
     fn = yardstick::j_index_vec,
@@ -65,4 +65,3 @@ tss.data.frame <- function(data,
     event_level = event_level
   )
 }
-

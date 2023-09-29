@@ -28,23 +28,25 @@
 #' @method predict repeat_ensemble
 #' @export
 predict.repeat_ensemble <-
-  function (object,
-            new_data,
-            type = "prob",
-            fun = "mean",
-            metric_thresh = NULL,
-            class_thresh = NULL,
-            members = FALSE,
-            ...) {
-  # we change the names of the workflows to combine with the repeat ids
-  object$workflow_id <- paste(object$rep_id,object$wflow_id, sep=".")
-  class(object)[1] <- "simple_ensemble"
-  # now predict the object as if it was a simple ensemble
-  stats::predict(object = object,
-          new_data = new_data,
-          type = type,
-          fun = fun,
-          metric_thresh = metric_thresh,
-          class_thresh = class_thresh,
-          members = members)
+  function(object,
+           new_data,
+           type = "prob",
+           fun = "mean",
+           metric_thresh = NULL,
+           class_thresh = NULL,
+           members = FALSE,
+           ...) {
+    # we change the names of the workflows to combine with the repeat ids
+    object$workflow_id <- paste(object$rep_id, object$wflow_id, sep = ".")
+    class(object)[1] <- "simple_ensemble"
+    # now predict the object as if it was a simple ensemble
+    stats::predict(
+      object = object,
+      new_data = new_data,
+      type = type,
+      fun = fun,
+      metric_thresh = metric_thresh,
+      class_thresh = class_thresh,
+      members = members
+    )
   }

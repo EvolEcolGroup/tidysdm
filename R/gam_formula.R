@@ -7,25 +7,31 @@
 #' @param k the *k* value for the smooth
 #' @returns a formula
 #' @export
-gam_formula<-function(object, k=10){
-  base_formula <- object %>% recipes::prep() %>% stats::formula()
+gam_formula <- function(object, k = 10) {
+  base_formula <- object %>%
+    recipes::prep() %>%
+    stats::formula()
   predictors <- rsample::form_pred(base_formula)
   # Now check which predictors are numeric, and thus should be used in smooths
-  predictors_type <- object$var_info$type[match(predictors,
-                                                object$var_info$variable)]
+  predictors_type <- object$var_info$type[match(
+    predictors,
+    object$var_info$variable
+  )]
   predictors_numeric <- predictors[!is.na(
     unlist(
-      lapply(predictors_type, function(table) match("numeric",table))))]
-  if (length(predictors_numeric)>1){
-    rhs <- paste0("s(", predictors, ", k = ",k,")",collapse=" + ")
+      lapply(predictors_type, function(table) match("numeric", table))
+    )
+  )]
+  if (length(predictors_numeric) > 1) {
+    rhs <- paste0("s(", predictors, ", k = ", k, ")", collapse = " + ")
   } else {
     stop("there are no numeric predictors; a gam does not really make much sense...")
   }
   predictors_factor <- predictors[!predictors %in% predictors_numeric]
-  if (length(predictors_factor)){
-    rhs<-paste(rhs,predictors_factor, collapse = "+")
+  if (length(predictors_factor)) {
+    rhs <- paste(rhs, predictors_factor, collapse = "+")
   }
-  stats::formula(paste (form_resp(base_formula), "~", rhs))
+  stats::formula(paste(form_resp(base_formula), "~", rhs))
 }
 
 #' Get the response variable from a formula
@@ -39,10 +45,10 @@ gam_formula<-function(object, k=10){
 #' @param x a formula
 #' @returns character the name of the response
 #' @keywords internal
-form_resp <- function(x){
-  if (attr(stats::terms(x), which = 'response')){
+form_resp <- function(x) {
+  if (attr(stats::terms(x), which = "response")) {
     all.vars(x)[1]
-  }  else{
+  } else {
     NULL
   }
 }

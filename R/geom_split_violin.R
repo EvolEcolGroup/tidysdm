@@ -15,15 +15,20 @@
 #' allotted to a given factor on the x-axis.
 #' @returns a [`ggplot2::layer`] object
 #' @examples
-#' data("bradypus", package="maxnet")
-#' bradypus_tb <- tibble::as_tibble(bradypus) %>% dplyr::mutate(presence = relevel(factor(
-#' dplyr::case_match (presence, 1~"presence",0 ~"absence")),
-#' ref="presence"))
+#' data("bradypus", package = "maxnet")
+#' bradypus_tb <- tibble::as_tibble(bradypus) %>% dplyr::mutate(presence = relevel(
+#'   factor(
+#'     dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
+#'   ),
+#'   ref = "presence"
+#' ))
 #'
-#' ggplot(bradypus_tb, aes(x = "",
-#'                         y= cld6190_ann,
-#'                         fill = presence)) +
-#'   geom_split_violin(nudge=0.01)
+#' ggplot(bradypus_tb, aes(
+#'   x = "",
+#'   y = cld6190_ann,
+#'   fill = presence
+#' )) +
+#'   geom_split_violin(nudge = 0.01)
 #'
 #' @export
 
@@ -40,21 +45,24 @@ geom_split_violin <- function(mapping = NULL,
                               na.rm = FALSE,
                               show.legend = NA,
                               inherit.aes = TRUE) {
-
-  ggplot2::layer(data = data,
-                 mapping = mapping,
-                 stat = stat,
-                 geom = GeomSplitViolin,
-                 position = position,
-                 show.legend = show.legend,
-                 inherit.aes = inherit.aes,
-                 params = list(trim = trim,
-                               scale = scale,
-                               # don't forget the nudge
-                               nudge = nudge,
-                               draw_quantiles = draw_quantiles,
-                               na.rm = na.rm,
-                               ...))
+  ggplot2::layer(
+    data = data,
+    mapping = mapping,
+    stat = stat,
+    geom = GeomSplitViolin,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      trim = trim,
+      scale = scale,
+      # don't forget the nudge
+      nudge = nudge,
+      draw_quantiles = draw_quantiles,
+      na.rm = na.rm,
+      ...
+    )
+  )
 }
 
 #' @keywords internal
@@ -68,43 +76,56 @@ GeomSplitViolin <- ggplot2::ggproto(
                         nudge = 0,
                         draw_quantiles = NULL) {
     data <- transform(data,
-                      xminv = x - violinwidth * (x - xmin),
-                      xmaxv = x + violinwidth * (xmax - x))
+      xminv = x - violinwidth * (x - xmin),
+      xmaxv = x + violinwidth * (xmax - x)
+    )
     grp <- data[1, "group"]
-    newdata <- dplyr::arrange(transform(data,
-                                       x = if (grp %% 2 == 1) xminv else xmaxv),
-                             if (grp %% 2 == 1) y else -y)
-    newdata <- rbind(newdata[1, ],
-                     newdata,
-                     newdata[nrow(newdata), ],
-                     newdata[1, ])
-    newdata[c(1, nrow(newdata)-1, nrow(newdata)), "x"] <- round(newdata[1, "x"])
+    newdata <- dplyr::arrange(
+      transform(data,
+        x = if (grp %% 2 == 1) xminv else xmaxv
+      ),
+      if (grp %% 2 == 1) y else -y
+    )
+    newdata <- rbind(
+      newdata[1, ],
+      newdata,
+      newdata[nrow(newdata), ],
+      newdata[1, ]
+    )
+    newdata[c(1, nrow(newdata) - 1, nrow(newdata)), "x"] <- round(newdata[1, "x"])
 
     # now nudge them apart
     newdata$x <- ifelse(newdata$group %% 2 == 1,
-                        newdata$x - nudge,
-                        newdata$x + nudge)
+      newdata$x - nudge,
+      newdata$x + nudge
+    )
 
     if (length(draw_quantiles) > 0 & !scales::zero_range(range(data$y))) {
-
       stopifnot(all(draw_quantiles >= 0), all(draw_quantiles <= 1))
 
-      quantiles <- ggplot2:::create_quantile_segment_frame(data,
-                                                           draw_quantiles)
+      quantiles <- ggplot2:::create_quantile_segment_frame(
+        data,
+        draw_quantiles
+      )
       aesthetics <- data[rep(1, nrow(quantiles)),
-                         setdiff(names(data), c("x", "y")),
-                         drop = FALSE]
+        setdiff(names(data), c("x", "y")),
+        drop = FALSE
+      ]
       aesthetics$alpha <- rep(1, nrow(quantiles))
       both <- cbind(quantiles, aesthetics)
       quantile_grob <- ggplot2::GeomPath$draw_panel(both, ...)
-      ggplot2:::ggname("geom_split_violin",
-                       grid::grobTree(ggplot2::GeomPolygon$draw_panel(newdata, ...),
-                                      quantile_grob))
-    }
-    else {
-      ggplot2:::ggname("geom_split_violin",
-                       ggplot2::GeomPolygon$draw_panel(newdata, ...))
+      ggplot2:::ggname(
+        "geom_split_violin",
+        grid::grobTree(
+          ggplot2::GeomPolygon$draw_panel(newdata, ...),
+          quantile_grob
+        )
+      )
+    } else {
+      ggplot2:::ggname(
+        "geom_split_violin",
+        ggplot2::GeomPolygon$draw_panel(newdata, ...)
+      )
     }
   }
 )
-

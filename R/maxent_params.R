@@ -34,7 +34,7 @@ regularization_multiplier <- function(range = c(0.5, 3), trans = NULL) {
 
 #' @rdname maxent_params
 #' @export
-feature_classes <- function(values=c("l","lq","lqp","lqph","lqpht")){
+feature_classes <- function(values = c("l", "lq", "lqp", "lqph", "lqpht")) {
   dials::new_qual_param(
     type = c("character"),
     values = values,
@@ -47,11 +47,12 @@ feature_classes <- function(values=c("l","lq","lqp","lqph","lqpht")){
 tunable.maxent <- function(x, ...) {
   tibble::tibble(
     name = c("regularization_multiplier", "feature_classes"),
-    call_info = list(list(pkg = NULL, fun = "regularization_multiplier"),
-                     list(pkg = NULL, fun = "feature_classes")),
+    call_info = list(
+      list(pkg = NULL, fun = "regularization_multiplier"),
+      list(pkg = NULL, fun = "feature_classes")
+    ),
     source = "model_spec",
     component = "maxent",
     component_id = "main"
   )
 }
-

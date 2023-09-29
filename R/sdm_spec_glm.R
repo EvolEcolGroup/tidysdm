@@ -14,10 +14,9 @@
 #' my_spec_glm <- sdm_spec_glm()
 #' @export
 
-sdm_spec_glm <- function(..., tune="none"){
+sdm_spec_glm <- function(..., tune = "none") {
   tune <- rlang::arg_match(tune)
-  parsnip::logistic_reg(...) %>%  # model type
-    parsnip::set_engine(engine = "glm") %>%  # model engine
+  parsnip::logistic_reg(...) %>% # model type
+    parsnip::set_engine(engine = "glm") %>% # model engine
     parsnip::set_mode("classification") # model mode
 }
-

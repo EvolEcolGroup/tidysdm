@@ -33,7 +33,7 @@
 # This code is an adaptation of spThin to work on sf objects
 
 thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
-                         time_col="time", lubridate_fun=c) {
+                              time_col = "time", lubridate_fun = c) {
   return_dataframe <-
     FALSE # flag whether we need to return a data.frame
   # cast to sf if needed
@@ -45,13 +45,15 @@ thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
   }
 
   # create a vector of times formatted as proper dates
-  time_lub <- data[,time_col] %>% as.data.frame() %>% dplyr::select(dplyr::all_of(time_col))
+  time_lub <- data[, time_col] %>%
+    as.data.frame() %>%
+    dplyr::select(dplyr::all_of(time_col))
 
-  time_lub <- lubridate_fun(time_lub[,time_col])
-  if (!inherits(time_lub,"POSIXct")){
+  time_lub <- lubridate_fun(time_lub[, time_col])
+  if (!inherits(time_lub, "POSIXct")) {
     stop("time is not a date (or cannot be coerced to one)")
   }
-  time_in_days<- as.numeric(time_lub - lubridate::origin)
+  time_in_days <- as.numeric(time_lub - lubridate::origin)
   # compute an interval matrix (analogous to the dist_mat, but for time)
   interval_mat <- as.matrix(stats::dist(time_in_days, diag = TRUE, upper = TRUE)) < interval_min
 
@@ -97,7 +99,7 @@ thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
     n_neighbours[points_to_remove] <- 0
 
     ## Set the occ to be ignored in the next iteration of the while loop
-    dist_mat[points_to_remove,] <- FALSE
+    dist_mat[points_to_remove, ] <- FALSE
     dist_mat[, points_to_remove] <- FALSE
 
     ## Note the occurrence for removal from the thinned data set
@@ -105,11 +107,11 @@ thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
   }
 
   ## Subset the original dataset
-  thinned_points <- data[points_to_keep,]
+  thinned_points <- data[points_to_keep, ]
   if (return_dataframe) {
     thinned_points <- thinned_points %>%
       dplyr::bind_cols(sf::st_coordinates(thinned_points)) %>% # re-add coordinates
-      as.data.frame() %>% #turn it into a data.frame
+      as.data.frame() %>% # turn it into a data.frame
       dplyr::select(-"geometry") %>% # remove the geometry column
       dplyr::rename("{coords[1]}" := "X", "{coords[2]}" := "Y")
   }

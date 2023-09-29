@@ -39,17 +39,16 @@
 #' @export
 
 
-sample_pseudoabs <- function (data, raster, n, coords = NULL,
-                              method="random", class_label = "pseudoabs",
-                              return_pres = TRUE)
-{
+sample_pseudoabs <- function(data, raster, n, coords = NULL,
+                             method = "random", class_label = "pseudoabs",
+                             return_pres = TRUE) {
   return_sf <- FALSE # flag whether we need to return an sf object
-  if (inherits(data,"sf")) {
+  if (inherits(data, "sf")) {
     bind_col <- TRUE
     if (all(c("X", "Y") %in% names(data))) {
       if (any(is.na(data[, c("X", "Y")]))) {
         stop("sf object contains NA values in the X and Y coordinates")
-        } else if (all(sf::st_drop_geometry(data[, c("X", "Y")]) == sf::st_coordinates(data))) {
+      } else if (all(sf::st_drop_geometry(data[, c("X", "Y")]) == sf::st_coordinates(data))) {
         bind_col <- FALSE
       } else {
         stop("sf object contains X and Y coordinates that do not match the sf point geometry")
@@ -63,62 +62,69 @@ sample_pseudoabs <- function (data, raster, n, coords = NULL,
   }
   coords <- check_coords_names(data, coords)
   dist_min <- dist_max <- NULL
-  if(method[1]=="dist_disc"){
+  if (method[1] == "dist_disc") {
     dist_min <- as.numeric(method[2])
     dist_max <- as.numeric(method[3])
-  } else if (method[1]=="dist_min"){
+  } else if (method[1] == "dist_min") {
     dist_min <- as.numeric(method[2])
-  } else if (method[1]=="dist_max"){
+  } else if (method[1] == "dist_max") {
     dist_max <- as.numeric(method[2])
-  } else if (!method[1] %in% "random"){
+  } else if (!method[1] %in% "random") {
     stop("method has to be one of 'random', 'dist_min', 'dist_max', or 'dist_disc'")
   }
-  xy_pres<-as.matrix(as.data.frame(data)[,coords])
+  xy_pres <- as.matrix(as.data.frame(data)[, coords])
   # get a one layer raster
   sampling_raster <- raster[[1]]
-  names(sampling_raster)<-"class"
+  names(sampling_raster) <- "class"
   # turn presences into additional NAs
   sampling_raster[stats::na.omit(terra::cellFromXY(sampling_raster, xy_pres))] <- NA
 
   # remove buffer < dist_min (or first parameter for disc)
-  if (!is.null(dist_min)){
-    min_buffer <- terra::buffer(terra::vect(xy_pres,
-                                            crs = terra::crs(sampling_raster)),
-                                dist_min)
-    sampling_raster <- terra::mask(sampling_raster,min_buffer, inverse=TRUE, touches=FALSE)
+  if (!is.null(dist_min)) {
+    min_buffer <- terra::buffer(
+      terra::vect(xy_pres,
+        crs = terra::crs(sampling_raster)
+      ),
+      dist_min
+    )
+    sampling_raster <- terra::mask(sampling_raster, min_buffer, inverse = TRUE, touches = FALSE)
   }
   # remove buffer >dist_max (or second parameter for disc)
-  if (!is.null(dist_max)){
-    max_buffer <- terra::buffer(terra::vect(xy_pres,
-                                            crs = terra::crs(sampling_raster)),
-                              dist_max)
-    sampling_raster <- terra::mask(sampling_raster,max_buffer, touches=FALSE)
+  if (!is.null(dist_max)) {
+    max_buffer <- terra::buffer(
+      terra::vect(xy_pres,
+        crs = terra::crs(sampling_raster)
+      ),
+      dist_max
+    )
+    sampling_raster <- terra::mask(sampling_raster, max_buffer, touches = FALSE)
   }
   # now sample points
   # cell ids excluding NAs
   cell_id <- terra::cells(sampling_raster)
-  if (length(cell_id)>n){
-    cell_id <- sample(x= cell_id, size = n)
+  if (length(cell_id) > n) {
+    cell_id <- sample(x = cell_id, size = n)
   } else {
-    warning("There are fewer available cells in the raster than the requested ", n, " points.\n",
-            "Only ", length(cell_id), " will be returned.")
+    warning(
+      "There are fewer available cells in the raster than the requested ", n, " points.\n",
+      "Only ", length(cell_id), " will be returned."
+    )
   }
-  pseudoabsences <- as.data.frame (terra::xyFromCell(sampling_raster, cell_id))
+  pseudoabsences <- as.data.frame(terra::xyFromCell(sampling_raster, cell_id))
   # fix the coordinate names to be the same we started with
   names(pseudoabsences) <- coords
-  pseudoabsences<- pseudoabsences %>% dplyr::mutate(class = class_label)
-  if (return_pres){
-    presences<- dplyr::as_tibble (xy_pres) %>%
-      dplyr::mutate(class="presence")
-    pseudoabsences <- presences %>% dplyr::bind_rows(pseudoabsences) %>%
-      dplyr::mutate (class=stats::relevel(factor(class),ref="presence"))
+  pseudoabsences <- pseudoabsences %>% dplyr::mutate(class = class_label)
+  if (return_pres) {
+    presences <- dplyr::as_tibble(xy_pres) %>%
+      dplyr::mutate(class = "presence")
+    pseudoabsences <- presences %>%
+      dplyr::bind_rows(pseudoabsences) %>%
+      dplyr::mutate(class = stats::relevel(factor(class), ref = "presence"))
   }
   # remove X and Y that were added to the sf object
-  if (return_sf){
+  if (return_sf) {
     pseudoabsences <- sf::st_as_sf(pseudoabsences, coords = coords) %>%
       sf::st_set_crs(crs_from_sf)
   }
   return(pseudoabsences)
 }
-
-

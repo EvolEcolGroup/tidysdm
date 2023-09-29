@@ -41,8 +41,8 @@ We convert our dataset into an `sf` data.frame so that we can easily plot it
 (here `tidyterra` shines):
 ```{r}
 library(sf)
-horses <- st_as_sf(horses, coords = c("longitude","latitude"))
-st_crs(horses) = 4326
+horses <- st_as_sf(horses, coords = c("longitude", "latitude"))
+st_crs(horses) <- 4326
 ```
 
 As a background to our presences, we will use the land mask for the present,
@@ -54,7 +54,7 @@ set_data_path(on_CRAN = TRUE)
 
 ```{r}
 library(pastclim)
-land_mask <- pastclim::get_land_mask(time_bp=0,dataset="Example")
+land_mask <- pastclim::get_land_mask(time_bp = 0, dataset = "Example")
 europe_poly <- vect(region_outline$Europe)
 crs(europe_poly) <- "lonlat"
 land_mask <- crop(land_mask, europe_poly)
@@ -65,9 +65,9 @@ And use `tidyterra` to plot:
 ```{r cast to sf, fig.width=6, fig.height=4}
 library(tidyterra)
 ggplot() +
-  geom_spatraster(data=land_mask, aes(fill=land_mask_0))+
+  geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
   scale_fill_terrain_c() +
-  geom_sf(data = horses, aes(col=time_bp))
+  geom_sf(data = horses, aes(col = time_bp))
 ```
 
 We now thin our presences, so that locations are further than 100km and
@@ -75,19 +75,21 @@ We now thin our presences, so that locations are further than 100km and
 
 ```{r thin_by_dist}
 set.seed(123)
-horses<-thin_by_dist_time(horses, dist_min = km2m(100),
-                          interval_min = y2d(2000),
-                          time_col="time_bp",
-                          lubridate_fun = ybp2date)
+horses <- thin_by_dist_time(horses,
+  dist_min = km2m(100),
+  interval_min = y2d(2000),
+  time_col = "time_bp",
+  lubridate_fun = ybp2date
+)
 nrow(horses)
 ```
 
 And see what we have left:
 ```{r plot_thinned, fig.width=6, fig.height=4}
 ggplot() +
-  geom_spatraster(data=land_mask, aes(fill=land_mask_0))+
+  geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
   scale_fill_terrain_c() +
-  geom_sf(data = horses, aes(col=time_bp))
+  geom_sf(data = horses, aes(col = time_bp))
 ```
 
 We now need a time series of palaeoclimate reconstructions. In this vignette,
@@ -100,10 +102,12 @@ Europe only:
 
 ```{r load_climate}
 library(pastclim)
-climate_vars <-c("bio01", "bio10", "bio12")
-climate_full<-pastclim::region_series(bio_variables = climate_vars, 
-                                      data="Example", 
-                                      crop= region_outline$Europe) 
+climate_vars <- c("bio01", "bio10", "bio12")
+climate_full <- pastclim::region_series(
+  bio_variables = climate_vars,
+  data = "Example",
+  crop = region_outline$Europe
+)
 ```
 
 Now we thin the observations to only keep one per cell in the raster (it would be better
@@ -111,37 +115,39 @@ if we had an equal area projection...), and remove locations outside the
 desired area (if there was any):
 ```{r thin_by_cell}
 set.seed(123)
-horses<-thin_by_cell_time(horses, raster = climate_full,
-                          time_col="time_bp",
-                          lubridate_fun = ybp2date)
+horses <- thin_by_cell_time(horses,
+  raster = climate_full,
+  time_col = "time_bp",
+  lubridate_fun = ybp2date
+)
 nrow(horses)
 ```
 
 Let's see what we have left of our points:
 ```{r, fig.width=6, fig.height=4}
 ggplot() +
-  geom_spatraster(data=land_mask, aes(fill=land_mask_0))+
+  geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
   scale_fill_terrain_c() +
-  geom_sf(data = horses, aes(col=time_bp))
+  geom_sf(data = horses, aes(col = time_bp))
 ```
 
 Now we sample pseudo-absences (we will constraint them to be at least 70km away
 from any presences), selecting three times the number of presences
 ```{r}
 set.seed(123)
-horses <- sample_pseudoabs_time(horses, 
-                                n_per_presence=3, 
-                                raster=climate_full,
-                                time_col="time_bp",
-                                lubridate_fun = ybp2date,
-                                method=c("dist_min", km2m(70))
+horses <- sample_pseudoabs_time(horses,
+  n_per_presence = 3,
+  raster = climate_full,
+  time_col = "time_bp",
+  lubridate_fun = ybp2date,
+  method = c("dist_min", km2m(70))
 )
 ```
 
 Let's see our presences and absences:
 ```{r, fig.width=6, fig.height=4}
 ggplot() +
-  geom_spatraster(data=land_mask, aes(fill=land_mask_0))+
+  geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
   scale_fill_terrain_c() +
   geom_sf(data = horses, aes(col = class))
 ```
@@ -153,17 +159,18 @@ values represent time in the past). We manipulate the `sf` object accordingly:
 ```{r climate_for_locations}
 horses_df <- horses %>%
   dplyr::bind_cols(sf::st_coordinates(horses)) %>%
-  mutate (time_bp=date2ybp(time_step)) %>%
+  mutate(time_bp = date2ybp(time_step)) %>%
   as.data.frame() %>%
-   select(-geometry)
+  select(-geometry)
 # get climate
-horses_df <- location_slice_from_region_series(horses_df, 
-                                               region_series = climate_full)
+horses_df <- location_slice_from_region_series(horses_df,
+  region_series = climate_full
+)
 
 # add the climate reconstructions to the sf object, and remove the time_step
 # as we don't need it for modelling
 horses <- horses %>%
-  bind_cols(horses_df[,climate_vars]) %>%
+  bind_cols(horses_df[, climate_vars]) %>%
   select(-time_step)
 ```
 
@@ -175,7 +182,7 @@ need to define the formula (*class* is the outcome,
 all other variables are predictors; note that, for `sf` objects, `geometry` is
 automatically ignored as a predictor):
 ```{r recipe}
-horses_rec <- recipe(horses, formula=class~.)
+horses_rec <- recipe(horses, formula = class ~ .)
 horses_rec
 ```
 
@@ -211,8 +218,9 @@ horses_models <-
   ) %>%
   # set formula for gams
   update_workflow_model("default_gam",
-                        spec = sdm_spec_gam(),
-                        formula = gam_formula(horses_rec)) %>%
+    spec = sdm_spec_gam(),
+    formula = gam_formula(horses_rec)
+  ) %>%
   # tweak controls to store information needed later to create the ensemble
   option_add(control = control_ensemble_grid())
 ```
@@ -235,10 +243,12 @@ We can now use the block CV folds to
 tune and assess the models:
 ```{r tune_grid}
 set.seed(123)
-horses_models <- 
-  horses_models %>% 
-  workflow_map("tune_grid", resamples = horses_cv, grid = 5, 
-               metrics = sdm_metric_set(), verbose = TRUE)
+horses_models <-
+  horses_models %>%
+  workflow_map("tune_grid",
+    resamples = horses_cv, grid = 5,
+    metrics = sdm_metric_set(), verbose = TRUE
+  )
 ```
 
 Note that `workflow_set` correctly detects that we have no tuning parameters for 
@@ -255,7 +265,7 @@ to choose the best random forest and boosted tree. When adding members to an ens
 automatically fitted to the full training dataset, and so ready to make predictions.
 ```{r}
 horses_ensemble <- simple_ensemble() %>%
-  add_member(horses_models, metric="boyce_cont")
+  add_member(horses_models, metric = "boyce_cont")
 ```
 
 And visualise it

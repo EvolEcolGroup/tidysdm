@@ -12,6 +12,6 @@
 #'
 #' @export
 
-y2d <- function(x){
-  lubridate::date_decimal(x+1950)-lubridate::date_decimal(1950)
+y2d <- function(x) {
+  lubridate::date_decimal(x + 1950) - lubridate::date_decimal(1950)
 }

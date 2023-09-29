@@ -46,7 +46,7 @@ prep.check_sdm_outcome <- function(x, training, info = NULL, ...) {
   browser()
   col_names <- recipes_eval_select(x$terms, training, info)
   ## Check that the level exists
-  #x$options$present %in%
+  # x$options$present %in%
 
   ## Use the constructor function to return the updated object.
   ## Note that `trained` is now set to TRUE

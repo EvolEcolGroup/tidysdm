@@ -35,26 +35,26 @@
 #' @returns An object of class [`sf::sf`] or [`data.frame`], the same as "data".
 #' @export
 
-thin_by_cell_time <- function(data, raster, coords=NULL, time_col="time",
-                         lubridate_fun=c, drop_na = TRUE, agg_fact=NULL){
+thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
+                              lubridate_fun = c, drop_na = TRUE, agg_fact = NULL) {
   # randomise the row order, so that when we get the first instance in a cell,
   # there should be no pattern
-  data <- data[sample(1:nrow(data)),]
+  data <- data[sample(1:nrow(data)), ]
   # create a vector of times formatted as proper dates
   time_lub <- lubridate_fun(data %>% dplyr::pull(dplyr::all_of(time_col)))
-  if (!inherits(time_lub,"POSIXct")){
+  if (!inherits(time_lub, "POSIXct")) {
     stop("time is not a date (or cannot be coerced to one)")
   }
   # if we have a SpatRasterDataset, ge thte first dataset
-  if (inherits(raster, "SpatRasterDataset")){
-    raster <- raster [[1]]
+  if (inherits(raster, "SpatRasterDataset")) {
+    raster <- raster[[1]]
   }
   time_steps <- terra::time(raster)
-  
-  if (any(is.na(time_steps))){
+
+  if (any(is.na(time_steps))) {
     stop("`raster` does not have a time dimension; use `terra::time()` to set it")
   }
-  if ( terra::timeInfo(raster)[1,2]=="years"){
+  if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)
   }
   # convert time_lub dates into indices for the SpatRasterDataset
@@ -62,14 +62,15 @@ thin_by_cell_time <- function(data, raster, coords=NULL, time_col="time",
     sapply(time_lub, function(a, b) {
       which.min(abs(a - b))
     }, time_steps)
-  data_thin<-NULL
-  for (i_index in unique(time_indices)){
+  data_thin <- NULL
+  for (i_index in unique(time_indices)) {
     # get data for this time_index, we remove coordinates as we don't need them
-    data_sub <- data %>% dplyr::filter(time_indices==i_index)
+    data_sub <- data %>% dplyr::filter(time_indices == i_index)
     raster_sub <- raster[[i_index]]
     data_sub <- thin_by_cell(data_sub, raster_sub,
-                             drop_na = drop_na, agg_fact=agg_fact)
-      data_thin <- data_thin %>% dplyr::bind_rows(data_sub)
+      drop_na = drop_na, agg_fact = agg_fact
+    )
+    data_thin <- data_thin %>% dplyr::bind_rows(data_sub)
   }
   return(data_thin)
 }

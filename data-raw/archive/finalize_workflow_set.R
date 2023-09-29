@@ -10,12 +10,12 @@
 #' @export
 
 # TODO add a threshold used to select whether a workflow should be excluded
-#finalise a workflowset, extracting the best fits for each workflow
-finalize_workflow_set <- function(x, metric){
+# finalise a workflowset, extracting the best fits for each workflow
+finalize_workflow_set <- function(x, metric) {
   wkflow_id <- x$wflow_id
   # create a list of workflows
   wkflow_list <- list()
-  for (i_wkflow in wkflow_id){
+  for (i_wkflow in wkflow_id) {
     wkflow_list[[i_wkflow]] <- finalize_workflow(
       extract_workflow(x, i_wkflow),
       select_best(extract_workflow_set_result(x, i_wkflow), metric)
@@ -23,14 +23,18 @@ finalize_workflow_set <- function(x, metric){
   }
   # rank results
   ranked_results <- rank_results(x, rank_metric = metric, select_best = TRUE)
-  ranked_results <- ranked_results[match(names(wkflow_list),
-                                         ranked_results$wflow_id),]
+  ranked_results <- ranked_results[match(
+    names(wkflow_list),
+    ranked_results$wflow_id
+  ), ]
   # TODO special case for gam, bring over the formula
-  ensemble_set<-list(workflow = wkflow_list,
-                     # we need to sort this in the same order as above
-                     metrics_cv = ranked_results,
-                     trained = FALSE)
-  class(ensemble_set)<-c("ensemble_set", class(ensemble_set))
+  ensemble_set <- list(
+    workflow = wkflow_list,
+    # we need to sort this in the same order as above
+    metrics_cv = ranked_results,
+    trained = FALSE
+  )
+  class(ensemble_set) <- c("ensemble_set", class(ensemble_set))
   ensemble_set
 }
 
@@ -44,9 +48,9 @@ finalize_workflow_set <- function(x, metric){
 #' @export
 
 fit.ensemble_set <- function(object, data, ...) {
-  object$workflow <- lapply(object$workflow, fit, data=data, ...)
+  object$workflow <- lapply(object$workflow, fit, data = data, ...)
   # TODO figure out how to set that worksets are fitted
-  object$trained = TRUE
+  object$trained <- TRUE
   object
 }
 
@@ -56,7 +60,7 @@ fit.ensemble_set <- function(object, data, ...) {
 #' @param object an ensemble_set object
 #' @param new_data the data to fit to (usually the full training dataset)
 #' @export
-predict.ensemble_set <- function (object, new_data, type=NULL, fun = NULL, metric = NULL, ...){
+predict.ensemble_set <- function(object, new_data, type = NULL, fun = NULL, metric = NULL, ...) {
   if (!object$trained) {
     stop("the ensemble_set needs to train first. Use fit() with the training dataset")
   }
@@ -71,5 +75,3 @@ predict.ensemble_set <- function (object, new_data, type=NULL, fun = NULL, metri
 #   # TODO check that models are not trained (we will train them later)
 #   class(model_list)<-c("ensemble_set", class(model_list))
 # }
-
-

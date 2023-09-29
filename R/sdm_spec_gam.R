@@ -14,9 +14,9 @@
 #' my_gam_spec <- sdm_spec_gam()
 #' @export
 
-sdm_spec_gam <- function(..., tune="none"){
+sdm_spec_gam <- function(..., tune = "none") {
   tune <- rlang::arg_match(tune)
-  parsnip::gen_additive_mod(...) %>%  # model type
-    parsnip::set_engine(engine = "mgcv") %>%  # model engine
+  parsnip::gen_additive_mod(...) %>% # model type
+    parsnip::set_engine(engine = "mgcv") %>% # model engine
     parsnip::set_mode("classification") # model mode
 }
