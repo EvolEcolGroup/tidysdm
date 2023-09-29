@@ -49,9 +49,9 @@ If multiple resamples are used, confidence bounds are shown for each result
 (95\% confidence, by default).
 }
 \examples{
-  # we use the two_class_example from `workflowsets`
-  two_class_ens <- simple_ensemble() \%>\%
-    add_member(two_class_res, metric = "roc_auc")
-  autoplot(two_class_ens)
+# we use the two_class_example from `workflowsets`
+two_class_ens <- simple_ensemble() \%>\%
+  add_member(two_class_res, metric = "roc_auc")
+autoplot(two_class_ens)
 
 }

@@ -76,7 +76,8 @@ The resulting list can be then used to build lists of explanations, which can
 then be plotted.
 
 ```{r profile, fig.width=6, fig.height=4}
-profile_list <- lapply(explainer_list, model_profile, N = 500, variables = "bio05")
+profile_list <- lapply(explainer_list, model_profile, N = 500,
+                       variables = "bio05")
 plot(profile_list)
 ```
 
@@ -104,7 +105,8 @@ scheme to partition the data:
 
 ```{r initial_split, fig.width=6, fig.height=4}
 set.seed(1005)
-lacerta_initial <- spatial_initial_split(lacerta_thin, prop = 1 / 5, spatial_block_cv)
+lacerta_initial <- spatial_initial_split(lacerta_thin, 
+                                         prop = 1 / 5, spatial_block_cv)
 autoplot(lacerta_initial)
 ```
 
@@ -133,7 +135,10 @@ variables that are uncorrelated:
 
 ```{r recipe}
 lacerta_rec_all <- recipe(lacerta_thin, formula = class ~ .)
-lacerta_rec_uncor <- lacerta_rec_all %>% step_rm(all_of(c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", "bio17", "bio18", "bio19", "altitude")))
+lacerta_rec_uncor <- lacerta_rec_all %>%
+  step_rm(all_of(c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08",
+                   "bio09", "bio10", "bio11", "bio12", "bio14", "bio16",
+                   "bio17", "bio18", "bio19", "altitude")))
 
 lacerta_rec_uncor
 ```
@@ -283,7 +288,8 @@ climate_present <- pastclim::region_slice(
 
 ```{r echo=FALSE, results='hide'}
 terra::gdal(warn = 3)
-climate_present <- terra::rast(system.file("extdata/lacerta_climate_present_10m.nc", package = "tidysdm"))
+climate_present <- terra::rast(
+  system.file("extdata/lacerta_climate_present_10m.nc", package = "tidysdm"))
 climate_vars <- lacerta_rec_all$var_info %>%
   filter(role == "predictor") %>%
   pull(variable)
@@ -294,7 +300,8 @@ if (!all(climate_vars %in% names(climate_present))) {
 
 
 ```{r plot_present, fig.width=6, fig.height=4}
-prediction_present <- predict_raster(lacerta_stack, climate_present, type = "prob")
+prediction_present <- predict_raster(lacerta_stack, climate_present,
+                                     type = "prob")
 library(tidyterra)
 ggplot() +
   geom_spatraster(data = prediction_present, aes(fill = .pred_presence)) +

@@ -17,7 +17,8 @@ negative numbers indicating years into the past, or a \code{POSIXct} date object
 a \code{POSIXct} date object, or a vector
 }
 \description{
-These functions convert between years BP as used by pastclim (negative numbers going into
+These functions convert between years BP as used by pastclim (negative
+numbers going into
 the past, positive into the future) and standard
 \code{POSIXct} date objects.
 }

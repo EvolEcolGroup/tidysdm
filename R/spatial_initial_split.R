@@ -31,7 +31,7 @@ spatial_initial_split <- function(data, prop, strategy, ...) {
     stop(deparse(substitute(strategy)), " is not a function in spatialsample")
   }
 
-  if (!is.numeric(prop) | prop >= 1 | prop <= 0) {
+  if (!is.numeric(prop) || prop >= 1 || prop <= 0) {
     rlang::abort("`prop` must be a number on (0, 1).")
   } else {
     v <- round(1 / prop, digits = 0)

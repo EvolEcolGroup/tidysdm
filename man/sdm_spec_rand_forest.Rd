@@ -34,8 +34,8 @@ Models.
 \code{sdm_spec_rf()} is simply a short form for \code{sm_spec_rand_forest()}.
 }
 \examples{
-test_rf_spec <- sdm_spec_rf(tune="sdm")
+test_rf_spec <- sdm_spec_rf(tune = "sdm")
 test_rf_spec
 # combining tuning with specific values for other hyperparameters
-sdm_spec_rf(tune="sdm", trees=100)
+sdm_spec_rf(tune = "sdm", trees = 100)
 }

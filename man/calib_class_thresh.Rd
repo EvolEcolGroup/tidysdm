@@ -28,8 +28,8 @@ Predict for a new dataset by using a simple ensemble. Predictions from individua
 models are combined according to \code{fun}
 }
 \examples{
-test_ens <- simple_ensemble() \%>\% add_member(two_class_res[1:3, ], metric="roc_auc")
-test_ens <- calib_class_thresh(test_ens, class_thresh="tss_max")
-test_ens <- calib_class_thresh(test_ens, class_thresh="kap_max")
-test_ens <- calib_class_thresh(test_ens, class_thresh=c("sens",0.9))
+test_ens <- simple_ensemble() \%>\% add_member(two_class_res[1:3, ], metric = "roc_auc")
+test_ens <- calib_class_thresh(test_ens, class_thresh = "tss_max")
+test_ens <- calib_class_thresh(test_ens, class_thresh = "kap_max")
+test_ens <- calib_class_thresh(test_ens, class_thresh = c("sens", 0.9))
 }
