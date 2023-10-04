@@ -53,8 +53,12 @@ sample_pseudoabs_time <- function (data, raster, n_per_presence, coords = NULL,t
   if (!inherits(time_lub,"POSIXct")){
     stop("time is not a date (or cannot be coerced to one)")
   }
-  # get the time steps from the SpatRasterDataset
-  time_steps <- time_steps_orig <- terra::time(raster)[[1]]
+  # get the time steps
+  if (inherits(raster, "SpatRasterDataset")) {
+    time_steps <- time_steps_orig <- terra::time(raster)[[1]]
+  } else {
+    time_steps <- time_steps_orig <- terra::time(raster)
+  }
   if ( terra::timeInfo(raster)[1,2]=="years"){
     time_steps <- lubridate::date_decimal(time_steps)
   }
