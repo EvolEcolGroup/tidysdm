@@ -31,13 +31,14 @@ exists).}
 A ggplot object.
 }
 \description{
-This \code{autoplot()} method plots performance metrics that have been ranked using
-a metric.
+This \code{autoplot()} method plots performance metrics that have been
+ranked using a metric.
 }
 \details{
 This function is intended to produce a default plot to visualize helpful
 information across all possible applications of a \code{\link{simple_ensemble}}. More
-sophisticated plots can be produced using standard \code{ggplot2} code for plotting.
+sophisticated plots can be produced using standard \code{ggplot2} code for
+plotting.
 
 The x-axis is the workflow rank in the set (a value of one being the best)
 versus the performance metric(s) on the y-axis. With multiple metrics, there

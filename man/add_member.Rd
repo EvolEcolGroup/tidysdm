@@ -33,5 +33,6 @@ a \link{simple_ensemble} with additional member(s)
 \description{
 This function adds member(s) to a \code{\link[=simple_ensemble]{simple_ensemble()}} object, taking the
 best member from each workflow provided. It is possible to pass individual
-\code{tune_results} objects from a tuned \code{workflow}, or a \code{\link[workflowsets:workflow_set]{workflowsets::workflow_set()}}.
+\code{tune_results} objects from a tuned \code{workflow}, or a
+\code{\link[workflowsets:workflow_set]{workflowsets::workflow_set()}}.
 }
