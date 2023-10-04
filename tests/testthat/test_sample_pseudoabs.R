@@ -82,7 +82,7 @@ test_that("handling of data frames and sf objects", {
   expect_error(sample_pseudoabs(locations_sf, coords = c("x", "y"), raster = grid_raster),
                "There are no recognised coordinate columns")
   expect_warning(sample_pseudoabs(locations_sf, raster = grid_raster, n = 100),
-                 "There are fewer available cells in the raster than the requested 100 points")
+                 "There are fewer available cells in raster for raster 'NA' (3 presences) than the requested 100 points. Only 52 will be returned.")
   locations_sf <- locations_sf %>% dplyr::bind_cols(sf::st_coordinates(.))
   expect_no_error(sample_pseudoabs(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25))
   locations_sf$X <- rep(0, 3)
