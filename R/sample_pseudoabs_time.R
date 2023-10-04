@@ -21,7 +21,7 @@
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
-#' @param raster the [terra::SpatRaster] from which cells will be sampled
+#' @param raster the [terra::SpatRaster] or [terra::SpatRasterDataset] from which cells will be sampled
 #' @param n_per_presence number of pseudoabsence/background points to sample for
 #' each presence
 #' @param coords a vector of length two giving the names of the "x" and "y"
@@ -69,7 +69,11 @@ sample_pseudoabs_time <- function (data, raster, n_per_presence, coords = NULL,t
     # get data for this time_index, we remove coordinates as we don't need them
     data_sub <- data %>% dplyr::filter(time_indices==i_index)
     # slice the region series based on the index;
-    raster_sub <- subset(raster, i_index)
+    if (inherits(raster, "SpatRasterDataset")) {
+      raster_sub <- pastclim::slice_region_series(raster, time_bp=pastclim::time_bp(raster[[1]])[i_index])
+    } else {
+      raster_sub <- subset(raster, i_index)
+    }
     data_sub <- sample_pseudoabs (data= data_sub,
                                               raster = raster_sub,
                                               n = n_per_presence*nrow(data_sub),
