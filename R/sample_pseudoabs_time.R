@@ -69,7 +69,7 @@ sample_pseudoabs_time <- function (data, raster, n_per_presence, coords = NULL,t
     # get data for this time_index, we remove coordinates as we don't need them
     data_sub <- data %>% dplyr::filter(time_indices==i_index)
     # slice the region series based on the index;
-    raster_sub <- pastclim::slice_region_series(raster, time_bp=pastclim::time_bp(raster)[i_index])
+    raster_sub <- subset(raster, i_index)
     data_sub <- sample_pseudoabs (data= data_sub,
                                               raster = raster_sub,
                                               n = n_per_presence*nrow(data_sub),
