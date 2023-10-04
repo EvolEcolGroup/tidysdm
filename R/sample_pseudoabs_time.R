@@ -76,7 +76,7 @@ sample_pseudoabs_time <- function (data, raster, n_per_presence, coords = NULL,t
     if (inherits(raster, "SpatRasterDataset")) {
       raster_sub <- pastclim::slice_region_series(raster, time_bp=pastclim::time_bp(raster[[1]])[i_index])
     } else {
-      raster_sub <- subset(raster, i_index)
+      raster_sub <- terra::subset(raster, i_index)
     }
     data_sub <- sample_pseudoabs (data= data_sub,
                                               raster = raster_sub,
