@@ -32,11 +32,17 @@ thin_by_cell <- function(data, raster, coords=NULL, drop_na = TRUE, agg_fact=NUL
          "use `thin_by_cell_time()`")
   }
 
-
-  # TODO add type checks for these parameters
+  # add type checks for these parameters
   return_sf <- FALSE # flag whether we need to return an sf object
   if (inherits(data,"sf")){
-    data <- data %>% dplyr::bind_cols(sf::st_coordinates(data))
+    if (all(c("X", "Y") %in% names(data))) {
+      if (!all(data[, c("X", "Y")] %>% sf::st_drop_geometry() %>% as.matrix() == sf::st_coordinates(data))) {
+        data <- data %>% dplyr::select(-X, -Y) %>% dplyr::bind_cols(sf::st_coordinates(data))
+        warning("sf contained 'X' and 'Y' coordinates that did not match point geometry and have been replaced")
+      }
+    } else {
+      data <- data %>% dplyr::bind_cols(sf::st_coordinates(data))
+    }
     return_sf <- TRUE
   }
   coords <- check_coords_names(data, coords)
