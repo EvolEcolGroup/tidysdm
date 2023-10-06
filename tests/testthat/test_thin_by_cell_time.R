@@ -53,24 +53,29 @@ test_that("thin_by_cell_time removes the correct points", {
   set.seed(123)
   locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>% sf::st_set_crs(4326)
   thin_100k_t_sf <- thin_by_cell_time(locations_sf,
-                                   raster = grid_raster,
-                                   time_col="time_bp",
-                                   lubridate_fun = ybp2date)
-  expect_true(inherits(thin_100k_t_sf,"sf"))
-  expect_true(inherits(thin_100k_t_sf,"data.frame")) # it is also a df!
-  expect_true(all(thin_100k_t$id ==thin_100k_t_sf$id))
-  
+    raster = grid_raster,
+    time_col = "time_bp",
+    lubridate_fun = ybp2date
+  )
+  expect_true(inherits(thin_100k_t_sf, "sf"))
+  expect_true(inherits(thin_100k_t_sf, "data.frame")) # it is also a df!
+  expect_true(all(thin_100k_t$id == thin_100k_t_sf$id))
+
   # check that the function can handle a sf object with X, Y columns
   locations_xy <- locations_sf %>% dplyr::bind_cols(sf::st_coordinates(.))
   expect_no_error(thin_by_cell_time(locations_xy,
-                                    raster = grid_raster,
-                                    time_col="time_bp",
-                                    lubridate_fun = ybp2date))
+    raster = grid_raster,
+    time_col = "time_bp",
+    lubridate_fun = ybp2date
+  ))
   locations_xy$X <- rep(NA)
-  expect_warning(thin_by_cell(locations_xy,
-                                   raster = grid_raster),
-                 "sf object contained 'X' and 'Y' coordinates that did not match the sf point geometry")
-  
+  expect_warning(
+    thin_by_cell(locations_xy,
+      raster = grid_raster
+    ),
+    "sf object contained 'X' and 'Y' coordinates that did not match the sf point geometry"
+  )
+
   # now use a SpatRasterDataset
   raster_list <- list(bio01 = grid_raster, bio10 = grid_raster)
   grid_sds <- terra::sds(raster_list)
