@@ -1,6 +1,7 @@
 #' Convert years BP from pastclim to lubridate date, or vice versa
 #'
-#' These functions convert between years BP as used by pastclim (negative numbers going into
+#' These functions convert between years BP as used by pastclim (negative
+#' numbers going into
 #' the past, positive into the future) and standard
 #' `POSIXct` date objects.
 #' @param x a time in years BP using the `pastclim` convention of
@@ -14,18 +15,18 @@
 #'
 #' @export
 
-ybp2date <- function(x){
-  if (!is.numeric(x)){
+ybp2date <- function(x) {
+  if (!is.numeric(x)) {
     stop("x should be numeric")
   }
-  lubridate::date_decimal(x+1950)
+  lubridate::date_decimal(x + 1950)
 }
 
 #' @rdname ybp2date
 #' @export
-date2ybp <- function(x){
-  if(!inherits(x,"POSIXct")){
+date2ybp <- function(x) {
+  if (!inherits(x, "POSIXct")) {
     stop("x should be a POSIXct object")
   }
-  lubridate::year(x)-1950
+  lubridate::year(x) - 1950
 }

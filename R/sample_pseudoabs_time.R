@@ -42,15 +42,16 @@
 #' @export
 
 
-sample_pseudoabs_time <- function (data, raster, n_per_presence, coords = NULL,time_col="time",
-                              lubridate_fun=c,
-                              method="random", class_label = "pseudoabs",
-                              return_pres=TRUE)
-{
+sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, time_col = "time",
+                                  lubridate_fun = c,
+                                  method = "random", class_label = "pseudoabs",
+                                  return_pres = TRUE) {
   # create a vector of times formatted as proper dates
-  time_lub <- data[,time_col] %>% as.data.frame() %>% dplyr::select(dplyr::all_of(time_col))
-  time_lub <- lubridate_fun(time_lub[,time_col])
-  if (!inherits(time_lub,"POSIXct")){
+  time_lub <- data[, time_col] %>%
+    as.data.frame() %>%
+    dplyr::select(dplyr::all_of(time_col))
+  time_lub <- lubridate_fun(time_lub[, time_col])
+  if (!inherits(time_lub, "POSIXct")) {
     stop("time is not a date (or cannot be coerced to one)")
   }
   # get the time steps
@@ -59,7 +60,7 @@ sample_pseudoabs_time <- function (data, raster, n_per_presence, coords = NULL,t
   } else {
     time_steps <- time_steps_orig <- terra::time(raster)
   }
-  if ( terra::timeInfo(raster)[1,2]=="years"){
+  if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)
   }
   # convert time_lub dates into indices for the SpatRasterDatset
@@ -67,29 +68,29 @@ sample_pseudoabs_time <- function (data, raster, n_per_presence, coords = NULL,t
     sapply(time_lub, function(a, b) {
       which.min(abs(a - b))
     }, time_steps)
-  pseudoabsences<-NULL
-  for (i_index in unique(time_indices)){
-    #browser()
+  pseudoabsences <- NULL
+  for (i_index in unique(time_indices)) {
+    # browser()
     # get data for this time_index, we remove coordinates as we don't need them
-    data_sub <- data %>% dplyr::filter(time_indices==i_index)
+    data_sub <- data %>% dplyr::filter(time_indices == i_index)
     # slice the region series based on the index;
     if (inherits(raster, "SpatRasterDataset")) {
-      raster_sub <- pastclim::slice_region_series(raster, time_bp=pastclim::time_bp(raster[[1]])[i_index])
+      raster_sub <- pastclim::slice_region_series(raster, time_bp = pastclim::time_bp(raster[[1]])[i_index])
     } else {
       raster_sub <- terra::subset(raster, i_index)
     }
-    data_sub <- sample_pseudoabs (data= data_sub,
-                                              raster = raster_sub,
-                                              n = n_per_presence*nrow(data_sub),
-                                              coords = coords,
-                                              method=method,
-                                              class_label = class_label,
-                                              return_pres=return_pres)
+    data_sub <- sample_pseudoabs(
+      data = data_sub,
+      raster = raster_sub,
+      n = n_per_presence * nrow(data_sub),
+      coords = coords,
+      method = method,
+      class_label = class_label,
+      return_pres = return_pres
+    )
     # we need to reattach time
     data_sub <- data_sub %>% dplyr::mutate(time_step = time_steps[i_index])
     pseudoabsences <- pseudoabsences %>% dplyr::bind_rows(data_sub)
   }
   return(pseudoabsences)
 }
-
-

@@ -13,6 +13,6 @@
 #' sdm_metric_set(accuracy)
 #' @export
 
-sdm_metric_set <- function(...){
+sdm_metric_set <- function(...) {
   metric_set(boyce_cont, roc_auc, tss_max, ...)
 }

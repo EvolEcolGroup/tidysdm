@@ -23,29 +23,34 @@
 #' custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune())
 #' @export
 
-sdm_spec_boost_tree <- function(..., tune=c("sdm","all","custom","none")){
+sdm_spec_boost_tree <- function(..., tune = c("sdm", "all", "custom", "none")) {
   tune <- rlang::arg_match(tune)
-  if (tune=="sdm"){
-    base_spec <- parsnip::boost_tree(mtry = tune(), #
-                                     trees = tune(), #
-                                     tree_depth = tune(), #
-                                     learn_rate = tune(), #
-                                     loss_reduction = tune(), #
-                                     stop_iter = tune(), #
-                                      ...)
-  } else if (tune=="all"){
-    base_spec <- parsnip::boost_tree(mtry = tune(),
-                                     trees = tune(),
-                                     min_n = tune(),
-                                     tree_depth = tune(),
-                                     learn_rate = tune(),
-                                     loss_reduction = tune(),
-                                     sample_size = tune(),
-                                     stop_iter = tune(),
-                                      ...)
-  } else if ((tune=="custom") | (tune=="none")){
+  if (tune == "sdm") {
+    base_spec <- parsnip::boost_tree(
+      mtry = tune(), #
+      trees = tune(), #
+      tree_depth = tune(), #
+      learn_rate = tune(), #
+      loss_reduction = tune(), #
+      stop_iter = tune(), #
+      ...
+    )
+  } else if (tune == "all") {
+    base_spec <- parsnip::boost_tree(
+      mtry = tune(),
+      trees = tune(),
+      min_n = tune(),
+      tree_depth = tune(),
+      learn_rate = tune(),
+      loss_reduction = tune(),
+      sample_size = tune(),
+      stop_iter = tune(),
+      ...
+    )
+  } else if ((tune == "custom") | (tune == "none")) {
     base_spec <- parsnip::boost_tree(...)
   }
-  base_spec %>%    parsnip::set_engine("xgboost") %>%
+  base_spec %>%
+    parsnip::set_engine("xgboost") %>%
     parsnip::set_mode("classification")
 }

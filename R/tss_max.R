@@ -61,20 +61,22 @@ tss_max.data.frame <- function(data,
 
 #' @rdname tss_max
 #' @export
-tss_max.sf <- function(data,...){
-  data %>% dplyr::as_tibble() %>% tss_max(...)
+tss_max.sf <- function(data, ...) {
+  data %>%
+    dplyr::as_tibble() %>%
+    tss_max(...)
 }
 
 
 #' @export
 #' @rdname tss_max
 tss_max_vec <- function(truth,
-                                  estimate,
-                                  estimator = NULL,
-                                  na_rm = TRUE,
-                                  event_level = "first",
-                                  case_weights = NULL,
-                                  ...) {
+                        estimate,
+                        estimator = NULL,
+                        na_rm = TRUE,
+                        event_level = "first",
+                        case_weights = NULL,
+                        ...) {
   utils::getFromNamespace("abort_if_class_pred", "yardstick")(truth)
 
   estimator <- yardstick::finalize_estimator(truth, estimator, "tss_max")
@@ -100,10 +102,10 @@ tss_max_vec <- function(truth,
 }
 
 tss_max_estimator_impl <- function(truth,
-                                             estimate,
-                                             estimator,
-                                             event_level,
-                                             case_weights) {
+                                   estimate,
+                                   estimator,
+                                   event_level,
+                                   case_weights) {
   if (!utils::getFromNamespace("is_binary", "yardstick")(estimator)) {
     stop("tss_max is only available for binary classes; multiclass is not supported")
   }
@@ -115,20 +117,18 @@ tss_max_estimator_impl <- function(truth,
     pres_level <- levels(truth)[2]
     absence_level <- levels(truth)[1]
   }
-  presences <- estimate[truth==pres_level]
-  absences <- estimate[truth==absence_level]
+  presences <- estimate[truth == pres_level]
+  absences <- estimate[truth == absence_level]
 
   # TODO we could implement case weights by properly fitting TSS from yardstick
-  if (!is.null(case_weights)){
+  if (!is.null(case_weights)) {
     stop("tss_max with case_weights has not been implemented yet")
   }
-  
-  conf_matrix_df <- conf_matrix_df(presences, absences)
-  sens = (conf_matrix_df$tp / (conf_matrix_df$tp + conf_matrix_df$fn))
-  spec = (conf_matrix_df$tn / (conf_matrix_df$tn + conf_matrix_df$fp))
 
-  tss = (sens + spec) - 1
+  conf_matrix_df <- conf_matrix_df(presences, absences)
+  sens <- (conf_matrix_df$tp / (conf_matrix_df$tp + conf_matrix_df$fn))
+  spec <- (conf_matrix_df$tn / (conf_matrix_df$tn + conf_matrix_df$fp))
+
+  tss <- (sens + spec) - 1
   max(tss) ## return the maximum TSS
 }
-
-

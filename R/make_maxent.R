@@ -12,7 +12,7 @@ make_maxent <- function() {
   )
   parsnip::set_dependency("maxent", eng = "maxnet", pkg = "maxnet")
   parsnip::set_dependency("maxent", eng = "maxnet", pkg = "tidysdm")
-  
+
   parsnip::set_model_arg(
     model = "maxent",
     eng = "maxnet",
@@ -21,7 +21,7 @@ make_maxent <- function() {
     func = list(pkg = "tidysdm", fun = "feature_classes"),
     has_submodel = FALSE
   )
-  
+
   parsnip::set_model_arg(
     model = "maxent",
     eng = "maxnet",
@@ -30,7 +30,7 @@ make_maxent <- function() {
     func = list(pkg = "tidysdm", fun = "regularization_multiplier"),
     has_submodel = FALSE
   )
-  
+
   parsnip::set_fit(
     model = "maxent",
     eng = "maxnet",
@@ -42,7 +42,7 @@ make_maxent <- function() {
       defaults = list()
     )
   )
-  
+
   parsnip::set_encoding(
     model = "maxent",
     eng = "maxnet",
@@ -54,20 +54,20 @@ make_maxent <- function() {
       allow_sparse_x = FALSE
     )
   )
-  
+
   class_info <-
     list(
       pre = NULL,
-      post = function(x,object){
-        class_vect<-rep(object$lvl[2],length(x))
-        class_vect[x==1]<- object$lvl[1]
-        class_vect <- stats::relevel(factor(class_vect),ref=object$lvl[1])
+      post = function(x, object) {
+        class_vect <- rep(object$lvl[2], length(x))
+        class_vect[x == 1] <- object$lvl[1]
+        class_vect <- stats::relevel(factor(class_vect), ref = object$lvl[1])
         tibble::tibble(class = class_vect)
       },
-      func = c(pkg="tidysdm", fun = "maxnet_predict"),
+      func = c(pkg = "tidysdm", fun = "maxnet_predict"),
       args =
-        # These lists should be of the form:
-        # {predict.maxnet argument name} = {values provided from parsnip objects}
+      # These lists should be of the form:
+      # {predict.maxnet argument name} = {values provided from parsnip objects}
         list(
           # We don't want the first two arguments evaluated right now
           # since they don't exist yet. `type` is a simple object that
@@ -77,7 +77,7 @@ make_maxent <- function() {
           type = "class"
         )
     )
-  
+
   parsnip::set_pred(
     model = "maxent",
     eng = "maxnet",
@@ -85,21 +85,23 @@ make_maxent <- function() {
     type = "class",
     value = class_info
   )
-  
+
   prob_info <-
     parsnip::pred_value_template(
       post = function(x, object) {
-        tibble::tibble("{object$lvl[1]}" := as.vector(x),
-                       "{object$lvl[2]}" := 1-as.vector(x))
+        tibble::tibble(
+          "{object$lvl[1]}" := as.vector(x),
+          "{object$lvl[2]}" := 1 - as.vector(x)
+        )
       },
-      func = c(pkg="tidysdm", fun = "maxnet_predict"),
+      func = c(pkg = "tidysdm", fun = "maxnet_predict"),
       # Now everything else is put into the `args` slot
       object = quote(object$fit),
       newdata = quote(new_data),
       type = "prob"
-      #TODO do we add here maxent_type and clamp???
+      # TODO do we add here maxent_type and clamp???
     )
-  
+
   parsnip::set_pred(
     model = "maxent",
     eng = "maxnet",

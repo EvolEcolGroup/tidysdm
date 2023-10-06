@@ -9,8 +9,10 @@
 #' @export
 #' @importMethodsFrom terra extract
 
-setMethod("extract", signature(x="SpatRaster", y="sf"),
-      function(x,y,...){
-        # terra::extract(x,terra::vect(y),...)
-        rlang::inform("you are here")
-      })
+setMethod(
+  "extract", signature(x = "SpatRaster", y = "sf"),
+  function(x, y, ...) {
+    # terra::extract(x,terra::vect(y),...)
+    rlang::inform("you are here")
+  }
+)

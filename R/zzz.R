@@ -6,5 +6,4 @@
   if (!any(current$models == "maxent")) {
     make_maxent()
   }
-
 }

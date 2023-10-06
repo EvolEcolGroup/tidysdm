@@ -32,6 +32,6 @@ whilst optimising a given metric. Currently available for \code{\link{tss_max}},
 \code{sensitivity} (for which a target sensitivity is required).
 }
 \examples{
-optim_thresh(two_class_example$truth,two_class_example$Class1,metric=c("tss_max"))
-optim_thresh(two_class_example$truth,two_class_example$Class1,metric=c("sens",0.9))
+optim_thresh(two_class_example$truth, two_class_example$Class1, metric = c("tss_max"))
+optim_thresh(two_class_example$truth, two_class_example$Class1, metric = c("sens", 0.9))
 }

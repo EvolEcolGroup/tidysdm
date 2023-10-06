@@ -55,7 +55,7 @@ is usually not the metric used for Species Distribution Models, where the
 threshold is recalibrated to maximise TSS; for that purpose, use \code{\link[=tss_max]{tss_max()}}.
 }
 \examples{
-#Two class
+# Two class
 data("two_class_example")
 tss(two_class_example, truth, predicted)
 # Multiclass
@@ -63,6 +63,6 @@ library(dplyr)
 data(hpc_cv)
 # Groups are respected
 hpc_cv \%>\%
- group_by(Resample) \%>\%
- tss(obs, pred)
+  group_by(Resample) \%>\%
+  tss(obs, pred)
 }

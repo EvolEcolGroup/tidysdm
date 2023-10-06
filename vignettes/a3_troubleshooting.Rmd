@@ -26,13 +26,19 @@ loading the *Lacerta* dataset, and manually add an NA:
 ```{r}
 library(tidysdm)
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
-                               package="tidysdm"))
-lacerta_thin$bio05[37]<-NA
+  package = "tidysdm"
+))
+lacerta_thin$bio05[37] <- NA
 ```
 
 Let us set up a recipe and fit workflow_set
 ```{r}
-lacerta_rec <- recipe(lacerta_thin, formula=class~.) %>% step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", "bio17", "bio18", "bio19", "altitude")))
+lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
+  step_rm(all_of(c(
+    "bio01", "bio02", "bio03", "bio04", "bio07", "bio08",
+    "bio09", "bio10", "bio11", "bio12", "bio14", "bio16",
+    "bio17", "bio18", "bio19", "altitude"
+  )))
 
 lacerta_models <-
   # create the workflow_set
@@ -54,10 +60,12 @@ lacerta_models <-
 ```{r error=TRUE}
 set.seed(100)
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
-lacerta_models <- 
-   lacerta_models %>% 
-   workflow_map("tune_grid", resamples = lacerta_cv, grid = 3, 
-                metrics = sdm_metric_set(), verbose = TRUE)
+lacerta_models <-
+  lacerta_models %>%
+  workflow_map("tune_grid",
+    resamples = lacerta_cv, grid = 3,
+    metrics = sdm_metric_set(), verbose = TRUE
+  )
 ```
 
 We can see that the error is self-explanatory. Also, note that the error impacts
@@ -92,9 +100,11 @@ variables of interest, and the error is less than clear:
 Let's load the data and create a recipe with `step_select`:
 ```{r}
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
-                               package="tidysdm"))
-suggested_vars <- c("bio05","bio06", "bio13", "bio14", "bio15")
-lacerta_rec_sel <- recipe(lacerta_thin, formula=class~.) %>% step_select(all_of( suggested_vars))
+  package = "tidysdm"
+))
+suggested_vars <- c("bio05", "bio06", "bio13", "bio14", "bio15")
+lacerta_rec_sel <- recipe(lacerta_thin, formula = class ~ .) %>%
+  step_select(all_of(suggested_vars))
 ```
 
 Now we create the workflow set and fit it:
@@ -117,10 +127,12 @@ lacerta_models <-
 
 set.seed(100)
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
-lacerta_models <- 
-   lacerta_models %>% 
-   workflow_map("tune_grid", resamples = lacerta_cv, grid = 3, 
-                metrics = sdm_metric_set(), verbose = TRUE)
+lacerta_models <-
+  lacerta_models %>%
+  workflow_map("tune_grid",
+    resamples = lacerta_cv, grid = 3,
+    metrics = sdm_metric_set(), verbose = TRUE
+  )
 ```
 The errors are not very intuitive. However, all models have failed for all algorithms,
 which suggests that the problem lies with the data preparation side (either the data
@@ -150,9 +162,15 @@ to every continuous predictor.
 
 ```{r}
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
-                               package="tidysdm"))
+  package = "tidysdm"
+))
 
-lacerta_rec <- recipe(lacerta_thin, formula=class~.) %>% step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", "bio17", "bio18", "bio19", "altitude")))
+lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
+  step_rm(all_of(c(
+    "bio01", "bio02", "bio03", "bio04", "bio07", "bio08",
+    "bio09", "bio10", "bio11", "bio12", "bio14", "bio16",
+    "bio17", "bio18", "bio19", "altitude"
+  )))
 
 lacerta_models <-
   # create the workflow_set
@@ -169,8 +187,9 @@ lacerta_models <-
   ) %>%
   # set formula for gams
   update_workflow_model("default_gam",
-                        spec = sdm_spec_gam(),
-                        formula = gam_formula(lacerta_rec)) %>%
+    spec = sdm_spec_gam(),
+    formula = gam_formula(lacerta_rec)
+  ) %>%
   # tweak controls to store information needed later to create the ensemble
   option_add(control = control_ensemble_grid())
 ```
@@ -179,10 +198,12 @@ lacerta_models <-
 ```{r}
 set.seed(100)
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
-lacerta_models <- 
-   lacerta_models %>% 
-   workflow_map("tune_grid", resamples = lacerta_cv, grid = 3, 
-                metrics = sdm_metric_set(), verbose = TRUE)
+lacerta_models <-
+  lacerta_models %>%
+  workflow_map("tune_grid",
+    resamples = lacerta_cv, grid = 3,
+    metrics = sdm_metric_set(), verbose = TRUE
+  )
 ```
 
 Note that the step of defining a formula is incompatible with using `step_cor`
@@ -205,14 +226,20 @@ We generate a problematic dataset by subsampling the lacerta dataset:
 
 ```{r}
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
-                               package="tidysdm"))
+  package = "tidysdm"
+))
 set.seed(123)
-lacerta_thin <- lacerta_thin[sample(1:nrow(lacerta_thin),nrow(lacerta_thin)/5),]
+lacerta_thin <- lacerta_thin[sample(
+  1:nrow(lacerta_thin),
+  nrow(lacerta_thin) / 5
+), ]
 
-lacerta_rec <- recipe(lacerta_thin, formula=class~.) %>% 
-  step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", 
-                    "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", 
-                    "bio17", "bio18", "bio19", "altitude")))
+lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
+  step_rm(all_of(c(
+    "bio01", "bio02", "bio03", "bio04", "bio07", "bio08",
+    "bio09", "bio10", "bio11", "bio12", "bio14", "bio16",
+    "bio17", "bio18", "bio19", "altitude"
+  )))
 
 lacerta_models <-
   # create the workflow_set
@@ -231,8 +258,9 @@ lacerta_models <-
   ) %>%
   # set formula for gams
   update_workflow_model("default_gam",
-                        spec = sdm_spec_gam(),
-                        formula = gam_formula(lacerta_rec)) %>%
+    spec = sdm_spec_gam(),
+    formula = gam_formula(lacerta_rec)
+  ) %>%
   # tweak controls to store information needed later to create the ensemble
   option_add(control = control_ensemble_grid())
 ```
@@ -242,10 +270,12 @@ We then create 3 folds and attempt to fit the models:
 ```{r}
 set.seed(100)
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 3)
-lacerta_models <- 
-   lacerta_models %>% 
-   workflow_map("tune_grid", resamples = lacerta_cv, grid = 3, 
-                metrics = sdm_metric_set(), verbose = TRUE)
+lacerta_models <-
+  lacerta_models %>%
+  workflow_map("tune_grid",
+    resamples = lacerta_cv, grid = 3,
+    metrics = sdm_metric_set(), verbose = TRUE
+  )
 ```
 
 We see that one of the folds gives us an error when using GAMs. The error 
@@ -256,7 +286,7 @@ an idea of where this error comes from.
 We start by extracting the results of the gam fits:
 
 ```{r}
-gam_results <- extract_workflow_set_result(lacerta_models,id = "default_gam")
+gam_results <- extract_workflow_set_result(lacerta_models, id = "default_gam")
 gam_results
 ```
 
@@ -282,8 +312,8 @@ We can now extract the workflow and refit it to the split to confirm that we
 have isolated the problem:
 
 ```{r}
-gam_workflow <- extract_workflow(lacerta_models,id = "default_gam")
-faulty_gam <- fit(gam_workflow,training(problem_split))
+gam_workflow <- extract_workflow(lacerta_models, id = "default_gam")
+faulty_gam <- fit(gam_workflow, training(problem_split))
 ```
 
 The next step would be to dig deeper into the data, trying to understand whether

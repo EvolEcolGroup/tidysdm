@@ -12,19 +12,21 @@
 check_sdm_presence <- function(
     .data,
     .col,
-    presence_level="presence")
-  {
-  .col = rlang::enquo(.col) %>% rlang::quo_get_expr() %>% rlang::as_string()
-  presence_level = rlang::enquo(presence_level) %>% rlang::quo_get_expr() %>%
+    presence_level = "presence") {
+  .col <- rlang::enquo(.col) %>%
+    rlang::quo_get_expr() %>%
+    rlang::as_string()
+  presence_level <- rlang::enquo(presence_level) %>%
+    rlang::quo_get_expr() %>%
     rlang::as_string()
   x <- .data %>% dplyr::pull(.col)
-  if (!is.factor(x)){
+  if (!is.factor(x)) {
     stop(.col, " should be a factor")
   }
-  if (!presence_level %in% levels(x)){
-    stop("level ", presence_level," is not used in ",.col)
+  if (!presence_level %in% levels(x)) {
+    stop("level ", presence_level, " is not used in ", .col)
   }
-  if (presence_level!=levels(x)[1]){
+  if (presence_level != levels(x)[1]) {
     stop("level ", presence_level, " is not the first level in ", .col)
   }
   return(TRUE)

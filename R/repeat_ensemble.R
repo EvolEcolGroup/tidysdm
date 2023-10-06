@@ -23,32 +23,29 @@ repeat_ensemble <- function(...) {
     # tibble of metrics from the CV on the training dataset (coming from when
     # the workflow was originally fit, potentially as part of a workflow_set)
     metrics = list()
-    )
-  base_ensemble <- structure(base_ensemble, class = c("repeat_ensemble",
-                                                      class(base_ensemble)))
+  )
+  base_ensemble <- structure(base_ensemble, class = c(
+    "repeat_ensemble",
+    class(base_ensemble)
+  ))
 }
 
 #' @export
 print.repeat_ensemble <- function(x, ...) {
-
   rlang::inform("A repeat_ensemble of models")
 
-  if (nrow(x)>0) {
-    rlang::inform(c("\nNumber of repeats:",length(unique(x$rep_id))))
-    rlang::inform(c("\nMembers:",unique(x$wflow_id)))
+  if (nrow(x) > 0) {
+    rlang::inform(c("\nNumber of repeats:", length(unique(x$rep_id))))
+    rlang::inform(c("\nMembers:", unique(x$wflow_id)))
     # all simple_ensembles need to have the same metrics
-    rlang::inform(c("\nAvailable metrics:",attr(x,"metrics")))
-    rlang::inform(c("\nMetric used to tune workflows:",attr(x,"best_metric")))
+    rlang::inform(c("\nAvailable metrics:", attr(x, "metrics")))
+    rlang::inform(c("\nMetric used to tune workflows:", attr(x, "best_metric")))
   } else {
     rlang::inform("\nThis object is empty; add models with `add_repeats()`")
   }
-
 }
 
 #' @export
 summary.repeat_ensemble <- function(object, ...) {
-
   print(object)
-
 }
-

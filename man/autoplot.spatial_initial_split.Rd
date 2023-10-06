@@ -24,16 +24,18 @@ A ggplot object with each fold assigned a color, made using
 \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}}.
 }
 \description{
-This method provides a good visualization method for a spatial initial rsplit.
+This method provides a good visualization method for a spatial
+initial rsplit.
 }
 \details{
 This plot method is a wrapper around the standard \code{spatial_rsplit} method,
-but it re-labels the folds as \emph{Testing} and \emph{Training} following the convention
-for a standard \code{initial_split} object
+but it re-labels the folds as \emph{Testing} and \emph{Training} following the
+convention for a standard \code{initial_split} object
 }
 \examples{
 
 set.seed(123)
-block_initial <- spatial_initial_split(boston_canopy, prop = 1/5, spatial_block_cv)
+block_initial <- spatial_initial_split(boston_canopy, 
+                                       prop = 1 / 5, spatial_block_cv)
 autoplot(block_initial)
 }

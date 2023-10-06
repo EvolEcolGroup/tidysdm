@@ -18,23 +18,27 @@
 #' }
 #' @returns a [parsnip::model_spec] of the model.
 #' @examples
-#' test_rf_spec <- sdm_spec_rf(tune="sdm")
+#' test_rf_spec <- sdm_spec_rf(tune = "sdm")
 #' test_rf_spec
 #' # combining tuning with specific values for other hyperparameters
-#' sdm_spec_rf(tune="sdm", trees=100)
+#' sdm_spec_rf(tune = "sdm", trees = 100)
 #' @export
 
-sdm_spec_rand_forest <- function(..., tune=c("sdm","all","custom","none")){
- tune <- rlang::arg_match(tune)
-  if (tune=="sdm"){
-    base_spec <- parsnip::rand_forest(mtry = tune(),
-                                     ...)
-  } else if (tune=="all"){
-    base_spec <- parsnip::rand_forest(mtry = tune(),
-                                     min_n = tune(),
-                                     trees = tune(),
-                                     ...)
-  } else if ((tune=="custom") | (tune=="none")){
+sdm_spec_rand_forest <- function(..., tune = c("sdm", "all", "custom", "none")) {
+  tune <- rlang::arg_match(tune)
+  if (tune == "sdm") {
+    base_spec <- parsnip::rand_forest(
+      mtry = tune(),
+      ...
+    )
+  } else if (tune == "all") {
+    base_spec <- parsnip::rand_forest(
+      mtry = tune(),
+      min_n = tune(),
+      trees = tune(),
+      ...
+    )
+  } else if ((tune == "custom") | (tune == "none")) {
     base_spec <- parsnip::rand_forest(...)
   }
   base_spec %>%
@@ -45,6 +49,6 @@ sdm_spec_rand_forest <- function(..., tune=c("sdm","all","custom","none")){
 #' @rdname sdm_spec_rand_forest
 #' @export
 
-sdm_spec_rf <- function(..., tune=c("sdm","all","custom","none")){
+sdm_spec_rf <- function(..., tune = c("sdm", "all", "custom", "none")) {
   sdm_spec_rand_forest(..., tune = tune)
 }

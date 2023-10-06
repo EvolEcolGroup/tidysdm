@@ -17,20 +17,19 @@ can get those with:
 
 ```{r}
 rank_results(leopards_models, rank_metric = "roc_auc", select_best = TRUE)
-
 ```
 And plot them with:
 ```{r}
-autoplot(leopards_models, select_best=TRUE)
+autoplot(leopards_models, select_best = TRUE)
 ```
 
 We are now ready to finalize the workflow_set, choosing the metric that we want to use:
 ```{r}
 leopards_ensemble <- finalize_worflow_set(leopards_models, metric = "roc_auc")
 
-leopards_ensemble <- fit(leopards_ensemble, data=leopards_training)
+leopards_ensemble <- fit(leopards_ensemble, data = leopards_training)
 
-leopards_testing_preds <-predict(leopards_ensemble, new_data = leopards_testing, type="prob")
+leopards_testing_preds <- predict(leopards_ensemble, new_data = leopards_testing, type = "prob")
 
 # we want to add a last_fit option for ensemble objects
 ```

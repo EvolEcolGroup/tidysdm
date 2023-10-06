@@ -94,14 +94,19 @@ Credit goes to @jan-jlx for providing a complete implementation on StackOverflow
 Trang Q. Nguyen for adding the nudge parameter.
 }
 \examples{
-data("bradypus", package="maxnet")
-bradypus_tb <- tibble::as_tibble(bradypus) \%>\% dplyr::mutate(presence = relevel(factor(
-dplyr::case_match (presence, 1~"presence",0 ~"absence")),
-ref="presence"))
+data("bradypus", package = "maxnet")
+bradypus_tb <- tibble::as_tibble(bradypus) \%>\% dplyr::mutate(presence = relevel(
+  factor(
+    dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
+  ),
+  ref = "presence"
+))
 
-ggplot(bradypus_tb, aes(x = "",
-                        y= cld6190_ann,
-                        fill = presence)) +
-  geom_split_violin(nudge=0.01)
+ggplot(bradypus_tb, aes(
+  x = "",
+  y = cld6190_ann,
+  fill = presence
+)) +
+  geom_split_violin(nudge = 0.01)
 
 }

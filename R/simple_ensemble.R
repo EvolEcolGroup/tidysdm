@@ -29,17 +29,19 @@ simple_ensemble <- function(...) {
     metrics = list()
   )
 
-  base_ensemble <- structure(base_ensemble, class = c("simple_ensemble",
-                                                      class(base_ensemble)))
+  base_ensemble <- structure(base_ensemble, class = c(
+    "simple_ensemble",
+    class(base_ensemble)
+  ))
 }
 
 #' @export
 print.simple_ensemble <- function(x, ...) {
   rlang::inform("A simple_ensemble of models")
-  if (nrow(x)>0) {
-    rlang::inform(c("\nMembers:",x$wflow_id))
-    rlang::inform(c("\nAvailable metrics:",attr(x,"metrics")))
-    rlang::inform(c("\nMetric used to tune workflows:",attr(x,"best_metric")))
+  if (nrow(x) > 0) {
+    rlang::inform(c("\nMembers:", x$wflow_id))
+    rlang::inform(c("\nAvailable metrics:", attr(x, "metrics")))
+    rlang::inform(c("\nMetric used to tune workflows:", attr(x, "best_metric")))
   } else {
     rlang::inform("\nThis object is empty; add models with `add_members()`")
   }
@@ -49,4 +51,3 @@ print.simple_ensemble <- function(x, ...) {
 summary.simple_ensemble <- function(object, ...) {
   print(object)
 }
-

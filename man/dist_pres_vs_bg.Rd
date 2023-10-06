@@ -25,10 +25,15 @@ of the available background.
 }
 \examples{
 # This should be updated to use a dataset from tidysdm
-data("bradypus", package="maxnet")
-bradypus_tb <- tibble::as_tibble(bradypus) \%>\% dplyr::mutate(presence = relevel(factor(
-  dplyr::case_match (presence, 1~"presence",0 ~"absence")),
-  ref="presence")) \%>\% select(-ecoreg)
+data("bradypus", package = "maxnet")
+bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
+  dplyr::mutate(presence = relevel(
+    factor(
+      dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
+    ),
+    ref = "presence"
+  )) \%>\%
+  select(-ecoreg)
 
 bradypus_tb \%>\% dist_pres_vs_bg(presence)
 

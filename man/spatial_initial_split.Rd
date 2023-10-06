@@ -26,7 +26,7 @@ a random split from that strategy will be used to generate the initial split.
 }
 \examples{
 set.seed(123)
-block_initial <- spatial_initial_split(boston_canopy, prop = 1/5, spatial_block_cv)
+block_initial <- spatial_initial_split(boston_canopy, prop = 1 / 5, spatial_block_cv)
 testing(block_initial)
 training(block_initial)
 }

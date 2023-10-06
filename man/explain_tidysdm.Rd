@@ -118,7 +118,8 @@ by multiple function to create explanations of the model.
 # using the whole ensemble
 lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
 # by workflow
-explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, 
-  by_workflow = TRUE)
+explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
+  by_workflow = TRUE
+)
 
 }

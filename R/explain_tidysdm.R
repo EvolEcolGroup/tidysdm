@@ -12,24 +12,24 @@
 #' # using the whole ensemble
 #' lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
 #' # by workflow
-#' explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, 
-#'   by_workflow = TRUE)
-#' 
-
-explain_tidysdm <- function (model,
-                             data,
-                             y,
-                             predict_function,
-                             predict_function_target_column,
-                             residual_function,
-                             ...,
-                             label,
-                             verbose,
-                             precalculate,
-                             colorize,
-                             model_info,
-                             type,
-                             by_workflow) {
+#' explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
+#'   by_workflow = TRUE
+#' )
+#'
+explain_tidysdm <- function(model,
+                            data,
+                            y,
+                            predict_function,
+                            predict_function_target_column,
+                            residual_function,
+                            ...,
+                            label,
+                            verbose,
+                            precalculate,
+                            colorize,
+                            model_info,
+                            type,
+                            by_workflow) {
   UseMethod("explain_tidysdm", object = model)
 }
 
@@ -49,9 +49,7 @@ explain_tidysdm.default <- function(
     colorize = !isTRUE(getOption("knitr.in.progress")),
     model_info = NULL,
     type = "classification",
-    by_workflow = FALSE
-)
-{
+    by_workflow = FALSE) {
   stop("no method defined for this object type")
 }
 
@@ -71,9 +69,8 @@ explain_tidysdm.simple_ensemble <- function(
     colorize = !isTRUE(getOption("knitr.in.progress")),
     model_info = NULL,
     type = "classification",
-    by_workflow = FALSE
-) {
-  if (by_workflow){
+    by_workflow = FALSE) {
+  if (by_workflow) {
     explain_simple_ensemble_by_workflow(
       model = model,
       data = data,
@@ -87,24 +84,26 @@ explain_tidysdm.simple_ensemble <- function(
       precalculate = precalculate,
       colorize = colorize,
       model_info = model_info,
-      type = type)
-    } else {
-      explain_simple_ensemble(
-        model = model,
-        data = data,
-        y = y,
-        predict_function = predict_function,
-        predict_function_target_column = predict_function_target_column,
-        residual_function = residual_function,
-        weights = NULL,
-        label = label,
-        verbose = verbose,
-        precalculate = precalculate,
-        colorize = colorize,
-        model_info = model_info,
-        type = type)      
-    }
+      type = type
+    )
+  } else {
+    explain_simple_ensemble(
+      model = model,
+      data = data,
+      y = y,
+      predict_function = predict_function,
+      predict_function_target_column = predict_function_target_column,
+      residual_function = residual_function,
+      weights = NULL,
+      label = label,
+      verbose = verbose,
+      precalculate = precalculate,
+      colorize = colorize,
+      model_info = model_info,
+      type = type
+    )
   }
+}
 
 #' @rdname explain_tidysdm
 #' @export
@@ -122,12 +121,11 @@ explain_tidysdm.repeat_ensemble <- function(
     colorize = !isTRUE(getOption("knitr.in.progress")),
     model_info = NULL,
     type = "classification",
-    by_workflow = FALSE
-) {
+    by_workflow = FALSE) {
   # we change the names of the workflows to combine with the repeat ids
-  model$workflow_id <- paste(model$rep_id,model$wflow_id, sep=".")
+  model$workflow_id <- paste(model$rep_id, model$wflow_id, sep = ".")
   class(model)[1] <- "simple_ensemble"
-  explain_tidysdm (
+  explain_tidysdm(
     model = model,
     data = data,
     y = y,
@@ -141,7 +139,8 @@ explain_tidysdm.repeat_ensemble <- function(
     colorize = colorize,
     model_info = model_info,
     type = type,
-    by_workflow = by_workflow)
+    by_workflow = by_workflow
+  )
 }
 
 explain_simple_ensemble <- function(
@@ -157,25 +156,24 @@ explain_simple_ensemble <- function(
     precalculate = TRUE,
     colorize = !isTRUE(getOption("knitr.in.progress")),
     model_info = NULL,
-    type = "classification"
-) {
-  if (type!="classification"){
+    type = "classification") {
+  if (type != "classification") {
     stop("type has to be classification for a tidysdm ensemble")
   }
-  if (is.null(data)){
-    data = workflowsets::extract_mold(model$workflow[[1]])$predictors
+  if (is.null(data)) {
+    data <- workflowsets::extract_mold(model$workflow[[1]])$predictors
   }
-  if (is.null(y)){
+  if (is.null(y)) {
     # note that we need presences to be 1 and absences to be zero
-    y <- (as.numeric(workflowsets::extract_mold(model$workflow[[1]])$outcomes %>% dplyr::pull())-2)*-1
+    y <- (as.numeric(workflowsets::extract_mold(model$workflow[[1]])$outcomes %>% dplyr::pull()) - 2) * -1
   } else {
-    if (!is.factor(y)){
+    if (!is.factor(y)) {
       stop("y should be a factor with presences as reference levels")
     } else {
-      y <- (as.numeric(y)-2)*-1
+      y <- (as.numeric(y) - 2) * -1
     }
   }
-  if (is.null(predict_function)){
+  if (is.null(predict_function)) {
     predict_function <- function(model, newdata) {
       stats::predict(model, newdata)$mean
     }
@@ -202,14 +200,15 @@ explain_simple_ensemble <- function(
 #' @importFrom DALEX model_info
 #' @export
 #' @method model_info simple_ensemble
-model_info.simple_ensemble<- function(model, is_multiclass = FALSE, ...){
-  if (is_multiclass){
+model_info.simple_ensemble <- function(model, is_multiclass = FALSE, ...) {
+  if (is_multiclass) {
     stop("tidysdm simple_ensembles can not be multiclass")
   }
   package <- "tidysdm"
   type <- "classification"
-  ver <- try(as.character(utils::packageVersion(package)), 
-             silent = TRUE)
+  ver <- try(as.character(utils::packageVersion(package)),
+    silent = TRUE
+  )
   if (inherits(ver, "try-error")) {
     ver <- "Unknown"
   }
@@ -222,14 +221,15 @@ model_info.simple_ensemble<- function(model, is_multiclass = FALSE, ...){
 #' @importFrom DALEX model_info
 #' @export
 #' @method model_info repeat_ensemble
-model_info.repeat_ensemble<- function(model, is_multiclass = FALSE, ...){
-  if (is_multiclass){
+model_info.repeat_ensemble <- function(model, is_multiclass = FALSE, ...) {
+  if (is_multiclass) {
     stop("tidysdm repeat_ensembles can not be multiclass")
   }
   package <- "tidysdm"
   type <- "classification"
-  ver <- try(as.character(utils::packageVersion(package)), 
-             silent = TRUE)
+  ver <- try(as.character(utils::packageVersion(package)),
+    silent = TRUE
+  )
   if (inherits(ver, "try-error")) {
     ver <- "Unknown"
   }
@@ -252,29 +252,28 @@ explain_simple_ensemble_by_workflow <- function(
     precalculate = TRUE,
     colorize = !isTRUE(getOption("knitr.in.progress")),
     model_info = NULL,
-    type = "classification"
-) {
-  if (type!="classification"){
+    type = "classification") {
+  if (type != "classification") {
     stop("type has to be classification for a tidysdm ensemble")
   }
   explainer_list <- list()
-  for (i in 1:nrow(model)){
-    if (is.null(data)){
+  for (i in 1:nrow(model)) {
+    if (is.null(data)) {
       data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
     } else {
-      data_train = data
+      data_train <- data
     }
-    if (is.null(y)){
-      data_response <- as.numeric(workflowsets::extract_mold(model$workflow[[i]])$outcomes %>% dplyr::pull())-1
+    if (is.null(y)) {
+      data_response <- as.numeric(workflowsets::extract_mold(model$workflow[[i]])$outcomes %>% dplyr::pull()) - 1
     } else {
       data_response <- y
     }
-    
-    explainer_list[[i]] <- 
+
+    explainer_list[[i]] <-
       DALEXtra::explain_tidymodels(
-        model$workflow[[i]], 
-        data= data_train,
-        y=data_response,
+        model$workflow[[i]],
+        data = data_train,
+        y = data_response,
         predict_function = predict_function,
         predict_function_target_column = predict_function_target_column,
         residual_function = residual_function,
@@ -283,8 +282,8 @@ explain_simple_ensemble_by_workflow <- function(
         precalculate = precalculate,
         colorize = colorize,
         model_info = model_info,
-        type = "classification")
+        type = "classification"
+      )
   }
   return(explainer_list)
 }
-

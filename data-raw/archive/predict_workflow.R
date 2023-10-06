@@ -14,9 +14,11 @@
 #' @import workflows
 
 predict.workflow <- function(object, new_data, ...) {
-  if (inherits(new_data, "sf")){
-    new_data<-new_data %>% dplyr::as_tibble() %>% dplyr::select(-geometry)
+  if (inherits(new_data, "sf")) {
+    new_data <- new_data %>%
+      dplyr::as_tibble() %>%
+      dplyr::select(-geometry)
   }
   browser()
-  workflows:::predict.workflow(object, new_data=new_data, ...)
+  workflows:::predict.workflow(object, new_data = new_data, ...)
 }

@@ -28,8 +28,8 @@ be used as a classifier of presences and absences in Species Distribution
 Models.
 }
 \examples{
-test_maxent_spec <- sdm_spec_maxent(tune="sdm")
+test_maxent_spec <- sdm_spec_maxent(tune = "sdm")
 test_maxent_spec
 # setting specific values
-sdm_spec_maxent(tune="custom", feature_classes="lq")
+sdm_spec_maxent(tune = "custom", feature_classes = "lq")
 }

@@ -1,7 +1,7 @@
 #' Plot the results of a simple ensemble
 #'
-#' This `autoplot()` method plots performance metrics that have been ranked using
-#' a metric.
+#' This `autoplot()` method plots performance metrics that have been
+#'  ranked using a metric.
 #'
 #' @param object A [`simple_ensemble`] whose elements have results.
 #' @param rank_metric A character string for which metric should be used to rank
@@ -15,7 +15,8 @@
 #' @details
 #' This function is intended to produce a default plot to visualize helpful
 #'  information across all possible applications of a [`simple_ensemble`]. More
-#'  sophisticated plots can be produced using standard `ggplot2` code for plotting.
+#'  sophisticated plots can be produced using standard `ggplot2` code for
+#'  plotting.
 #'
 #' The x-axis is the workflow rank in the set (a value of one being the best)
 #' versus the performance metric(s) on the y-axis. With multiple metrics, there
@@ -27,23 +28,23 @@
 #' (95% confidence, by default).
 #' @returns A ggplot object.
 #' @examples
-#'   # we use the two_class_example from `workflowsets`
-#'   two_class_ens <- simple_ensemble() %>%
-#'     add_member(two_class_res, metric = "roc_auc")
-#'   autoplot(two_class_ens)
+#' # we use the two_class_example from `workflowsets`
+#' two_class_ens <- simple_ensemble() %>%
+#'   add_member(two_class_res, metric = "roc_auc")
+#' autoplot(two_class_ens)
 #'
 #' @export
 autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
-                                  std_errs = stats::qnorm(0.95), ...) {
+                                     std_errs = stats::qnorm(0.95), ...) {
   # get metrics table
   res <- object$metrics %>% dplyr::bind_rows()
   # vector of available metrics
-  metric_avail <- attr(object,"metrics")
+  metric_avail <- attr(object, "metrics")
   # if we requested metrics, make sure they are all available
   if (!is.null(metric)) {
     # all necessary metrics (rank_metric plus all in metric)
     keep_metrics <- unique(c(rank_metric, metric))
-    if (!all(keep_metrics %in% metric_avail)){
+    if (!all(keep_metrics %in% metric_avail)) {
       stop("some metrics are not part of the ensemble")
     }
     res <- dplyr::filter(res, .data$.metric %in% keep_metrics)
@@ -54,35 +55,44 @@ autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
   # check we have the rank_metric, or, if we were not given one, take the
   # metric that was to choose models in the workflows when simple_ensemble was
   # created
-  if (!is.null(rank_metric)){
-    if (!rank_metric %in% metric_avail){
+  if (!is.null(rank_metric)) {
+    if (!rank_metric %in% metric_avail) {
       stop("rank metric ", rank_metric, " is not part of the ensemble")
     }
   } else {
-    rank_metric <- attr(object,"best_metric")
+    rank_metric <- attr(object, "best_metric")
   }
   # rank models by the metric of choice
   res_rank_metric <- res %>%
-    dplyr::filter(.data$.metric==rank_metric)  %>%
+    dplyr::filter(.data$.metric == rank_metric) %>%
     dplyr::arrange(mean)
 
-  res$rank <- (1:nrow(res_rank_metric))[match(res$wflow_id,  res_rank_metric$wflow_id)]
+  res$rank <- (1:nrow(res_rank_metric))[match(
+    res$wflow_id,
+    res_rank_metric$wflow_id
+  )]
 
   # relevel the .metric factor to show first the rank metric
-  res <- res %>% dplyr::mutate (.metric=stats::relevel(factor(res$.metric),ref=rank_metric))
+  res <- res %>%
+    dplyr::mutate(.metric = stats::relevel(factor(res$.metric),
+      ref = rank_metric
+    ))
 
   num_metrics <- length(unique(res$.metric))
   has_std_error <- !all(is.na(res$std_err))
 
   p <-
-    ggplot2::ggplot(res, ggplot2::aes(x = .data$rank, y = .data$mean, col = .data$wflow_id)) +
+    ggplot2::ggplot(res, ggplot2::aes(
+      x = .data$rank,
+      y = .data$mean,
+      col = .data$wflow_id
+    )) +
     ggplot2::geom_point(ggplot2::aes(shape = .data$wflow_id))
 
   if (num_metrics > 1) {
-    #res$.metric <- factor(as.character(res$.metric)) #, levels = metrics$metric)
     p <-
       p +
-      ggplot2::facet_wrap(~.data$.metric, scales = "free_y", as.table = FALSE) +
+      ggplot2::facet_wrap(~ .data$.metric, scales = "free_y", as.table = FALSE) +
       ggplot2::labs(x = "Workflow Rank", y = "Metric")
   } else {
     p <- p + ggplot2::labs(x = "Workflow Rank", y = unique(res$.metric))
@@ -93,10 +103,10 @@ autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
       p +
       ggplot2::geom_errorbar(
         ggplot2::aes(
-          ymin = .data$mean - .data$std_err *std_errs,
+          ymin = .data$mean - .data$std_err * std_errs,
           ymax = .data$mean + .data$std_err * std_errs
         ),
-       width = diff(range(res$rank)) / 75
+        width = diff(range(res$rank)) / 75
       )
   }
 
