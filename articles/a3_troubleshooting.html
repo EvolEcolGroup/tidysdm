@@ -119,11 +119,17 @@ NA:</p>
 <span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Dig deeper into tidy modeling with R at <span style="color: #00BB00;">https://www.tmwr.org</span></span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span>
 <span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_sf.RDS"</span>,</span>
-<span>                               package<span class="op">=</span><span class="st">"tidysdm"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">lacerta_thin</span><span class="op">$</span><span class="va">bio05</span><span class="op">[</span><span class="fl">37</span><span class="op">]</span><span class="op">&lt;-</span><span class="cn">NA</span></span></code></pre></div>
+<span>  package <span class="op">=</span> <span class="st">"tidysdm"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">lacerta_thin</span><span class="op">$</span><span class="va">bio05</span><span class="op">[</span><span class="fl">37</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
 <p>Let us set up a recipe and fit workflow_set</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lacerta_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula<span class="op">=</span><span class="va">class</span><span class="op">~</span><span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">step_rm</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bio01"</span>, <span class="st">"bio02"</span>, <span class="st">"bio03"</span>, <span class="st">"bio04"</span>, <span class="st">"bio07"</span>, <span class="st">"bio08"</span>, <span class="st">"bio09"</span>, <span class="st">"bio10"</span>, <span class="st">"bio11"</span>, <span class="st">"bio12"</span>, <span class="st">"bio14"</span>, <span class="st">"bio16"</span>, <span class="st">"bio17"</span>, <span class="st">"bio18"</span>, <span class="st">"bio19"</span>, <span class="st">"altitude"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">lacerta_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula <span class="op">=</span> <span class="va">class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"bio01"</span>, <span class="st">"bio02"</span>, <span class="st">"bio03"</span>, <span class="st">"bio04"</span>, <span class="st">"bio07"</span>, <span class="st">"bio08"</span>,</span>
+<span>    <span class="st">"bio09"</span>, <span class="st">"bio10"</span>, <span class="st">"bio11"</span>, <span class="st">"bio12"</span>, <span class="st">"bio14"</span>, <span class="st">"bio16"</span>,</span>
+<span>    <span class="st">"bio17"</span>, <span class="st">"bio18"</span>, <span class="st">"bio19"</span>, <span class="st">"altitude"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
 <span>  <span class="co"># create the workflow_set</span></span>
@@ -143,18 +149,20 @@ NA:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">lacerta_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">lacerta_thin</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="va">lacerta_models</span> <span class="op">&lt;-</span> </span>
-<span>   <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>   <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>, resamples <span class="op">=</span> <span class="va">lacerta_cv</span>, grid <span class="op">=</span> <span class="fl">3</span>, </span>
-<span>                metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>,</span>
+<span>    resamples <span class="op">=</span> <span class="va">lacerta_cv</span>, grid <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>    metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (590ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (570ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
 <span><span class="co">#&gt; → <span style="color: #BB0000; font-weight: bold;">A</span> | <span style="color: #BB0000;">error</span>:   Missing data in columns: bio05.</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x1</span></span>
-<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x10</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x11</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x15</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
@@ -208,9 +216,11 @@ is less than clear:</p>
 <code>step_select</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_sf.RDS"</span>,</span>
-<span>                               package<span class="op">=</span><span class="st">"tidysdm"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">suggested_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bio05"</span>,<span class="st">"bio06"</span>, <span class="st">"bio13"</span>, <span class="st">"bio14"</span>, <span class="st">"bio15"</span><span class="op">)</span></span>
-<span><span class="va">lacerta_rec_sel</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula<span class="op">=</span><span class="va">class</span><span class="op">~</span><span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">step_select</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span> <span class="va">suggested_vars</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  package <span class="op">=</span> <span class="st">"tidysdm"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">suggested_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bio05"</span>, <span class="st">"bio06"</span>, <span class="st">"bio13"</span>, <span class="st">"bio14"</span>, <span class="st">"bio15"</span><span class="op">)</span></span>
+<span><span class="va">lacerta_rec_sel</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula <span class="op">=</span> <span class="va">class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">step_select</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="va">suggested_vars</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Now we create the workflow set and fit it:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
@@ -231,10 +241,12 @@ is less than clear:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">lacerta_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">lacerta_thin</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="va">lacerta_models</span> <span class="op">&lt;-</span> </span>
-<span>   <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>   <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>, resamples <span class="op">=</span> <span class="va">lacerta_cv</span>, grid <span class="op">=</span> <span class="fl">3</span>, </span>
-<span>                metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>,</span>
+<span>    resamples <span class="op">=</span> <span class="va">lacerta_cv</span>, grid <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>    metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
 <span><span class="co">#&gt; → <span style="color: #BB0000; font-weight: bold;">A</span> | <span style="color: #BB0000;">error</span>:   object '.' not found</span></span>
@@ -245,9 +257,6 @@ is less than clear:</p>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
 <span><span class="co">#&gt; → <span style="color: #BB0000; font-weight: bold;">A</span> | <span style="color: #BB0000;">error</span>:   subscript out of bounds</span></span>
-<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x15</span></span>
-<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x15</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.</span></span>
 <span><span class="co">#&gt; Unknown or uninitialised column: `.notes`.</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #000000;">2 of 2 tuning:     default_rf failed with </span></span></span></code></pre></div>
@@ -293,9 +302,15 @@ some functions to simplify this process, assuming that the user just
 wants to fit a standard smooth to every continuous predictor.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_sf.RDS"</span>,</span>
-<span>                               package<span class="op">=</span><span class="st">"tidysdm"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  package <span class="op">=</span> <span class="st">"tidysdm"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lacerta_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula<span class="op">=</span><span class="va">class</span><span class="op">~</span><span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">step_rm</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bio01"</span>, <span class="st">"bio02"</span>, <span class="st">"bio03"</span>, <span class="st">"bio04"</span>, <span class="st">"bio07"</span>, <span class="st">"bio08"</span>, <span class="st">"bio09"</span>, <span class="st">"bio10"</span>, <span class="st">"bio11"</span>, <span class="st">"bio12"</span>, <span class="st">"bio14"</span>, <span class="st">"bio16"</span>, <span class="st">"bio17"</span>, <span class="st">"bio18"</span>, <span class="st">"bio19"</span>, <span class="st">"altitude"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">lacerta_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula <span class="op">=</span> <span class="va">class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"bio01"</span>, <span class="st">"bio02"</span>, <span class="st">"bio03"</span>, <span class="st">"bio04"</span>, <span class="st">"bio07"</span>, <span class="st">"bio08"</span>,</span>
+<span>    <span class="st">"bio09"</span>, <span class="st">"bio10"</span>, <span class="st">"bio11"</span>, <span class="st">"bio12"</span>, <span class="st">"bio14"</span>, <span class="st">"bio16"</span>,</span>
+<span>    <span class="st">"bio17"</span>, <span class="st">"bio18"</span>, <span class="st">"bio19"</span>, <span class="st">"altitude"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
 <span>  <span class="co"># create the workflow_set</span></span>
@@ -312,20 +327,23 @@ wants to fit a standard smooth to every continuous predictor.</p>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># set formula for gams</span></span>
 <span>  <span class="fu">update_workflow_model</span><span class="op">(</span><span class="st">"default_gam"</span>,</span>
-<span>                        spec <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_gam.html">sdm_spec_gam</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                        formula <span class="op">=</span> <span class="fu"><a href="../reference/gam_formula.html">gam_formula</a></span><span class="op">(</span><span class="va">lacerta_rec</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    spec <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_gam.html">sdm_spec_gam</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    formula <span class="op">=</span> <span class="fu"><a href="../reference/gam_formula.html">gam_formula</a></span><span class="op">(</span><span class="va">lacerta_rec</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># tweak controls to store information needed later to create the ensemble</span></span>
 <span>  <span class="fu">option_add</span><span class="op">(</span>control <span class="op">=</span> <span class="fu"><a href="../reference/control_ensemble.html">control_ensemble_grid</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">lacerta_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">lacerta_thin</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="va">lacerta_models</span> <span class="op">&lt;-</span> </span>
-<span>   <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>   <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>, resamples <span class="op">=</span> <span class="va">lacerta_cv</span>, grid <span class="op">=</span> <span class="fl">3</span>, </span>
-<span>                metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>,</span>
+<span>    resamples <span class="op">=</span> <span class="va">lacerta_cv</span>, grid <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>    metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (529ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (511ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 resampling: default_gam</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 resampling: default_gam (1.6s)</span></span></span></code></pre></div>
@@ -353,14 +371,20 @@ workflow, and potentially investigate fitting it to the specific
 dataset:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_sf.RDS"</span>,</span>
-<span>                               package<span class="op">=</span><span class="st">"tidysdm"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  package <span class="op">=</span> <span class="st">"tidysdm"</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span>,<span class="op">]</span></span>
+<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span>
+<span>  <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span></span>
+<span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>
-<span><span class="va">lacerta_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula<span class="op">=</span><span class="va">class</span><span class="op">~</span><span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bio01"</span>, <span class="st">"bio02"</span>, <span class="st">"bio03"</span>, <span class="st">"bio04"</span>, <span class="st">"bio07"</span>, <span class="st">"bio08"</span>, </span>
-<span>                    <span class="st">"bio09"</span>, <span class="st">"bio10"</span>, <span class="st">"bio11"</span>, <span class="st">"bio12"</span>, <span class="st">"bio14"</span>, <span class="st">"bio16"</span>, </span>
-<span>                    <span class="st">"bio17"</span>, <span class="st">"bio18"</span>, <span class="st">"bio19"</span>, <span class="st">"altitude"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">lacerta_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula <span class="op">=</span> <span class="va">class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"bio01"</span>, <span class="st">"bio02"</span>, <span class="st">"bio03"</span>, <span class="st">"bio04"</span>, <span class="st">"bio07"</span>, <span class="st">"bio08"</span>,</span>
+<span>    <span class="st">"bio09"</span>, <span class="st">"bio10"</span>, <span class="st">"bio11"</span>, <span class="st">"bio12"</span>, <span class="st">"bio14"</span>, <span class="st">"bio16"</span>,</span>
+<span>    <span class="st">"bio17"</span>, <span class="st">"bio18"</span>, <span class="st">"bio19"</span>, <span class="st">"altitude"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
 <span>  <span class="co"># create the workflow_set</span></span>
@@ -379,31 +403,34 @@ dataset:</p>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># set formula for gams</span></span>
 <span>  <span class="fu">update_workflow_model</span><span class="op">(</span><span class="st">"default_gam"</span>,</span>
-<span>                        spec <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_gam.html">sdm_spec_gam</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                        formula <span class="op">=</span> <span class="fu"><a href="../reference/gam_formula.html">gam_formula</a></span><span class="op">(</span><span class="va">lacerta_rec</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    spec <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_gam.html">sdm_spec_gam</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    formula <span class="op">=</span> <span class="fu"><a href="../reference/gam_formula.html">gam_formula</a></span><span class="op">(</span><span class="va">lacerta_rec</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># tweak controls to store information needed later to create the ensemble</span></span>
 <span>  <span class="fu">option_add</span><span class="op">(</span>control <span class="op">=</span> <span class="fu"><a href="../reference/control_ensemble.html">control_ensemble_grid</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We then create 3 folds and attempt to fit the models:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">lacerta_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">lacerta_thin</span>, v <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="va">lacerta_models</span> <span class="op">&lt;-</span> </span>
-<span>   <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>   <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>, resamples <span class="op">=</span> <span class="va">lacerta_cv</span>, grid <span class="op">=</span> <span class="fl">3</span>, </span>
-<span>                metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>,</span>
+<span>    resamples <span class="op">=</span> <span class="va">lacerta_cv</span>, grid <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>    metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 3 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: default_glm (353ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: default_glm (348ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 3 resampling: default_gam</span></span></span>
 <span><span class="co">#&gt; → <span style="color: #BBBB00; font-weight: bold;">A</span> | <span style="color: #BBBB00;">warning</span>: Fitting terminated with step failure - check results carefully</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x1</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 resampling: default_gam (1.7s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 resampling: default_gam (1.8s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 3 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     default_rf (814ms)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     default_rf (798ms)</span></span></span></code></pre></div>
 <p>We see that one of the folds gives us an error when using GAMs. The
 error (“Fitting terminated with step failure - check results carefully”)
 comes from the gam function in the package <code>mgcv</code>. A quick
@@ -411,7 +438,7 @@ google on StackOverflow[<a href="https://stats.stackexchange.com/questions/57627
 gives us an idea of where this error comes from.</p>
 <p>We start by extracting the results of the gam fits:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gam_results</span> <span class="op">&lt;-</span> <span class="fu">extract_workflow_set_result</span><span class="op">(</span><span class="va">lacerta_models</span>,id <span class="op">=</span> <span class="st">"default_gam"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">gam_results</span> <span class="op">&lt;-</span> <span class="fu">extract_workflow_set_result</span><span class="op">(</span><span class="va">lacerta_models</span>, id <span class="op">=</span> <span class="st">"default_gam"</span><span class="op">)</span></span>
 <span><span class="va">gam_results</span></span>
 <span><span class="co">#&gt; # Resampling results</span></span>
 <span><span class="co">#&gt; # 3-fold spatial block cross-validation </span></span>
@@ -490,8 +517,8 @@ split; too few presences will generally lead to errors).</p>
 <p>We can now extract the workflow and refit it to the split to confirm
 that we have isolated the problem:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gam_workflow</span> <span class="op">&lt;-</span> <span class="fu">extract_workflow</span><span class="op">(</span><span class="va">lacerta_models</span>,id <span class="op">=</span> <span class="st">"default_gam"</span><span class="op">)</span></span>
-<span><span class="va">faulty_gam</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">gam_workflow</span>,<span class="fu">training</span><span class="op">(</span><span class="va">problem_split</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">gam_workflow</span> <span class="op">&lt;-</span> <span class="fu">extract_workflow</span><span class="op">(</span><span class="va">lacerta_models</span>, id <span class="op">=</span> <span class="st">"default_gam"</span><span class="op">)</span></span>
+<span><span class="va">faulty_gam</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">gam_workflow</span>, <span class="fu">training</span><span class="op">(</span><span class="va">problem_split</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,</span></span>
 <span><span class="co">#&gt; : Fitting terminated with step failure - check results carefully</span></span></code></pre></div>
 <p>The next step would be to dig deeper into the data, trying to

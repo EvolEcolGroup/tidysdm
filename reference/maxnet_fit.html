@@ -75,7 +75,7 @@ as well exposing parameters for normalisation in a manner compatible with
 <span>  regmult <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  classes <span class="op">=</span> <span class="st">"default"</span>,</span>
 <span>  regfun <span class="op">=</span> <span class="fu">maxnet</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/maxnet/man/maxnet.html" class="external-link">maxnet.default.regularization</a></span>,</span>
-<span>  addsamplestobackground <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>  addsamplestobackground <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -121,7 +121,8 @@ consisting of a glmnet model with the following elements added:</p><dl><dt>betas
 <dd><p>nonzero coefficients of the fitted model</p></dd>
 
 <dt>alpha</dt>
-<dd><p>constant offset making the exponential model sum to one over the background data</p></dd>
+<dd><p>constant offset making the exponential model sum to one
+over the background data</p></dd>
 
 <dt>entropy</dt>
 <dd><p>entropy of the exponential model</p></dd>
@@ -152,7 +153,8 @@ consisting of a glmnet model with the following elements added:</p><dl><dt>betas
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The response needs to be a factor with the class representing presences
-as the reference level of the factor (as expected by other classification models).
+as the reference level of the factor (as expected by other
+classification models).
 A good guide to how options of a Maxent model work can be found in
 https://onlinelibrary.wiley.com/doi/full/10.1111/j.1600-0587.2013.07872.x</p>
     </div>
@@ -160,13 +162,17 @@ https://onlinelibrary.wiley.com/doi/full/10.1111/j.1600-0587.2013.07872.x</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="co"># we repeat the example in the `maxnet` package</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bradypus"</span>, package<span class="op">=</span><span class="st">"maxnet"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">bradypus_tb</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">bradypus</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>presence <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/relevel.html" class="external-link">relevel</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_match.html" class="external-link">case_match</a></span> <span class="op">(</span><span class="va">presence</span>, <span class="fl">1</span><span class="op">~</span><span class="st">"presence"</span>,<span class="fl">0</span> <span class="op">~</span><span class="st">"absence"</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    ref<span class="op">=</span><span class="st">"presence"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">mod3</span> <span class="op">&lt;-</span> <span class="fu">maxnet_fit</span><span class="op">(</span><span class="va">presence</span><span class="op">~</span><span class="va">.</span>,data<span class="op">=</span><span class="va">bradypus_tb</span>, classes<span class="op">=</span><span class="st">"lq"</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"tmp6190_ann"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># we repeat the example in the `maxnet` package</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bradypus"</span>, package <span class="op">=</span> <span class="st">"maxnet"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bradypus_tb</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">bradypus</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>presence <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/relevel.html" class="external-link">relevel</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_match.html" class="external-link">case_match</a></span><span class="op">(</span><span class="va">presence</span>, <span class="fl">1</span> <span class="op">~</span> <span class="st">"presence"</span>, <span class="fl">0</span> <span class="op">~</span> <span class="st">"absence"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    ref <span class="op">=</span> <span class="st">"presence"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mod3</span> <span class="op">&lt;-</span> <span class="fu">maxnet_fit</span><span class="op">(</span><span class="va">presence</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">bradypus_tb</span>, classes <span class="op">=</span> <span class="st">"lq"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mod</span>, <span class="st">"tmp6190_ann"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
