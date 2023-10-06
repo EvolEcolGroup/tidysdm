@@ -97,8 +97,9 @@ iberia_poly <- terra::vect("POLYGON((-9.8 43.3,-7.8 44.1,-2.0 43.7,3.6 42.5,3.8 
 
 crs(iberia_poly) <- "lonlat"
 gdal(warn = 3)
-land_mask <- rast(system.file("extdata/lacerta_land_mask.nc", 
-                              package = "tidysdm"))
+land_mask <- rast(system.file("extdata/lacerta_land_mask.nc",
+  package = "tidysdm"
+))
 ```
 
 For
@@ -172,7 +173,8 @@ climate_vars <- get_vars_for_dataset("WorldClim_2.1_10m")
 ```{r echo=FALSE, results='hide'}
 gdal(warn = 3)
 climate_present <- rast(system.file("extdata/lacerta_climate_present_10m.nc",
-                                    package = "tidysdm"))
+  package = "tidysdm"
+))
 climate_vars <- names(climate_present)
 ```
 

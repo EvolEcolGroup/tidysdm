@@ -105,7 +105,7 @@ sample_pseudoabs <- function(data, raster, n, coords = NULL,
   if (length(cell_id) > n) {
     cell_id <- sample(x = cell_id, size = n)
   } else {
-    warning("There are fewer available cells for raster '", terra::time(sampling_raster),"' (",nrow(xy_pres)," presences) than the requested ", n, " pseudoabsences. Only ", length(cell_id), " will be returned.\n")
+    warning("There are fewer available cells for raster '", terra::time(sampling_raster), "' (", nrow(xy_pres), " presences) than the requested ", n, " pseudoabsences. Only ", length(cell_id), " will be returned.\n")
   }
   pseudoabsences <- as.data.frame(terra::xyFromCell(sampling_raster, cell_id))
   # fix the coordinate names to be the same we started with

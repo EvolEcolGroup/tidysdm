@@ -34,9 +34,11 @@ lacerta_thin$bio05[37] <- NA
 Let us set up a recipe and fit workflow_set
 ```{r}
 lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
-  step_rm(all_of(c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08",
-                   "bio09", "bio10", "bio11", "bio12", "bio14", "bio16",
-                   "bio17", "bio18", "bio19", "altitude")))
+  step_rm(all_of(c(
+    "bio01", "bio02", "bio03", "bio04", "bio07", "bio08",
+    "bio09", "bio10", "bio11", "bio12", "bio14", "bio16",
+    "bio17", "bio18", "bio19", "altitude"
+  )))
 
 lacerta_models <-
   # create the workflow_set
@@ -164,9 +166,11 @@ lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
 ))
 
 lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
-  step_rm(all_of(c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08",
-                   "bio09", "bio10", "bio11", "bio12", "bio14", "bio16",
-                   "bio17", "bio18", "bio19", "altitude")))
+  step_rm(all_of(c(
+    "bio01", "bio02", "bio03", "bio04", "bio07", "bio08",
+    "bio09", "bio10", "bio11", "bio12", "bio14", "bio16",
+    "bio17", "bio18", "bio19", "altitude"
+  )))
 
 lacerta_models <-
   # create the workflow_set
@@ -225,8 +229,10 @@ lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
   package = "tidysdm"
 ))
 set.seed(123)
-lacerta_thin <- lacerta_thin[sample(1:nrow(lacerta_thin), 
-                                    nrow(lacerta_thin) / 5), ]
+lacerta_thin <- lacerta_thin[sample(
+  1:nrow(lacerta_thin),
+  nrow(lacerta_thin) / 5
+), ]
 
 lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
   step_rm(all_of(c(

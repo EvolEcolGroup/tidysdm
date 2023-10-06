@@ -67,21 +67,26 @@ autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
     dplyr::filter(.data$.metric == rank_metric) %>%
     dplyr::arrange(mean)
 
-  res$rank <- (1:nrow(res_rank_metric))[match(res$wflow_id, 
-                                              res_rank_metric$wflow_id)]
+  res$rank <- (1:nrow(res_rank_metric))[match(
+    res$wflow_id,
+    res_rank_metric$wflow_id
+  )]
 
   # relevel the .metric factor to show first the rank metric
-  res <- res %>% 
+  res <- res %>%
     dplyr::mutate(.metric = stats::relevel(factor(res$.metric),
-                                           ref = rank_metric))
+      ref = rank_metric
+    ))
 
   num_metrics <- length(unique(res$.metric))
   has_std_error <- !all(is.na(res$std_err))
 
   p <-
-    ggplot2::ggplot(res, ggplot2::aes(x = .data$rank,
-                                      y = .data$mean,
-                                      col = .data$wflow_id)) +
+    ggplot2::ggplot(res, ggplot2::aes(
+      x = .data$rank,
+      y = .data$mean,
+      col = .data$wflow_id
+    )) +
     ggplot2::geom_point(ggplot2::aes(shape = .data$wflow_id))
 
   if (num_metrics > 1) {

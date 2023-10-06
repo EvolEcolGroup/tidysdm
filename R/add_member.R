@@ -31,8 +31,10 @@ add_member.default <- function(x, member, ...) {
 add_member.tune_results <- function(x, member, metric = NULL, id = NULL, ...) {
   # set the metric if the simple ensemble is empty (and thus has no metric)
   if (is.null(attr(x, "best_metric"))) {
-    attr(x, "best_metric") <- utils::getFromNamespace("choose_metric",
-                                                      "tune")(metric, member)
+    attr(x, "best_metric") <- utils::getFromNamespace(
+      "choose_metric",
+      "tune"
+    )(metric, member)
   }
 
   # if metric is NULL

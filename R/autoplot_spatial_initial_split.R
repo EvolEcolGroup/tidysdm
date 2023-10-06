@@ -23,8 +23,9 @@
 #' @examples
 #'
 #' set.seed(123)
-#' block_initial <- spatial_initial_split(boston_canopy, 
-#'                                        prop = 1 / 5, spatial_block_cv)
+#' block_initial <- spatial_initial_split(boston_canopy,
+#'   prop = 1 / 5, spatial_block_cv
+#' )
 #' autoplot(block_initial)
 #' @importFrom ggplot2 autoplot
 #' @export
