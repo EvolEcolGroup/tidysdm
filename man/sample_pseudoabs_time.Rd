@@ -21,7 +21,7 @@ sample_pseudoabs_time(
 These can be defined in \code{coords}, unless they have standard names
 (see details below).}
 
-\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} from which cells will be sampled}
+\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} or \link[terra:SpatRaster-class]{terra::SpatRasterDataset} from which cells will be sampled}
 
 \item{n_per_presence}{number of pseudoabsence/background points to sample for
 each presence}
