@@ -98,7 +98,7 @@ the translation of formulae in recipe. This method strips the <code>geometry</co
 column from the <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> and replaces it with a simple <code>X</code> and <code>Y</code> columns
 before any further operations, thus allowing
 the usual processing by <code>recipe()</code> to succeed (<code>X</code> and <code>Y</code> are give the role
-of coords ina spatial recipe). When prepping and baking a <code>spatial_recipe</code>,
+of coords in a spatial recipe). When prepping and baking a <code>spatial_recipe</code>,
 if a data.frame or tibble without coordinates is used as <code>training</code> or
 <code>new_data</code>, dummy <code>X</code> and <code>Y</code> columns
 are generated and filled with NAs.
