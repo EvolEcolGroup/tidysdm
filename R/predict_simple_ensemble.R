@@ -57,18 +57,17 @@ predict.simple_ensemble <-
 
       # check that we have an entry for this calibration
       ref_calib_tb <- attr(object, "class_thresholds")
-      # browser()
+      # give up immediately if ref_calib_tb is null
       if (is.null(ref_calib_tb)) {
         stop(
           "this model needs to be first calibrated before classes can be produced\n",
-          paste("use 'calib_class_thresh' first")
+          "use 'calib_class_thresh()' first"
         )
-        # the next check fails if ref_calib_tb is null
       } else if (!any(unlist(lapply(ref_calib_tb %>% dplyr::pull("metric_thresh"), identical, metric_thresh)) &
         unlist(lapply(ref_calib_tb %>% dplyr::pull("class_thresh"), identical, class_thresh)))) {
         stop(
           "this model needs to be first calibrated before classes can be produced\n",
-          paste("use 'calib_class_thresh' first")
+          "use 'calib_class_thresh()' first"
         )
       }
 
@@ -87,7 +86,7 @@ predict.simple_ensemble <-
       TRUE # boolean determining whether we have an aggregating function
     if (inherits(fun, "character")) {
       # check that we have valid values
-      if (!(((length(fun) == 1 & fun[1] == "none")) |
+      if (!(((length(fun) == 1 && fun[1] == "none")) |
         all(fun %in% c("mean", "median", "weighted_mean", "weighted_median")))) {
         stop("fun should be either 'none', or a combination of 'mean', 'median', 'weighted_mean', and 'weighted_median'")
       }

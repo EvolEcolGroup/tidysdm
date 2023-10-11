@@ -37,6 +37,9 @@ vignette and runs the tests.:
 devtools::check()
 ```
 
+Make sure that you have resolved all warnings and notes raised by
+`devtools::check()`!
+
 Once you have followed **those 3 steps**, you are ready to make your Pull Request.
 Your changes will go through automatic continuous integration, which will check
 the impact of those changes on multiple platforms. If everything goes well, you

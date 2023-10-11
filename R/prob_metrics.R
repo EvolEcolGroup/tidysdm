@@ -8,13 +8,13 @@
 #' @returns A tibble with columns `.metric`, `.estimator`, and `.estimate`
 #'  and 1 row of values.
 #' @import yardstick
-#' @name prob_metrics
+#' @name prob_metrics_sf
 #'
 NULL
 
 #' @description [yardstick::average_precision()]
 #' @export
-#' @rdname prob_metrics
+#' @rdname prob_metrics_sf
 average_precision.sf <- function(data, ...) {
   data %>%
     dplyr::as_tibble() %>%
@@ -23,7 +23,7 @@ average_precision.sf <- function(data, ...) {
 
 #' @description [yardstick::brier_class()]
 #' @export
-#' @rdname prob_metrics
+#' @rdname prob_metrics_sf
 brier_class.sf <- function(data, ...) {
   data %>%
     dplyr::as_tibble() %>%
@@ -32,7 +32,7 @@ brier_class.sf <- function(data, ...) {
 
 #' @description [yardstick::classification_cost()]
 #' @export
-#' @rdname prob_metrics
+#' @rdname prob_metrics_sf
 classification_cost.sf <- function(data, ...) {
   data %>%
     dplyr::as_tibble() %>%
@@ -41,7 +41,7 @@ classification_cost.sf <- function(data, ...) {
 
 #' @description [yardstick::gain_capture()]
 #' @export
-#' @rdname prob_metrics
+#' @rdname prob_metrics_sf
 gain_capture.sf <- function(data, ...) {
   data %>%
     dplyr::as_tibble() %>%
@@ -50,7 +50,7 @@ gain_capture.sf <- function(data, ...) {
 
 #' @description [yardstick::mn_log_loss()]
 #' @export
-#' @rdname prob_metrics
+#' @rdname prob_metrics_sf
 mn_log_loss.sf <- function(data, ...) {
   data %>%
     dplyr::as_tibble() %>%
@@ -59,7 +59,7 @@ mn_log_loss.sf <- function(data, ...) {
 
 #' @description [yardstick::pr_auc()]
 #' @export
-#' @rdname prob_metrics
+#' @rdname prob_metrics_sf
 pr_auc.sf <- function(data, ...) {
   data %>%
     dplyr::as_tibble() %>%
@@ -68,7 +68,7 @@ pr_auc.sf <- function(data, ...) {
 
 #' @description [yardstick::roc_auc()]
 #' @export
-#' @rdname prob_metrics
+#' @rdname prob_metrics_sf
 roc_auc.sf <- function(data, ...) {
   data %>%
     dplyr::as_tibble() %>%
@@ -77,7 +77,7 @@ roc_auc.sf <- function(data, ...) {
 
 #' @description [yardstick::roc_aunp()]
 #' @export
-#' @rdname prob_metrics
+#' @rdname prob_metrics_sf
 roc_aunp.sf <- function(data, ...) {
   data %>%
     dplyr::as_tibble() %>%
@@ -86,7 +86,7 @@ roc_aunp.sf <- function(data, ...) {
 
 #' @description [yardstick::roc_aunu()]
 #' @export
-#' @rdname prob_metrics
+#' @rdname prob_metrics_sf
 roc_aunu.sf <- function(data, ...) {
   data %>%
     dplyr::as_tibble() %>%

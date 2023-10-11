@@ -4,7 +4,7 @@
 #' methods. This function creates a DALEX explainer (see [DALEX::explain()]), which can then be queried
 #' by multiple function to create explanations of the model.
 #' @inheritParams DALEX::explain
-#' @param by_workflow boolean determing whether a list of explainer, one per model,
+#' @param by_workflow boolean determining whether a list of explainer, one per model,
 #' should be returned instead of a single explainer for the ensemble
 #' @return explainer object [`DALEX::explain`] ready to work with DALEX
 #' @export

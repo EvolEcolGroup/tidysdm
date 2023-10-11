@@ -34,12 +34,12 @@ the column index \code{FALSE})?}
 
 \item{to_keep}{A vector of variable names that we want to force in the set
 (note that the function will return an error if the correlation among any of
-those varialbes is higher thna the cutoff).}
+those variables is higher than the cutoff).}
 }
 \value{
 A vector of names of columns that are below the correlation threshold
-(when \code{names = TRUE}), otherwise a vector of indices. Note that the indeces
-are only for numeric variables (i.e. if factors are present, the indeces do
+(when \code{names = TRUE}), otherwise a vector of indices. Note that the indices
+are only for numeric variables (i.e. if factors are present, the indices do
 not take them into account).
 }
 \description{

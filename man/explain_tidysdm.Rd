@@ -103,7 +103,7 @@ This will happen also if \code{verbose} is TRUE. Set both \code{verbose} and \co
 
 \item{type}{type of a model, either \code{classification} or \code{regression}. If not specified then \code{type} will be extracted from \code{model_info}.}
 
-\item{by_workflow}{boolean determing whether a list of explainer, one per model,
+\item{by_workflow}{boolean determining whether a list of explainer, one per model,
 should be returned instead of a single explainer for the ensemble}
 }
 \value{

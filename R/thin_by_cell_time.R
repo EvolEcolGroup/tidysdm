@@ -16,7 +16,7 @@
 #' corresponding to the time slices (times should be set as either POSIXlt or
 #'  "years", see [terra::time()] for details), or a [`terra::SpatRasterDataset`]
 #'   where the first dataset will be
-#'  used (again, times for that dataset should be set as eitehr POSIXlt or
+#'  used (again, times for that dataset should be set as either POSIXlt or
 #'  "years")
 #' `terra::time()`
 #' @param coords a vector of length two giving the names of the "x" and "y"

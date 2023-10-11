@@ -31,7 +31,7 @@ the translation of formulae in \link{recipe}. This method strips the \code{geome
 column from the \link{data.frame} and replaces it with a simple \code{X} and \code{Y} columns
 before any further operations, thus allowing
 the usual processing by \code{\link[=recipe]{recipe()}} to succeed (\code{X} and \code{Y} are give the role
-of coords ina spatial recipe). When prepping and baking a \code{spatial_recipe},
+of coords in a spatial recipe). When prepping and baking a \code{spatial_recipe},
 if a data.frame or tibble without coordinates is used as \code{training} or
 \code{new_data}, dummy \code{X} and \code{Y} columns
 are generated and filled with NAs.

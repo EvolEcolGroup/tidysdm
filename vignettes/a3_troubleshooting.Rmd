@@ -297,7 +297,7 @@ have zero rows). We can check that it indeed contains the error that we wanted:
 gam_results$.notes[2]
 ```
 
-We can now get the problmatic data split, and extract the training data:
+We can now get the problematic data split, and extract the training data:
 
 ```{r}
 problem_split <- gam_results$splits[2][[1]]

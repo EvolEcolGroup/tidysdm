@@ -10,7 +10,7 @@
 #' column from the [data.frame] and replaces it with a simple `X` and `Y` columns
 #' before any further operations, thus allowing
 #' the usual processing by [recipe()] to succeed (`X` and `Y` are give the role
-#' of coords ina spatial recipe). When prepping and baking a `spatial_recipe`,
+#' of coords in a spatial recipe). When prepping and baking a `spatial_recipe`,
 #' if a data.frame or tibble without coordinates is used as `training` or
 #' `new_data`, dummy `X` and `Y` columns
 #' are generated and filled with NAs.

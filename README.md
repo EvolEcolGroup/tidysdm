@@ -21,7 +21,7 @@ with [`pastclim`](https://evolecolgroup.github.io/pastclim/dev/index.html),
 which helps downloading and manipulating present day data,
 future predictions, and palaeoclimate reconstructions.
 
-An overviewof the capabilities of `tidysdm` is given in [Leonardi et al.
+An overview of the capabilities of `tidysdm` is given in [Leonardi et al.
 (2023)](https://doi.org/10.1101/2023.07.24.550358).
 
 ## Installation
@@ -65,7 +65,8 @@ There is also a [dev
 version](https://evolecolgroup.github.io/tidysdm/dev/) of the site
 updated for the `dev` branch of `tidysdm` (on the top left of the dev
 website, the version number is in red and in the format x.x.x.9xxx,
-indicating it is a development version).
+indicating it is a development version). If you want to contribute, make
+sure to read our [contributing guide](https://evolecolgroup.github.io/tidysdm/CONTRIBUTING.html).
 
 ## When something does not work
 
@@ -87,4 +88,5 @@ new issue. Please make sure you have updated to the latest version of
 `tidysdm`, as well as updating all other packages on your
 system, and provide [a reproducible
 example](https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example)
-for the developers to investigate the problem.
+for the developers to investigate the problem. If you think you can help
+with fixing that bug, read our [contributing guide](https://evolecolgroup.github.io/tidysdm/CONTRIBUTING.html).
