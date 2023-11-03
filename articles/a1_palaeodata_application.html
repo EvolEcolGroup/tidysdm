@@ -117,7 +117,7 @@ and concepts that will be used in the present article.</p>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Dig deeper into tidy modeling with R at <span style="color: #00BB00;">https://www.tmwr.org</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Search for functions across packages at <span style="color: #00BB00;">https://www.tidymodels.org/find/</span></span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -153,7 +153,7 @@ can easily plot it (here <code>tidyterra</code> shines):</p>
 present, taken from <code>pastclim</code>, and cut to cover only
 Europe:</p>
 <pre><code><span><span class="co">#&gt; Loading required package: terra</span></span>
-<span><span class="co">#&gt; terra 1.7.59</span></span>
+<span><span class="co">#&gt; terra 1.7.55</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'terra'</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:tidyr':</span></span>
@@ -161,12 +161,7 @@ Europe:</p>
 <span><span class="co">#&gt;     extract</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:scales':</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     rescale</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'pastclim'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:tidysdm':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     date2ybp, ybp2date</span></span></code></pre>
+<span><span class="co">#&gt;     rescale</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/pastclim" class="external-link">pastclim</a></span><span class="op">)</span></span>
 <span><span class="va">land_mask</span> <span class="op">&lt;-</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/get_land_mask.html" class="external-link">get_land_mask</a></span><span class="op">(</span>time_bp <span class="op">=</span> <span class="fl">0</span>, dataset <span class="op">=</span> <span class="st">"Example"</span><span class="op">)</span></span>
@@ -195,7 +190,7 @@ and 2000 years apart.</p>
 <span>  dist_min <span class="op">=</span> <span class="fu"><a href="../reference/km2m.html">km2m</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
 <span>  interval_min <span class="op">=</span> <span class="fu"><a href="../reference/y2d.html">y2d</a></span><span class="op">(</span><span class="fl">2000</span><span class="op">)</span>,</span>
 <span>  time_col <span class="op">=</span> <span class="st">"time_bp"</span>,</span>
-<span>  lubridate_fun <span class="op">=</span> <span class="va">ybp2date</span></span>
+<span>  lubridate_fun <span class="op">=</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="va"><a href="https://evolecolgroup.github.io/pastclim/reference/ybp2date.html" class="external-link">ybp2date</a></span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">horses</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 185</span></span></code></pre></div>
@@ -230,7 +225,7 @@ locations outside the desired area (if there was any):</p>
 <span><span class="va">horses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_by_cell_time.html">thin_by_cell_time</a></span><span class="op">(</span><span class="va">horses</span>,</span>
 <span>  raster <span class="op">=</span> <span class="va">climate_full</span>,</span>
 <span>  time_col <span class="op">=</span> <span class="st">"time_bp"</span>,</span>
-<span>  lubridate_fun <span class="op">=</span> <span class="va">ybp2date</span></span>
+<span>  lubridate_fun <span class="op">=</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="va"><a href="https://evolecolgroup.github.io/pastclim/reference/ybp2date.html" class="external-link">ybp2date</a></span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">horses</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 138</span></span></code></pre></div>
@@ -250,7 +245,7 @@ presences</p>
 <span>  n_per_presence <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  raster <span class="op">=</span> <span class="va">climate_full</span>,</span>
 <span>  time_col <span class="op">=</span> <span class="st">"time_bp"</span>,</span>
-<span>  lubridate_fun <span class="op">=</span> <span class="va">ybp2date</span>,</span>
+<span>  lubridate_fun <span class="op">=</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="va"><a href="https://evolecolgroup.github.io/pastclim/reference/ybp2date.html" class="external-link">ybp2date</a></span>,</span>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dist_min"</span>, <span class="fu"><a href="../reference/km2m.html">km2m</a></span><span class="op">(</span><span class="fl">70</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Let’s see our presences and absences:</p>
@@ -267,7 +262,7 @@ the past). We manipulate the <code>sf</code> object accordingly:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">horses_df</span> <span class="op">&lt;-</span> <span class="va">horses</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">horses</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time_bp <span class="op">=</span> <span class="fu"><a href="../reference/ybp2date.html">date2ybp</a></span><span class="op">(</span><span class="va">time_step</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time_bp <span class="op">=</span> <span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/ybp2date.html" class="external-link">date2ybp</a></span><span class="op">(</span><span class="va">time_step</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">geometry</span><span class="op">)</span></span>
 <span><span class="co"># get climate</span></span>
@@ -369,16 +364,16 @@ and assess our models:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 4 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (585ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (345ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 4 resampling: default_gam</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 resampling: default_gam (1.1s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 resampling: default_gam (786ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 4 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_rf (4.6s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_rf (2.6s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">4 of 4 tuning:     default_gbm</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_gbm (27.3s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_gbm (15.6s)</span></span></span></code></pre></div>
 <p>Note that <code>workflow_set</code> correctly detects that we have no
 tuning parameters for <em>glm</em> and <em>gam</em>. We can have a look
 at the performance of our models with:</p>
