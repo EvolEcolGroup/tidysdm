@@ -31,12 +31,12 @@ jobs:
           extra-packages: any::covr
           needs: coverage
 
-      - name: Get dev terra and pastclim
-        run: |
-          install.packages('terra', repos='https://rspatial.r-universe.dev')
-          install.packages('devtools')
-          devtools::install_github("EvolEcolGroup/pastclim", ref="dev")
-        shell: Rscript {0}
+#      - name: Get dev terra and pastclim
+#        run: |
+#          install.packages('terra', repos='https://rspatial.r-universe.dev')
+#          install.packages('devtools')
+#          devtools::install_github("EvolEcolGroup/pastclim", ref="dev")
+#        shell: Rscript {0}
 
       - name: Test coverage
         run: covr::codecov(type="all")
