@@ -6,16 +6,14 @@
 #' @param ... parameters to be passed to [parsnip::boost_tree()] to
 #' customise the model. See the help of that function for details.
 #' @param tune character defining the tuning strategy. Valid strategies are:
-#' {itemize:
-#' /item: "sdm" chooses hyperparameters that are most important to tune for
+#' * "sdm" chooses hyperparameters that are most important to tune for
 #' an sdm (for *boost_tree*: 'mtry', 'trees', 'tree_depth', 'learn_rate',
 #' 'loss_reduction', and 'stop_iter')
-#' /item: "all" tunes all hyperparameters (for *boost_tree*: 'mtry', 'trees',
+#' * "all" tunes all hyperparameters (for *boost_tree*: 'mtry', 'trees',
 #' 'tree_depth', 'learn_rate',
 #' 'loss_reduction', 'stop_iter','min_n' and 'sample_size')
-#' /item: "custom" passes the options from '...'
-#' /item: "none" does not tune any hyperparameter
-#' }
+#' * "custom" passes the options from '...'
+#' * "none" does not tune any hyperparameter
 #' @returns a [parsnip::model_spec] of the model.
 #' @examples
 #' standard_bt_spec <- sdm_spec_boost_tree()

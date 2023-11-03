@@ -7,13 +7,11 @@
 #' @param ... parameters to be passed to [maxent()] to
 #' customise the model. See the help of that function for details.
 #' @param tune character defining the tuning strategy. Valid strategies are:
-#' {itemize:
-#' /item: "sdm" chooses hyperparameters that are most important to tune for
+#' * "sdm" chooses hyperparameters that are most important to tune for
 #' an sdm (for *maxent*, 'mtry')
-#' /item: "all" tunes all hyperparameters (for *maxent*, 'mtry', 'trees' and 'min')
-#' /item: "custom" passes the options from '...'
-#' /item: "none" does not tune any hyperparameter
-#' }
+#' * "all" tunes all hyperparameters (for *maxent*, 'mtry', 'trees' and 'min')
+#' * "custom" passes the options from '...'
+#' * "none" does not tune any hyperparameter
 #' @returns a [parsnip::model_spec] of the model.
 #' @examples
 #' test_maxent_spec <- sdm_spec_maxent(tune = "sdm")

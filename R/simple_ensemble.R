@@ -9,13 +9,11 @@
 #' @param ... not used, this function just creates an empty `simple_ensemble`
 #' object. Members are added with `add_best_candidates()`
 #' @returns an empty `simple_ensemble`. This is a tibble with columns:
-#' {/itemize:
-#' /item: `wflow_id`: the name of the workflows for which the best model was
+#' * `wflow_id`: the name of the workflows for which the best model was
 #' chosen
-#' /item: `workflow`: the trained workflow objects
-#' /item: `metrics`: metrics based on the crossvalidation resampling used
+#' * `workflow`: the trained workflow objects
+#' * `metrics`: metrics based on the crossvalidation resampling used
 #' to tune the models
-#' }
 #' @export
 
 simple_ensemble <- function(...) {
