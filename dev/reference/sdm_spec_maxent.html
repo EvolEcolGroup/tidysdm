@@ -14,7 +14,7 @@ Models."><meta property="og:image" content="https://evolecolgroup.github.io/tidy
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.0.9005</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.1.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,7 +95,7 @@ an sdm (for <em>maxent</em>, 'mtry')
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">test_maxent_spec</span> <span class="op">&lt;-</span> <span class="fu">sdm_spec_maxent</span><span class="op">(</span>tune<span class="op">=</span><span class="st">"sdm"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">test_maxent_spec</span> <span class="op">&lt;-</span> <span class="fu">sdm_spec_maxent</span><span class="op">(</span>tune <span class="op">=</span> <span class="st">"sdm"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">test_maxent_spec</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> maxent Model Specification (classification)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -106,7 +106,7 @@ an sdm (for <em>maxent</em>, 'mtry')
 <span class="r-out co"><span class="r-pr">#&gt;</span> Computational engine: maxnet </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># setting specific values</span></span></span>
-<span class="r-in"><span><span class="fu">sdm_spec_maxent</span><span class="op">(</span>tune<span class="op">=</span><span class="st">"custom"</span>, feature_classes<span class="op">=</span><span class="st">"lq"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">sdm_spec_maxent</span><span class="op">(</span>tune <span class="op">=</span> <span class="st">"custom"</span>, feature_classes <span class="op">=</span> <span class="st">"lq"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> maxent Model Specification (classification)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Main Arguments:</span>

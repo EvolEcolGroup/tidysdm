@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/CONTRIBUTING.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/LICENSE.html</loc>
   </url>
   <url>
@@ -145,7 +151,7 @@
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/predict_raster.html</loc>
   </url>
   <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/prob_metrics.html</loc>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/prob_metrics_sf.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/prob_to_binary.html</loc>
@@ -209,8 +215,5 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/y2d.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/ybp2date.html</loc>
   </url>
 </urlset>

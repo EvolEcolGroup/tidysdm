@@ -14,7 +14,7 @@ by multiple function to create explanations of the model."><meta property="og:im
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.0.9005</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.1.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -194,7 +194,7 @@ This will happen also if <code>verbose</code> is TRUE. Set both <code>verbose</c
 
 
 <dt>by_workflow</dt>
-<dd><p>boolean determing whether a list of explainer, one per model,
+<dd><p>boolean determining whether a list of explainer, one per model,
 should be returned instead of a single explainer for the ensemble</p></dd>
 
 </dl></div>
@@ -216,15 +216,16 @@ should be returned instead of a single explainer for the ensemble</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; target variable   :  452  values </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predict function  :  predict_function </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  No value for predict function target column. ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  package tidysdm , ver. 0.9.0.9005 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  package tidysdm , ver. 0.9.1.9001 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  type set to  classification </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.0004084954 , mean =  0.238296 , max =  0.9561616  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  -0.5010351 , mean =  0.01170401 , max =  0.6113744  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;"> A new explainer has been created! </span> </span>
 <span class="r-in"><span><span class="co"># by workflow</span></span></span>
-<span class="r-in"><span><span class="va">explainer_list</span> <span class="op">&lt;-</span> <span class="fu">explain_tidysdm</span><span class="op">(</span><span class="fu">tidysdm</span><span class="fu">::</span><span class="va"><a href="lacerta_ensemble.html">lacerta_ensemble</a></span>, </span></span>
-<span class="r-in"><span>  by_workflow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">explainer_list</span> <span class="op">&lt;-</span> <span class="fu">explain_tidysdm</span><span class="op">(</span><span class="fu">tidysdm</span><span class="fu">::</span><span class="va"><a href="lacerta_ensemble.html">lacerta_ensemble</a></span>,</span></span>
+<span class="r-in"><span>  by_workflow <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Preparation of a new explainer is initiated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model label       :  default_glm </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; data              :  452  rows  4  cols </span>

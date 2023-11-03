@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.0.9005</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.1.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@ and concepts that will be used in the present article.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">broom       </span> 1.0.5     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">recipes     </span> 1.0.8</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dials       </span> 1.2.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rsample     </span> 1.2.0</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr       </span> 1.1.3     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble      </span> 3.2.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2     </span> 3.4.3     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr       </span> 1.3.0</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2     </span> 3.4.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr       </span> 1.3.0</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">infer       </span> 1.0.5     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tune        </span> 1.1.2</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">modeldata   </span> 1.2.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflows   </span> 1.1.3</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">parsnip     </span> 1.1.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflowsets</span> 1.0.1</span></span>
@@ -118,7 +118,7 @@ and concepts that will be used in the present article.</p>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Learn how to get started at <span style="color: #00BB00;">https://www.tidymodels.org/start/</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Search for functions across packages at <span style="color: #00BB00;">https://www.tidymodels.org/find/</span></span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -148,13 +148,13 @@ can easily plot it (here <code>tidyterra</code> shines):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
-<span><span class="va">horses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">horses</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>,<span class="st">"latitude"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">horses</span><span class="op">)</span> <span class="op">=</span> <span class="fl">4326</span></span></code></pre></div>
+<span><span class="va">horses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">horses</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">horses</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">4326</span></span></code></pre></div>
 <p>As a background to our presences, we will use the land mask for the
 present, taken from <code>pastclim</code>, and cut to cover only
 Europe:</p>
 <pre><code><span><span class="co">#&gt; Loading required package: terra</span></span>
-<span><span class="co">#&gt; terra 1.7.49</span></span>
+<span><span class="co">#&gt; terra 1.7.55</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'terra'</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:tidyr':</span></span>
@@ -165,7 +165,7 @@ Europe:</p>
 <span><span class="co">#&gt;     rescale</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/pastclim" class="external-link">pastclim</a></span><span class="op">)</span></span>
-<span><span class="va">land_mask</span> <span class="op">&lt;-</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/get_land_mask.html" class="external-link">get_land_mask</a></span><span class="op">(</span>time_bp<span class="op">=</span><span class="fl">0</span>,dataset<span class="op">=</span><span class="st">"Example"</span><span class="op">)</span></span>
+<span><span class="va">land_mask</span> <span class="op">&lt;-</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/get_land_mask.html" class="external-link">get_land_mask</a></span><span class="op">(</span>time_bp <span class="op">=</span> <span class="fl">0</span>, dataset <span class="op">=</span> <span class="st">"Example"</span><span class="op">)</span></span>
 <span><span class="va">europe_poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="va">region_outline</span><span class="op">$</span><span class="va">Europe</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">europe_poly</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"lonlat"</span></span>
 <span><span class="va">land_mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="va">land_mask</span>, <span class="va">europe_poly</span><span class="op">)</span></span>
@@ -179,26 +179,28 @@ Europe:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     filter</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill<span class="op">=</span><span class="va">land_mask_0</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">land_mask_0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/scale_terrain.html" class="external-link">scale_fill_terrain_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">horses</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>col<span class="op">=</span><span class="va">time_bp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">horses</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">time_bp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a1_palaeodata_application_files/figure-html/cast%20to%20sf-1.png" width="576"></p>
 <p>We now thin our presences, so that locations are further than 100km
 and 2000 years apart.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">horses</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/thin_by_dist_time.html">thin_by_dist_time</a></span><span class="op">(</span><span class="va">horses</span>, dist_min <span class="op">=</span> <span class="fu"><a href="../reference/km2m.html">km2m</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
-<span>                          interval_min <span class="op">=</span> <span class="fu"><a href="../reference/y2d.html">y2d</a></span><span class="op">(</span><span class="fl">2000</span><span class="op">)</span>,</span>
-<span>                          time_col<span class="op">=</span><span class="st">"time_bp"</span>,</span>
-<span>                          lubridate_fun <span class="op">=</span> <span class="va">ybp2date</span><span class="op">)</span></span>
+<span><span class="va">horses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_by_dist_time.html">thin_by_dist_time</a></span><span class="op">(</span><span class="va">horses</span>,</span>
+<span>  dist_min <span class="op">=</span> <span class="fu"><a href="../reference/km2m.html">km2m</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,</span>
+<span>  interval_min <span class="op">=</span> <span class="fu"><a href="../reference/y2d.html">y2d</a></span><span class="op">(</span><span class="fl">2000</span><span class="op">)</span>,</span>
+<span>  time_col <span class="op">=</span> <span class="st">"time_bp"</span>,</span>
+<span>  lubridate_fun <span class="op">=</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="va"><a href="https://evolecolgroup.github.io/pastclim/reference/ybp2date.html" class="external-link">ybp2date</a></span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">horses</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 185</span></span></code></pre></div>
 <p>And see what we have left:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill<span class="op">=</span><span class="va">land_mask_0</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">land_mask_0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/scale_terrain.html" class="external-link">scale_fill_terrain_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">horses</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>col<span class="op">=</span><span class="va">time_bp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">horses</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">time_bp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a1_palaeodata_application_files/figure-html/plot_thinned-1.png" width="576"></p>
 <p>We now need a time series of palaeoclimate reconstructions. In this
 vignette, we will use the example dataset from <code>pastclim</code>.
@@ -210,43 +212,47 @@ for the land mask, we will cut the reconstructions to cover Europe
 only:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/pastclim" class="external-link">pastclim</a></span><span class="op">)</span></span>
-<span><span class="va">climate_vars</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bio01"</span>, <span class="st">"bio10"</span>, <span class="st">"bio12"</span><span class="op">)</span></span>
-<span><span class="va">climate_full</span><span class="op">&lt;-</span><span class="fu">pastclim</span><span class="fu">::</span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/region_series.html" class="external-link">region_series</a></span><span class="op">(</span>bio_variables <span class="op">=</span> <span class="va">climate_vars</span>, </span>
-<span>                                      data<span class="op">=</span><span class="st">"Example"</span>, </span>
-<span>                                      crop<span class="op">=</span> <span class="va">region_outline</span><span class="op">$</span><span class="va">Europe</span><span class="op">)</span> </span></code></pre></div>
+<span><span class="va">climate_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bio01"</span>, <span class="st">"bio10"</span>, <span class="st">"bio12"</span><span class="op">)</span></span>
+<span><span class="va">climate_full</span> <span class="op">&lt;-</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/region_series.html" class="external-link">region_series</a></span><span class="op">(</span></span>
+<span>  bio_variables <span class="op">=</span> <span class="va">climate_vars</span>,</span>
+<span>  data <span class="op">=</span> <span class="st">"Example"</span>,</span>
+<span>  crop <span class="op">=</span> <span class="va">region_outline</span><span class="op">$</span><span class="va">Europe</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Now we thin the observations to only keep one per cell in the raster
 (it would be better if we had an equal area projection…), and remove
 locations outside the desired area (if there was any):</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">horses</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/thin_by_cell_time.html">thin_by_cell_time</a></span><span class="op">(</span><span class="va">horses</span>, raster <span class="op">=</span> <span class="va">climate_full</span>,</span>
-<span>                          time_col<span class="op">=</span><span class="st">"time_bp"</span>,</span>
-<span>                          lubridate_fun <span class="op">=</span> <span class="va">ybp2date</span><span class="op">)</span></span>
+<span><span class="va">horses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_by_cell_time.html">thin_by_cell_time</a></span><span class="op">(</span><span class="va">horses</span>,</span>
+<span>  raster <span class="op">=</span> <span class="va">climate_full</span>,</span>
+<span>  time_col <span class="op">=</span> <span class="st">"time_bp"</span>,</span>
+<span>  lubridate_fun <span class="op">=</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="va"><a href="https://evolecolgroup.github.io/pastclim/reference/ybp2date.html" class="external-link">ybp2date</a></span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">horses</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 138</span></span></code></pre></div>
 <p>Let’s see what we have left of our points:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill<span class="op">=</span><span class="va">land_mask_0</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">land_mask_0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/scale_terrain.html" class="external-link">scale_fill_terrain_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">horses</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>col<span class="op">=</span><span class="va">time_bp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">horses</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">time_bp</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a1_palaeodata_application_files/figure-html/unnamed-chunk-6-1.png" width="576"></p>
 <p>Now we sample pseudo-absences (we will constraint them to be at least
 70km away from any presences), selecting three times the number of
 presences</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">horses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_pseudoabs_time.html">sample_pseudoabs_time</a></span><span class="op">(</span><span class="va">horses</span>, </span>
-<span>                                n_per_presence<span class="op">=</span><span class="fl">3</span>, </span>
-<span>                                raster<span class="op">=</span><span class="va">climate_full</span>,</span>
-<span>                                time_col<span class="op">=</span><span class="st">"time_bp"</span>,</span>
-<span>                                lubridate_fun <span class="op">=</span> <span class="va">ybp2date</span>,</span>
-<span>                                method<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dist_min"</span>, <span class="fu"><a href="../reference/km2m.html">km2m</a></span><span class="op">(</span><span class="fl">70</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">horses</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_pseudoabs_time.html">sample_pseudoabs_time</a></span><span class="op">(</span><span class="va">horses</span>,</span>
+<span>  n_per_presence <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  raster <span class="op">=</span> <span class="va">climate_full</span>,</span>
+<span>  time_col <span class="op">=</span> <span class="st">"time_bp"</span>,</span>
+<span>  lubridate_fun <span class="op">=</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="va"><a href="https://evolecolgroup.github.io/pastclim/reference/ybp2date.html" class="external-link">ybp2date</a></span>,</span>
+<span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dist_min"</span>, <span class="fu"><a href="../reference/km2m.html">km2m</a></span><span class="op">(</span><span class="fl">70</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Let’s see our presences and absences:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill<span class="op">=</span><span class="va">land_mask_0</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">land_mask_0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/scale_terrain.html" class="external-link">scale_fill_terrain_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">horses</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">class</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a1_palaeodata_application_files/figure-html/unnamed-chunk-8-1.png" width="576"></p>
@@ -257,17 +263,18 @@ the past). We manipulate the <code>sf</code> object accordingly:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">horses_df</span> <span class="op">&lt;-</span> <span class="va">horses</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html" class="external-link">st_coordinates</a></span><span class="op">(</span><span class="va">horses</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span> <span class="op">(</span>time_bp<span class="op">=</span><span class="fu"><a href="../reference/ybp2date.html">date2ybp</a></span><span class="op">(</span><span class="va">time_step</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time_bp <span class="op">=</span> <span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/ybp2date.html" class="external-link">date2ybp</a></span><span class="op">(</span><span class="va">time_step</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">geometry</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">geometry</span><span class="op">)</span></span>
 <span><span class="co"># get climate</span></span>
-<span><span class="va">horses_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/location_slice_from_region_series.html" class="external-link">location_slice_from_region_series</a></span><span class="op">(</span><span class="va">horses_df</span>, </span>
-<span>                                               region_series <span class="op">=</span> <span class="va">climate_full</span><span class="op">)</span></span>
+<span><span class="va">horses_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/location_slice_from_region_series.html" class="external-link">location_slice_from_region_series</a></span><span class="op">(</span><span class="va">horses_df</span>,</span>
+<span>  region_series <span class="op">=</span> <span class="va">climate_full</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add the climate reconstructions to the sf object, and remove the time_step</span></span>
 <span><span class="co"># as we don't need it for modelling</span></span>
 <span><span class="va">horses</span> <span class="op">&lt;-</span> <span class="va">horses</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">horses_df</span><span class="op">[</span>,<span class="va">climate_vars</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">horses_df</span><span class="op">[</span>, <span class="va">climate_vars</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">time_step</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -279,7 +286,7 @@ define the formula (<em>class</em> is the outcome, all other variables
 are predictors; note that, for <code>sf</code> objects,
 <code>geometry</code> is automatically ignored as a predictor):</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">horses_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">horses</span>, formula<span class="op">=</span><span class="va">class</span><span class="op">~</span><span class="va">.</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">horses_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">horses</span>, formula <span class="op">=</span> <span class="va">class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span>
 <span><span class="va">horses_rec</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Recipe</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────────────────────────</span></span></span>
@@ -330,8 +337,9 @@ specifications.</p>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># set formula for gams</span></span>
 <span>  <span class="fu">update_workflow_model</span><span class="op">(</span><span class="st">"default_gam"</span>,</span>
-<span>                        spec <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_gam.html">sdm_spec_gam</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>                        formula <span class="op">=</span> <span class="fu"><a href="../reference/gam_formula.html">gam_formula</a></span><span class="op">(</span><span class="va">horses_rec</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    spec <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_gam.html">sdm_spec_gam</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    formula <span class="op">=</span> <span class="fu"><a href="../reference/gam_formula.html">gam_formula</a></span><span class="op">(</span><span class="va">horses_rec</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># tweak controls to store information needed later to create the ensemble</span></span>
 <span>  <span class="fu">option_add</span><span class="op">(</span>control <span class="op">=</span> <span class="fu"><a href="../reference/control_ensemble.html">control_ensemble_grid</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Note that <em>gams</em> are unusual, as we need to specify a formula
@@ -349,22 +357,24 @@ and assess our models:</p>
 <p>We can now use the block CV folds to tune and assess the models:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">horses_models</span> <span class="op">&lt;-</span> </span>
-<span>  <span class="va">horses_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>, resamples <span class="op">=</span> <span class="va">horses_cv</span>, grid <span class="op">=</span> <span class="fl">5</span>, </span>
-<span>               metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">horses_models</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">horses_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>,</span>
+<span>    resamples <span class="op">=</span> <span class="va">horses_cv</span>, grid <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>    metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 4 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (444ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (569ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 4 resampling: default_gam</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 resampling: default_gam (763ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 resampling: default_gam (982ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 4 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_rf (3.4s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_rf (4.6s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">4 of 4 tuning:     default_gbm</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_gbm (19.4s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_gbm (26.1s)</span></span></span></code></pre></div>
 <p>Note that <code>workflow_set</code> correctly detects that we have no
 tuning parameters for <em>glm</em> and <em>gam</em>. We can have a look
 at the performance of our models with:</p>
@@ -380,7 +390,7 @@ automatically fitted to the full training dataset, and so ready to make
 predictions.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">horses_ensemble</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simple_ensemble.html">simple_ensemble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/add_member.html">add_member</a></span><span class="op">(</span><span class="va">horses_models</span>, metric<span class="op">=</span><span class="st">"boyce_cont"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/add_member.html">add_member</a></span><span class="op">(</span><span class="va">horses_models</span>, metric <span class="op">=</span> <span class="st">"boyce_cont"</span><span class="op">)</span></span></code></pre></div>
 <p>And visualise it</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">horses_ensemble</span><span class="op">)</span></span></code></pre></div>
