@@ -1,3 +1,7 @@
+# `tidysdm` 0.9.2
+
+* Clean up for CRAN
+
 # `tidysdm` 0.9.1
 
 * Add a `spatial_recipe` class. This is a BREAKING change that makes previously

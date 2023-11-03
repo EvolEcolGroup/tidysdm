@@ -1,5 +1,6 @@
 BCI
 CMD
+DALEX
 Ecol
 GAMs
 GBIF
@@ -13,6 +14,7 @@ Lacerta
 MaxEnt
 Maxent
 Maxnet
+POSIXlt
 Prepping
 Randin
 SDM
@@ -32,10 +34,10 @@ cellsize
 center
 codecov
 color
+colorized
 colors
 com
 coords
-crossvalidating
 crossvalidation
 crs
 cutoff
@@ -47,7 +49,6 @@ fn
 fp
 gam
 gams
-gbm
 ggplot
 ggplots
 glm
@@ -55,13 +56,14 @@ glmnet
 iter
 jan
 jlx
+kap
+lacerta
 lh
 lonlat
 lqpht
 lubridate
 magrittr
 manpage
-mars
 maxent
 maxnet
 mtry
@@ -72,7 +74,6 @@ palaeo
 palaeoclimate
 palaeoclimatic
 palaeodata
-pastclim
 pred
 prepping
 prob
@@ -85,8 +86,10 @@ rsplit
 schreiberi
 sdm
 spatialsample
+stackexchange
 stackoverflow
 stat
+svm
 thres
 tibble
 tibbles

@@ -1,5 +1,5 @@
 Package: tidysdm
-Title: Species Distribution Models with tidymodels
+Title: Species Distribution Models with Tidymodels
 Version: 0.9.1.9001
 Authors@R: c(
     person("Michela", "Leonardi", role = "aut"),
@@ -52,10 +52,12 @@ Suggests:
     ranger,
     readr,
     rmarkdown,
+    spelling,
     stacks,
     testthat (>= 3.0.0),
     tidyterra,
-    xgboost
+    xgboost,
+    V8
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: true
