@@ -56,9 +56,9 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
   }
   # get the time steps
   if (inherits(raster, "SpatRasterDataset")) {
-    time_steps <- time_steps_orig <- terra::time(raster)[[1]]
+    time_steps <- terra::time(raster)[[1]]
   } else {
-    time_steps <- time_steps_orig <- terra::time(raster)
+    time_steps <- terra::time(raster)
   }
   if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)
