@@ -16,7 +16,7 @@
 #'   k = 5, # number of folds
 #'   size = 350000, # size of the blocks in metres
 #'   selection = "random", # random blocks-to-fold
-#'   iteration = 50
+#'   iteration = 10
 #' ) # find evenly dispersed folds
 #' sb1_rsample <- blockcv2rsample(sb1, pa_data)
 #' class(sb1_rsample)

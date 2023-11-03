@@ -6,7 +6,7 @@
 #' @param truth The column identifier for the true class results (that is a
 #' factor). This should be an unquoted column name although this argument is
 #' passed by expression and supports quasiquotation (you can unquote column
-#' names). For ⁠_vec()⁠ functions, a factor vector.
+#' names). For _vec() functions, a factor vector.
 #' @param estimate the predicted probability for the event
 #' @param metric character of metric to be optimised. Currently only "tss_max",
 #' "kap_max", and "sensitivity" with a given target

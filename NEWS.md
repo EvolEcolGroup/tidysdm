@@ -1,6 +1,6 @@
 # `tidysdm` 0.9.2
 
-* Clean up for CRAN
+* Release on CRAN
 
 # `tidysdm` 0.9.1
 

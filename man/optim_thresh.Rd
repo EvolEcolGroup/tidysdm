@@ -10,7 +10,7 @@ optim_thresh(truth, estimate, metric, event_level = "first")
 \item{truth}{The column identifier for the true class results (that is a
 factor). This should be an unquoted column name although this argument is
 passed by expression and supports quasiquotation (you can unquote column
-names). For ⁠_vec()⁠ functions, a factor vector.}
+names). For _vec() functions, a factor vector.}
 
 \item{estimate}{the predicted probability for the event}
 
