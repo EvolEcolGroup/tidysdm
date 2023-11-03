@@ -79,7 +79,7 @@ horses <- thin_by_dist_time(horses,
   dist_min = km2m(100),
   interval_min = y2d(2000),
   time_col = "time_bp",
-  lubridate_fun = ybp2date
+  lubridate_fun = pastclim::ybp2date
 )
 nrow(horses)
 ```
@@ -118,7 +118,7 @@ set.seed(123)
 horses <- thin_by_cell_time(horses,
   raster = climate_full,
   time_col = "time_bp",
-  lubridate_fun = ybp2date
+  lubridate_fun = pastclim::ybp2date
 )
 nrow(horses)
 ```
@@ -139,7 +139,7 @@ horses <- sample_pseudoabs_time(horses,
   n_per_presence = 3,
   raster = climate_full,
   time_col = "time_bp",
-  lubridate_fun = ybp2date,
+  lubridate_fun = pastclim::ybp2date,
   method = c("dist_min", km2m(70))
 )
 ```

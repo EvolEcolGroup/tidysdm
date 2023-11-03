@@ -22,7 +22,7 @@ test_that("thin_by_cell_time removes the correct points", {
     thin_by_cell_time(locations,
       raster = grid_raster,
       time_col = "time_bp",
-      lubridate_fun = ybp2date
+      lubridate_fun = pastclim::ybp2date
     ),
     "`raster` does not have a time dimension"
   )
@@ -31,7 +31,7 @@ test_that("thin_by_cell_time removes the correct points", {
   thin_100k <- thin_by_cell_time(locations,
     raster = grid_raster,
     time_col = "time_bp",
-    lubridate_fun = ybp2date
+    lubridate_fun = pastclim::ybp2date
   )
   expect_true(inherits(thin_100k, "data.frame"))
   expect_false(inherits(thin_100k, "sf"))
@@ -44,7 +44,7 @@ test_that("thin_by_cell_time removes the correct points", {
   thin_100k_t <- thin_by_cell_time(locations,
     raster = grid_raster,
     time_col = "time_bp",
-    lubridate_fun = ybp2date
+    lubridate_fun = pastclim::ybp2date
   )
   # we should now have the first pair, but lose one of the last two
   expect_true(setequal(thin_100k_t$id, c(1, 2, 3, 5)))
@@ -55,7 +55,7 @@ test_that("thin_by_cell_time removes the correct points", {
   thin_100k_t_sf <- thin_by_cell_time(locations_sf,
     raster = grid_raster,
     time_col = "time_bp",
-    lubridate_fun = ybp2date
+    lubridate_fun = pastclim::ybp2date
   )
   expect_true(inherits(thin_100k_t_sf, "sf"))
   expect_true(inherits(thin_100k_t_sf, "data.frame")) # it is also a df!
@@ -66,7 +66,7 @@ test_that("thin_by_cell_time removes the correct points", {
   expect_no_error(thin_by_cell_time(locations_xy,
     raster = grid_raster,
     time_col = "time_bp",
-    lubridate_fun = ybp2date
+    lubridate_fun = pastclim::ybp2date
   ))
   locations_xy$X <- rep(NA)
   expect_warning(
@@ -83,7 +83,7 @@ test_that("thin_by_cell_time removes the correct points", {
   thin_100k_sd <- thin_by_cell_time(locations_sf,
     raster = grid_sds,
     time_col = "time_bp",
-    lubridate_fun = ybp2date
+    lubridate_fun = pastclim::ybp2date
   )
   expect_true(inherits(thin_100k_sd, "sf"))
   expect_true(all(thin_100k_t$id == thin_100k_sd$id))

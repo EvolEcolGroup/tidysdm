@@ -48,7 +48,7 @@ Suggests:
     kernlab,
     knitr,
     overlapping,
-    pastclim,
+    pastclim (>= 2.0.0),
     ranger,
     readr,
     rmarkdown,

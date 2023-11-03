@@ -21,7 +21,7 @@ test_that("thin_by_dist_time removes the correct points", {
     dist_min = 100000,
     interval_min = 365 * 2000,
     time_col = "time_bp",
-    lubridate_fun = ybp2date
+    lubridate_fun = pastclim::ybp2date
   )
   expect_true(inherits(thin_100k, "data.frame"))
   expect_false(inherits(thin_100k, "sf"))
@@ -35,7 +35,7 @@ test_that("thin_by_dist_time removes the correct points", {
     dist_min = 100000,
     interval_min = 365 * 2000,
     time_col = "time_bp",
-    lubridate_fun = ybp2date
+    lubridate_fun = pastclim::ybp2date
   )
   # we should now get everything back
   expect_true(setequal(thin_100k_t$id, c(1, 2, 3, 4, 5)))
@@ -47,7 +47,7 @@ test_that("thin_by_dist_time removes the correct points", {
     dist_min = 100000,
     interval_min = 365 * 2000,
     time_col = "time_bp",
-    lubridate_fun = ybp2date
+    lubridate_fun = pastclim::ybp2date
   )
   expect_true(inherits(thin_100k_t_sf, "sf"))
   expect_true(inherits(thin_100k_t_sf, "data.frame")) # it is also a df!

@@ -257,7 +257,7 @@ explain_simple_ensemble_by_workflow <- function(
     stop("type has to be classification for a tidysdm ensemble")
   }
   explainer_list <- list()
-  for (i in 1:nrow(model)) {
+  for (i in seq_len(nrow(model))) {
     if (is.null(data)) {
       data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
     } else {

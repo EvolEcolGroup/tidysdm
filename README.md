@@ -42,16 +42,6 @@ that might not be mature yet, use:
 devtools::install_github("EvolEcolGroup/tidysdm", ref = "dev")
 ```
 
-
-To take advantage of the integration with `pastclim` highlighted in the articles, you
-will need the `dev` version (NOT the one on CRAN). You can obtain it with:
-``` r        
-install.packages('terra', repos='https://rspatial.r-universe.dev')
-
-devtools::install_github("EvolEcolGroup/pastclim", ref="dev")
-```
-
-
 ## Overview of functionality
 
 On its dedicated [website](https://evolecolgroup.github.io/tidysdm/),
