@@ -74,16 +74,15 @@ customise the model. See the help of that function for details.</p></dd>
 
 
 <dt>tune</dt>
-<dd><p>character defining the tuning strategy. Valid strategies are:
-itemize:
-/item: "sdm" chooses hyperparameters that are most important to tune for
+<dd><p>character defining the tuning strategy. Valid strategies are:</p><ul><li><p>"sdm" chooses hyperparameters that are most important to tune for
 an sdm (for <em>boost_tree</em>: 'mtry', 'trees', 'tree_depth', 'learn_rate',
-'loss_reduction', and 'stop_iter')
-/item: "all" tunes all hyperparameters (for <em>boost_tree</em>: 'mtry', 'trees',
+'loss_reduction', and 'stop_iter')</p></li>
+<li><p>"all" tunes all hyperparameters (for <em>boost_tree</em>: 'mtry', 'trees',
 'tree_depth', 'learn_rate',
-'loss_reduction', 'stop_iter','min_n' and 'sample_size')
-/item: "custom" passes the options from '...'
-/item: "none" does not tune any hyperparameter</p></dd>
+'loss_reduction', 'stop_iter','min_n' and 'sample_size')</p></li>
+<li><p>"custom" passes the options from '...'</p></li>
+<li><p>"none" does not tune any hyperparameter</p></li>
+</ul></dd>
 
 </dl></div>
     <div class="section level2">
