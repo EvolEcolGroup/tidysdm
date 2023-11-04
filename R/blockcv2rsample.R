@@ -7,6 +7,7 @@
 #' @returns an `rsample` object
 #' @export
 #' @examples
+#' \donttest{
 #' library(blockCV)
 #' points <- read.csv(system.file("extdata/", "species.csv", package = "blockCV"))
 #' pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845)
@@ -20,6 +21,7 @@
 #' ) # find evenly dispersed folds
 #' sb1_rsample <- blockcv2rsample(sb1, pa_data)
 #' class(sb1_rsample)
+#' }
 blockcv2rsample <- function(x, data) {
   splits <- lapply(
     x$folds_list,

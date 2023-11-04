@@ -12,11 +12,11 @@ object. Members are added with \code{add_best_candidates()}}
 }
 \value{
 an empty \code{simple_ensemble}. This is a tibble with columns:
-{/itemize:
-/item: \code{wflow_id}: the name of the workflows for which the best model was
+\itemize{
+\item \code{wflow_id}: the name of the workflows for which the best model was
 chosen
-/item: \code{workflow}: the trained workflow objects
-/item: \code{metrics}: metrics based on the crossvalidation resampling used
+\item \code{workflow}: the trained workflow objects
+\item \code{metrics}: metrics based on the crossvalidation resampling used
 to tune the models
 }
 }

@@ -9,6 +9,7 @@
 #' the first level of this factor
 #' @returns a `patchwork` composite plot
 #' @examples
+#' \donttest{
 #' data("bradypus", package = "maxnet")
 #' bradypus_tb <- tibble::as_tibble(bradypus) %>%
 #'   dplyr::mutate(presence = relevel(
@@ -20,7 +21,7 @@
 #'   select(-ecoreg)
 #'
 #' bradypus_tb %>% plot_pres_vs_bg(presence)
-#'
+#' }
 #' @export
 
 plot_pres_vs_bg <- function(

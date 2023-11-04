@@ -33,6 +33,7 @@ A good guide to how options of a Maxent model work can be found in
 https://onlinelibrary.wiley.com/doi/full/10.1111/j.1600-0587.2013.07872.x
 }
 \examples{
+\donttest{
 # format the data
 data("bradypus", package = "maxnet")
 bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
@@ -61,5 +62,5 @@ cv <- vfold_cv(bradypus_tb, v = 2)
 maxent_tune_res <- maxent_spec \%>\%
   tune_grid(presence ~ ., cv, grid = 3)
 show_best(maxent_tune_res, metric = "roc_auc")
-
+}
 }

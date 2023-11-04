@@ -14,12 +14,12 @@ sdm_spec_rf(..., tune = c("sdm", "all", "custom", "none"))
 customise the model. See the help of that function for details.}
 
 \item{tune}{character defining the tuning strategy. Valid strategies are:
-{itemize:
-/item: "sdm" chooses hyperparameters that are most important to tune for
+\itemize{
+\item "sdm" chooses hyperparameters that are most important to tune for
 an sdm (for \emph{rf}, 'mtry')
-/item: "all" tunes all hyperparameters (for \emph{rf}, 'mtry', 'trees' and 'min')
-/item: "custom" passes the options from '...'
-/item: "none" does not tune any hyperparameter
+\item "all" tunes all hyperparameters (for \emph{rf}, 'mtry', 'trees' and 'min')
+\item "custom" passes the options from '...'
+\item "none" does not tune any hyperparameter
 }}
 }
 \value{

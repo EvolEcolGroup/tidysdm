@@ -21,6 +21,7 @@ Create a composite plots contrasting the distribution of multiple variables
 for presences vs the background.
 }
 \examples{
+\donttest{
 data("bradypus", package = "maxnet")
 bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
   dplyr::mutate(presence = relevel(
@@ -32,5 +33,5 @@ bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
   select(-ecoreg)
 
 bradypus_tb \%>\% plot_pres_vs_bg(presence)
-
+}
 }
