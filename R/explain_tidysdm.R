@@ -9,13 +9,14 @@
 #' @return explainer object [`DALEX::explain`] ready to work with DALEX
 #' @export
 #' @examples
+#' \donttest{
 #' # using the whole ensemble
 #' lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
 #' # by workflow
 #' explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
 #'   by_workflow = TRUE
 #' )
-#'
+#' }
 explain_tidysdm <- function(model,
                             data,
                             y,

@@ -27,3 +27,6 @@ Possibly misspelled words in DESCRIPTION:
     tidymodels (8:56)
 
 0 errors ✔ | 0 warnings ✔ | 1 notes ✖
+
+## Changes from initial submission
+The vignettes and one example were flagged for CPU time >2.5 times elapsed time.

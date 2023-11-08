@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(cores=2)
+options(mc.cores=2)
 ```
 # SDMs with `tidymodels`
 

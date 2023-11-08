@@ -115,11 +115,12 @@ methods. This function creates a DALEX explainer (see \code{\link[DALEX:explain]
 by multiple function to create explanations of the model.
 }
 \examples{
+\donttest{
 # using the whole ensemble
 lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
 # by workflow
 explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
   by_workflow = TRUE
 )
-
+}
 }
