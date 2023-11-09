@@ -28,7 +28,10 @@ ideal framework. `tidysdm` provides a number of wrappers and specialised
 functions to facilitate the fitting of SDM with `tidymodels`.
 
 This article provides an overview of the how `tidysdm` facilitates fitting
-SDMs. As `tidysdm` relies on `tidymodels`, users are advised to familiarise 
+SDMs. Further articles, detailing how to use the package for palaeodata, 
+fitting more complex models and how to troubleshoot models can be found
+on the [`tidisdm` website](https://evolecolgroup.github.io/tidysdm/). 
+As `tidysdm` relies on `tidymodels`, users are advised to familiarise 
 themselves with the introductory
 tutorials on the [`tidymodels` website](https://www.tidymodels.org/start/).
 
