@@ -2,7 +2,6 @@ BCI
 CMD
 DALEX
 Ecol
-GAMs
 GBIF
 GC
 Guisan
@@ -15,7 +14,6 @@ MaxEnt
 Maxent
 Maxnet
 POSIXlt
-Prepping
 Randin
 SDM
 SDMs
@@ -87,10 +85,8 @@ rsplit
 schreiberi
 sdm
 spatialsample
-stackexchange
 stackoverflow
 stat
-svm
 thres
 tibble
 tibbles
