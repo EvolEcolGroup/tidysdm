@@ -207,7 +207,8 @@ should be returned instead of a single explainer for the ensemble</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># using the whole ensemble</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># using the whole ensemble</span></span></span>
 <span class="r-in"><span><span class="va">lacerta_explainer</span> <span class="op">&lt;-</span> <span class="fu">explain_tidysdm</span><span class="op">(</span><span class="fu">tidysdm</span><span class="fu">::</span><span class="va"><a href="lacerta_ensemble.html">lacerta_ensemble</a></span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Preparation of a new explainer is initiated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model label       :  data.frame  ( <span style="color: #BBBB00;"> default </span> )</span>
@@ -278,7 +279,7 @@ should be returned instead of a single explainer for the ensemble</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  -0.8946667 , mean =  -0.04582804 , max =  0.561125  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;"> A new explainer has been created! </span> </span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
