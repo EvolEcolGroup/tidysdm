@@ -32,5 +32,4 @@ Possibly misspelled words in DESCRIPTION:
 The vignettes and one example were flagged for CPU time >2.5 times elapsed time.
 We do not use any code parallelisation directly in our code, so the problem arises from one of
 the dependencies grabbing more threads than it should. We have attempted to
-limit threads explicitly in the underlying packages, but it is not easy to replicate the problem seen on
-the CRAN machine.
+limit threads explicitly in the underlying packages.
