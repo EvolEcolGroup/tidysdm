@@ -64,7 +64,7 @@ land_mask <- mask(land_mask, europe_poly)
 ```
 
 And use `tidyterra` to plot:
-```{r cast to sf, fig.width=6, fig.height=4}
+```{r cast_to_sf, fig.width=6, fig.height=4}
 library(tidyterra)
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
