@@ -8,7 +8,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(cores=2)
+options(mc.cores=2)
+```
 
 In this vignette, we illustrate how to troubleshoot tuning errors. This is not a 
 comprehensive list (yet), but rather an attempt to illustrate how an error 
@@ -18,8 +25,7 @@ can be approached.
 
 Most algorithms do not allow NAs. We can generate a problematic dataset by
 loading the *Lacerta* dataset, and manually add an NA:
-
-```r
+```{r}
 library(tidysdm)
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
   package = "tidysdm"
@@ -28,8 +34,7 @@ lacerta_thin$bio05[37] <- NA
 ```
 
 Let us set up a recipe and fit workflow_set
-
-```r
+```{r}
 lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
   step_rm(all_of(c(
     "bio01", "bio02", "bio03", "bio04", "bio07", "bio08",
@@ -54,8 +59,7 @@ lacerta_models <-
   option_add(control = control_ensemble_grid())
 ```
 
-
-```r
+```{r error=TRUE}
 set.seed(100)
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
 lacerta_models <-
@@ -64,31 +68,6 @@ lacerta_models <-
     resamples = lacerta_cv, grid = 3,
     metrics = sdm_metric_set(), verbose = TRUE
   )
-#> i	No tuning parameters. `fit_resamples()` will be attempted
-#> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (527ms)
-#> i 2 of 2 tuning:     default_rf
-#> i Creating pre-processing data to finalize unknown parameter: mtry
-#> → A | error:   Missing data in columns: bio05.
-#> 
-There were issues with some computations   A: x1
-
-There were issues with some computations   A: x4
-
-There were issues with some computations   A: x7
-
-There were issues with some computations   A: x10
-
-There were issues with some computations   A: x11
-
-There were issues with some computations   A: x12
-
-There were issues with some computations   A: x14
-
-There were issues with some computations   A: x15
-#> Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.
-#> Warning: Unknown or uninitialised column: `.notes`.
-#> ✖ 2 of 2 tuning:     default_rf failed with
 ```
 
 We can see that the error is self-explanatory. Also, note that the error impacts
@@ -97,24 +76,9 @@ splits for 3 hyperparameter values).
 
 Prepping the recipe (which trains it on the dataset) can help diagnosing
 problems:
-
-```r
+```{r}
 lacerta_prep <- lacerta_rec %>% prep(lacerta_thin)
 lacerta_prep
-#> 
-#> ── Recipe ──────────────────────────────────────────────────────────────────────────────────────────────────────
-#> 
-#> ── Inputs
-#> Number of variables by role
-#> outcome:    1
-#> predictor: 20
-#> coords:     2
-#> 
-#> ── Training information
-#> Training data contained 452 data points and 1 incomplete row.
-#> 
-#> ── Operations
-#> • Variables removed: bio01, bio02, bio03, bio04, bio07, bio08, bio09, bio10, bio11, bio12, bio14, ... | Trained
 ```
 
 Note that, in the training information, we were warned that 1 row was incomplete.
@@ -136,8 +100,7 @@ variables of interest. This can happen if we use `step_select` to choose
 variables of interest, and the error is less than clear:
 
 Let's load the data and create a recipe with `step_select`:
-
-```r
+```{r}
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
   package = "tidysdm"
 ))
@@ -147,8 +110,7 @@ lacerta_rec_sel <- recipe(lacerta_thin, formula = class ~ .) %>%
 ```
 
 Now we create the workflow set and fit it:
-
-```r
+```{r error=TRUE}
 lacerta_models <-
   # create the workflow_set
   workflow_set(
@@ -173,36 +135,6 @@ lacerta_models <-
     resamples = lacerta_cv, grid = 3,
     metrics = sdm_metric_set(), verbose = TRUE
   )
-#> i	No tuning parameters. `fit_resamples()` will be attempted
-#> i 1 of 2 resampling: default_glm
-#> → A | error:   object '.' not found
-#> 
-There were issues with some computations   A: x1
-
-There were issues with some computations   A: x4
-
-There were issues with some computations   A: x5
-#> Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.
-#> Warning: Unknown or uninitialised column: `.notes`.
-#> ✖ 1 of 2 resampling: default_glm failed with 
-#> i 2 of 2 tuning:     default_rf
-#> i Creating pre-processing data to finalize unknown parameter: mtry
-#> → A | error:   subscript out of bounds
-#> 
-There were issues with some computations   A: x1
-
-There were issues with some computations   A: x3
-
-There were issues with some computations   A: x6
-
-There were issues with some computations   A: x9
-
-There were issues with some computations   A: x13
-
-There were issues with some computations   A: x15
-#> Warning: All models failed. Run `show_notes(.Last.tune.result)` for more information.
-#> Unknown or uninitialised column: `.notes`.
-#> ✖ 2 of 2 tuning:     default_rf failed with
 ```
 The errors are not very intuitive. However, all models have failed for all algorithms,
 which suggests that the problem lies with the data preparation side (either the data
@@ -213,24 +145,9 @@ So, in this case, we know that the data are fine. Whilst prepping (and sometimes
 diagnose problems with the outcome variable in a recipe. Prepping will not
 show anything obvious:
 
-
-```r
+```{r}
 lacerta_prep_sel <- lacerta_rec_sel %>% prep(lacerta_thin)
 lacerta_prep_sel
-#> 
-#> ── Recipe ──────────────────────────────────────────────────────────────────────────────────────────────────────
-#> 
-#> ── Inputs
-#> Number of variables by role
-#> outcome:    1
-#> predictor: 20
-#> coords:     2
-#> 
-#> ── Training information
-#> Training data contained 452 data points and no incomplete rows.
-#> 
-#> ── Operations
-#> • Variables selected: bio05, bio06, bio13, bio14, bio15 | Trained
 ```
 
 In this case, it is a process of exclusion. Everything seems fine, but the models
@@ -245,8 +162,7 @@ which variables are fitted with splines. `tidysdm` has some functions to
 simplify this process, assuming that the user just wants to fit a standard smooth
 to every continuous predictor.
 
-
-```r
+```{r}
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
   package = "tidysdm"
 ))
@@ -281,8 +197,7 @@ lacerta_models <-
 ```
 
 
-
-```r
+```{r}
 set.seed(100)
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
 lacerta_models <-
@@ -291,12 +206,6 @@ lacerta_models <-
     resamples = lacerta_cv, grid = 3,
     metrics = sdm_metric_set(), verbose = TRUE
   )
-#> i	No tuning parameters. `fit_resamples()` will be attempted
-#> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (1s)
-#> i	No tuning parameters. `fit_resamples()` will be attempted
-#> i 2 of 2 resampling: default_gam
-#> ✔ 2 of 2 resampling: default_gam (5.3s)
 ```
 
 Note that the step of defining a formula is incompatible with using `step_cor`
@@ -317,8 +226,7 @@ investigate fitting it to the specific `rsplit`.
 
 We generate a problematic dataset by subsampling the lacerta dataset:
 
-
-```r
+```{r}
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
   package = "tidysdm"
 ))
@@ -361,8 +269,7 @@ lacerta_models <-
 
 We then create 3 folds and attempt to fit the models:
 
-
-```r
+```{r}
 set.seed(100)
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 3)
 lacerta_models <-
@@ -371,20 +278,6 @@ lacerta_models <-
     resamples = lacerta_cv, grid = 3,
     metrics = sdm_metric_set(), verbose = TRUE
   )
-#> i	No tuning parameters. `fit_resamples()` will be attempted
-#> i 1 of 3 resampling: default_glm
-#> ✔ 1 of 3 resampling: default_glm (453ms)
-#> i	No tuning parameters. `fit_resamples()` will be attempted
-#> i 2 of 3 resampling: default_gam
-#> → A | warning: Fitting terminated with step failure - check results carefully
-#> 
-There were issues with some computations   A: x1
-
-There were issues with some computations   A: x1
-#> ✔ 2 of 3 resampling: default_gam (3.7s)
-#> i 3 of 3 tuning:     default_rf
-#> i Creating pre-processing data to finalize unknown parameter: mtry
-#> ✔ 3 of 3 tuning:     default_rf (979ms)
 ```
 
 We see that one of the folds gives us an error when using GAMs. The error 
@@ -394,73 +287,23 @@ an idea of where this error comes from.
 
 We start by extracting the results of the gam fits:
 
-
-```r
+```{r}
 gam_results <- extract_workflow_set_result(lacerta_models, id = "default_gam")
 gam_results
-#> # Resampling results
-#> # 3-fold spatial block cross-validation 
-#> # A tibble: 3 × 5
-#>   splits          id    .metrics         .notes           .predictions     
-#>   <list>          <chr> <list>           <list>           <list>           
-#> 1 <split [54/36]> Fold1 <tibble [3 × 4]> <tibble [0 × 3]> <tibble [36 × 5]>
-#> 2 <split [63/27]> Fold2 <tibble [3 × 4]> <tibble [1 × 3]> <tibble [27 × 5]>
-#> 3 <split [64/26]> Fold3 <tibble [3 × 4]> <tibble [0 × 3]> <tibble [26 × 5]>
-#> 
-#> There were issues with some computations:
-#> 
-#>   - Warning(s) x1: Fitting terminated with step failure - check results carefully
-#> 
-#> Run `show_notes(.Last.tune.result)` for more information.
 ```
 
 We see that, in the `.notes` column, the second item is not empty (it does not
 have zero rows). We can check that it indeed contains the error that we wanted:
 
-
-```r
+```{r}
 gam_results$.notes[2]
-#> [[1]]
-#> # A tibble: 1 × 3
-#>   location                    type    note                                                          
-#>   <chr>                       <chr>   <chr>                                                         
-#> 1 preprocessor 1/1, model 1/1 warning Fitting terminated with step failure - check results carefully
 ```
 
 We can now get the problematic data split, and extract the training data:
 
-
-```r
+```{r}
 problem_split <- gam_results$splits[2][[1]]
 summary(training(problem_split))
-#>        class             geometry      bio01           bio02            bio03           bio04      
-#>  presence :18   POINT        :63   Min.   : 4.74   Min.   : 6.737   Min.   :34.30   Min.   :341.2  
-#>  pseudoabs:45   epsg:4326    : 0   1st Qu.:11.81   1st Qu.: 9.336   1st Qu.:39.30   1st Qu.:500.8  
-#>                 +proj=long...: 0   Median :13.09   Median :10.937   Median :40.55   Median :610.8  
-#>                                    Mean   :12.88   Mean   :11.052   Mean   :40.54   Mean   :584.6  
-#>                                    3rd Qu.:14.82   3rd Qu.:12.649   3rd Qu.:42.19   3rd Qu.:656.1  
-#>                                    Max.   :17.87   Max.   :14.037   Max.   :46.98   Max.   :756.7  
-#>      bio05           bio06             bio07           bio08            bio09            bio10      
-#>  Min.   :19.90   Min.   :-6.2732   Min.   :16.40   Min.   : 1.922   Min.   : 1.588   Min.   :12.86  
-#>  1st Qu.:24.91   1st Qu.:-0.6787   1st Qu.:23.32   1st Qu.: 7.716   1st Qu.:16.995   1st Qu.:18.53  
-#>  Median :28.59   Median : 1.1918   Median :27.88   Median : 9.668   Median :19.828   Median :20.51  
-#>  Mean   :28.57   Mean   : 1.2175   Mean   :27.35   Mean   : 9.450   Mean   :18.938   Mean   :20.48  
-#>  3rd Qu.:32.31   3rd Qu.: 3.5664   3rd Qu.:31.49   3rd Qu.:11.341   3rd Qu.:22.607   3rd Qu.:23.08  
-#>  Max.   :35.31   Max.   : 8.2344   Max.   :35.27   Max.   :16.882   Max.   :25.470   Max.   :25.71  
-#>      bio11            bio12            bio13           bio14           bio15           bio16      
-#>  Min.   :-2.060   Min.   : 249.0   Min.   : 36.0   Min.   : 2.00   Min.   :13.44   Min.   : 96.0  
-#>  1st Qu.: 4.968   1st Qu.: 452.0   1st Qu.: 59.0   1st Qu.: 8.00   1st Qu.:30.07   1st Qu.:157.0  
-#>  Median : 6.236   Median : 628.0   Median : 91.0   Median :17.00   Median :38.97   Median :249.0  
-#>  Mean   : 6.268   Mean   : 757.8   Mean   :101.5   Mean   :21.97   Mean   :41.58   Mean   :280.3  
-#>  3rd Qu.: 8.455   3rd Qu.:1016.5   3rd Qu.:119.0   3rd Qu.:30.50   3rd Qu.:54.30   3rd Qu.:334.0  
-#>  Max.   :11.795   Max.   :1622.0   Max.   :248.0   Max.   :74.00   Max.   :71.59   Max.   :714.0  
-#>      bio17            bio18           bio19          altitude     
-#>  Min.   : 17.00   Min.   : 22.0   Min.   : 68.0   Min.   :  38.0  
-#>  1st Qu.: 43.00   1st Qu.: 47.0   1st Qu.:128.5   1st Qu.: 319.5  
-#>  Median : 71.00   Median : 78.0   Median :225.0   Median : 689.0  
-#>  Mean   : 88.08   Mean   : 96.0   Mean   :252.5   Mean   : 685.5  
-#>  3rd Qu.:109.50   3rd Qu.:117.5   3rd Qu.:319.5   3rd Qu.: 855.0  
-#>  Max.   :253.00   Max.   :253.0   Max.   :714.0   Max.   :1926.0
 ```
 
 In this case, there is nothing too obvious that leads to the error (an important
@@ -470,12 +313,9 @@ generally lead to errors).
 We can now extract the workflow and refit it to the split to confirm that we
 have isolated the problem:
 
-
-```r
+```{r}
 gam_workflow <- extract_workflow(lacerta_models, id = "default_gam")
 faulty_gam <- fit(gam_workflow, training(problem_split))
-#> Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L, : Fitting terminated with step
-#> failure - check results carefully
 ```
 
 The next step would be to dig deeper into the data, trying to understand whether
