@@ -8,8 +8,8 @@ Authors@R: c(
 Description: Fit species distribution models (SDMs) using the `tidymodels` framework, 
   which provides a standardised interface to define models and process their 
   outputs. `tidysdm` expands `tidymodels` by providing methods for spatial objects,
-  as well a number of specialised functions to process presences and pseudoabsences
-  for present-day datasets and palaeo datasets. Its full 
+  as well as a number of specialised functions to process presences and pseudoabsences
+  for contemporary and palaeo datasets. Its full 
   functionalities are described
   in Leonardi et al. (2023) <doi:10.1101/2023.07.24.550358>.
 License: AGPL (>= 3)
