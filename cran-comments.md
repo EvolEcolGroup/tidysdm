@@ -29,7 +29,9 @@ Possibly misspelled words in DESCRIPTION:
 0 errors ✔ | 0 warnings ✔ | 1 notes ✖
 
 ## Changes from initial submission
-The vignettes and one example were flagged for CPU time >2.5 times elapsed time.
-We do not use any code parallelisation directly in our code, so the problem arises from one of
-the dependencies grabbing more threads than it should. We have attempted to
-limit threads explicitly for the underlying packages.
+Description text: Removed unnecessary capitalisation and provided better
+explanation of the package
+Avoid using \dontrun() for examples: the one case of \dontrun() has been 
+replaced with \donttest()
+No function writes by default: we had left a script in the vignette folder
+that was used to precompile long running code, but it has now been removed.

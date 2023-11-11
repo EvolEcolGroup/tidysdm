@@ -5,7 +5,12 @@ Authors@R: c(
     person("Michela", "Leonardi", role = "aut"),
     person("Margherita", "Colucci", role = "aut"),
     person("Andrea", "Manica", , "am315@cam.ac.uk", role = c("aut", "cre")))
-Description: Fit Species Distribution Models using the tidymodels framework, as described
+Description: Fit species distribution models (SDMs) using the `tidymodels` framework, 
+  which provides a standardised interface to define models and process their 
+  outputs. `tidysdm` expands `tidymodels` by providing methods for spatial objects,
+  as well a number of specialised functions to process presences and pseudoabsences
+  for present-day datasets and palaeo datasets. Its full 
+  functionalities are described
   in Leonardi et al. (2023) <doi:10.1101/2023.07.24.550358>.
 License: AGPL (>= 3)
 Encoding: UTF-8

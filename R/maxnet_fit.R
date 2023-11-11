@@ -36,7 +36,7 @@
 #'  \item{levels}{ levels of each predictor that is a factor }
 #' }
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # we repeat the example in the `maxnet` package
 #' data("bradypus", package = "maxnet")
 #' bradypus_tb <- tibble::as_tibble(bradypus) %>%
@@ -46,7 +46,7 @@
 #'     ),
 #'     ref = "presence"
 #'   ))
-#' mod3 <- maxnet_fit(presence ~ ., data = bradypus_tb, classes = "lq")
+#' mod <- maxnet_fit(presence ~ ., data = bradypus_tb, classes = "lq")
 #' plot(mod, "tmp6190_ann")
 #' }
 #' @keywords internal
