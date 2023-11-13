@@ -20,7 +20,8 @@ Check the balance of presences vs pseudoabsences among splits
 }
 \examples{
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
-  package="tidysdm"))
+  package = "tidysdm"
+))
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
 check_splits_balance(lacerta_cv, class)
 

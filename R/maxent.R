@@ -14,34 +14,42 @@
 #' @param regularization_multiplier  numeric, a constant to adjust regularization
 #' @returns a [`model_spec`] for a `maxent` model
 #' @examples
+#' \donttest{
 #' # format the data
-#' data("bradypus", package="maxnet")
-#' bradypus_tb <- tibble::as_tibble(bradypus) %>% dplyr::mutate(presence = relevel(factor(
-#'   dplyr::case_match (presence, 1~"presence",0 ~"absence")),
-#'   ref="presence")) %>% select(-ecoreg)
+#' data("bradypus", package = "maxnet")
+#' bradypus_tb <- tibble::as_tibble(bradypus) %>%
+#'   dplyr::mutate(presence = relevel(
+#'     factor(
+#'       dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
+#'     ),
+#'     ref = "presence"
+#'   )) %>%
+#'   select(-ecoreg)
 #'
 #' # fit the model, and make some predictions
 #' maxent_spec <- maxent(feature_classes = "lq")
 #' maxent_fitted <- maxent_spec %>%
 #'   fit(presence ~ ., data = bradypus_tb)
-#' pred_prob <-predict(maxent_fitted,new_data = bradypus[,-1], type="prob")
-#' pred_class <- predict(maxent_fitted,new_data = bradypus[,-1], type="class")
+#' pred_prob <- predict(maxent_fitted, new_data = bradypus[, -1], type = "prob")
+#' pred_class <- predict(maxent_fitted, new_data = bradypus[, -1], type = "class")
 #'
 #' # Now with tuning
-#' maxent_spec <- maxent(regularization_multiplier = tune(),
-#'                       feature_classes = tune())
+#' maxent_spec <- maxent(
+#'   regularization_multiplier = tune(),
+#'   feature_classes = tune()
+#' )
 #' set.seed(452)
-#' cv <- vfold_cv(bradypus_tb, v=2)
+#' cv <- vfold_cv(bradypus_tb, v = 2)
 #' maxent_tune_res <- maxent_spec %>%
 #'   tune_grid(presence ~ ., cv, grid = 3)
 #' show_best(maxent_tune_res, metric = "roc_auc")
-#'
+#' }
 #' @export
 maxent <-
-  function(mode = "classification",  engine = "maxnet", feature_classes = NULL,
+  function(mode = "classification", engine = "maxnet", feature_classes = NULL,
            regularization_multiplier = NULL) {
     # Check for correct mode
-    if (mode  != "classification") {
+    if (mode != "classification") {
       rlang::abort("`mode` should be 'classification'")
     }
 
@@ -50,8 +58,10 @@ maxent <-
     }
 
     # Capture the arguments in quosures
-    args <- list(feature_classes = rlang::enquo(feature_classes),
-                 regularization_multiplier = regularization_multiplier)
+    args <- list(
+      feature_classes = rlang::enquo(feature_classes),
+      regularization_multiplier = regularization_multiplier
+    )
 
     # Save some empty slots for future parts of the specification
     parsnip::new_model_spec(
@@ -67,11 +77,10 @@ maxent <-
 
 #' @export
 update.maxent <- function(object,
-                                        parameters = NULL,
-                                        feature_classes = NULL,
-                                        regularization_multiplier = NULL,
-                                        fresh = FALSE, ...) {
-
+                          parameters = NULL,
+                          feature_classes = NULL,
+                          regularization_multiplier = NULL,
+                          fresh = FALSE, ...) {
   args <- list(
     feature_classes = rlang::enquo(feature_classes),
     regularization_multiplier = rlang::enquo(regularization_multiplier)

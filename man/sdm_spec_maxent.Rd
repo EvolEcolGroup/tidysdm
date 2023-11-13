@@ -11,12 +11,12 @@ sdm_spec_maxent(..., tune = c("sdm", "all", "custom", "none"))
 customise the model. See the help of that function for details.}
 
 \item{tune}{character defining the tuning strategy. Valid strategies are:
-{itemize:
-/item: "sdm" chooses hyperparameters that are most important to tune for
+\itemize{
+\item "sdm" chooses hyperparameters that are most important to tune for
 an sdm (for \emph{maxent}, 'mtry')
-/item: "all" tunes all hyperparameters (for \emph{maxent}, 'mtry', 'trees' and 'min')
-/item: "custom" passes the options from '...'
-/item: "none" does not tune any hyperparameter
+\item "all" tunes all hyperparameters (for \emph{maxent}, 'mtry', 'trees' and 'min')
+\item "custom" passes the options from '...'
+\item "none" does not tune any hyperparameter
 }}
 }
 \value{
@@ -28,8 +28,8 @@ be used as a classifier of presences and absences in Species Distribution
 Models.
 }
 \examples{
-test_maxent_spec <- sdm_spec_maxent(tune="sdm")
+test_maxent_spec <- sdm_spec_maxent(tune = "sdm")
 test_maxent_spec
 # setting specific values
-sdm_spec_maxent(tune="custom", feature_classes="lq")
+sdm_spec_maxent(tune = "custom", feature_classes = "lq")
 }

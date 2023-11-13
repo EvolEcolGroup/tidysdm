@@ -10,15 +10,15 @@
 #' @returns a [`terra::SpatRaster`] with the predictions
 #' @export
 #'
-predict_raster <- function (object, raster,...) {
+predict_raster <- function(object, raster, ...) {
   UseMethod("predict_raster", object)
 }
 
 #' @rdname predict_raster
 #' @export
-predict_raster.default <- function(object, raster, ...){
+predict_raster.default <- function(object, raster, ...) {
   # create a dataframe
-  raster_df <-  terra::as.data.frame(raster, cell=TRUE, na.rm= TRUE)
+  raster_df <- terra::as.data.frame(raster, cell = TRUE, na.rm = TRUE)
   # create a vector of predictions by dispatching to the predict generics
   pred_df <- stats::predict(object, raster_df, ...)
 
@@ -26,22 +26,22 @@ predict_raster.default <- function(object, raster, ...){
   pred_raster <- terra::rast(raster[[1]])
 
   # and now fill in the values, adding a layer for each aggregating function we used
-  pred_raster[raster_df$cell]<-pred_df %>% dplyr::pull(1)
-  if (is.factor(pred_df %>% dplyr::pull(1))){
-    levels(pred_raster)<-data.frame(id=1:2, class=levels(pred_df %>% dplyr::pull(1)))
+  pred_raster[raster_df$cell] <- pred_df %>% dplyr::pull(1)
+  if (is.factor(pred_df %>% dplyr::pull(1))) {
+    levels(pred_raster) <- data.frame(id = 1:2, class = levels(pred_df %>% dplyr::pull(1)))
   }
 
 
-  if (ncol(pred_df)>1){
-    for (i_col in 2:ncol(pred_df)){
+  if (ncol(pred_df) > 1) {
+    for (i_col in 2:ncol(pred_df)) {
       pred_raster2 <- terra::rast(raster[[1]])
-      pred_raster2[raster_df$cell]<-pred_df %>% dplyr::pull(i_col)
-      terra::add(pred_raster)<- pred_raster2
+      pred_raster2[raster_df$cell] <- pred_df %>% dplyr::pull(i_col)
+      terra::add(pred_raster) <- pred_raster2
     }
   }
   names(pred_raster) <- names(pred_df)
-  if (is.factor(pred_df %>% dplyr::pull(1))){
-    names(pred_raster) <- paste0("binary_",names(pred_raster))
+  if (is.factor(pred_df %>% dplyr::pull(1))) {
+    names(pred_raster) <- paste0("binary_", names(pred_raster))
   }
   pred_raster
 }

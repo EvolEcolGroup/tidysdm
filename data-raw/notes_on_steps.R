@@ -1,13 +1,13 @@
 # https://www.tidymodels.org/learn/develop/recipes/
 
 step_dummy_coords <- function(recipe, ...,
-                        role = "predictor",
-                        trained = FALSE,
-                        inputs = NULL,
-                        skip = FALSE,
-                        id = rand_id("coords")) {
+                              role = "predictor",
+                              trained = FALSE,
+                              inputs = NULL,
+                              skip = FALSE,
+                              id = rand_id("coords")) {
   inputs <- enquos(..., .named = TRUE)
-  
+
   add_step(
     recipe,
     step_dummy_coords_new(
@@ -48,20 +48,19 @@ prep.step_dummy_coords <- function(x, training, info = NULL, ...) {
 
 #' @export
 bake.step_dummy_coords <- function(object, new_data, ...) {
-  if (!all(c("X","Y") %in% names(new_data))){
+  if (!all(c("X", "Y") %in% names(new_data))) {
     new_data <- dplyr::add_column(new_data, X = NA, Y = NA)
-  } 
+  }
   browser()
   return(new_data)
-  
 }
 
-#' 
+#'
 #' print.step_rename <-
 #'   function(x, width = max(20, options()$width - 35), ...) {
 #'     title <- "Variable renaming for "
 #'     trained_names <- names(x$inputs)
-#'     
+#'
 #'     untrained_terms <- rlang::parse_quos(
 #'       trained_names %||% "",
 #'       rlang::current_env()
@@ -69,13 +68,13 @@ bake.step_dummy_coords <- function(object, new_data, ...) {
 #'     print_step(trained_names, untrained_terms, x$trained, title, width)
 #'     invisible(x)
 #'   }
-#' 
+#'
 #' #' @rdname tidy.recipe
 #' #' @export
 #' tidy.step_rename <- function(x, ...) {
 #'   var_expr <- map(x$inputs, quo_get_expr)
 #'   var_expr <- map_chr(var_expr, quo_text, width = options()$width, nlines = 1)
-#'   
+#'
 #'   tibble(
 #'     terms = names(x$inputs) %||% character(),
 #'     value = unname(var_expr) %||% character(),

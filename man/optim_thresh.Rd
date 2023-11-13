@@ -10,7 +10,7 @@ optim_thresh(truth, estimate, metric, event_level = "first")
 \item{truth}{The column identifier for the true class results (that is a
 factor). This should be an unquoted column name although this argument is
 passed by expression and supports quasiquotation (you can unquote column
-names). For ⁠_vec()⁠ functions, a factor vector.}
+names). For _vec() functions, a factor vector.}
 
 \item{estimate}{the predicted probability for the event}
 
@@ -28,10 +28,10 @@ the probability threshold for the event
 }
 \description{
 This function returns the threshold to turn probabilities into binary classes
-whilst optimising a given metric. Currently available for tss_max and
-sensitivity (for which a target sensitivity is required).
+whilst optimising a given metric. Currently available for \code{\link{tss_max}}, \code{\link{kap_max}} and
+\code{sensitivity} (for which a target sensitivity is required).
 }
 \examples{
-optim_thresh(two_class_example$truth,two_class_example$Class1,metric=c("tss_max"))
-optim_thresh(two_class_example$truth,two_class_example$Class1,metric=c("sens",0.9))
+optim_thresh(two_class_example$truth, two_class_example$Class1, metric = c("tss_max"))
+optim_thresh(two_class_example$truth, two_class_example$Class1, metric = c("sens", 0.9))
 }

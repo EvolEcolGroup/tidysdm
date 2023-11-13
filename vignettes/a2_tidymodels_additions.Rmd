@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(cores=2)
+options(mc.cores=2)
 ```
 
 # Additional features of `tidymodels`
@@ -76,7 +78,10 @@ The resulting list can be then used to build lists of explanations, which can
 then be plotted.
 
 ```{r profile, fig.width=6, fig.height=4}
-profile_list <- lapply(explainer_list,model_profile, N = 500, variables = "bio05")
+profile_list <- lapply(explainer_list, model_profile,
+  N = 500,
+  variables = "bio05"
+)
 plot(profile_list)
 ```
 
@@ -95,7 +100,8 @@ analogous to the one that we generated in the [`tidysdm` overview](https://evole
 library(tidysdm)
 library(sf)
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
-                                    package="tidysdm"))
+  package = "tidysdm"
+))
 ```
 
 We then use `spatial_initial_split` to do the split, using a `spatial_block_cv`
@@ -103,7 +109,9 @@ scheme to partition the data:
 
 ```{r initial_split, fig.width=6, fig.height=4}
 set.seed(1005)
-lacerta_initial <- spatial_initial_split(lacerta_thin, prop = 1/5, spatial_block_cv)
+lacerta_initial <- spatial_initial_split(lacerta_thin,
+  prop = 1 / 5, spatial_block_cv
+)
 autoplot(lacerta_initial)
 ```
 
@@ -115,9 +123,11 @@ we used for the `initial_split`).
 set.seed(1005)
 library(sf)
 lacerta_training <- training(lacerta_initial)
-lacerta_cv <- spatial_block_cv(lacerta_training, v = 5,
-                                cellsize = grid_cellsize(lacerta_thin),
-                                offset = grid_offset(lacerta_thin))
+lacerta_cv <- spatial_block_cv(lacerta_training,
+  v = 5,
+  cellsize = grid_cellsize(lacerta_thin),
+  offset = grid_offset(lacerta_thin)
+)
 autoplot(lacerta_cv)
 ```
 
@@ -129,8 +139,13 @@ we will create two recipes, one with all variables, and one only with the
 variables that are uncorrelated:
 
 ```{r recipe}
-lacerta_rec_all <- recipe(lacerta_thin, formula=class~.)
-lacerta_rec_uncor <- lacerta_rec_all %>% step_rm(all_of( c("bio01", "bio02", "bio03", "bio04", "bio07", "bio08", "bio09", "bio10", "bio11", "bio12", "bio14", "bio16", "bio17", "bio18", "bio19", "altitude")))
+lacerta_rec_all <- recipe(lacerta_thin, formula = class ~ .)
+lacerta_rec_uncor <- lacerta_rec_all %>%
+  step_rm(all_of(c(
+    "bio01", "bio02", "bio03", "bio04", "bio07", "bio08",
+    "bio09", "bio10", "bio11", "bio12", "bio14", "bio16",
+    "bio17", "bio18", "bio19", "altitude"
+  )))
 
 lacerta_rec_uncor
 ```
@@ -145,9 +160,10 @@ for creating a model specification. However, we can use a standard model spec fr
 lacerta_models <-
   # create the workflow_set
   workflow_set(
-    preproc = list(uncor = lacerta_rec_uncor, # recipe for the glm
-                   all = lacerta_rec_all,  # recipe for the random forest
-                   all = lacerta_rec_uncor # recipe for svm
+    preproc = list(
+      uncor = lacerta_rec_uncor, # recipe for the glm
+      all = lacerta_rec_all, # recipe for the random forest
+      all = lacerta_rec_uncor # recipe for svm
     ),
     models = list(
       # the standard glm specs
@@ -155,8 +171,10 @@ lacerta_models <-
       # rf specs with tuning
       rf = sdm_spec_rf(),
       # svm specs with tuning
-     svm = parsnip::svm_poly(cost = tune(),
-                               degree = tune()) %>% 
+      svm = parsnip::svm_poly(
+        cost = tune(),
+        degree = tune()
+      ) %>%
         parsnip::set_engine("kernlab") %>%
         parsnip::set_mode("classification")
     ),
@@ -186,26 +204,27 @@ informing the set dials with the actual data:
 ```{r}
 rf_param <- lacerta_models %>%
   # extract the rf workflow
-  extract_workflow ("all_rf") %>%
+  extract_workflow("all_rf") %>%
   # extract its parameters dials (used to tune)
   extract_parameter_set_dials() %>%
   # give it the predictors to finalize mtry
-  finalize(x=st_drop_geometry(lacerta_thin) %>% select(-class))
+  finalize(x = st_drop_geometry(lacerta_thin) %>% select(-class))
 
 # now update the workflowset with the new parameter info
 lacerta_models <- lacerta_models %>%
-  option_add(param_info=rf_param,id="all_rf")
-
+  option_add(param_info = rf_param, id = "all_rf")
 ```
 
 
 And now we can tune the models:
 ```{r tune_grid}
 set.seed(1234567)
-lacerta_models <- 
-   lacerta_models %>% 
-   workflow_map("tune_bayes", resamples = lacerta_cv, initial=8,
-                metrics = sdm_metric_set(), verbose = TRUE)
+lacerta_models <-
+  lacerta_models %>%
+  workflow_map("tune_bayes",
+    resamples = lacerta_cv, initial = 8,
+    metrics = sdm_metric_set(), verbose = TRUE
+  )
 ```
 
 We can have a look at the performance of our models with:
@@ -224,7 +243,7 @@ multiple versions of the same algorithm with different hyper-parameters.
 ```{r build_stack, fig.width=6, fig.height=4}
 library(stacks)
 set.seed(1005)
-lacerta_stack <- 
+lacerta_stack <-
   # initialize the stack
   stacks() %>%
   # add candidate members
@@ -245,9 +264,9 @@ testing data:
 ```{r predict_test}
 lacerta_testing <- testing(lacerta_initial)
 
-lacerta_test_pred <- 
+lacerta_test_pred <-
   lacerta_testing %>%
-  bind_cols(predict(lacerta_stack, ., type="prob"))
+  bind_cols(predict(lacerta_stack, ., type = "prob"))
 ```
 
 And look at the goodness of fit using some commonly used sdm metrics. Note that
@@ -255,39 +274,49 @@ And look at the goodness of fit using some commonly used sdm metrics. Note that
 on the data.
 
 ```{r assess_test}
-sdm_metric_set()(data= lacerta_test_pred,truth=class,.pred_presence)
+sdm_metric_set()(data = lacerta_test_pred, truth = class, .pred_presence)
 ```
 
 We can now make predictions with this stacked ensemble. We start by extracting the climate for the variables of interest
 
 ```{r eval=FALSE}
 download_dataset("WorldClim_2.1_10m")
-climate_vars <-lacerta_rec_all$var_info %>% filter(role=="predictor") %>% pull(variable)
+climate_vars <- lacerta_rec_all$var_info %>%
+  filter(role == "predictor") %>%
+  pull(variable)
 
-climate_present<-pastclim::region_slice(time_ce = 1985, 
-                                        bio_variables = climate_vars, 
-                                        data="WorldClim_2.1_10m", 
-                                        crop=iberia_poly)
+climate_present <- pastclim::region_slice(
+  time_ce = 1985,
+  bio_variables = climate_vars,
+  data = "WorldClim_2.1_10m",
+  crop = iberia_poly
+)
 ```
 
 ```{r echo=FALSE, results='hide'}
-terra::gdal(warn=3)
-climate_present<-terra::rast(system.file("extdata/lacerta_climate_present_10m.nc", package="tidysdm"))
-climate_vars <- lacerta_rec_all$var_info %>% filter(role=="predictor") %>% pull(variable)
-if (!all(climate_vars %in% names(climate_present))){
+terra::gdal(warn = 3)
+climate_present <- terra::rast(
+  system.file("extdata/lacerta_climate_present_10m.nc", package = "tidysdm")
+)
+climate_vars <- lacerta_rec_all$var_info %>%
+  filter(role == "predictor") %>%
+  pull(variable)
+if (!all(climate_vars %in% names(climate_present))) {
   stop("mismatched variables in the raster")
 }
 ```
 
 
 ```{r plot_present, fig.width=6, fig.height=4}
-prediction_present <- predict_raster(lacerta_stack, climate_present, type="prob")
+prediction_present <- predict_raster(lacerta_stack, climate_present,
+  type = "prob"
+)
 library(tidyterra)
 ggplot() +
-  geom_spatraster(data=prediction_present, aes(fill=.pred_presence))+
+  geom_spatraster(data = prediction_present, aes(fill = .pred_presence)) +
   scale_fill_terrain_c() +
   # plot presences used in the model
-  geom_sf(data = lacerta_thin %>% filter(class=="presence"))
+  geom_sf(data = lacerta_thin %>% filter(class == "presence"))
 ```
 
 

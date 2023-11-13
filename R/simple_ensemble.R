@@ -9,13 +9,11 @@
 #' @param ... not used, this function just creates an empty `simple_ensemble`
 #' object. Members are added with `add_best_candidates()`
 #' @returns an empty `simple_ensemble`. This is a tibble with columns:
-#' {/itemize:
-#' /item: `wflow_id`: the name of the workflows for which the best model was
+#' * `wflow_id`: the name of the workflows for which the best model was
 #' chosen
-#' /item: `workflow`: the trained workflow objects
-#' /item: `metrics`: metrics based on the crossvalidation resampling used
+#' * `workflow`: the trained workflow objects
+#' * `metrics`: metrics based on the crossvalidation resampling used
 #' to tune the models
-#' }
 #' @export
 
 simple_ensemble <- function(...) {
@@ -29,17 +27,19 @@ simple_ensemble <- function(...) {
     metrics = list()
   )
 
-  base_ensemble <- structure(base_ensemble, class = c("simple_ensemble",
-                                                      class(base_ensemble)))
+  base_ensemble <- structure(base_ensemble, class = c(
+    "simple_ensemble",
+    class(base_ensemble)
+  ))
 }
 
 #' @export
 print.simple_ensemble <- function(x, ...) {
   rlang::inform("A simple_ensemble of models")
-  if (nrow(x)>0) {
-    rlang::inform(c("\nMembers:",x$wflow_id))
-    rlang::inform(c("\nAvailable metrics:",attr(x,"metrics")))
-    rlang::inform(c("\nMetric used to tune workflows:",attr(x,"best_metric")))
+  if (nrow(x) > 0) {
+    rlang::inform(c("\nMembers:", x$wflow_id))
+    rlang::inform(c("\nAvailable metrics:", attr(x, "metrics")))
+    rlang::inform(c("\nMetric used to tune workflows:", attr(x, "best_metric")))
   } else {
     rlang::inform("\nThis object is empty; add models with `add_members()`")
   }
@@ -49,4 +49,3 @@ print.simple_ensemble <- function(x, ...) {
 summary.simple_ensemble <- function(object, ...) {
   print(object)
 }
-

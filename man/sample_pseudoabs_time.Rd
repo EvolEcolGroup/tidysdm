@@ -21,7 +21,7 @@ sample_pseudoabs_time(
 These can be defined in \code{coords}, unless they have standard names
 (see details below).}
 
-\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} from which cells will be sampled}
+\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} or \link[terra:SpatRaster-class]{terra::SpatRasterDataset} from which cells will be sampled}
 
 \item{n_per_presence}{number of pseudoabsence/background points to sample for
 each presence}
@@ -54,17 +54,17 @@ This function samples pseudo-absence (or background, the naming is a matter
 of semantics) points from a raster given a set of presences.
 The locations returned as the center points of the sampled cells, which can
 not overlap with the presences. The following methods are implemented:
-{/itemize:
-/item: 'random': pseudo-absences/background randomly sampled from the region covered by the
+\itemize{
+\item 'random': pseudo-absences/background randomly sampled from the region covered by the
 raster (i.e. not NAs).
-/item: 'dist_min': pseudo-absences/background randomly sampled from the region excluding a buffer
+\item 'dist_min': pseudo-absences/background randomly sampled from the region excluding a buffer
 of 'dist_min' from presences (distances in 'm' for lonlat rasters, and in map
 units for projected rasters).
-/item: 'dist_max': pseudo-absences/background randomly sampled from the unioned buffers
+\item 'dist_max': pseudo-absences/background randomly sampled from the unioned buffers
 of 'dist_max' from presences (distances in 'm' for lonlat rasters, and in map
 units for projected rasters). Using the union of buffers means that areas that
 are in multiple buffers are not oversampled. This is also referred to as "thickening".
-/item: 'dist_disc': pseudo-absences/background randomly sampled from the unioned discs around presences
+\item 'dist_disc': pseudo-absences/background randomly sampled from the unioned discs around presences
 with the two values of 'dist_disc' defining the minimum and maximum distance from
 presences.
 }

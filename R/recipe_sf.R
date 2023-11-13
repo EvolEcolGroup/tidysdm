@@ -10,8 +10,8 @@
 #' column from the [data.frame] and replaces it with a simple `X` and `Y` columns
 #' before any further operations, thus allowing
 #' the usual processing by [recipe()] to succeed (`X` and `Y` are give the role
-#' of coords ina spatial recipe). When prepping and baking a `spatial_recipe`,
-#' if a data.frame or tibble without coordinates is used as `training` or 
+#' of coords in a spatial recipe). When prepping and baking a `spatial_recipe`,
+#' if a data.frame or tibble without coordinates is used as `training` or
 #' `new_data`, dummy `X` and `Y` columns
 #' are generated and filled with NAs.
 #' NOTE that order matters! You need to use the syntax
@@ -26,31 +26,33 @@
 #' @export
 #' @import recipes
 
-recipe.sf <- function (x, ...) {
+recipe.sf <- function(x, ...) {
   # we should check that all coordinates are points
-#  browser()
+  #  browser()
   if (all(c("X", "Y") %in% names(x))) {
-   if (all(sf::st_drop_geometry(x[, c("X", "Y")]) == sf::st_coordinates(x))) {
-     x<-x %>% sf::st_drop_geometry()
+    if (all(sf::st_drop_geometry(x[, c("X", "Y")]) == sf::st_coordinates(x))) {
+      x <- x %>% sf::st_drop_geometry()
     } else {
       stop("sf object `x` contains `X` and `Y` coordinates that do not match the sf point geometry")
     }
   } else {
-    x<-x %>% dplyr::bind_cols(sf::st_coordinates(x)) %>% sf::st_drop_geometry()
+    x <- x %>%
+      dplyr::bind_cols(sf::st_coordinates(x)) %>%
+      sf::st_drop_geometry()
   }
-  
-  
-  
-  rec <- recipe(x, ...)  %>% 
-    update_role(dplyr::any_of(c("X","Y")),new_role="coords")
+
+
+
+  rec <- recipe(x, ...) %>%
+    update_role(dplyr::any_of(c("X", "Y")), new_role = "coords")
   class(rec) <- c("spatial_recipe", class(rec))
   rec
 }
 
 #' @export
 #' @rdname recipe.sf
-spatial_recipe <- function (x, ...){
-  if (!inherits(x, "sf")){
+spatial_recipe <- function(x, ...) {
+  if (!inherits(x, "sf")) {
     stop("x should be an `sf` object")
   }
   recipe(x, ...)

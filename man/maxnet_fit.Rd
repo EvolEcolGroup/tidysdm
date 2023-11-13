@@ -10,7 +10,7 @@ maxnet_fit(
   regmult = 1,
   classes = "default",
   regfun = maxnet::maxnet.default.regularization,
-  addsamplestobackground = T,
+  addsamplestobackground = TRUE,
   ...
 )
 }
@@ -36,7 +36,8 @@ Maxnet returns an object of class \code{maxnet}, which is a list
 consisting of a glmnet model with the following elements added:
 \describe{
 \item{betas}{ nonzero coefficients of the fitted model }
-\item{alpha}{ constant offset making the exponential model sum to one over the background data }
+\item{alpha}{ constant offset making the exponential model sum to one
+over the background data }
 \item{entropy}{ entropy of the exponential model }
 \item{penalty.factor}{ the regularization constants used for each feature }
 \item{featuremins}{ minimum of each feature, to be used for clamping }
@@ -55,19 +56,24 @@ as well exposing parameters for normalisation in a manner compatible with
 }
 \details{
 The response needs to be a factor with the class representing presences
-as the reference level of the factor (as expected by other classification models).
+as the reference level of the factor (as expected by other
+classification models).
 A good guide to how options of a Maxent model work can be found in
 https://onlinelibrary.wiley.com/doi/full/10.1111/j.1600-0587.2013.07872.x
 }
 \examples{
-\dontrun{
-  # we repeat the example in the `maxnet` package
-  data("bradypus", package="maxnet")
-  bradypus_tb <- tibble::as_tibble(bradypus) \%>\% dplyr::mutate(presence = relevel(factor(
-    dplyr::case_match (presence, 1~"presence",0 ~"absence")),
-    ref="presence"))
-  mod3 <- maxnet_fit(presence~.,data=bradypus_tb, classes="lq")
-  plot(mod, "tmp6190_ann")
+\donttest{
+# we repeat the example in the `maxnet` package
+data("bradypus", package = "maxnet")
+bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
+  dplyr::mutate(presence = relevel(
+    factor(
+      dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
+    ),
+    ref = "presence"
+  ))
+mod <- maxnet_fit(presence ~ ., data = bradypus_tb, classes = "lq")
+plot(mod, "tmp6190_ann")
 }
 }
 \keyword{internal}

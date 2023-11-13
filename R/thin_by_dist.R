@@ -76,7 +76,7 @@ thin_by_dist <- function(data, dist_min, coords = NULL) {
     n_neighbours[points_to_remove] <- 0
 
     ## Set the occ to be ignored in the next iteration of the while loop
-    dist_mat[points_to_remove,] <- FALSE
+    dist_mat[points_to_remove, ] <- FALSE
     dist_mat[, points_to_remove] <- FALSE
 
     ## Note the occurrence for removal from the thinned data set
@@ -84,11 +84,11 @@ thin_by_dist <- function(data, dist_min, coords = NULL) {
   }
 
   ## Subset the original dataset
-  thinned_points <- data[points_to_keep,]
+  thinned_points <- data[points_to_keep, ]
   if (return_dataframe) {
     thinned_points <- thinned_points %>%
       dplyr::bind_cols(sf::st_coordinates(thinned_points)) %>% # re-add coordinates
-      as.data.frame() %>% #turn it into a data.frame
+      as.data.frame() %>% # turn it into a data.frame
       dplyr::select(-"geometry") %>% # remove the geometry column
       dplyr::rename("{coords[1]}" := "X", "{coords[2]}" := "Y")
   }

@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/EvolEcolGroup/tidysdm/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EvolEcolGroup/tidysdm/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/EvolEcolGroup/tidysdm/branch/main/graph/badge.svg?token=KLOzxJoLBO)](https://codecov.io/gh/EvolEcolGroup/tidysdm)
+[![codecov](https://codecov.io/gh/EvolEcolGroup/tidysdm/branch/main/graph/badge.svg?token=KLOzxJoLBO)](https://app.codecov.io/gh/EvolEcolGroup/tidysdm)
 <!-- badges: end -->
 
 The goal of `tidysdm` is to implement Species Distribution Models using the
@@ -21,7 +21,7 @@ with [`pastclim`](https://evolecolgroup.github.io/pastclim/dev/index.html),
 which helps downloading and manipulating present day data,
 future predictions, and palaeoclimate reconstructions.
 
-An overviewof the capabilities of `tidysdm` is given in [Leonardi et al.
+An overview of the capabilities of `tidysdm` is given in [Leonardi et al.
 (2023)](https://doi.org/10.1101/2023.07.24.550358).
 
 ## Installation
@@ -42,16 +42,6 @@ that might not be mature yet, use:
 devtools::install_github("EvolEcolGroup/tidysdm", ref = "dev")
 ```
 
-
-To take advantage of the integration with `pastclim` highlighted in the articles, you
-will need the `dev` version (NOT the one on CRAN). You can obtain it with:
-``` r        
-install.packages('terra', repos='https://rspatial.r-universe.dev')
-
-devtools::install_github("EvolEcolGroup/pastclim", ref="dev")
-```
-
-
 ## Overview of functionality
 
 On its dedicated [website](https://evolecolgroup.github.io/tidysdm/),
@@ -65,7 +55,8 @@ There is also a [dev
 version](https://evolecolgroup.github.io/tidysdm/dev/) of the site
 updated for the `dev` branch of `tidysdm` (on the top left of the dev
 website, the version number is in red and in the format x.x.x.9xxx,
-indicating it is a development version).
+indicating it is a development version). If you want to contribute, make
+sure to read our [contributing guide](https://evolecolgroup.github.io/tidysdm/CONTRIBUTING.html).
 
 ## When something does not work
 
@@ -87,4 +78,5 @@ new issue. Please make sure you have updated to the latest version of
 `tidysdm`, as well as updating all other packages on your
 system, and provide [a reproducible
 example](https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example)
-for the developers to investigate the problem.
+for the developers to investigate the problem. If you think you can help
+with fixing that bug, read our [contributing guide](https://evolecolgroup.github.io/tidysdm/CONTRIBUTING.html).

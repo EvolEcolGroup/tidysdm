@@ -11,6 +11,6 @@
 #'
 #' @export
 
-km2m <- function(x){
+km2m <- function(x) {
   x * 1000
 }
