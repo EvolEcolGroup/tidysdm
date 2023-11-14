@@ -26,19 +26,24 @@ An overview of the capabilities of `tidysdm` is given in [Leonardi et al.
 
 ## Installation
 
-`tidysdm` is still at the **beta** stage of development, and there is no official release on
-CRAN yet.
+`tidysdm` is on CRAN, and the easiest way to install it is with:
 
-You can install the latest version of tidysdm from [GitHub](https://github.com/) with:
+```         
+install.packages("tidysdm")
+```
+
+The version on CRAN is recommended for every day use. New features and
+bug fixes appear first on the `dev` branch on GitHub, before they make
+their way to CRAN. If you need to have early access to these new
+features, you can install `tidysdm` directly from GitHub. To install
+from GitHub, you will need to use `devtools`; if you haven't done so
+already, get it from CRAN with `install.packages("devtools")`.
+
+
+You can install the latest `dev` version of tidysdm from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("EvolEcolGroup/tidysdm")
-```
-
-For the development version of `tidysdm`, which includes experimental features
-that might not be mature yet, use:
-``` r
 devtools::install_github("EvolEcolGroup/tidysdm", ref = "dev")
 ```
 
