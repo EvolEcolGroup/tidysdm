@@ -14,7 +14,7 @@ by multiple function to create explanations of the model."><meta property="og:im
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.1.9001</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -207,7 +207,8 @@ should be returned instead of a single explainer for the ensemble</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># using the whole ensemble</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># using the whole ensemble</span></span></span>
 <span class="r-in"><span><span class="va">lacerta_explainer</span> <span class="op">&lt;-</span> <span class="fu">explain_tidysdm</span><span class="op">(</span><span class="fu">tidysdm</span><span class="fu">::</span><span class="va"><a href="lacerta_ensemble.html">lacerta_ensemble</a></span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Preparation of a new explainer is initiated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model label       :  data.frame  ( <span style="color: #BBBB00;"> default </span> )</span>
@@ -216,7 +217,7 @@ should be returned instead of a single explainer for the ensemble</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; target variable   :  452  values </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predict function  :  predict_function </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  No value for predict function target column. ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  package tidysdm , ver. 0.9.1.9001 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  package tidysdm , ver. 0.9.2.9000 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  type set to  classification </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.0004084954 , mean =  0.238296 , max =  0.9561616  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
@@ -237,7 +238,7 @@ should be returned instead of a single explainer for the ensemble</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  type set to  classification </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.004906125 , mean =  0.75 , max =  0.9990497  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  -0.9678673 , mean =  -1.202865e-17 , max =  0.953622  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  -0.9678673 , mean =  -7.873284e-18 , max =  0.953622  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;"> A new explainer has been created! </span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Preparation of a new explainer is initiated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model label       :  default_rf </span>
@@ -278,7 +279,7 @@ should be returned instead of a single explainer for the ensemble</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  -0.8946667 , mean =  -0.04582804 , max =  0.561125  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;"> A new explainer has been created! </span> </span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
