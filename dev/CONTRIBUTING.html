@@ -76,15 +76,14 @@
 <h2 id="functional-changes">Functional changes<a class="anchor" aria-label="anchor" href="#functional-changes"></a></h2>
 <p>If you want to make a change that impacts the functioning of <code>tidysdm</code>, it’s a good idea to first file an issue explaining what you have in mind. If the change is meant to fix a bug, then<br>
 add a minimal <a href="https://www.tidyverse.org/help/#reprex" class="external-link">reprex</a>.</p>
-<p>A good reprex is also the perfect starting point for writing a unit test, which should accompany any functional change in the code. Unit tests are also essential when fix bugs, so that you can both demonstrate that the fix work, and prevent future changes from undoing your work. For unit testing, we use <code>testthat</code>; you will find tests under <code>tests</code>, with a file dedicated to each function, following the convention <code>test_my_function.R</code> for naming files.</p>
+<p>A good reprex is also the perfect starting point for writing a unit test, which should accompany any functional change in the code. Unit tests are also essential when fixing bugs, so that you can both demonstrate that the fix work, and prevent future changes from undoing your work. For unit testing, we use <code>testthat</code>; you will find tests under <code>tests</code>, with a file dedicated to each function, following the convention <code>test_my_function.R</code> for naming files. When creating tests, try to make use built-in datasets, rather than adding data files to the package.</p>
 <p>Ideally, the body of your Pull Request will include the phrase <code>Fixes #issue-number</code>, where <code>issue_number</code> is the number on Github. In this way, your Pull Request will be automatically linked to the issue, and the issue will be closed when the Pull Request is merged in.</p>
 <p>For user-facing changes, add a bullet to the top of <code>NEWS.md</code> (i.e. just below the first header). Follow the style described in <a href="https://style.tidyverse.org/news.html" class="external-link uri">https://style.tidyverse.org/news.html</a>.</p>
+<p>Our continuous integration checks that the Pull Request does not reduce test coverage.</p>
 <div class="section level3">
 <h3 id="code-style">Code style<a class="anchor" aria-label="anchor" href="#code-style"></a></h3>
 <p>New code should follow the tidyverse <a href="https://style.tidyverse.org" class="external-link">style guide</a>. You can use the <a href="https://CRAN.R-project.org/package=styler" class="external-link">styler</a> package to apply these styles, but please don’t restyle code that has nothing to do with your PR.</p>
-<p>Lot’s of commenting in the code helps mantainability; so, if in doubt, always add an explanation to your new code.</p>
-<p>As discussed above, we use <a href="https://cran.r-project.org/package=roxygen2" class="external-link">roxygen2</a>, with <a href="https://roxygen2.r-lib.org/articles/rd-formatting.html" class="external-link">Markdown syntax</a>, for documentation.</p>
-<p>We use <a href="https://cran.r-project.org/package=testthat" class="external-link">testthat</a> for unit tests. Contributions that change functionality should always include test cases. Our continuous integration checks that the Pull Request does not reduce test coverage. When creating tests, try to make use built-in datasets, rather than adding data files to the package.</p>
+<p>Lots of commenting in the code helps mantainability; so, if in doubt, always add an explanation to your new code.</p>
 </div>
 </div>
 <div class="section level2">
