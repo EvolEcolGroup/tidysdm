@@ -64,11 +64,13 @@ add a minimal
 
 A good reprex is also the
 perfect starting point for writing a unit test, which should accompany any
-functional change in the code. Unit tests are also essential when fix bugs, so
+functional change in the code. Unit tests are also essential when fixing bugs, so
 that you can both demonstrate that the fix work, and prevent future changes
 from undoing your work. For unit testing, we use `testthat`; you will find tests under
 `tests`, with a file dedicated to each function, following the convention 
-`test_my_function.R` for naming files.
+`test_my_function.R` for naming files. When creating tests, try to make use 
+built-in datasets, rather than adding data
+files to the package.
 
 Ideally, the body of your Pull Request will include the phrase `Fixes #issue-number`,
 where `issue_number` is the number on Github. In this way, your Pull Request
@@ -79,22 +81,18 @@ For user-facing changes, add a bullet to the top of `NEWS.md`
 (i.e. just below the first header). Follow the style described 
 in <https://style.tidyverse.org/news.html>.
 
+Our continuous integration checks that the Pull Request does not
+reduce test coverage.
+        
+
 ### Code style
 
 New code should follow the tidyverse [style guide](https://style.tidyverse.org). 
 You can use the [styler](https://CRAN.R-project.org/package=styler) package 
 to apply these styles, but please don't restyle code that has nothing to do with your PR.
 
-Lot's of commenting in the code helps mantainability; so, if in doubt, always
+Lots of commenting in the code helps mantainability; so, if in doubt, always
 add an explanation to your new code.
-         
-As discussed above, we use [roxygen2](https://cran.r-project.org/package=roxygen2), with [Markdown syntax](https://roxygen2.r-lib.org/articles/rd-formatting.html), for documentation.  
-         
-We use [testthat](https://cran.r-project.org/package=testthat) for unit tests. 
-Contributions that change functionality should always include test cases. Our
-continuous integration checks that the Pull Request does not reduce test coverage.
-When creating tests, try to make use built-in datasets, rather than adding data
-files to the package.
          
 ## Code of Conduct
          
