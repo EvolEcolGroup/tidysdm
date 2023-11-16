@@ -34,6 +34,7 @@
 #' @param class_label the label given to the sampled points. Defaults to `pseudoabs`
 #' @param return_pres return presences together with pseudoabsences/background
 #'  in a single tibble
+#'  @param time_buffer temporary hack to have a time buffer when sampling pseudoabsences
 #' @returns An object of class [tibble::tibble]. If presences are returned, the
 #' presence level is set as the reference (to match the expectations in the
 #' `yardstick` package that considers the first level to be the event)
@@ -43,7 +44,7 @@
 sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, time_col = "time",
                                   lubridate_fun = c,
                                   method = "random", class_label = "pseudoabs",
-                                  return_pres = TRUE) {
+                                  return_pres = TRUE, time_buffer = 0) {
   # create a vector of times formatted as proper dates
   time_lub <- data[, time_col] %>%
     as.data.frame() %>%
@@ -70,7 +71,8 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
   for (i_index in unique(time_indices)) {
     # browser()
     # get data for this time_index, we remove coordinates as we don't need them
-    data_sub <- data %>% dplyr::filter(time_indices == i_index)
+    i_index_vector <- seq(i_index-time_buffer,i_index+time_buffer,1)
+    data_sub <- data %>% dplyr::filter(time_indices %in% i_index_vector)
     # slice the region series based on the index;
     if (inherits(raster, "SpatRasterDataset")) {
       raster_sub <- pastclim::slice_region_series(raster, time_bp = pastclim::time_bp(raster[[1]])[i_index])
