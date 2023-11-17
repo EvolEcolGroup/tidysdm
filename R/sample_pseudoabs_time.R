@@ -1,4 +1,4 @@
-#' Sample pseudo-absence (or background) points for SDM analysis
+#' Sample pseudo-absence (or background) points for SDM analysis for points with a time point.
 #'
 #' This function samples pseudo-absence (or background, the naming is a matter
 #' of semantics) points from a raster given a set of presences.
@@ -19,7 +19,9 @@
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
-#' @param raster the [terra::SpatRaster] or [terra::SpatRasterDataset] from which cells will be sampled
+#' @param raster the [terra::SpatRaster] or [terra::SpatRasterDataset] from which cells will be sampled.
+#' If a [terra::SpatRasterDataset], the first dataset will be used to define which cells are valid,
+#' and which are NAs.
 #' @param n_per_presence number of pseudoabsence/background points to sample for
 #' each presence
 #' @param coords a vector of length two giving the names of the "x" and "y"
@@ -34,7 +36,12 @@
 #' @param class_label the label given to the sampled points. Defaults to `pseudoabs`
 #' @param return_pres return presences together with pseudoabsences/background
 #'  in a single tibble
-#'  @param time_buffer temporary hack to have a time buffer when sampling pseudoabsences
+#'  @param time_buffer the buffer on the time axis around presences that defines their effect when
+#'  sampling pseudoabsences. If set to zero, presences have an effect only on the time step to which
+#'  they are assigned in `raster`; if a positive value, it defines the number of days before
+#'  and after the date provided in the `time` column for which the presence should be considered
+#'  (e.g. 20 days means that a presence is considered in all time steps equivalent to plus and minus
+#'  twenty days from its date).
 #' @returns An object of class [tibble::tibble]. If presences are returned, the
 #' presence level is set as the reference (to match the expectations in the
 #' `yardstick` package that considers the first level to be the event)
@@ -46,13 +53,21 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
                                   method = "random", class_label = "pseudoabs",
                                   return_pres = TRUE, time_buffer = 0) {
   # create a vector of times formatted as proper dates
-  time_lub <- data[, time_col] %>%
-    as.data.frame() %>%
-    dplyr::select(dplyr::all_of(time_col))
-  time_lub <- lubridate_fun(time_lub[, time_col])
+  time_lub <- data %>%
+    sf::st_drop_geometry() %>%
+    dplyr::pull(time_col)
+  time_lub <- lubridate_fun(time_lub)
   if (!inherits(time_lub, "POSIXct")) {
     stop("time is not a date (or cannot be coerced to one)")
   }
+  ## TODO
+  ## Check that we can now create a time_lub_min and time_lub_max by adding and removing days
+  ## and then filter later on for i_index >= lub_min and i_index<=lub_max (or something along those lines,
+  ## think carefully about units)
+  
+  
+  ## TODO it would be easier to just get the first dataset from raster and rename it raster!
+  
   # get the time steps
   if (inherits(raster, "SpatRasterDataset")) {
     time_steps <- terra::time(raster)[[1]]
@@ -70,6 +85,7 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
   pseudoabsences <- NULL
   for (i_index in unique(time_indices)) {
     # browser()
+    # TODO separate real points from presences that are buffer.
     # get data for this time_index, we remove coordinates as we don't need them
     i_index_vector <- seq(i_index-time_buffer,i_index+time_buffer,1)
     data_sub <- data %>% dplyr::filter(time_indices %in% i_index_vector)
