@@ -15,14 +15,11 @@ pastclim::time_bp(grid_raster)<-0:4
 
 # locations (first isolated, two closer to each other)
 locations <- data.frame(
-  lon = c(0.8, 1.9, 0.7),
-  lat = c(1.3, -1.8, -0.9),
-  id = 1:3,
-  time = c(2,2,4)
+  lon = c(0.8, 1.9, 0.7, 0.4),
+  lat = c(1.3, -1.8, -0.9, 1.2),
+  id = 1:4,
+  time = c(2,2,3,4)
 )
-min_buffer <- terra::buffer(terra::vect(locations, crs = "lonlat"), 60000)
-max_buffer <- terra::buffer(terra::vect(locations, crs = "lonlat"), 90000)
-
 
 # points in poygons function
 # (from https://stackoverflow.com/questions/72384038/point-in-polygon-using-terra-package-in-r)
@@ -38,103 +35,56 @@ test_that("sample_pseudoabs_time samples in the right places", {
                "time is not a date")
   set.seed(123)
   pa_random <- sample_pseudoabs_time(locations,
-    n = 5, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
-    return_pres = FALSE
-  )
-  # we should now check that some points are in the buffers
-  expect_true(length(pts_in_polys(terra::vect(pa_random), min_buffer)) > 0)
-  expect_true(length(pts_in_polys(terra::vect(pa_random), max_buffer)) > 0)
-  # there should be no presences
-  expect_true(unique(pa_random$class) == "pseudoabs")
-
-  # now use a minimum buffer
-  set.seed(123)
-  pa_min <- sample_pseudoabs_time(locations,
-    n = 15, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+    n = 10, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
     method = c("dist_min", 60000),
     return_pres = FALSE
   )
-  # none should be within the minimum buffer
-  expect_false(length(pts_in_polys(terra::vect(pa_min), min_buffer)) == 0)
-
-  ##Stopped here, the above does not work fully.
+  # we have the right number of pseudoabsences per time
+  expect_true(all(table(locations$time)*10==table(pa_random$time_step)))
+  # none are within the buffer at a given time step
+  min_buffer <- terra::buffer(terra::vect(locations %>%
+                                            dplyr::filter(time==2), crs = "lonlat"), 60000)
+  expect_true(length(pts_in_polys(terra::vect(pa_random %>% 
+                                                dplyr::filter(time_step=="1952-01-01")), min_buffer)) == 0)
+  # but they ignore presences from other time steps
+  min_buffer <- terra::buffer(terra::vect(locations %>%
+                                            dplyr::filter(time==3), crs = "lonlat"), 60000)
+  expect_false(length(pts_in_polys(terra::vect(pa_random %>% 
+                                                 dplyr::filter(time_step=="1952-01-01")), min_buffer)) == 0)
+  min_buffer <- terra::buffer(terra::vect(locations %>%
+                                            dplyr::filter(time==4), crs = "lonlat"), 60000)
+  expect_false(length(pts_in_polys(terra::vect(pa_random %>% 
+                                                 dplyr::filter(time_step=="1952-01-01")), min_buffer)) == 0)
   
-  
-  
-  # now use a maximum buffer
+  # now set the time buffer so that we allow presences to impact absences in other time steps
   set.seed(123)
-  pa_max <- sample_pseudoabs(locations,
-    n = 5, raster = grid_raster,
-    method = c("dist_max", 90000),
-    return_pres = FALSE
-  )
-  # all are within the max buffer
-  expect_true(length(pts_in_polys(terra::vect(pa_max), max_buffer)) == nrow(pa_max))
-
-  # and now use a disc
-  set.seed(123)
-  pa_disc <- sample_pseudoabs(locations,
-    n = 5, raster = grid_raster,
-    method = c("dist_disc", 60000, 90000),
-    return_pres = FALSE
-  )
-  # all are within the max buffer
-  expect_true(length(pts_in_polys(terra::vect(pa_disc), max_buffer)) == nrow(pa_disc))
-  # none should be within the minimum buffer
-  expect_true(length(pts_in_polys(terra::vect(pa_disc), min_buffer)) == 0)
-
-  pa_pres <- sample_pseudoabs(locations, n = 25, raster = grid_raster)
-  expect_true(all(levels(pa_pres$class) == c("presence", "pseudoabs")))
-
-  # now confirm that it all works if we use an sf object
-  set.seed(123)
-  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>% sf::st_set_crs(4326)
-  pa_random_sf <- sample_pseudoabs(locations_sf,
-    n = 25, raster = grid_raster,
-    return_pres = FALSE
-  )
-  expect_true(inherits(pa_random_sf, "sf"))
-  expect_true(inherits(pa_random_sf, "data.frame")) # it is also a df!
-  expect_true(all(pa_random$id == pa_random_sf$id))
-
-  # test error messages
-  expect_error(
-    sample_pseudoabs(locations_sf, n = 25, raster = grid_raster, method = "blah"),
-    "method has to be"
-  )
-  expect_error(
-    sample_pseudoabs(locations_sf, n = 25, raster = grid_raster, method = c("blah", 25)),
-    "method has to be"
-  )
+  pa_random <- sample_pseudoabs_time(locations,
+                                     n = 10, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+                                     method = c("dist_min", 60000),
+                                     return_pres = FALSE,
+                                     time_buffer = y2d(1)
+  )  
+  # we have the right number of pseudoabsences per time
+  expect_true(all(table(locations$time)*10==table(pa_random$time_step)))
+  # none are within the buffer at a given time step
+  min_buffer <- terra::buffer(terra::vect(locations %>%
+                                            dplyr::filter(time==2), crs = "lonlat"), 60000)
+  expect_true(length(pts_in_polys(terra::vect(pa_random %>% 
+                                                dplyr::filter(time_step=="1952-01-01")), min_buffer)) == 0)
+  # none are within the buffer of a location in the time buffer
+  min_buffer <- terra::buffer(terra::vect(locations %>%
+                                            dplyr::filter(time==3), crs = "lonlat"), 60000)
+  expect_true(length(pts_in_polys(terra::vect(pa_random %>% 
+                                                dplyr::filter(time_step=="1952-01-01")), min_buffer)) == 0)
+  # but they ignore presences from time steps outside the buffer
+  min_buffer <- terra::buffer(terra::vect(locations %>%
+                                            dplyr::filter(time==4), crs = "lonlat"), 60000)
+  expect_false(length(pts_in_polys(terra::vect(pa_random %>% 
+                                                 dplyr::filter(time_step=="1952-01-01")), min_buffer)) == 0)
 })
 
-test_that("handling of data frames and sf objects", {
-  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>% sf::st_set_crs(4326)
-  expect_error(
-    sample_pseudoabs(locations_sf, coords = c("x", "y"), raster = grid_raster),
-    "There are no recognised coordinate columns"
-  )
-  expect_warning(sample_pseudoabs(locations_sf, raster = grid_raster, n = 100), "There are fewer available cells for raster 'NA' (3 presences) than the requested 100 pseudoabsences. Only 52 will be returned.", fixed = TRUE)
-  locations_sf <- locations_sf %>% dplyr::bind_cols(sf::st_coordinates(.))
-  expect_no_error(sample_pseudoabs(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25))
-  locations_sf$X <- rep(0, 3)
-  locations_sf$Y <- rep(0, 3)
-  expect_error(
-    sample_pseudoabs(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25),
-    "sf object contains X and Y coordinates that do not match the sf point geometry"
-  )
-  locations_sf$X <- rep(NA, 3)
-  locations_sf$Y <- rep(NA, 3)
-  expect_error(
-    sample_pseudoabs(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25),
-    "sf object contains NA values in the X and Y coordinates"
-  )
-})
-
-# sample code to plot points in and buffers
-# plot(grid_raster,colNA="darkgray")
-# polys(terra::as.polygons(grid_raster))
-# points(vect(locations), col="red", cex=2)
-# points(vect(pa_disc), col="blue", cex=2)
-# polys(min_buffer)
-# polys(max_buffer)
+# sample code to plot points
+# i <- 4
+# plot(grid_raster[[i]],colNA="darkgray")
+# polys(terra::as.polygons(grid_raster[[i]]))
+# points(vect(locations %>% filter(time==i)), col="red", cex=2)

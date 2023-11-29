@@ -36,7 +36,7 @@
 #' @param class_label the label given to the sampled points. Defaults to `pseudoabs`
 #' @param return_pres return presences together with pseudoabsences/background
 #'  in a single tibble
-#'  @param time_buffer the buffer on the time axis around presences that defines their effect when
+#' @param time_buffer the buffer on the time axis around presences that defines their effect when
 #'  sampling pseudoabsences. If set to zero, presences have an effect only on the time step to which
 #'  they are assigned in `raster`; if a positive value, it defines the number of days before
 #'  and after the date provided in the `time` column for which the presence should be considered
@@ -60,12 +60,10 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
   if (!inherits(time_lub, "POSIXct")) {
     stop("time is not a date (or cannot be coerced to one)")
   }
-  ## TODO
-  ## Check that we can now create a time_lub_min and time_lub_max by adding and removing days
-  ## and then filter later on for i_index >= lub_min and i_index<=lub_max (or something along those lines,
-  ## think carefully about units)
-  
-  
+  # create max and min date of influence for a presence with time_buffer
+  time_lub_min <- time_lub-lubridate::days(time_buffer)
+  time_lub_max <- time_lub+lubridate::days(time_buffer)
+
   ## TODO it would be easier to just get the first dataset from raster and rename it raster!
   
   # get the time steps
@@ -82,13 +80,25 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
     sapply(time_lub, function(a, b) {
       which.min(abs(a - b))
     }, time_steps)
+  time_indices_min <-
+    sapply(time_lub_min, function(a, b) {
+      which.min(abs(a - b))
+    }, time_steps)
+  time_indices_max <-
+    sapply(time_lub_max, function(a, b) {
+      which.min(abs(a - b))
+    }, time_steps)
+  
+  
   pseudoabsences <- NULL
+
   for (i_index in unique(time_indices)) {
-    # browser()
-    # TODO separate real points from presences that are buffer.
-    # get data for this time_index, we remove coordinates as we don't need them
-    i_index_vector <- seq(i_index-time_buffer,i_index+time_buffer,1)
-    data_sub <- data %>% dplyr::filter(time_indices %in% i_index_vector)
+    # count the presences in this time step
+    n_pres_this_time <- data %>% dplyr::filter(time_indices == i_index) %>% nrow()
+    # create a dataset with presences for this time step plus presences within the time buffer
+    data_sub <- data %>% dplyr::filter(
+      i_index >= time_indices_min & i_index <=time_indices_max)
+
     # slice the region series based on the index;
     if (inherits(raster, "SpatRasterDataset")) {
       raster_sub <- pastclim::slice_region_series(raster, time_bp = pastclim::time_bp(raster[[1]])[i_index])
@@ -98,7 +108,7 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
     data_sub <- sample_pseudoabs(
       data = data_sub,
       raster = raster_sub,
-      n = n_per_presence * nrow(data_sub),
+      n = n_per_presence * n_pres_this_time,
       coords = coords,
       method = method,
       class_label = class_label,
