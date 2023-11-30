@@ -81,6 +81,19 @@ test_that("sample_pseudoabs_time samples in the right places", {
                                             dplyr::filter(time==4), crs = "lonlat"), 60000)
   expect_false(length(pts_in_polys(terra::vect(pa_random %>% 
                                                  dplyr::filter(time_step=="1952-01-01")), min_buffer)) == 0)
+  
+  
+  # now check that we return the right number of presences
+  set.seed(123)
+  pa_random <- sample_pseudoabs_time(locations,
+                                     n = 10, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+                                     method = c("dist_min", 60000),
+                                     return_pres = TRUE,
+                                     time_buffer = y2d(1)
+  )  
+  expect_true(table(pa_random$class)[1]==4)
+  expect_true(table(pa_random$class)[2]==10*table(pa_random$class)[1])
+  
 })
 
 # sample code to plot points

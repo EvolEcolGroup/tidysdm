@@ -112,11 +112,16 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
       coords = coords,
       method = method,
       class_label = class_label,
-      return_pres = return_pres
+      return_pres = FALSE
     )
     # we need to reattach time
     data_sub <- data_sub %>% dplyr::mutate(time_step = time_steps[i_index])
     pseudoabsences <- pseudoabsences %>% dplyr::bind_rows(data_sub)
+  }
+  if (return_pres){
+    presences <- data[,names(pseudoabsences[1:2])] %>% mutate(class="presence",time_step=time_lub) 
+    pseudoabsences <- pseudoabsences %>% dplyr::bind_rows(presences) %>%
+      dplyr::mutate(class = stats::relevel(factor(class), ref = "presence"))
   }
   return(pseudoabsences)
 }
