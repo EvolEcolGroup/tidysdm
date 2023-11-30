@@ -1,7 +1,14 @@
 #' Convert an object created with `blockCV` to an `rsample` object
 #'
 #' This function creates objects created with `blockCV` to `rsample` objects
-#' that can be used by `tidysdm`
+#' that can be used by `tidysdm`. BlockCV provides more sophisticated sampling
+#' options than the `spatialsample` library. For example, it is possible to
+#' stratify the sampling to ensure that presences and absences are evenly
+#' distributed among the folds (see the example below).
+#' 
+#' Note that objects created with this function can not be plotted with 
+#' `autoplot`
+#' 
 #' @param x a object created with a `blockCV` function
 #' @param data the `sf` object used to create `x`
 #' @returns an `rsample` object
