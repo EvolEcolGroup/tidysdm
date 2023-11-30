@@ -119,7 +119,13 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
     pseudoabsences <- pseudoabsences %>% dplyr::bind_rows(data_sub)
   }
   if (return_pres){
-    presences <- data[,names(pseudoabsences[1:2])] %>% mutate(class="presence",time_step=time_lub) 
+    if (inherits(data,"sf")){
+      presences <- sf::st_set_geometry(data.frame(geometry = data$geometry), 
+                                       data$geometry)
+    } else {
+      presences <- data[,names(pseudoabsences[1:2])]
+    }
+    presences <- presences %>% dplyr::mutate(class="presence",time_step=time_lub) 
     pseudoabsences <- pseudoabsences %>% dplyr::bind_rows(presences) %>%
       dplyr::mutate(class = stats::relevel(factor(class), ref = "presence"))
   }
