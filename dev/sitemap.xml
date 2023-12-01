@@ -64,6 +64,9 @@
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/check_splits_balance.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/collect_metrics.simple_ensemble.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/conf_matrix_df.html</loc>
   </url>
   <url>
@@ -110,6 +113,9 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/lacerta_ensemble.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/lacerta_rep_ens.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/maxent.html</loc>
