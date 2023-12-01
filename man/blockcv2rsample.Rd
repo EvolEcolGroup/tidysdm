@@ -16,7 +16,14 @@ an \code{rsample} object
 }
 \description{
 This function creates objects created with \code{blockCV} to \code{rsample} objects
-that can be used by \code{tidysdm}
+that can be used by \code{tidysdm}. BlockCV provides more sophisticated sampling
+options than the \code{spatialsample} library. For example, it is possible to
+stratify the sampling to ensure that presences and absences are evenly
+distributed among the folds (see the example below).
+}
+\details{
+Note that objects created with this function can not be plotted with
+\code{autoplot}
 }
 \examples{
 \donttest{

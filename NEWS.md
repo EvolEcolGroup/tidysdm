@@ -1,3 +1,7 @@
+# dev version
+
+* implement `collect_metrics` for ensembles.
+
 # `tidysdm` 0.9.2
 
 * Release on CRAN

@@ -13,7 +13,8 @@ check_splits_balance(splits, .col)
 \item{.col}{the column containing the presences}
 }
 \value{
-a table of number of presences and pseudoabsences
+a table of number of presences and pseudoabsences in the training and testing
+set of each split
 }
 \description{
 Check the balance of presences vs pseudoabsences among splits
