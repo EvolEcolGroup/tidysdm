@@ -89,12 +89,14 @@ set of each split</p>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">lacerta_cv</span> <span class="op">&lt;-</span> <span class="fu">spatial_block_cv</span><span class="op">(</span><span class="va">lacerta_thin</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">check_splits_balance</span><span class="op">(</span><span class="va">lacerta_cv</span>, <span class="va">class</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      presence_train pseudoabs_train presence_test pseudoabs_test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]             80             273            33             66</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]             80             283            33             56</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]             97             272            16             67</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]             94             262            19             77</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]            101             267            12             72</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 5 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   presence_assessment pseudoabs_assessment presence_analysis pseudoabs_analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>                  80                  273                33                 66</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>                  80                  283                33                 56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>                  97                  272                16                 67</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>                  94                  262                19                 77</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>                 101                  267                12                 72</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
