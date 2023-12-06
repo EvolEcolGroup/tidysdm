@@ -93,8 +93,8 @@ distributed among the folds (see the example below).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Note that objects created with this function can not be plotted with
-<code>autoplot</code></p>
+    <p>Note that currently only objects of type <code>cv_spatial</code> and <code>cv_cluster</code> are
+supported.</p>
     </div>
 
     <div class="section level2">
@@ -106,7 +106,7 @@ distributed among the folds (see the example below).</p>
 <span class="r-in"><span><span class="va">pa_data</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">points</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">7845</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">sb1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/blockCV/man/cv_spatial.html" class="external-link">cv_spatial</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="va">pa_data</span>,</span></span>
-<span class="r-in"><span>  column <span class="op">=</span> <span class="st">"occ"</span>, <span class="co"># the response column (binary or multi-class)</span></span></span>
+<span class="r-in"><span>  column <span class="op">=</span> <span class="st">"occ"</span>, <span class="co"># the response column to balance the folds</span></span></span>
 <span class="r-in"><span>  k <span class="op">=</span> <span class="fl">5</span>, <span class="co"># number of folds</span></span></span>
 <span class="r-in"><span>  size <span class="op">=</span> <span class="fl">350000</span>, <span class="co"># size of the blocks in metres</span></span></span>
 <span class="r-in"><span>  selection <span class="op">=</span> <span class="st">"random"</span>, <span class="co"># random blocks-to-fold</span></span></span>
@@ -123,6 +123,8 @@ distributed among the folds (see the example below).</p>
 <span class="r-in"><span><span class="va">sb1_rsample</span> <span class="op">&lt;-</span> <span class="fu">blockcv2rsample</span><span class="op">(</span><span class="va">sb1</span>, <span class="va">pa_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">sb1_rsample</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "spatial_rset" "rset"         "tbl_df"       "tbl"          "data.frame"  </span>
+<span class="r-in"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">sb1_rsample</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="blockcv2rsample-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
