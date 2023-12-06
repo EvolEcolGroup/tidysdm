@@ -75,6 +75,8 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
   if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)
   }
+  out_of_range_warning(time_lub, time_steps)
+
   # convert time_lub dates into indices for the SpatRasterDatset
   time_indices <-
     sapply(time_lub, function(a, b) {
