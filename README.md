@@ -4,6 +4,7 @@
 [![R-CMD-check](https://github.com/EvolEcolGroup/tidysdm/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/EvolEcolGroup/tidysdm/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/EvolEcolGroup/tidysdm/branch/main/graph/badge.svg?token=KLOzxJoLBO)](https://app.codecov.io/gh/EvolEcolGroup/tidysdm)
 [![CRAN status](https://www.r-pkg.org/badges/version/tidysdm)](https://CRAN.R-project.org/package=tidysdm)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/tidysdm)](https://github.com/r-hub/cranlogs.app)
 <!-- badges: end -->
 
 The goal of `tidysdm` is to implement Species Distribution Models using the
