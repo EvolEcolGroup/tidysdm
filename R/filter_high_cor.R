@@ -57,8 +57,11 @@ filter_high_cor.SpatRaster <-
            verbose = FALSE,
            names = TRUE,
            to_keep = NULL) {
-
+    # the new version of terra (as of 1.7.65) uses "cor" for pearson correlation
+    # we use the legacy "pearson" so that the nextline works with old version of terra as well
+    # we should update it at some point once old terra is really obsolete
     cor_matrix <- terra::layerCor(x, "pearson", na.rm = TRUE)
+    # get the appropriate slot depending on what version of terra created the object
     if ("pearson" %in% names(cor_matrix)){
       cor_matrix <- cor_matrix$pearson
     } else {
