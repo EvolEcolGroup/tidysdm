@@ -57,7 +57,13 @@ filter_high_cor.SpatRaster <-
            verbose = FALSE,
            names = TRUE,
            to_keep = NULL) {
-    cor_matrix <- terra::layerCor(x, "pearson", na.rm = TRUE)$pearson
+
+    cor_matrix <- terra::layerCor(x, "pearson", na.rm = TRUE)
+    if ("pearson" %in% names(cor_matrix)){
+      cor_matrix <- cor_matrix$pearson
+    } else {
+      cor_matrix <- cor_matrix$correlation
+    }
     dimnames(cor_matrix) <- list(names(x), names(x))
     filter_high_cor(
       x = cor_matrix,
