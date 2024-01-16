@@ -11,6 +11,9 @@ out_of_range_warning(times, time_steps)
 
 \item{time_steps}{the time steps from the raster}
 }
+\value{
+NULL return
+}
 \description{
 This function helps making sure that, when we assign times to time_step
 layers of a raster, we do not have values which are badly out of range
