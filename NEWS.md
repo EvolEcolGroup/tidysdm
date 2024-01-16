@@ -1,5 +1,6 @@
 # dev version
 
+* fix bug in `filter_high_cor` due to changes in `terra` 1.6.75
 * implement `collect_metrics` for ensembles.
 
 # `tidysdm` 0.9.2

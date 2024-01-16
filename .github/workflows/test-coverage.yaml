@@ -39,5 +39,5 @@ jobs:
 #        shell: Rscript {0}
 
       - name: Test coverage
-        run: covr::codecov(type="all")
+        run: covr::codecov(type="tests")
         shell: Rscript {0}
