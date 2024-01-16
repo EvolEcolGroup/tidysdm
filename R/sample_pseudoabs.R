@@ -61,11 +61,20 @@ sample_pseudoabs <- function(data, raster, n, coords = NULL,
   coords <- check_coords_names(data, coords)
   dist_min <- dist_max <- NULL
   if (method[1] == "dist_disc") {
+    if (length(method)!=3){
+      stop("method 'dist_disc' should have two thresholds, e.g. c('dist_disc',10,20)")
+    }
     dist_min <- as.numeric(method[2])
     dist_max <- as.numeric(method[3])
   } else if (method[1] == "dist_min") {
+    if (length(method)!=2){
+      stop("method 'dist_min' should have one threshold, e.g. c('dist_min',10)")
+    }
     dist_min <- as.numeric(method[2])
   } else if (method[1] == "dist_max") {
+    if (length(method)!=2){
+      stop("method 'dist_max' should have one threshold, e.g. c('dist_max',50)")
+    }
     dist_max <- as.numeric(method[2])
   } else if (!method[1] %in% "random") {
     stop("method has to be one of 'random', 'dist_min', 'dist_max', or 'dist_disc'")

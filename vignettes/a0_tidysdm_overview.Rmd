@@ -318,7 +318,8 @@ our models. We will do an 80:20 split, by creating 5 folds. We use the
 `spatial_block_cv` function from the package `spatialsample`. `spatialsample`
 offers a number of sampling approaches for spatial data; it is also possible to
 convert objects created with `blockCV` (which offers further features
-for spatial sampling) into an `rsample` object suitable to `tisysdm` with the
+for spatial sampling, such as stratified sampling) into an `rsample` object 
+suitable to `tisysdm` with the
 function `blockcv2rsample`.
 
 ```{r training_cv, fig.width=6, fig.height=4}
@@ -363,6 +364,11 @@ lacerta_ensemble
 And visualise it
 ```{r autoplot_ens, fig.width=7, fig.height=4}
 autoplot(lacerta_ensemble)
+```
+
+A tabular form of the model metrics can be obtained with:
+```{r}
+lacerta_ensemble %>% collect_metrics()
 ```
 
 # Projecting to the present
@@ -569,16 +575,19 @@ for (i_repeat in 1:3) {
 
 Now we can create a `repeat_ensemble` from the list:
 ```{r}
-lacerta_thin_rep_ens <- repeat_ensemble() %>% add_repeat(ensemble_list)
-lacerta_thin_rep_ens
+lacerta_rep_ens <- repeat_ensemble() %>% add_repeat(ensemble_list)
+lacerta_rep_ens
 ```
+
+We can summarise the goodness of fit of models for each repeat with `collect_metrics()`,
+but there is no `autoplot()` function for `repeated_ensemble` objects.
 
 We can then predict in the usual way (we will take the mean and median of all models):
 ```{r, fig.width=6, fig.height=4}
-lacerta_thin_rep_ens <- predict_raster(lacerta_thin_rep_ens, climate_present,
+lacerta_rep_ens <- predict_raster(lacerta_rep_ens, climate_present,
   fun = c("mean", "median")
 )
 ggplot() +
-  geom_spatraster(data = lacerta_thin_rep_ens, aes(fill = median)) +
+  geom_spatraster(data = lacerta_rep_ens, aes(fill = median)) +
   scale_fill_terrain_c()
 ```

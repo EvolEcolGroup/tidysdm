@@ -1,4 +1,5 @@
 BCI
+BlockCV
 CMD
 DALEX
 Ecol
@@ -22,6 +23,7 @@ SDMs
 SSP
 Schmiegelow
 SpatRaster
+SpatRasterDataset
 StackOverflow
 TSS
 Tidymodels
@@ -91,6 +93,7 @@ stackexchange
 stackoverflow
 stat
 svm
+terra
 thres
 tibble
 tibbles

@@ -8,7 +8,8 @@
 #' the results. If none is given, the first metric in the metric set is used
 #' (after filtering by the `metric` option).
 #' @param metric A character vector for which metrics (apart from `rank_metric`)
-#' to be included in the visualization.
+#' to be included in the visualization. If NULL (the default), all available 
+#' metrics will be plotted
 #' @param std_errs The number of standard errors to plot (if the standard error
 #' exists).
 #' @param ... Other options to pass to `autoplot()`. Currently unused.

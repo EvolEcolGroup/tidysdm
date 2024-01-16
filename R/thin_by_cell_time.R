@@ -45,7 +45,7 @@ thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
   if (!inherits(time_lub, "POSIXct")) {
     stop("time is not a date (or cannot be coerced to one)")
   }
-  # if we have a SpatRasterDataset, ge thte first dataset
+  # if we have a SpatRasterDataset, ge the first dataset
   if (inherits(raster, "SpatRasterDataset")) {
     raster <- raster[[1]]
   }
@@ -57,6 +57,7 @@ thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
   if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)
   }
+  out_of_range_warning(time_lub, time_steps)
   # convert time_lub dates into indices for the SpatRasterDataset
   time_indices <-
     sapply(time_lub, function(a, b) {

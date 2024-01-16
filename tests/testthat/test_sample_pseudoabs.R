@@ -92,6 +92,18 @@ test_that("sample_pseudoabs samples in the right places", {
     sample_pseudoabs(locations_sf, n = 25, raster = grid_raster, method = c("blah", 25)),
     "method has to be"
   )
+  expect_error(
+    sample_pseudoabs(locations_sf, n = 25, raster = grid_raster, method = c("dist_min")),
+    "method 'dist_min' should have one threshold"
+  ) 
+  expect_error(
+    sample_pseudoabs(locations_sf, n = 25, raster = grid_raster, method = c("dist_max",10,20)),
+    "method 'dist_max' should have one threshold"
+  ) 
+  expect_error(
+    sample_pseudoabs(locations_sf, n = 25, raster = grid_raster, method = c("dist_disc",10)),
+    "method 'dist_disc' should have two thresholds"
+  )
 })
 
 test_that("handling of data frames and sf objects", {
