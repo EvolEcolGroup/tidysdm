@@ -4,7 +4,7 @@
 #' layers of a raster, we do not have values which are badly out of range
 #' @param times the times of the locations
 #' @param time_steps the time steps from the raster
-#' @returns NULL
+#' @returns NULL return
 #' @keywords internal
 
 out_of_range_warning <- function(times, time_steps){

@@ -28,6 +28,8 @@ pts_in_polys <- function(pts, polys) {
   e[!is.na(e[, 2]), 1]
 }
 
+n_pt <- 20
+
 test_that("sample_pseudoabs_time samples in the right places", {
   # error if time is not a posix object
   expect_error(sample_pseudoabs_time(locations,
@@ -35,12 +37,12 @@ test_that("sample_pseudoabs_time samples in the right places", {
                "time is not a date")
   set.seed(123)
   pa_random <- sample_pseudoabs_time(locations,
-    n = 10, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+    n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
     method = c("dist_min", 60000),
     return_pres = FALSE
   )
   # we have the right number of pseudoabsences per time
-  expect_true(all(table(locations$time)*10==table(pa_random$time_step)))
+  expect_true(all(table(locations$time)*n_pt==table(pa_random$time_step)))
   # none are within the buffer at a given time step
   min_buffer <- terra::buffer(terra::vect(locations %>%
                                             dplyr::filter(time==2), crs = "lonlat"), 60000)
@@ -59,13 +61,13 @@ test_that("sample_pseudoabs_time samples in the right places", {
   # now set the time buffer so that we allow presences to impact absences in other time steps
   set.seed(123)
   pa_random <- sample_pseudoabs_time(locations,
-                                     n = 10, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+                                     n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
                                      method = c("dist_min", 60000),
                                      return_pres = FALSE,
                                      time_buffer = y2d(1)
   )  
   # we have the right number of pseudoabsences per time
-  expect_true(all(table(locations$time)*10==table(pa_random$time_step)))
+  expect_true(all(table(locations$time)*n_pt==table(pa_random$time_step)))
   # none are within the buffer at a given time step
   min_buffer <- terra::buffer(terra::vect(locations %>%
                                             dplyr::filter(time==2), crs = "lonlat"), 60000)
@@ -86,13 +88,13 @@ test_that("sample_pseudoabs_time samples in the right places", {
   # now check that we return the right number of presences
   set.seed(123)
   pa_random <- sample_pseudoabs_time(locations,
-                                     n = 10, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+                                     n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
                                      method = c("dist_min", 60000),
                                      return_pres = TRUE,
                                      time_buffer = y2d(1)
   )  
   expect_true(table(pa_random$class)[1]==4)
-  expect_true(table(pa_random$class)[2]==10*table(pa_random$class)[1])
+  expect_true(table(pa_random$class)[2]==n_pt*table(pa_random$class)[1])
   
 })
 
