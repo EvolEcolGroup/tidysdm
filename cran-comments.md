@@ -1,8 +1,5 @@
-This is a new package not present on CRAN yet.
-
-On all testing environment (see below), we only get a note because of the
-package being a new submission, and a false positive for mispelling 
-(author name in the reference, and tidymodels).
+This is a minor bug fix that deals with changes in the latest version
+of `terra` (1.6.75).
 
 ## Test environments
 - R-hub windows-x86_64-devel (r-devel)
@@ -27,7 +24,3 @@ Possibly misspelled words in DESCRIPTION:
     tidymodels (8:56)
 
 0 errors ✔ | 0 warnings ✔ | 1 notes ✖
-
-## Changes from previous submission
-Description text: Fixed a typo, and changed to undirected quotation marks
-for package names as requested.

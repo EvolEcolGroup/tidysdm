@@ -48,6 +48,7 @@ Imports:
     yardstick
 Suggests:
     blockCV,
+    data.table,
     doParallel,
     earth,
     kernlab,
