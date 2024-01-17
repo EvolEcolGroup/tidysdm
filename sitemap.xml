@@ -67,6 +67,9 @@
     <loc>https://evolecolgroup.github.io/tidysdm/reference/check_splits_balance.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/collect_metrics.simple_ensemble.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/conf_matrix_df.html</loc>
   </url>
   <url>
@@ -115,6 +118,9 @@
     <loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta_ensemble.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta_rep_ens.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/maxent.html</loc>
   </url>
   <url>
@@ -137,6 +143,9 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh_tss_max.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/out_of_range_warning.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/pipe.html</loc>
