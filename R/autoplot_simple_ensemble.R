@@ -29,11 +29,12 @@
 #' (95% confidence, by default).
 #' @returns A ggplot object.
 #' @examples
-#' # we use the two_class_example from `workflowsets`
+#' \donttest{
+#' #' # we use the two_class_example from `workflowsets`
 #' two_class_ens <- simple_ensemble() %>%
 #'   add_member(two_class_res, metric = "roc_auc")
 #' autoplot(two_class_ens)
-#'
+#' }
 #' @export
 autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
                                      std_errs = stats::qnorm(0.95), ...) {
