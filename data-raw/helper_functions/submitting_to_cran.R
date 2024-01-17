@@ -28,3 +28,13 @@ devtools::check_win_devel()
 
 # TO DO MANUALLY: if everything passes, edit the cran-comments.md to explain any notes
 devtools::release()
+
+
+
+################################################################################
+################################################################################
+# For errors from r-hub, get a Docker image from:
+# https://hub.docker.com/r/rhub/debian-gcc-release
+# and then run with:
+# docker run -ti rhub/fedora-clang-devel bash
+
