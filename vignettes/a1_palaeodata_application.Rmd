@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 options(cores=2)
 options(mc.cores=2)
 # xgboost uses data.table
-data.table::setDTthreads(1)
+data.table::setDTthreads(2)
 ```
 
 # SDMs with tidymodels for palaeo data
