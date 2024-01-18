@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample_pseudoabs_time.R
 \name{sample_pseudoabs_time}
 \alias{sample_pseudoabs_time}
-\title{Sample pseudo-absence (or background) points for SDM analysis}
+\title{Sample pseudo-absence (or background) points for SDM analysis for points with a time point.}
 \usage{
 sample_pseudoabs_time(
   data,
@@ -13,7 +13,8 @@ sample_pseudoabs_time(
   lubridate_fun = c,
   method = "random",
   class_label = "pseudoabs",
-  return_pres = TRUE
+  return_pres = TRUE,
+  time_buffer = 0
 )
 }
 \arguments{
@@ -21,7 +22,9 @@ sample_pseudoabs_time(
 These can be defined in \code{coords}, unless they have standard names
 (see details below).}
 
-\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} or \link[terra:SpatRaster-class]{terra::SpatRasterDataset} from which cells will be sampled}
+\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} or \link[terra:SpatRaster-class]{terra::SpatRasterDataset} from which cells will be sampled.
+If a \link[terra:SpatRaster-class]{terra::SpatRasterDataset}, the first dataset will be used to define which cells are valid,
+and which are NAs.}
 
 \item{n_per_presence}{number of pseudoabsence/background points to sample for
 each presence}
@@ -43,6 +46,13 @@ use \code{lubridate_fun} to provide a function that can be used to convert appro
 
 \item{return_pres}{return presences together with pseudoabsences/background
 in a single tibble}
+
+\item{time_buffer}{the buffer on the time axis around presences that defines their effect when
+sampling pseudoabsences. If set to zero, presences have an effect only on the time step to which
+they are assigned in \code{raster}; if a positive value, it defines the number of days before
+and after the date provided in the \code{time} column for which the presence should be considered
+(e.g. 20 days means that a presence is considered in all time steps equivalent to plus and minus
+twenty days from its date).}
 }
 \value{
 An object of class \link[tibble:tibble]{tibble::tibble}. If presences are returned, the

@@ -16,7 +16,14 @@ an \code{rsample} object
 }
 \description{
 This function creates objects created with \code{blockCV} to \code{rsample} objects
-that can be used by \code{tidysdm}
+that can be used by \code{tidysdm}. BlockCV provides more sophisticated sampling
+options than the \code{spatialsample} library. For example, it is possible to
+stratify the sampling to ensure that presences and absences are evenly
+distributed among the folds (see the example below).
+}
+\details{
+Note that currently only objects of type \code{cv_spatial} and \code{cv_cluster} are
+supported.
 }
 \examples{
 \donttest{
@@ -25,7 +32,7 @@ points <- read.csv(system.file("extdata/", "species.csv", package = "blockCV"))
 pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845)
 sb1 <- cv_spatial(
   x = pa_data,
-  column = "occ", # the response column (binary or multi-class)
+  column = "occ", # the response column to balance the folds
   k = 5, # number of folds
   size = 350000, # size of the blocks in metres
   selection = "random", # random blocks-to-fold
@@ -33,5 +40,6 @@ sb1 <- cv_spatial(
 ) # find evenly dispersed folds
 sb1_rsample <- blockcv2rsample(sb1, pa_data)
 class(sb1_rsample)
+autoplot(sb1_rsample)
 }
 }

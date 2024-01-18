@@ -28,6 +28,8 @@ a \link[parsnip:model_spec]{parsnip::model_spec} of the model.
 \description{
 This function returns a \link[parsnip:model_spec]{parsnip::model_spec} for a Boosted Trees model to
 be used as a classifier of presences and absences in Species Distribution Model.
+It uses the library \code{xgboost} to fit boosted trees; to use another library, simply build the
+\link[parsnip:model_spec]{parsnip::model_spec} directly.
 }
 \examples{
 standard_bt_spec <- sdm_spec_boost_tree()

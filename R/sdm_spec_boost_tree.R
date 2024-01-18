@@ -2,6 +2,8 @@
 #'
 #' This function returns a [parsnip::model_spec] for a Boosted Trees model to
 #' be used as a classifier of presences and absences in Species Distribution Model.
+#' It uses the library `xgboost` to fit boosted trees; to use another library, simply build the
+#' [parsnip::model_spec] directly.
 #'
 #' @param ... parameters to be passed to [parsnip::boost_tree()] to
 #' customise the model. See the help of that function for details.

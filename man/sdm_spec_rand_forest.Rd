@@ -28,7 +28,9 @@ a \link[parsnip:model_spec]{parsnip::model_spec} of the model.
 \description{
 This function returns a \link[parsnip:model_spec]{parsnip::model_spec} for a Random Forest to
 be used as a classifier of presences and absences in Species Distribution
-Models.
+Models. It uses the library \code{ranger} to fit boosted trees; to use another
+library, simply build the
+\link[parsnip:model_spec]{parsnip::model_spec} directly.
 }
 \details{
 \code{sdm_spec_rf()} is simply a short form for \code{sm_spec_rand_forest()}.

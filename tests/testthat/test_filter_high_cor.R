@@ -39,4 +39,10 @@ test_that("filter correlated variables", {
     filter_high_cor("blah"),
     "no method available for this object type"
   )
+  
+  # test method on SpatRaster
+  climate_present <- terra::rast(system.file("extdata/lacerta_climate_present_10m.nc",
+                                      package = "tidysdm"
+  ))
+  cor_spatraster <- filter_high_cor(climate_present)
 })

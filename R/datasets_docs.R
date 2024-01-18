@@ -25,7 +25,14 @@
 
 #' A simple ensemble for the lacerta data
 #'
-#' Ensemble SDM for *Lacerta schreiberi*.
+#' Ensemble SDM for *Lacerta schreiberi*, as generated in the vignette.
 #'
 #' @format A [`simple_ensemble`] object
 "lacerta_ensemble"
+
+#' A repeat ensemble for the lacerta data
+#'
+#' Ensemble SDM for *Lacerta schreiberi*, as generated in the vignette.
+#'
+#' @format A [`repeat_ensemble`] object
+"lacerta_rep_ens"

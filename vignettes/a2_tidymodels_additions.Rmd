@@ -13,8 +13,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+# set options to limit threads used by imported libraries
 options(cores=2)
 options(mc.cores=2)
+# xgboost uses data.table
+data.table::setDTthreads(1)
 ```
 
 # Additional features of `tidymodels`
@@ -115,13 +118,18 @@ lacerta_initial <- spatial_initial_split(lacerta_thin,
 autoplot(lacerta_initial)
 ```
 
+And check the balance of presences vs pseudoabsences:
+```{r}
+check_splits_balance(lacerta_initial, class)
+```
+
+
 We can now extract the training set from our `lacerta_initial` split, and sample
 folds to set up cross validation (note that we set the `cellsize` and `offset`
 based on the full dataset, `lacerta_thin`; this allows us to use the same grid 
 we used for the `initial_split`).
 ```{r training_cv, fig.width=6, fig.height=4}
 set.seed(1005)
-library(sf)
 lacerta_training <- training(lacerta_initial)
 lacerta_cv <- spatial_block_cv(lacerta_training,
   v = 5,
@@ -129,6 +137,11 @@ lacerta_cv <- spatial_block_cv(lacerta_training,
   offset = grid_offset(lacerta_thin)
 )
 autoplot(lacerta_cv)
+```
+
+And check the balance in the dataset:
+```{r}
+check_splits_balance(lacerta_cv, class)
 ```
 
 # Different recipes for certain models

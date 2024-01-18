@@ -20,7 +20,8 @@ the results. If none is given, the first metric in the metric set is used
 (after filtering by the \code{metric} option).}
 
 \item{metric}{A character vector for which metrics (apart from \code{rank_metric})
-to be included in the visualization.}
+to be included in the visualization. If NULL (the default), all available
+metrics will be plotted}
 
 \item{std_errs}{The number of standard errors to plot (if the standard error
 exists).}
