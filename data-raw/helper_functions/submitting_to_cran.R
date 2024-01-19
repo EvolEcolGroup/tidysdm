@@ -19,6 +19,12 @@ source("./data-raw/helper_functions/check_returns_in_documentation.R")
 # update version number
 # update news
 
+
+# NEXT SUBMISSION:
+# try removing donttest in examples to check if we have some problems with data.table that
+# we can remove by limiting threads
+
+
 # first check with rhub
 tidysdm_checks <- rhub::check_for_cran()
 
@@ -28,3 +34,5 @@ devtools::check_win_devel()
 
 # TO DO MANUALLY: if everything passes, edit the cran-comments.md to explain any notes
 devtools::release()
+
+
