@@ -63,3 +63,9 @@ and 1 row of values.
 
 \code{\link[yardstick:roc_aunu]{yardstick::roc_aunu()}}
 }
+\details{
+Note that \code{roc_aunp} and \code{roc_aunu} are multiclass metrics, and as such are
+are not relevant for SDMs (which work on a binary response). They are included
+for completeness, so that all class probability metrics from \code{yardstick} have
+an \code{sf} method, for applications other than SDMs.
+}

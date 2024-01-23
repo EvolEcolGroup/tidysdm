@@ -9,18 +9,4 @@ of `terra` (1.6.75).
 - devtools::check_win_devel()
 
 ## R CMD check results
-On all systems:
-
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: ‘Andrea Manica <am315@cam.ac.uk>’
-
-New submission
-
-Possibly misspelled words in DESCRIPTION:
-    Leonardi (9:6)
-    Tidymodels (2:41)
-    al (9:18)
-    et (9:15)
-    tidymodels (8:56)
-
-0 errors ✔ | 0 warnings ✔ | 1 notes ✖
+Not issues on any system.

@@ -36,3 +36,11 @@ devtools::check_win_devel()
 devtools::release()
 
 
+
+################################################################################
+################################################################################
+# For errors from r-hub, get a Docker image from:
+# https://hub.docker.com/r/rhub/debian-gcc-release
+# and then run with:
+# docker run -ti rhub/fedora-clang-devel bash
+

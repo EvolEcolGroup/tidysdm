@@ -61,8 +61,8 @@ Suggests:
     stacks,
     testthat (>= 3.0.0),
     tidyterra,
-    xgboost,
-    V8
+    vdiffr,
+    xgboost
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: true
