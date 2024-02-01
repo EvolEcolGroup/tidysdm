@@ -56,7 +56,7 @@ nndm <- cv_nndm(x = pa_data,
                 plot = FALSE, 
                 report = FALSE)
 expect_error(blockcv2rsample(nndm, pa_data),
-             "this function does support this object type")
+             "this function does not support this object type")
 
 
 

@@ -1,0 +1,5 @@
+I have a package, `tidysdm`, that relies heavily on `spatialsample`. One feature that would be very desirable would be stratification for `spatial_block_cv`, which I see is mentioned in #147 as not being on the short-term road map.
+
+I would be happy to help with the implementation, but as it not a trivial change, it would be good to discuss what would be the best way to go about it for a pull request to be acceptable. Do you have any thoughts already on what the requirements would be?
+
+From a quick look at the code, we would have to jump in at line 203 of `spatial_block_cv.R` and sample in a stratified manner (taking into account the number of points per grid_block). For that, we could use the infrastracture for group sampling from rsample.
