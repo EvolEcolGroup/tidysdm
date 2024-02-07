@@ -35,7 +35,7 @@
 \item{data}{an \link[sf:sf]{sf::sf} object}
 
 \item{...}{any other parameters to pass to the \code{data.frame} version of
-the metric.}
+the metric. See the specific man page for the metric of interest.}
 }
 \value{
 A tibble with columns \code{.metric}, \code{.estimator}, and \code{.estimate}

@@ -2,6 +2,7 @@
 % Please edit documentation in R/tidysdm.R
 \docType{package}
 \name{tidysdm}
+\alias{tidysdm-package}
 \alias{tidysdm}
 \title{tidysdm}
 \description{
@@ -23,4 +24,23 @@ There is also a
 updated for the \code{dev} version (on the top left, the version number is in
 red, and will be in the format x.x.x.9xxx, indicating it is a
 development version).
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/EvolEcolGroup/tidysdm}
+  \item \url{https://evolecolgroup.github.io/tidysdm/}
+  \item Report bugs at \url{https://github.com/EvolEcolGroup/tidysdm/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Andrea Manica \email{am315@cam.ac.uk}
+
+Authors:
+\itemize{
+  \item Michela Leonardi
+  \item Margherita Colucci
+}
+
 }
