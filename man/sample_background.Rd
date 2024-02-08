@@ -57,7 +57,7 @@ raster (i.e. not NAs).
 of 'dist_max' from presences (distances in 'm' for lonlat rasters, and in map
 units for projected rasters). Using the union of buffers means that areas that
 are in multiple buffers are not oversampled. This is also referred to as "thickening".
-\item bias': background points are sampled according to a surface representing
+\item 'bias': background points are sampled according to a surface representing
 the biased sampling effort.
 }
 }

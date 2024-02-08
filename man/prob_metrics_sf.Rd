@@ -42,8 +42,10 @@ A tibble with columns \code{.metric}, \code{.estimator}, and \code{.estimate}
 and 1 row of values.
 }
 \description{
-\code{tidysdm} provides methods to handle \link[sf:sf]{sf::sf} objects for the following
-\link{yardstick} metrics:
+\code{tidysdm} provides specialised metrics for SDMs, which have their own
+help pages(\code{\link[=boyce_cont]{boyce_cont()}}, \code{\link[=kap_max]{kap_max()}},\code{\link[=tss_max]{tss_max()}}). Additionally, it also
+provides methods to handle \link[sf:sf]{sf::sf} objects for the following
+standard \link{yardstick} metrics:
 
 \code{\link[yardstick:average_precision]{yardstick::average_precision()}}
 
