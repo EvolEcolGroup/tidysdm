@@ -19,11 +19,12 @@ sample_background(
 These can be defined in \code{coords}, unless they have standard names
 (see details below).}
 
-\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} from which cells will be sampled. If
-sampling is "biased", then sampling probability will be proportional to the values on
-the raster.}
+\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} from which cells will be sampled (the first layer
+will be used to determin which cells are NAs, and thus can not be sampled). If
+sampling is "biased", then the sampling probability will be proportional to the values on
+the first layer (i.e. band) of the raster.}
 
-\item{n}{number of pseudoabsence points to sample.}
+\item{n}{number of background points to sample.}
 
 \item{coords}{a vector of length two giving the names of the "x" and "y"
 coordinates, as found in \code{data}. If left to NULL, the function will

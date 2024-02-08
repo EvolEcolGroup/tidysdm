@@ -17,10 +17,11 @@
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
-#' @param raster the [terra::SpatRaster] from which cells will be sampled. If
-#' sampling is "biased", then sampling probability will be proportional to the values on
-#' the raster.
-#' @param n number of pseudoabsence points to sample.
+#' @param raster the [terra::SpatRaster] from which cells will be sampled (the first layer
+#' will be used to determin which cells are NAs, and thus can not be sampled). If
+#' sampling is "biased", then the sampling probability will be proportional to the values on
+#' the first layer (i.e. band) of the raster. 
+#' @param n number of background points to sample.
 #' @param coords a vector of length two giving the names of the "x" and "y"
 #' coordinates, as found in `data`. If left to NULL, the function will
 #' try to guess the columns based on standard names `c("x", "y")`, `c("X","Y")`,
@@ -91,7 +92,7 @@ sample_background <- function(data, raster, n, coords = NULL,
   # if bias extract the bias values to use as weights for sampling
   if (method[1]=="bias"){
     bias <- terra::extract(raster, cell_id)
-    bias <- bias/sum(bias)
+    bias <- bias[,1]/sum(bias[,1])
   } else {
     bias = NULL
   }
