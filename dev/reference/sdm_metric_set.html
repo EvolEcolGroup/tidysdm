@@ -14,7 +14,7 @@ SDM."><meta property="og:image" content="https://evolecolgroup.github.io/tidysdm
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.2.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.3.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,20 +87,16 @@ constraints on the type of metrics that can be mixed.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">sdm_metric_set</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   metric     class       direction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> boyce_cont prob_metric maximize </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> roc_auc    prob_metric maximize </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> tss_max    prob_metric maximize </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A metric set, consisting of:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - `boyce_cont()`, a probability metric | direction: <span style="color: #00BB00;">maximize</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - `roc_auc()`, a probability metric    | direction: <span style="color: #00BB00;">maximize</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - `tss_max()`, a probability metric    | direction: <span style="color: #00BB00;">maximize</span></span>
 <span class="r-in"><span><span class="fu">sdm_metric_set</span><span class="op">(</span><span class="va">accuracy</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   metric     class        direction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> boyce_cont prob_metric  maximize </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> roc_auc    prob_metric  maximize </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> tss_max    prob_metric  maximize </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> accuracy   class_metric maximize </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A metric set, consisting of:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - `boyce_cont()`, a probability metric | direction: <span style="color: #00BB00;">maximize</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - `roc_auc()`, a probability metric    | direction: <span style="color: #00BB00;">maximize</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - `tss_max()`, a probability metric    | direction: <span style="color: #00BB00;">maximize</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - `accuracy()`, a class metric         | direction: <span style="color: #00BB00;">maximize</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -172,6 +172,12 @@
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/repeat_ensemble.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/sample_background.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/sample_background_time.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/sample_pseudoabs.html</loc>
   </url>
   <url>
@@ -214,7 +220,7 @@
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/thin_by_dist_time.html</loc>
   </url>
   <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/tidysdm.html</loc>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/tidysdm-package.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/tss.html</loc>

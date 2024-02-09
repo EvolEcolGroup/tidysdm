@@ -16,7 +16,7 @@ formatted)."><meta property="og:image" content="https://evolecolgroup.github.io/
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.2.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.3.9001</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,13 +89,13 @@ These can be defined in <code>coords</code>, unless they have standard names
 
 
 <dt>raster</dt>
-<dd><p>A <code><a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> object that defined the grid with layers
+<dd><p>A <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> object that defined the grid with layers
 corresponding to the time slices (times should be set as either POSIXlt or
-"years", see <code><a href="https://rdrr.io/pkg/terra/man/time.html" class="external-link">terra::time()</a></code> for details), or a <code><a href="https://rdrr.io/pkg/terra/man/SpatRaster-class.html" class="external-link">terra::SpatRasterDataset</a></code>
+"years", see <code><a href="https://rspatial.github.io/terra/reference/time.html" class="external-link">terra::time()</a></code> for details), or a <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRasterDataset</a></code>
 where the first dataset will be
 used (again, times for that dataset should be set as either POSIXlt or
 "years")
-<code><a href="https://rdrr.io/pkg/terra/man/time.html" class="external-link">terra::time()</a></code></p></dd>
+<code><a href="https://rspatial.github.io/terra/reference/time.html" class="external-link">terra::time()</a></code></p></dd>
 
 
 <dt>coords</dt>
@@ -136,7 +136,7 @@ grid of <code>raster</code>)</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Further spatial thinning can be achieved by aggregating cells in the raster
 before thinning, as achieved by setting <code>agg_fact</code> &gt; 1 (aggregation works in a
-manner equivalent to <code><a href="https://rdrr.io/pkg/terra/man/aggregate.html" class="external-link">terra::aggregate()</a></code>).</p>
+manner equivalent to <code><a href="https://rspatial.github.io/terra/reference/aggregate.html" class="external-link">terra::aggregate()</a></code>).</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
