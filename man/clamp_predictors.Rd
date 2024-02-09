@@ -4,23 +4,26 @@
 \alias{clamp_predictors}
 \alias{clamp_predictors.default}
 \alias{clamp_predictors.SpatRaster}
+\alias{clamp_predictors.SpatRasterDataset}
 \title{Clamp the predictors to match values in training set}
 \usage{
-clamp_predictors(x, traning, use_na)
+clamp_predictors(x, training, use_na)
 
-\method{clamp_predictors}{default}(x, traning, use_na)
+\method{clamp_predictors}{default}(x, training, use_na)
 
-\method{clamp_predictors}{SpatRaster}(x, traning, use_na = FALSE)
+\method{clamp_predictors}{SpatRaster}(x, training, use_na = FALSE)
+
+\method{clamp_predictors}{SpatRasterDataset}(x, training, use_na = FALSE)
 }
 \arguments{
 \item{x}{a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} to clamp.}
 
+\item{training}{the training dataset (a \code{\link{data.frame}} or a \code{\link[sf:sf]{sf::sf}} object.}
+
 \item{use_na}{a boolean determining whether values outside the range
 of the training dataset are removed (set to NA). If FALSE (the default),
-values outside the traning range are replaced with the extremes of the training
+values outside the training range are replaced with the extremes of the training
 range.}
-
-\item{training}{the training dataset (a \code{\link{data.frame}} or a \code{\link[sf:sf]{sf::sf}} object.}
 }
 \value{
 a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} clamped to

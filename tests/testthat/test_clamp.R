@@ -38,9 +38,19 @@ test_that("clamping_predictor works on SpatRasterDatasets",{
   )
   # get climate
   horses_df <- location_slice_from_region_series(horses,
-                                                 region_series = climate_full
+                                                 region_series = climate_full,
+                                                 nn_interpol = FALSE
   )
-  
-  
+  horses_env <- horses_df[,c("bio01","bio10","bio12") ]
+  clamped_sds <- clamp_predictors(climate_full, training=horses_env)
+  climate_minmax<-lapply(climate_full,minmax)
+  clumped_minmax <- lapply(clamped_sds,minmax)
+  training_minmax <- apply(horses_env, 2, range, na.rm=TRUE)
+  # expect the full climate to be broader than the clumped
+  expect_true(all(climate_minmax[[1]][1,]<=clumped_minmax[[1]][1,]))
+  expect_true(all(climate_minmax[[2]][2,]>=clumped_minmax[[2]][2,]))
+  # expect the training set to be wider or equal
+  expect_true(all(training_minmax[1,1]<=clumped_minmax[[1]][1,]))
+  expect_true(all(training_minmax[2,2]>=clumped_minmax[[2]][2,]))
 }
 )
