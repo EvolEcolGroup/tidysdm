@@ -24,7 +24,14 @@ test_that("clamping_predictor works on SpatRasters",{
   expect_true(any(future_minmax[2,]>=training_minmax[2,]))
   # but the training range is bigger or equal to the clamped raster
   expect_true(all(training_minmax[1,]<=clamped_minmax[1,]))
-  expect_true(all(training_minmax[2,]>=clamped_minmax[2,]))  
+  expect_true(all(training_minmax[2,]>=clamped_minmax[2,]))
+  # get error for missing variable
+  climate_sub<-climate_present[[1:2]]
+  expect_error(clamp_predictors(climate_sub, training=lacerta_env),
+               "`x` is missing the following")
+  #error for missing class
+  expect_error(clamp_predictors(lacerta_env, lacerta_env),
+               "no method available for this object type")
 })
 
 test_that("clamping_predictor works on SpatRasterDatasets",{
@@ -52,5 +59,9 @@ test_that("clamping_predictor works on SpatRasterDatasets",{
   # expect the training set to be wider or equal
   expect_true(all(training_minmax[1,1]<=clumped_minmax[[1]][1,]))
   expect_true(all(training_minmax[2,2]>=clumped_minmax[[2]][2,]))
+  # get error for missing variable
+  climate_sub<-climate_full[[c("bio01","bio10")]]
+  expect_error(clamp_predictors(climate_sub, training=horses_env),
+               "`x` is missing the following")
 }
 )
