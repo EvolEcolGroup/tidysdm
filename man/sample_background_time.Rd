@@ -12,7 +12,7 @@ sample_background_time(
   time_col = "time",
   lubridate_fun = c,
   method = "random",
-  class_label = "pseudoabs",
+  class_label = "background",
   return_pres = TRUE,
   time_buffer = 0
 )
@@ -42,9 +42,9 @@ use \code{lubridate_fun} to provide a function that can be used to convert appro
 \item{method}{sampling method. One of 'random', 'dist_min', 'dist_max', or
 'dist_disc'.}
 
-\item{class_label}{the label given to the sampled points. Defaults to \code{pseudoabs}}
+\item{class_label}{the label given to the sampled points. Defaults to \code{background}}
 
-\item{return_pres}{return presences together with pseudoabsences/background
+\item{return_pres}{return presences together with background
 in a single tibble}
 
 \item{time_buffer}{the buffer on the time axis around presences that defines their effect when

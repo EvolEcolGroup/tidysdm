@@ -30,8 +30,8 @@
 #' @param lubridate_fun function to convert the time column into a lubridate object
 #' @param method sampling method. One of 'random', 'dist_min', 'dist_max', or
 #' 'dist_disc'.
-#' @param class_label the label given to the sampled points. Defaults to `pseudoabs`
-#' @param return_pres return presences together with pseudoabsences/background
+#' @param class_label the label given to the sampled points. Defaults to `background`
+#' @param return_pres return presences together with background
 #'  in a single tibble
 #' @param time_buffer the buffer on the time axis around presences that defines their effect when
 #'  sampling background with method 'max_dist'. If set to zero, presences have an effect only on the time step to which
@@ -47,10 +47,10 @@
 
 sample_background_time <- function(data, raster, n_per_time_step, coords = NULL, time_col = "time",
                                   lubridate_fun = c,
-                                  method = "random", class_label = "pseudoabs",
+                                  method = "random", class_label = "background",
                                   return_pres = TRUE, time_buffer = 0) {
-  if (time_buffer!=0 & method[1]!="max_dist"){
-    stop("'time_buffer' should only be set with method 'max_dist'")
+  if (time_buffer!=0 & method[1]!="dist_max"){
+    stop("'time_buffer' should only be set with method 'dist_max'")
   }
   
   

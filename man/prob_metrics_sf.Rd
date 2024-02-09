@@ -43,7 +43,7 @@ and 1 row of values.
 }
 \description{
 \code{tidysdm} provides specialised metrics for SDMs, which have their own
-help pages(\code{\link[=boyce_cont]{boyce_cont()}}, \code{\link[=kap_max]{kap_max()}},\code{\link[=tss_max]{tss_max()}}). Additionally, it also
+help pages(\code{\link[=boyce_cont]{boyce_cont()}}, \code{\link[=kap_max]{kap_max()}}, and \code{\link[=tss_max]{tss_max()}}). Additionally, it also
 provides methods to handle \link[sf:sf]{sf::sf} objects for the following
 standard \link{yardstick} metrics:
 
