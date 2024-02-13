@@ -19,8 +19,8 @@ grid_cellsize <- function(
     n = c(10, 10)) {
   # TODO check that this is an sf object
   grid_box <- sf::st_bbox(data)
-  if (utils::getFromNamespace("is_longlat", "spatialsample")(data)) {
-    grid_box <- utils::getFromNamespace("expand_grid", "spatialsample")(grid_box)
+  if (is_longlat(data)) {
+    grid_box <- expand_grid(grid_box)
   }
   c(diff(sf::st_bbox(grid_box)[c(1, 3)]), diff(sf::st_bbox(grid_box)[c(2, 4)])) / n
 }
