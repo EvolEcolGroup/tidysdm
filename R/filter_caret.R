@@ -29,38 +29,21 @@
 #' are only for numeric variables (i.e. if factors are present, the indices do
 #' not take them into account).
 #'
-#' @export
-
-filter_high_cor <- function(x,
-                            cutoff = 0.7,
-                            verbose = FALSE,
-                            names = TRUE,
-                            to_keep = NULL) {
-  UseMethod("filter_high_cor", object = x)
-}
-
-#' @rdname filter_high_cor
-#' @export
-filter_high_cor.default <- function(x, cutoff = 0.7,
-                                    verbose = FALSE,
-                                    names = TRUE,
-                                    to_keep = NULL) {
-  stop("no method available for this object type")
-}
+#' @keywords internal
+#' @noRd
 
 
-#' @rdname filter_high_cor
-#' @export
-filter_high_cor.SpatRaster <-
+filter_caret_SpatRaster <-
   function(x,
            cutoff = 0.7,
            verbose = FALSE,
            names = TRUE,
-           to_keep = NULL) {
+           to_keep = NULL,
+           max_cells = Inf) {
     # the new version of terra (as of 1.7.65) uses "cor" for pearson correlation
     # we use the legacy "pearson" so that the nextline works with old version of terra as well
     # we should update it at some point once old terra is really obsolete
-    cor_matrix <- terra::layerCor(x, "pearson", na.rm = TRUE)
+    cor_matrix <- terra::layerCor(x, "pearson", na.rm = TRUE, max_cells = max_cells)
     # get the appropriate slot depending on what version of terra created the object
     if ("pearson" %in% names(cor_matrix)){
       cor_matrix <- cor_matrix$pearson
@@ -68,7 +51,7 @@ filter_high_cor.SpatRaster <-
       cor_matrix <- cor_matrix$correlation
     }
     dimnames(cor_matrix) <- list(names(x), names(x))
-    filter_high_cor(
+    filter_caret_matrix(
       x = cor_matrix,
       cutoff = cutoff,
       verbose = verbose,
@@ -78,9 +61,7 @@ filter_high_cor.SpatRaster <-
   }
 
 
-#' @rdname filter_high_cor
-#' @export
-filter_high_cor.data.frame <-
+filter_caret_df <-
   function(x,
            cutoff = 0.7,
            verbose = FALSE,
@@ -90,7 +71,7 @@ filter_high_cor.data.frame <-
       dplyr::select(dplyr::where(is.numeric)) %>%
       sf::st_drop_geometry()
     cor_matrix <- stats::cor(x)
-    filter_high_cor(
+    filter_caret_matrix(
       x = cor_matrix,
       cutoff = cutoff,
       verbose = verbose,
@@ -99,9 +80,7 @@ filter_high_cor.data.frame <-
     )
   }
 
-#' @rdname filter_high_cor
-#' @export
-filter_high_cor.matrix <-
+filter_caret_matrix <-
   function(x,
            cutoff = 0.7,
            verbose = FALSE,
@@ -139,7 +118,7 @@ filter_high_cor.matrix <-
       ]
       x <- x[!dimnames(x)[[1]] %in% to_keep, !dimnames(x)[[1]] %in% to_keep]
     }
-    filter_output <- filter_high_cor_algorithm(
+    filter_output <- filter_caret_algorithm(
       x = x,
       cutoff = cutoff,
       verbose = verbose
@@ -160,10 +139,10 @@ filter_high_cor.matrix <-
     return(filter_output)
   }
 
-#' @rdname filter_high_cor
+#' @rdname filter_caret
 #' @export
 # this funciton is only ever called from the cor.matrix method
-filter_high_cor_algorithm <-
+filter_caret_algorithm <-
   function(x,
            cutoff = 0.7,
            verbose = FALSE) {
