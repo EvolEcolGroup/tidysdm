@@ -15,8 +15,6 @@ prep.spatial_recipe <- function(x, training = NULL, fresh = FALSE, verbose = FAL
       training <- training %>% dplyr::mutate(X = NA, Y = NA)
     }
   }
-  # recipes:::prep.recipe
-#  utils::getFromNamespace("prep.recipe", "recipes")(
   NextMethod(generic="prep",
     x = x, training = sf::st_drop_geometry(training),
     fresh = fresh, verbose = FALSE,
@@ -39,10 +37,6 @@ bake.spatial_recipe <- function(object, new_data, ..., composition = "tibble") {
       new_data <- new_data %>% dplyr::mutate(X = NA, Y = NA)
     }
   }
-  ## TODO the st_drop_geometry below should be redundant given line 43
-#  utils::getFromNamespace("bake.recipe", "recipes")(object = object, ...,
-#    new_data = sf::st_drop_geometry(new_data),
-#    composition = composition)
   NextMethod(generic="bake", object = object, 
                   new_data = sf::st_drop_geometry(new_data), ...,
                   composition = composition)

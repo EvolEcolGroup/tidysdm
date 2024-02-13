@@ -77,7 +77,6 @@ tss_max_vec <- function(truth,
                         event_level = "first",
                         case_weights = NULL,
                         ...) {
-  #utils::getFromNamespace("abort_if_class_pred", "yardstick")(truth)
   abort_if_class_pred(truth)
 
   estimator <- yardstick::finalize_estimator(truth, estimator, "tss_max")
@@ -107,7 +106,6 @@ tss_max_estimator_impl <- function(truth,
                                    estimator,
                                    event_level,
                                    case_weights) {
-#  if (!utils::getFromNamespace("is_binary", "yardstick")(estimator)) {
   if (!identical(estimator, "binary")){
       
     stop("tss_max is only available for binary classes; multiclass is not supported")
