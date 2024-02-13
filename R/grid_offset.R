@@ -16,8 +16,8 @@ grid_offset <- function(
     data) {
   # TODO check that this is an sf object
   grid_box <- sf::st_bbox(data)
-  if (utils::getFromNamespace("is_longlat", "spatialsample")(data)) {
-    grid_box <- utils::getFromNamespace("expand_grid", "spatialsample")(grid_box)
+  if (is_longlat(data)) {
+    grid_box <- expand_grid(grid_box)
   }
   sf::st_bbox(grid_box)[c("xmin", "ymin")]
 }

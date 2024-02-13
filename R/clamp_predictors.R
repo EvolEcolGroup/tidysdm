@@ -45,19 +45,19 @@ clamp_predictors.SpatRasterDataset <- function(x, training, use_na = FALSE) {
   # check that all variables are present in the raster
   if (!all(names(training) %in% names(x))){
     stop("`x` is missing the following variables (which are present in `training`): ",
-         paste(names(training)[!names(training) %in% varnames(x)]), sep=",")
+         paste(names(training)[!names(training) %in% terra::varnames(x)]), sep=",")
   }
   # subset to the variables in training
   extremes <- apply(training, 2, range, na.rm=TRUE)
   # hack to be able to change the datasets
   # without converting to a list, it doesn't seem possible
-  dataset_names <- varnames(x)
+  dataset_names <- terra::varnames(x)
   x <-as.list(x)
   names(x)<-dataset_names
   # end of hack
   for (i_name in names(x)){
    x[[i_name]]<-terra::clamp(x[[i_name]], lower = extremes[1,i_name], upper = extremes[2,i_name], values = !use_na)
   }
-  x <- sds(x)
+  x <- terra::sds(x)
   return(x)
 }
