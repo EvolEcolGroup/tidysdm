@@ -27,7 +27,7 @@
 #' those variables is higher than the cutoff).
 #' @param method character. One of "cor_caret", "vif_cor" or "vif_step".
 #' @param cor_type character. For methods that use correlation, which type of correlation: "pearson", "kendall", or "spearman"
-#' @param maxcell positive integer. The maximum number of cells to be used. If this is smaller than ncell(x), a regular sample of x is used
+#' @param max_cell positive integer. The maximum number of cells to be used. If this is smaller than ncell(x), a regular sample of x is used
 #' @returns A vector of names of columns that are below the correlation threshold
 #' (when \code{names = TRUE}), otherwise a vector of indices. Note that the indices
 #' are only for numeric variables (i.e. if factors are present, the indices do
@@ -41,7 +41,8 @@ filter_collinear <- function(x,
                             names = TRUE,
                             to_keep = NULL,
                             method = "cor_caret",
-                            maxcell = Inf) {
+                            cor_type = "pearson",
+                            max_cells = Inf) {
   UseMethod("filter_collinear", object = x)
 }
 
@@ -52,7 +53,8 @@ filter_collinear.default <- function(x,
                                     verbose = FALSE,
                                     names = TRUE,
                                     to_keep = NULL,
-                                    method = "caret",
+                                    method = "cor_caret",
+                                    cor_type = "pearson",
                                     max_cells = Inf) {
   stop("no method available for this object type")
 }
@@ -70,7 +72,8 @@ filter_collinear.SpatRaster <-
            verbose = FALSE,
            names = TRUE,
            to_keep = NULL,
-           method = "caret",
+           method = "cor_caret",
+           cor_type = "pearson",
            max_cells = Inf,
            exhaustive = FALSE) {
       # if max_cells > ncell, then sample
@@ -88,6 +91,7 @@ filter_collinear.SpatRaster <-
         names = names,
         to_keep = to_keep,
         method = method,
+        cor_type = cor_type,
         max_cells = max_cells
       )
     }
@@ -102,7 +106,8 @@ filter_collinear.data.frame <-
            verbose = FALSE,
            names = TRUE,
            to_keep = NULL,
-           method = "caret",
+           method = "cor_caret",
+           cor_type = "pearson",
            max_cells = Inf) {
     x <- x %>%
       # do we need this?!? check vif cor and vif step
@@ -114,6 +119,7 @@ filter_collinear.data.frame <-
      x <- x %>% slice_sample(n=max_cells)
    }
    x <- as.matrix(x)
+   # now dispatch to the matrix method
    filter_collinear(
      x,
      cutoff = cutoff,
@@ -121,6 +127,7 @@ filter_collinear.data.frame <-
      names = names,
      to_keep = to_keep,
      method = method,
+     cor_type = cor_type,
      max_cells = max_cells
    )
 }
@@ -133,22 +140,35 @@ filter_collinear.matrix <- function(x,
                                     verbose = FALSE,
                                     names = TRUE,
                                     to_keep = NULL,
-                                    method = "caret",
+                                    method = "cor_caret",
+                                    cor_type = "pearson",
                                     max_cells = Inf) {
-  if (max_cells < nrow(x)){
-    ##sample rows
-    x <- x [sample(1:nrwo(x),max_cells),]
+  if (ncol(x) <2) {
+    stop("at least 2 numeric variables are needed")
   }
   
+  # check that to_keep is valid
+  if (!is.null(to_keep)){
+    if (!any(to_keep %in% colnames(x))) {
+      stop("to_keep includes variables that are not present in x")
+    }    
+  }
+
+  
+  # sample rows if needed
+  if (max_cells < nrow(x)){
+    x <- x [sample(1:nrwo(x),max_cells),]
+  }
+
   # now dispatch to the correct method
-  if (method == "caret") {
-    filter_caret(
+  if (method == "cor_caret") {
+    filter_cor_caret(
       x,
       cutoff = cutoff,
       verbose = verbose,
       names = names,
       to_keep = to_keep,
-      max_cells = max_cells
+      cor_type = cor_type
     )
   } else if (method == "vif_step") {
     filter_vifstep(
@@ -156,8 +176,7 @@ filter_collinear.matrix <- function(x,
       cutoff = cutoff,
       verbose = verbose,
       names = names,
-      to_keep = to_keep,
-      max_cells = max_cells
+      to_keep = to_keep
     )    
   } else if (method == "vif_cor") {
     filter_vifcor(
@@ -166,11 +185,11 @@ filter_collinear.matrix <- function(x,
       verbose = verbose,
       names = names,
       to_keep = to_keep,
-      max_cells = max_cells
+      cor_type = cor_type
     )    
   } else {
     stop (
-      "the selected method is not valid: only options 'cor_caret', 'vifstep' and 'vifcor' are accepted."
+      "the selected method is not valid: only options 'cor_caret', 'vif_step' and 'vif_cor' are accepted."
     )
   }
 }
@@ -181,3 +200,4 @@ filter_collinear.matrix <- function(x,
   
   
 #}
+

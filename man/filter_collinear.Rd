@@ -5,6 +5,7 @@
 \alias{filter_collinear.default}
 \alias{filter_collinear.SpatRaster}
 \alias{filter_collinear.data.frame}
+\alias{filter_collinear.matrix}
 \title{Filter to retain only variables that have low collinearity}
 \usage{
 filter_collinear(
@@ -13,8 +14,9 @@ filter_collinear(
   verbose = FALSE,
   names = TRUE,
   to_keep = NULL,
-  method = "caret",
-  maxcell = Inf
+  method = "cor_caret",
+  cor_type = "pearson",
+  max_cells = Inf
 )
 
 \method{filter_collinear}{default}(
@@ -23,7 +25,8 @@ filter_collinear(
   verbose = FALSE,
   names = TRUE,
   to_keep = NULL,
-  method = "caret",
+  method = "cor_caret",
+  cor_type = "pearson",
   max_cells = Inf
 )
 
@@ -33,8 +36,10 @@ filter_collinear(
   verbose = FALSE,
   names = TRUE,
   to_keep = NULL,
-  method = "caret",
-  max_cells = Inf
+  method = "cor_caret",
+  cor_type = "pearson",
+  max_cells = Inf,
+  exhaustive = FALSE
 )
 
 \method{filter_collinear}{data.frame}(
@@ -43,13 +48,25 @@ filter_collinear(
   verbose = FALSE,
   names = TRUE,
   to_keep = NULL,
-  method = "caret",
+  method = "cor_caret",
+  cor_type = "pearson",
+  max_cells = Inf
+)
+
+\method{filter_collinear}{matrix}(
+  x,
+  cutoff = NULL,
+  verbose = FALSE,
+  names = TRUE,
+  to_keep = NULL,
+  method = "cor_caret",
+  cor_type = "pearson",
   max_cells = Inf
 )
 }
 \arguments{
 \item{x}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object, a data.frame (with only numeric
-variables), or a correlation matrix}
+variables)}
 
 \item{cutoff}{A numeric value used as a threshold to remove variables. For, "caret",
 it is the pair-wise absolute correlation cutoff, which defaults to 0.7. For "vifstep"
@@ -65,9 +82,16 @@ the column index \code{FALSE})?}
 (note that the function will return an error if the correlation among any of
 those variables is higher than the cutoff).}
 
-\item{method}{character. One of "caret", "vifcor" or "vifstep"}
+\item{method}{character. One of "cor_caret", "vif_cor" or "vif_step".}
 
-\item{maxcell}{positive integer. The maximum number of cells to be used. If this is smaller than ncell(x), a regular sample of x is used}
+\item{cor_type}{character. For methods that use correlation, which type of correlation: "pearson", "kendall", or "spearman"}
+
+\item{exhaustive}{boolean. Used only for \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} when downsampling
+to \code{max_cells}, if we require the \code{exhaustive} approach in \code{\link[terra:sample]{terra::spatSample()}}.
+This is only needed for rasters that are very sparse and not too large, see the help
+page of \code{\link[terra:sample]{terra::spatSample()}} for details.}
+
+\item{max_cell}{positive integer. The maximum number of cells to be used. If this is smaller than ncell(x), a regular sample of x is used}
 }
 \value{
 A vector of names of columns that are below the correlation threshold
@@ -78,20 +102,13 @@ not take them into account).
 \description{
 This method finds a subset of variables that have low collinearity. It provides
 three methods: \code{cor_caret}, a stepwise approach to remove variables with a pairwise correlation
-above a given cutoff (based on the algorithm in \code{caret::findCorrelation});
-\code{vifstep}, a stepwise appraoch
+above a given cutoff, choosing the variable with the greatest mean correlation (based on the algorithm in \code{caret::findCorrelation});
+\code{vif_step}, a stepwise approach to remove variables with an variance inflation factor
+above a given cutoff (based on the algorithm in \code{usdm::vifstep}), and \code{vif_cor}, a stepwise
+approach that, at each step, find the pair of variables with the highest correlation above the cutoff and removes the
+one with the largest vif.
 such that all have a correlation
-below a certain cutoff. There are methods for \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, and
-\code{\link{data.frame}}. Only numeric variables will be considered. For \code{data.frame}, only numeric variables will be
+below a certain cutoff. There are methods for \code{\link[terra:SpatRaster-class]{terra::SpatRaster}},
+\code{\link{data.frame}} and \code{\link{matrix}}. For \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} and \code{data.frame}, only numeric variables will be
 considered.
-The algorithm is based on \code{caret::findCorrelation}, using the \code{exact} option.
-The absolute values of pair-wise correlations are considered. If two
-variables have a high correlation, the function looks at the mean absolute
-correlation of each variable and removes the variable with the largest mean
-absolute correlation.
-}
-\details{
-There are several function in the package \code{subselect}
-that can also be used to accomplish
-the same goal but tend to retain more predictors.
 }

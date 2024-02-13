@@ -32,116 +32,68 @@
 #' @keywords internal
 #' @noRd
 
-
-filter_caret_SpatRaster <-
-  function(x,
-           cutoff = 0.7,
-           verbose = FALSE,
-           names = TRUE,
-           to_keep = NULL,
-           max_cells = Inf) {
-    # the new version of terra (as of 1.7.65) uses "cor" for pearson correlation
-    # we use the legacy "pearson" so that the nextline works with old version of terra as well
-    # we should update it at some point once old terra is really obsolete
-    cor_matrix <- terra::layerCor(x, "pearson", na.rm = TRUE, max_cells = max_cells)
-    # get the appropriate slot depending on what version of terra created the object
-    if ("pearson" %in% names(cor_matrix)){
-      cor_matrix <- cor_matrix$pearson
-    } else {
-      cor_matrix <- cor_matrix$correlation
-    }
-    dimnames(cor_matrix) <- list(names(x), names(x))
-    filter_caret_matrix(
-      x = cor_matrix,
-      cutoff = cutoff,
-      verbose = verbose,
-      names = names,
-      to_keep
-    )
+filter_cor_caret <-function(x,
+                                    cutoff = NULL,
+                                    verbose = FALSE,
+                                    names = TRUE,
+                                    cor_type = "pearson",
+                                    to_keep = NULL){
+  
+  if (is.null(cutoff)){
+    cutoff <- 0.7
   }
-
-
-filter_caret_df <-
-  function(x,
-           cutoff = 0.7,
-           verbose = FALSE,
-           names = TRUE,
-           to_keep = NULL) {
-    x <- x %>%
-      dplyr::select(dplyr::where(is.numeric)) %>%
-      sf::st_drop_geometry()
-    cor_matrix <- stats::cor(x)
-    filter_caret_matrix(
-      x = cor_matrix,
-      cutoff = cutoff,
-      verbose = verbose,
-      names = names,
-      to_keep = to_keep
-    )
-  }
-
-filter_caret_matrix <-
-  function(x,
-           cutoff = 0.7,
-           verbose = FALSE,
-           names = TRUE,
-           to_keep = NULL) {
-    if (!isTRUE(all.equal(x, t(x)))) {
-      stop("correlation matrix is not symmetric")
+  var_names <- colnames(x)
+  # create a correlation matrix
+  x <- stats::cor(x, method = cor_type)
+  diag(x) <- NA
+#  x <- abs(x)
+  if (!is.null(to_keep)) {
+    if (!any(to_keep %in% var_names)) {
+      stop("to_keep should only include numeric variables in x")
     }
-    if (dim(x)[1] == 1) {
-      stop("only one variable given")
-    }
-
-    var_names <- dimnames(x)[[1]]
-    diag(x) <- NA
-    # if we have some variables to force in
-    if (!is.null(to_keep)) {
-      if (!any(to_keep %in% var_names)) {
-        stop("to_keep should only include numeric variables in x")
+   # browser()
+    if (length(to_keep) > 1) {
+      x_keep <- x[to_keep, to_keep]
+      # diag(x_keep)<-NA
+      if (any(x_keep > cutoff, na.rm = TRUE)) {
+        stop("some variables in `to_keep` have a correlation higher than the `cutoff`")
       }
-      if (length(to_keep) > 1) {
-        x_keep <- x[to_keep, to_keep]
-        # diag(x_keep)<-NA
-        if (any(x_keep > cutoff, na.rm = TRUE)) {
-          stop("some variables in `to_keep` have a correlation higher than the `cutoff`")
-        }
-        max_cor_vs_keep <- apply(abs(x[, to_keep]), 1, max, na.rm = TRUE)
-      } else { # if only 1 var to keep, we just need to take the abs value of correlations
-        max_cor_vs_keep <- abs(x[, to_keep])
-      }
-      # remove variables that are too highly correlated with variables to keep
-
-      x <- x[
-        !var_names %in% names(which(max_cor_vs_keep > cutoff)),
-        !var_names %in% names(which(max_cor_vs_keep > cutoff))
-      ]
-      x <- x[!dimnames(x)[[1]] %in% to_keep, !dimnames(x)[[1]] %in% to_keep]
+      max_cor_vs_keep <- apply(abs(x[, to_keep]), 1, max, na.rm = TRUE)
+    } else { # if only 1 var to keep, we just need to take the abs value of correlations
+      max_cor_vs_keep <- abs(x[, to_keep])
     }
-    filter_output <- filter_caret_algorithm(
-      x = x,
-      cutoff = cutoff,
-      verbose = verbose
-    )
-    if (!is.null(to_keep)) {
-      to_remove <- attr(filter_output, "to_remove")
-      filter_output <- c(to_keep, filter_output)
-      attr(filter_output, "to_remove") <- to_remove
-    }
-
-
-    if (!names) {
-      # return their indices
-      to_remove <- match(attr(filter_output, "to_remove"), var_names)
-      filter_output <- match(filter_output, var_names)
-      attr(filter_output, "to_remove") <- to_remove
-    }
-    return(filter_output)
+    # remove variables that are too highly correlated with variables to keep
+    
+    x <- x[
+      !var_names %in% names(which(max_cor_vs_keep > cutoff)),
+      !var_names %in% names(which(max_cor_vs_keep > cutoff))
+    ]
+    x <- x[!dimnames(x)[[1]] %in% to_keep, !dimnames(x)[[1]] %in% to_keep]
   }
+  filter_output <- filter_caret_algorithm(
+    x = x,
+    cutoff = cutoff,
+    verbose = verbose
+  )
+  if (!is.null(to_keep)) {
+    to_remove <- attr(filter_output, "to_remove")
+    filter_output <- c(to_keep, filter_output)
+    attr(filter_output, "to_remove") <- to_remove
+  }
+  
+  
+  if (!names) {
+    # return their indices
+    to_remove <- match(attr(filter_output, "to_remove"), var_names)
+    filter_output <- match(filter_output, var_names)
+    attr(filter_output, "to_remove") <- to_remove
+  }
+  return(filter_output)
+}
 
-#' @rdname filter_caret
-#' @export
-# this funciton is only ever called from the cor.matrix method
+#' @keywords internal
+#' @noRd
+# this funciton is a modified version of the caret algorithm
 filter_caret_algorithm <-
   function(x,
            cutoff = 0.7,
