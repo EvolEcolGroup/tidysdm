@@ -8,18 +8,10 @@
 #' approach that, at each step, find the pair of variables with the highest correlation above the cutoff and removes the
 #' one with the largest vif.
 #' such that all have a correlation
-#' below a certain cutoff. There are methods for [`terra::SpatRaster`], and
-#' [`data.frame`]. Only numeric variables will be considered. For `data.frame`, only numeric variables will be
+#' below a certain cutoff. There are methods for [`terra::SpatRaster`],
+#' [`data.frame`] and [`matrix`]. For [`terra::SpatRaster`] and `data.frame`, only numeric variables will be
 #' considered.
-#' The algorithm is based on `caret::findCorrelation`, using the `exact` option.
-#' The absolute values of pair-wise correlations are considered. If two
-#' variables have a high correlation, the function looks at the mean absolute
-#' correlation of each variable and removes the variable with the largest mean
-#' absolute correlation.
-#'
-#' There are several function in the package `subselect`
-#' that can also be used to accomplish
-#' the same goal but tend to retain more predictors.
+
 #'
 #' @param x A [`terra::SpatRaster`] object, a data.frame (with only numeric
 #' variables)
@@ -48,7 +40,7 @@ filter_collinear <- function(x,
                             verbose = FALSE,
                             names = TRUE,
                             to_keep = NULL,
-                            method = "caret",
+                            method = "cor_caret",
                             maxcell = Inf) {
   UseMethod("filter_collinear", object = x)
 }
@@ -67,6 +59,10 @@ filter_collinear.default <- function(x,
 
 
 #' @rdname filter_collinear
+#' @param exhaustive boolean. Used only for [`terra::SpatRaster`] when downsampling
+#' to `max_cells`, if we require the `exhaustive` approach in [terra::spatSample()].
+#' This is only needed for rasters that are very sparse and not too large, see the help
+#' page of [terra::spatSample()] for details.
 #' @export
 filter_collinear.SpatRaster <-
   function(x,
@@ -75,26 +71,16 @@ filter_collinear.SpatRaster <-
            names = TRUE,
            to_keep = NULL,
            method = "caret",
-           max_cells = Inf) {
-    # special case for method "caret", where we avoid sampling the raster and use
-    # the fast layerCor function in terra
-    if (method == "caret") {
-      filter_caret_SpatRaster(
-        x,
-        cutoff = cutoff,
-        verbose = verbose,
-        names = names,
-        to_keep = to_keep,
-        max_cells = max_cells
-      )
-    } else {
+           max_cells = Inf,
+           exhaustive = FALSE) {
       # if max_cells > ncell, then sample
       if (max_cells >= terra::ncell(x)) {
-        x_df <- terra::spatSample(x, size = max_cells, na.rm = TRUE)
+        x_df <- terra::spatSample(x, size = max_cells, na.rm = TRUE, as.df = FALSE,
+                                  exhaustive = exhaustive)
       } else {
-        x_df <- terra::as.data.frame(x, na.rm = TRUE)
+        x_df <- terra::as.matrix(x, na.rm = TRUE)
       }
-      # now dispatch to the data.frame method
+      # now dispatch to the matrix method
       filter_collinear(
         x,
         cutoff = cutoff,
@@ -105,7 +91,7 @@ filter_collinear.SpatRaster <-
         max_cells = max_cells
       )
     }
-  }
+
 
 
 #' @rdname filter_collinear
@@ -127,9 +113,36 @@ filter_collinear.data.frame <-
      ##sample rows
      x <- x %>% slice_sample(n=max_cells)
    }
-    # now dispatch to the df version of each method
+   x <- as.matrix(x)
+   filter_collinear(
+     x,
+     cutoff = cutoff,
+     verbose = verbose,
+     names = names,
+     to_keep = to_keep,
+     method = method,
+     max_cells = max_cells
+   )
+}
+    
+    
+#' @rdname filter_collinear
+#' @export
+filter_collinear.matrix <- function(x,
+                                    cutoff = NULL,
+                                    verbose = FALSE,
+                                    names = TRUE,
+                                    to_keep = NULL,
+                                    method = "caret",
+                                    max_cells = Inf) {
+  if (max_cells < nrow(x)){
+    ##sample rows
+    x <- x [sample(1:nrwo(x),max_cells),]
+  }
+  
+  # now dispatch to the correct method
   if (method == "caret") {
-    filter_caret_df(
+    filter_caret(
       x,
       cutoff = cutoff,
       verbose = verbose,
@@ -137,8 +150,8 @@ filter_collinear.data.frame <-
       to_keep = to_keep,
       max_cells = max_cells
     )
-  } else if (method == "vifstep") {
-    filter_vifstep_df(
+  } else if (method == "vif_step") {
+    filter_vifstep(
       x,
       cutoff = cutoff,
       verbose = verbose,
@@ -146,8 +159,8 @@ filter_collinear.data.frame <-
       to_keep = to_keep,
       max_cells = max_cells
     )    
-  } else if (method == "vifcor") {
-    filter_vifcor_df(
+  } else if (method == "vif_cor") {
+    filter_vifcor(
       x,
       cutoff = cutoff,
       verbose = verbose,
@@ -157,14 +170,14 @@ filter_collinear.data.frame <-
     )    
   } else {
     stop (
-      "the selected method is not valid: only options 'caret', 'vifstep' and 'vifcor' are accepted."
+      "the selected method is not valid: only options 'cor_caret', 'vifstep' and 'vifcor' are accepted."
     )
   }
 }
 
-.test_keep_cor <- function(x, to_keep){
+#.check_keep_cor <- function(x, to_keep){
   
   
   
   
-}
+#}
