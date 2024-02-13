@@ -31,10 +31,7 @@ add_member.default <- function(x, member, ...) {
 add_member.tune_results <- function(x, member, metric = NULL, id = NULL, ...) {
   # set the metric if the simple ensemble is empty (and thus has no metric)
   if (is.null(attr(x, "best_metric"))) {
-    attr(x, "best_metric") <- utils::getFromNamespace(
-      "choose_metric",
-      "tune"
-    )(metric, member)
+    attr(x, "best_metric") <- tidydsm_choose_metric(metric, member)
   }
 
   # if metric is NULL
@@ -93,4 +90,18 @@ add_member.workflow_set <- function(x, member, metric = NULL, ...) {
     x <- x %>% add_member(this_res, metric = metric, id = i_wflow)
   }
   x
+}
+
+
+tidydsm_choose_metric <- function (metric, x) {
+  if (is.null(metric)) {
+    metric_vals <- .get_tune_metric_names(x)
+    metric <- metric_vals[1]
+    if (length(metric_vals) > 1) {
+      msg <- paste0("No value of `metric` was given; metric '",
+                    metric, "' ", "will be used.")
+      rlang::warn(msg)
+    }
+  }
+  metric
 }
