@@ -36,7 +36,62 @@ filter_vif_step<-function(x, cutoff=10, verbose = FALSE, to_keep=NULL, size, cor
   vars_kept
 }
 
+#' @keywords internal
+#' @noRd
+filter_vif_cor<-function(x, cutoff=10, verbose = FALSE, to_keep=NULL, size, cor_type='pearson') {
+  
+  if (is.null(cutoff)){
+    cutoff <- 0.7
+  }
+  # names of all variables (from the full matrix)
+  var_names <- colnames(x)
+  x_cor <- stats::cor(x, method = cor_type)
+  x_cor <- abs(x_cor)
+  # create a dataframe
+  x_cor <- data.frame(row=rownames(x_cor)[row(x_cor)[upper.tri(x_cor)]], 
+             col=colnames(x_cor)[col(x_cor)[upper.tri(x_cor)]], 
+             cor=x_cor[upper.tri(x_cor)])
+  # order it by correlation coefficient
+  x_cor <- x_cor %>% dplyr::arrange(dplyr::desc(.data$cor)) %>%
+    dplyr::filter (!(row %in% to_keep & col %in% to_keep))  # remove comparisons among variables to keep
 
+  vars_to_remove <- c()
+  # work down the highest correlations above cutoff
+  while (TRUE) {
+    if (x_cor$cor[1] > cutoff){
+      # target variables to consider
+      target_vars <- c(x_cor$row[1],x_cor$col[1])
+      target_vars <- target_vars[!target_vars %in% to_keep]
+      # if we still have two variables (i.e. neither is in to_keep)
+      if (length(target_vars)>1){
+        vif_vector <- vif_fast(x,match(target_vars,colnames(x)))
+        target_var <- names(vif_vector)[which.max(vif_vector)] 
+      } else {
+        target_var <- target_vars
+      }
+      
+      # choose vars with larger vif
+      x_cor <- x_cor %>% dplyr::filter(!(col==target_var | row==target_var))
+      vars_to_remove <- c(vars_to_remove,target_var)
+      x <- x[,-which(colnames(x) == target_var)]
+    } else {
+      break
+    }
+    # break if we don't have any correlations left to investigate
+    if (nrow(x_cor)==0){
+      break
+    }
+  }
+  vars_kept <- var_names[!var_names %in% vars_to_remove]
+  if (verbose){
+    message("vif of retained variables")
+    print(vif_fast(x))
+    message("correlation matrix of retained variables")
+    print(stats::cor(x, method = cor_type))
+    print("----")
+  }
+  vars_kept
+}
 
 
 # estimate the variance inflation factor
