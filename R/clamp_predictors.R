@@ -45,6 +45,7 @@ clamp_predictors.SpatRaster <- function(x, training, .col, use_na = FALSE) {
     stop("`x` is missing the following variables (which are present in `training`): ",
          paste(names(training)[!names(training) %in% names(x)]))
   }
+  training <- stats::na.omit(training)
   # subset to the variables in training
   extremes <- apply(training, 2, range, na.rm=TRUE)
   x <- terra::clamp(x, lower = extremes[1,], upper = extremes[2,], values = !use_na)
@@ -70,6 +71,7 @@ clamp_predictors.SpatRasterDataset <- function(x, training, .col, use_na = FALSE
     stop("`x` is missing the following variables (which are present in `training`): ",
          paste(names(training)[!names(training) %in% terra::varnames(x)]), sep=",")
   }
+  training <- stats::na.omit(training)
   # subset to the variables in training
   extremes <- apply(training, 2, range, na.rm=TRUE)
   # hack to be able to change the datasets

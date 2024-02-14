@@ -10,7 +10,8 @@
 #' @param x [`terra::SpatRaster`], [`terra::SpatRasterDataset`] or [`data.frame`]
 #' @param v matrix or data.frame containing the reference values; each column
 #' should correspond to one layer of the [`terra::SpatRaster`] object.
-#' 
+#' @param .col the column containing the presences (optional). If specified,
+#' it is excluded from the clamping.
 #' @param filename character. Output filename (optional)
 #' @param ... additional arguments as for [terra::writeRaster()]
 #' @return a [`terra::SpatRaster`] (data.frame) with
@@ -20,21 +21,18 @@
 #' modelling range-shifting species. Methods in Ecology and Evolution
 #' 1:330-342. c("\\Sexpr[results=rd]{tools:::Rd_expr_doi(\"#1\")}",
 #' "10.1111/j.2041-210X.2010.00036.x")\Sexpr{tools:::Rd_expr_doi("10.1111/j.2041-210X.2010.00036.x")}
-#' @examples
-#' 
-#' 
+ 
 
 # author: Jean-Pierre Rossi <jean-pierre.rossi@supagro.inra.fr>
 # modifications by Robert Hijmans and Paulo van Breugel
 # rewritten for predicts by RH
 # adapted for tidysdm by AM
 
-setGeneric("mess_predictors", function(x, training, .col, ...) 
+setGeneric("mess_predictors", function(x, training, ...) 
   standardGeneric("mess_predictors") )
 
 setMethod("mess_predictors", signature(x="SpatRaster"), 
 	function(x, training, .col, filename="", ...) {
-	  browser()
 	  # remove the class column if it is present
 	  .col <- rlang::enquo(.col) %>%
 	    rlang::quo_get_expr() %>%
@@ -42,30 +40,35 @@ setMethod("mess_predictors", signature(x="SpatRaster"),
 	  if (.col!=""){
 	    training <- training %>% dplyr::select(-dplyr::one_of(.col))
 	  }
+	  # remove locations in training if they are present
+	  training <- training %>% sf::st_drop_geometry()
+	  # check that all variables are present in the raster
+	  if (!setequal(names(training),names(x))){
+	    stop("`x` and `training` should contain the same variables")
+	  }
 	  
 		training <- stats::na.omit(training)
 		if (nrow(training) < 2) {
 			stop("insufficient number of reference points")
 		}
-		stopifnot(NCOL(training) == nlyr(x))
-
-		out <- rast(x)
-		nl <- nlyr(x)
+    
+		out <- terra::rast(x)
+		nl <- terra::nlyr(x)
 		nms <- paste0(names(x), "_mess")
-		readStart(x)
-		on.exit(readStop(x))
+		terra::readStart(x)
+		on.exit(terra::readStop(x))
 		if (nl == 1) {
 			names(out) <- "mess"
-			b <- writeStart(out, filename, ...)
+			b <- terra::writeStart(out, filename, ...)
 			for (i in 1:b$n) {		
 				vv <- terra::readValues(x, b$row[i], b$nrows[i])
 				p <- .messi(vv, training)
 				terra::writeValues(out, p, b$row[i], b$nrows[i])
 			}
 		} else {
-				nlyr(out) <- 1
+				terra::nlyr(out) <- 1
 				names(out) <- "mess"
-				b <- writeStart(out, filename, ...)
+				b <- terra::writeStart(out, filename, ...)
 				for (i in 1:b$n) {
 					vv <- terra::readValues(x, b$row[i], b$nrows[i], mat=TRUE)
 					vv <- sapply(1:ncol(training), function(i) .messi(vv[,i], training[,i]))
@@ -74,7 +77,7 @@ setMethod("mess_predictors", signature(x="SpatRaster"),
 					terra::writeValues(out, m, b$row[i], b$nrows[i])
 			}
 		}
-		writeStop(out)
+		terra::writeStop(out)
 		out
 	}	
 )
@@ -87,6 +90,18 @@ setMethod("mess_predictors", signature(x="data.frame"),
 	    rlang::as_string()
 	  if (.col!=""){
 	    training <- training %>% dplyr::select(-dplyr::one_of(.col))
+	  }
+	  # remove locations in training if they are present
+	  training <- training %>% sf::st_drop_geometry()
+	  x <- x %>% sf::st_drop_geometry()
+	  # check that all variables are present in the raster
+	  if (!setequal(names(training),names(x))){
+	    stop("`x` and `training` should contain the same variables")
+	  }
+	  
+	  training <- stats::na.omit(training)
+	  if (nrow(training) < 2) {
+	    stop("insufficient number of reference points")
 	  }
 	  
 		if (ncol(x) == 1) {
@@ -124,7 +139,10 @@ setMethod("mess_predictors", signature(x="SpatRasterDataset"),
 )
 
 
-.messi <- function(p, v) {	
+.messi <- function(p, v) {
+  if (inherits(v, "data.frame")){
+    v <- v %>% dplyr::pull()
+  }
 	v <- sort(v)
 	f <- 100 * findInterval(p, v) / length(v)
 	minv <- v[1]
