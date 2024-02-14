@@ -66,16 +66,16 @@ do not exceed the range in the training dataset.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">clamp_predictors</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">use_na</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">clamp_predictors</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span>, <span class="va">use_na</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for default</span></span>
-<span><span class="fu">clamp_predictors</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">use_na</span><span class="op">)</span></span>
+<span><span class="fu">clamp_predictors</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span>, <span class="va">use_na</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for SpatRaster</span></span>
-<span><span class="fu">clamp_predictors</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, use_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">clamp_predictors</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span>, use_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for SpatRasterDataset</span></span>
-<span><span class="fu">clamp_predictors</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, use_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">clamp_predictors</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span>, use_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -86,6 +86,11 @@ do not exceed the range in the training dataset.</p>
 
 <dt>training</dt>
 <dd><p>the training dataset (a <code><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></code> or a <code><a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::sf</a></code> object.</p></dd>
+
+
+<dt>.col</dt>
+<dd><p>the column containing the presences (optional). If specified,
+it is excluded from the clamping.</p></dd>
 
 
 <dt>use_na</dt>
