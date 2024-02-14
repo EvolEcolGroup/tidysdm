@@ -7,15 +7,9 @@
 #' \code{v} can be obtained for a set of points using
 #' [terra::extract()] .
 #' 
-#' @aliases mess mess,SpatRaster-method mess,data.frame-method
 #' @param x [`terra::SpatRaster`], [`terra::SpatRasterDataset`] or [`data.frame`]
 #' @param v matrix or data.frame containing the reference values; each column
-#' should correspond to one layer of the [`terra::SpatRaster`] object. If \code{x} is a
-#' [`terra::SpatRaster`] or [`terra::SpatRasterDataset`], it can also be a SpatVector with reference locations (points)
-#' @param full logical. If \code{FALSE} a [`terra::SpatRaster`] with the MESS values is
-#' returned. If \code{TRUE}, a [`terra::SpatRaster`] is returned with \code{n} layers
-#' corresponding to the layers of the input [`terra::SpatRaster`] and an additional layer
-#' with the MESS values
+#' should correspond to one layer of the [`terra::SpatRaster`] object.
 #' @param filename character. Output filename (optional)
 #' @param ... additional arguments as for {terra::writeRaster}
 #' @return [`terra::SpatRaster`] (or data.frame) with layers (columns) corresponding to
@@ -67,14 +61,8 @@
 
 
 setMethod("mess_predictors", signature(x="SpatRaster"), 
-	function(x, v, full=FALSE, filename="", ...) {
+	function(x, v, filename="", ...) {
 
-		if (inherits(v, "SpatVector")) {
-			if (geomtype(p) != "points") {
-				stop("SpatVector v must have points geometry")
-			}
-			v <- extract(v, x)
-		}
 		v <- stats::na.omit(v)
 		if (nrow(v) < 2) {
 			stop("insufficient number of reference points")

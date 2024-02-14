@@ -7,9 +7,9 @@
 niche_overlap(x, y, method = c("Schoener", "Hellinger"))
 }
 \arguments{
-\item{x}{a \link[terra:SpatRaster-class]{terra::SpatRaster}}
+\item{x}{a \link[terra:SpatRaster-class]{terra::SpatRaster} with a single layer}
 
-\item{y}{a \link[terra:SpatRaster-class]{terra::SpatRaster}}
+\item{y}{a \link[terra:SpatRaster-class]{terra::SpatRaster} with a single layer}
 
 \item{method}{a string (or vector of strings) taking values "Schoener" and
 "Hellinger"}

@@ -80,3 +80,7 @@ ncdf4::ncatt_put(nc_in, varid = "time", attname = "axis", attval = "T")
 ncdf4::nc_close(nc_in)
 
 #####
+# from the vignette, we save
+# lacerta_thin (present, absences plus all climatic variables)
+# lacerta ensemble
+usethis::use_data(lacerta_ens, overwrite=TRUE)
