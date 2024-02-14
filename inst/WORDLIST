@@ -22,6 +22,8 @@ SDM
 SDMs
 SSP
 Schmiegelow
+Schoener
+Schoener's
 SpatRaster
 SpatRasterDataset
 StackOverflow
@@ -60,6 +62,7 @@ iter
 jan
 jlx
 kap
+kendall
 lacerta
 lh
 lonlat
@@ -71,12 +74,14 @@ maxent
 maxnet
 mtry
 multiclass
+ncell
 nonzero
 onlinelibrary
 palaeo
 palaeoclimate
 palaeoclimatic
 palaeodata
+pearson
 pred
 prepping
 prob
@@ -90,6 +95,7 @@ rsplit
 schreiberi
 sdm
 spatialsample
+spearman
 stackexchange
 stackoverflow
 stat
@@ -104,4 +110,5 @@ tp
 tss
 unioned
 vec
+vif
 wiley
