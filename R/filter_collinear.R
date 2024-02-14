@@ -15,9 +15,10 @@
 #'
 #' @param x A [`terra::SpatRaster`] object, a data.frame (with only numeric
 #' variables)
-#' @param cutoff A numeric value used as a threshold to remove variables. For, "caret",
-#' it is the pair-wise absolute correlation cutoff, which defaults to 0.7. For "vifstep"
-#' and "vifcor", it is the variable inflation factor, which defaults to 10
+#' @param cutoff A numeric value used as a threshold to remove variables. 
+#' For, "cor_caret" and "vif_cor",
+#' it is the pair-wise absolute correlation cutoff, which defaults to 0.7. For 
+#' "vif_step", it is the variable inflation factor, which defaults to 10
 #' @param verbose A boolean whether additional information should be provided
 #' on the screen
 #' @param names a logical; should the column names be returned `TRUE` or
@@ -26,7 +27,8 @@
 #' (note that the function will return an error if the correlation among any of
 #' those variables is higher than the cutoff).
 #' @param method character. One of "cor_caret", "vif_cor" or "vif_step".
-#' @param cor_type character. For methods that use correlation, which type of correlation: "pearson", "kendall", or "spearman"
+#' @param cor_type character. For methods that use correlation, which type 
+#' of correlation: "pearson", "kendall", or "spearman". Defaults to "pearson"
 #' @param max_cell positive integer. The maximum number of cells to be used. If this is smaller than ncell(x), a regular sample of x is used
 #' @returns A vector of names of columns that are below the correlation threshold
 #' (when \code{names = TRUE}), otherwise a vector of indices. Note that the indices
@@ -76,16 +78,17 @@ filter_collinear.SpatRaster <-
            cor_type = "pearson",
            max_cells = Inf,
            exhaustive = FALSE) {
-      # if max_cells > ncell, then sample
-      if (max_cells >= terra::ncell(x)) {
-        x_df <- terra::spatSample(x, size = max_cells, na.rm = TRUE, as.df = FALSE,
+      # if raster is bigger than max_cells, then sample
+      if (max_cells < terra::ncell(x)) {
+        x_matrix <- terra::spatSample(x, size = max_cells,
+                                  method = "random", na.rm = TRUE, as.df = FALSE,
                                   exhaustive = exhaustive)
       } else {
-        x_df <- terra::as.matrix(x, na.rm = TRUE)
+        x_matrix <- terra::as.matrix(x, na.rm = TRUE)
       }
       # now dispatch to the matrix method
       filter_collinear(
-        x,
+        x_matrix,
         cutoff = cutoff,
         verbose = verbose,
         names = names,
@@ -154,36 +157,32 @@ filter_collinear.matrix <- function(x,
     }    
   }
 
-  
   # sample rows if needed
   if (max_cells < nrow(x)){
-    x <- x [sample(1:nrwo(x),max_cells),]
+    x <- x [sample(1:nrow(x),max_cells),]
   }
 
   # now dispatch to the correct method
   if (method == "cor_caret") {
-    filter_cor_caret(
+    vars_kept <- filter_cor_caret(
       x,
       cutoff = cutoff,
       verbose = verbose,
-      names = names,
       to_keep = to_keep,
       cor_type = cor_type
     )
   } else if (method == "vif_step") {
-    filter_vifstep(
+    vars_kept <- filter_vifstep(
       x,
       cutoff = cutoff,
       verbose = verbose,
-      names = names,
       to_keep = to_keep
     )    
   } else if (method == "vif_cor") {
-    filter_vifcor(
+    vars_kept <- filter_vifcor(
       x,
       cutoff = cutoff,
       verbose = verbose,
-      names = names,
       to_keep = to_keep,
       cor_type = cor_type
     )    
@@ -192,6 +191,16 @@ filter_collinear.matrix <- function(x,
       "the selected method is not valid: only options 'cor_caret', 'vif_step' and 'vif_cor' are accepted."
     )
   }
+  # format the output of the function
+  var_names <- colnames(x)
+  attr(vars_kept, "to_remove") <- var_names[var_names %in% vars_kept]
+
+  if (!names) {
+    # return their indices
+    vars_kept <- match(vars_kept, var_names)
+    attr(vars_kept, "to_remove") <- match(var_names[var_names %in% vars_kept], var_names)
+  }
+  return(vars_kept)
 }
 
 #.check_keep_cor <- function(x, to_keep){

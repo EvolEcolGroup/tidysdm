@@ -1,11 +1,11 @@
-test_that("filter collinear variables", {
+test_that("filter collinear variables with cor_caret", {
   lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
     package = "tidysdm"
   ))
   set.seed(123)
-  to_keep <- filter_collinear(lacerta_thin)
+  vars_to_keep <- filter_collinear(lacerta_thin)
   expect_true(all(c("bio02", "bio19", "altitude", "bio15", "bio08", "bio09", "bio03")
-  %in% to_keep))
+  %in% vars_to_keep))
   expect_true(all(is.numeric(filter_collinear(lacerta_thin, names = FALSE))))
   verbose_test <- suppressMessages(filter_collinear(lacerta_thin, verbose = TRUE))
   expect_error(
@@ -37,9 +37,16 @@ test_that("filter collinear variables", {
     "no method available for this object type"
   )
   
+  # sample from data.frame
+  set.seed(123)
+  expect_true(!identical(filter_collinear(lacerta_thin, max_cells = 100), vars_to_keep))
+  
+  
   # test method on SpatRaster
   climate_present <- terra::rast(system.file("extdata/lacerta_climate_present_10m.nc",
                                       package = "tidysdm"
   ))
-  cor_spatraster <- filter_collinear(climate_present)
+  cor_spatraster_ken <- filter_collinear(climate_present, cor_type = "kendall")
+  cor_spatraster_ken_sub <- filter_collinear(climate_present, max_cells = 200, cor_type = "kendall")
+  expect_true(!identical(cor_spatraster_ken, cor_spatraster_ken_sub))
 })

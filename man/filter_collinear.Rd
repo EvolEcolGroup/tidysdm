@@ -68,9 +68,10 @@ filter_collinear(
 \item{x}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object, a data.frame (with only numeric
 variables)}
 
-\item{cutoff}{A numeric value used as a threshold to remove variables. For, "caret",
-it is the pair-wise absolute correlation cutoff, which defaults to 0.7. For "vifstep"
-and "vifcor", it is the variable inflation factor, which defaults to 10}
+\item{cutoff}{A numeric value used as a threshold to remove variables.
+For, "cor_caret" and "vif_cor",
+it is the pair-wise absolute correlation cutoff, which defaults to 0.7. For
+"vif_step", it is the variable inflation factor, which defaults to 10}
 
 \item{verbose}{A boolean whether additional information should be provided
 on the screen}
@@ -84,7 +85,8 @@ those variables is higher than the cutoff).}
 
 \item{method}{character. One of "cor_caret", "vif_cor" or "vif_step".}
 
-\item{cor_type}{character. For methods that use correlation, which type of correlation: "pearson", "kendall", or "spearman"}
+\item{cor_type}{character. For methods that use correlation, which type
+of correlation: "pearson", "kendall", or "spearman". Defaults to "pearson"}
 
 \item{exhaustive}{boolean. Used only for \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} when downsampling
 to \code{max_cells}, if we require the \code{exhaustive} approach in \code{\link[terra:sample]{terra::spatSample()}}.
