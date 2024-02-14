@@ -68,10 +68,10 @@ vars_uncor <- c("bio15", "bio05", "bio13", "bio06")
 climate_future <- pastclim::region_slice(
   time_ce = 2090,
   bio_variables = vars_uncor,
-  data = "WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m",
+  dataset = "WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m",
   crop = iberia_poly
 )
-writeCDF(climate_present, "./inst/extdata/lacerta_climate_future_10m.nc",
+writeCDF(climate_future, "./inst/extdata/lacerta_climate_future_10m.nc",
   compression = 9, split = TRUE, overwrite = TRUE
 )
 # fix time axis (this is a workaround if we open the file with sf)

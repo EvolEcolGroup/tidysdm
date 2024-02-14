@@ -1,4 +1,5 @@
 test_that("simple_ensemble predictions", {
+  data.table::setDTthreads(2)
   ## now add some models (the first 3) using default metric
   test_ens <- simple_ensemble() %>% add_member(two_class_res[1:3, ], metric = "roc_auc")
   # default mean prediction across the 3 models
