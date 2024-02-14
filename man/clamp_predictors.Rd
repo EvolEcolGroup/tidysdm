@@ -7,18 +7,21 @@
 \alias{clamp_predictors.SpatRasterDataset}
 \title{Clamp the predictors to match values in training set}
 \usage{
-clamp_predictors(x, training, use_na)
+clamp_predictors(x, training, .col, use_na)
 
-\method{clamp_predictors}{default}(x, training, use_na)
+\method{clamp_predictors}{default}(x, training, .col, use_na)
 
-\method{clamp_predictors}{SpatRaster}(x, training, use_na = FALSE)
+\method{clamp_predictors}{SpatRaster}(x, training, .col, use_na = FALSE)
 
-\method{clamp_predictors}{SpatRasterDataset}(x, training, use_na = FALSE)
+\method{clamp_predictors}{SpatRasterDataset}(x, training, .col, use_na = FALSE)
 }
 \arguments{
 \item{x}{a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} to clamp.}
 
 \item{training}{the training dataset (a \code{\link{data.frame}} or a \code{\link[sf:sf]{sf::sf}} object.}
+
+\item{.col}{the column containing the presences (optional). If specified,
+it is excluded from the clamping.}
 
 \item{use_na}{a boolean determining whether values outside the range
 of the training dataset are removed (set to NA). If FALSE (the default),

@@ -3,7 +3,7 @@ test_that("clamping_predictor works on SpatRasters",{
   climate_present <- terra::rast(system.file("extdata/lacerta_climate_present_10m.nc",
                                 package = "tidysdm"
   ))
-  climate_present <- climate_present[[c("bio05","bio13","bio06")]]
+  climate_present <- climate_present[[c("bio05","bio13","bio06","bio15")]]
   lacerta_env <- bind_cols(terra::extract(climate_present, lacerta[,c(3,2)], ID = FALSE))
   # now get future climate
   climate_future <- terra::rast(system.file("extdata/lacerta_climate_future_10m.nc",
@@ -32,6 +32,12 @@ test_that("clamping_predictor works on SpatRasters",{
   #error for missing class
   expect_error(clamp_predictors(lacerta_env, lacerta_env),
                "no method available for this object type")
+  # check that we can use the original training dataset as an sf object
+  clamped_rast <- clamp_predictors(climate_future, lacerta_thin, .col=class)
+  expect_true(inherits(clamped_rast,"SpatRaster"))
+  # error if we fail to specify the class column
+  expect_error(clamp_predictors(climate_future, lacerta_thin),
+               "`x` is missing the following variables")
 })
 
 test_that("clamping_predictor works on SpatRasterDatasets",{
@@ -64,5 +70,12 @@ test_that("clamping_predictor works on SpatRasterDatasets",{
   climate_sub<-climate_full[[c("bio01","bio10")]]
   expect_error(clamp_predictors(climate_sub, training=horses_env),
                "`x` is missing the following")
+  # now add a class column
+  horses_env$class <- "presence"
+  clamped_rast <- clamp_predictors(climate_full, horses_env, .col=class)
+  expect_true(inherits(clamped_rast,"SpatRasterDataset"))
+  # error if we fail to specify the class column
+  expect_error(clamp_predictors(climate_full, horses_env),
+               "`x` is missing the following variables")  
 }
 )

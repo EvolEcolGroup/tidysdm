@@ -6,6 +6,8 @@
 #'
 #' @param x a [`terra::SpatRaster`] or [`terra::SpatRasterDataset`] to clamp.
 #' @param training the training dataset (a [`data.frame`] or a [`sf::sf`] object.
+#' @param .col the column containing the presences (optional). If specified,
+#' it is excluded from the clamping.
 #' @param use_na a boolean determining whether values outside the range
 #' of the training dataset are removed (set to NA). If FALSE (the default),
 #' values outside the training range are replaced with the extremes of the training
@@ -15,19 +17,29 @@
 #' @keywords export
 
 
-clamp_predictors <- function(x, training, use_na) {
+clamp_predictors <- function(x, training, .col, use_na) {
   UseMethod("clamp_predictors", object = x)
 }
 
 #' @rdname clamp_predictors
 #' @export
-clamp_predictors.default <- function(x, training, use_na) {
+clamp_predictors.default <- function(x, training, .col, use_na) {
   stop("no method available for this object type")
 }
 
 #' @rdname clamp_predictors
 #' @export
-clamp_predictors.SpatRaster <- function(x, training, use_na = FALSE) {
+clamp_predictors.SpatRaster <- function(x, training, .col, use_na = FALSE) {
+  # remove the class column if it is present
+  .col <- rlang::enquo(.col) %>%
+    rlang::quo_get_expr() %>%
+    rlang::as_string()
+  if (.col!=""){
+    training <- training %>% dplyr::select(-dplyr::one_of(.col))
+  }
+  
+  # remove locations in training if they are present
+  training <- training %>% sf::st_drop_geometry()
   # check that all variables are present in the raster
   if (!all(names(training) %in% names(x))){
     stop("`x` is missing the following variables (which are present in `training`): ",
@@ -41,7 +53,18 @@ clamp_predictors.SpatRaster <- function(x, training, use_na = FALSE) {
 
 #' @rdname clamp_predictors
 #' @export
-clamp_predictors.SpatRasterDataset <- function(x, training, use_na = FALSE) {
+clamp_predictors.SpatRasterDataset <- function(x, training, .col, use_na = FALSE) {
+  # remove the class column if it is present
+  .col <- rlang::enquo(.col) %>%
+    rlang::quo_get_expr() %>%
+    rlang::as_string()
+  if (.col!=""){
+    training <- training %>% dplyr::select(-dplyr::one_of(.col))
+  }
+  
+  # remove locations in training if they are present
+  training <- training %>% sf::st_drop_geometry()
+  
   # check that all variables are present in the raster
   if (!all(names(training) %in% names(x))){
     stop("`x` is missing the following variables (which are present in `training`): ",
