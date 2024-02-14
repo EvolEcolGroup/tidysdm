@@ -29,7 +29,8 @@
 #' @param method character. One of "cor_caret", "vif_cor" or "vif_step".
 #' @param cor_type character. For methods that use correlation, which type 
 #' of correlation: "pearson", "kendall", or "spearman". Defaults to "pearson"
-#' @param max_cell positive integer. The maximum number of cells to be used. If this is smaller than ncell(x), a regular sample of x is used
+#' @param max_cells positive integer. The maximum number of cells to be used. If this is smaller than ncell(x), a regular sample of x is used
+#' @param ... additional arguments specific to a given object type
 #' @returns A vector of names of columns that are below the correlation threshold
 #' (when \code{names = TRUE}), otherwise a vector of indices. Note that the indices
 #' are only for numeric variables (i.e. if factors are present, the indices do
@@ -44,7 +45,8 @@ filter_collinear <- function(x,
                             to_keep = NULL,
                             method = "cor_caret",
                             cor_type = "pearson",
-                            max_cells = Inf) {
+                            max_cells = Inf,
+                            ...) {
   UseMethod("filter_collinear", object = x)
 }
 
@@ -57,7 +59,8 @@ filter_collinear.default <- function(x,
                                     to_keep = NULL,
                                     method = "cor_caret",
                                     cor_type = "pearson",
-                                    max_cells = Inf) {
+                                    max_cells = Inf,
+                                    ...) {
   stop("no method available for this object type")
 }
 
@@ -70,21 +73,23 @@ filter_collinear.default <- function(x,
 #' @export
 filter_collinear.SpatRaster <-
   function(x,
-           cutoff = 0.7,
+           cutoff = NULL,
            verbose = FALSE,
            names = TRUE,
            to_keep = NULL,
            method = "cor_caret",
            cor_type = "pearson",
            max_cells = Inf,
-           exhaustive = FALSE) {
+           exhaustive = FALSE,
+           ...) {
       # if raster is bigger than max_cells, then sample
       if (max_cells < terra::ncell(x)) {
         x_matrix <- terra::spatSample(x, size = max_cells,
                                   method = "random", na.rm = TRUE, as.df = FALSE,
                                   exhaustive = exhaustive)
       } else {
-        x_matrix <- terra::as.matrix(x, na.rm = TRUE)
+        x_matrix <- stats::na.omit(terra::as.matrix(x))
+        
       }
       # now dispatch to the matrix method
       filter_collinear(
@@ -111,15 +116,16 @@ filter_collinear.data.frame <-
            to_keep = NULL,
            method = "cor_caret",
            cor_type = "pearson",
-           max_cells = Inf) {
+           max_cells = Inf,
+           ...) {
     x <- x %>%
       # do we need this?!? check vif cor and vif step
       dplyr::select(dplyr::where(is.numeric)) %>%
-      sf::st_drop_geometry()
+      sf::st_drop_geometry() %>% stats::na.omit()
    # sample rows if we have too many
    if (max_cells < nrow(x)){
      ##sample rows
-     x <- x %>% slice_sample(n=max_cells)
+     x <- x %>% dplyr::slice_sample(n=max_cells)
    }
    x <- as.matrix(x)
    # now dispatch to the matrix method
@@ -145,7 +151,8 @@ filter_collinear.matrix <- function(x,
                                     to_keep = NULL,
                                     method = "cor_caret",
                                     cor_type = "pearson",
-                                    max_cells = Inf) {
+                                    max_cells = Inf,
+                                    ...) {
   if (ncol(x) <2) {
     stop("at least 2 numeric variables are needed")
   }
@@ -172,14 +179,14 @@ filter_collinear.matrix <- function(x,
       cor_type = cor_type
     )
   } else if (method == "vif_step") {
-    vars_kept <- filter_vifstep(
+    vars_kept <- filter_vif_step(
       x,
       cutoff = cutoff,
       verbose = verbose,
       to_keep = to_keep
     )    
   } else if (method == "vif_cor") {
-    vars_kept <- filter_vifcor(
+    vars_kept <- filter_vif_cor(
       x,
       cutoff = cutoff,
       verbose = verbose,
@@ -193,20 +200,20 @@ filter_collinear.matrix <- function(x,
   }
   # format the output of the function
   var_names <- colnames(x)
-  attr(vars_kept, "to_remove") <- var_names[var_names %in% vars_kept]
+  attr(vars_kept, "to_remove") <- var_names[!var_names %in% vars_kept]
 
   if (!names) {
     # return their indices
     vars_kept <- match(vars_kept, var_names)
-    attr(vars_kept, "to_remove") <- match(var_names[var_names %in% vars_kept], var_names)
+    attr(vars_kept, "to_remove") <- match(var_names[!var_names %in% vars_kept], var_names)
   }
   return(vars_kept)
 }
 
-#.check_keep_cor <- function(x, to_keep){
-  
-  
-  
-  
-#}
+
+
+################################################################################
+## legacy functions to be eventually removed
+################################################################################
+
 

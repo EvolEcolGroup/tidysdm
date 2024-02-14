@@ -16,7 +16,8 @@ filter_collinear(
   to_keep = NULL,
   method = "cor_caret",
   cor_type = "pearson",
-  max_cells = Inf
+  max_cells = Inf,
+  ...
 )
 
 \method{filter_collinear}{default}(
@@ -27,19 +28,21 @@ filter_collinear(
   to_keep = NULL,
   method = "cor_caret",
   cor_type = "pearson",
-  max_cells = Inf
+  max_cells = Inf,
+  ...
 )
 
 \method{filter_collinear}{SpatRaster}(
   x,
-  cutoff = 0.7,
+  cutoff = NULL,
   verbose = FALSE,
   names = TRUE,
   to_keep = NULL,
   method = "cor_caret",
   cor_type = "pearson",
   max_cells = Inf,
-  exhaustive = FALSE
+  exhaustive = FALSE,
+  ...
 )
 
 \method{filter_collinear}{data.frame}(
@@ -50,7 +53,8 @@ filter_collinear(
   to_keep = NULL,
   method = "cor_caret",
   cor_type = "pearson",
-  max_cells = Inf
+  max_cells = Inf,
+  ...
 )
 
 \method{filter_collinear}{matrix}(
@@ -61,7 +65,8 @@ filter_collinear(
   to_keep = NULL,
   method = "cor_caret",
   cor_type = "pearson",
-  max_cells = Inf
+  max_cells = Inf,
+  ...
 )
 }
 \arguments{
@@ -88,12 +93,14 @@ those variables is higher than the cutoff).}
 \item{cor_type}{character. For methods that use correlation, which type
 of correlation: "pearson", "kendall", or "spearman". Defaults to "pearson"}
 
+\item{max_cells}{positive integer. The maximum number of cells to be used. If this is smaller than ncell(x), a regular sample of x is used}
+
+\item{...}{additional arguments specific to a given object type}
+
 \item{exhaustive}{boolean. Used only for \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} when downsampling
 to \code{max_cells}, if we require the \code{exhaustive} approach in \code{\link[terra:sample]{terra::spatSample()}}.
 This is only needed for rasters that are very sparse and not too large, see the help
 page of \code{\link[terra:sample]{terra::spatSample()}} for details.}
-
-\item{max_cell}{positive integer. The maximum number of cells to be used. If this is smaller than ncell(x), a regular sample of x is used}
 }
 \value{
 A vector of names of columns that are below the correlation threshold

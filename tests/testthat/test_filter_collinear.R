@@ -50,3 +50,18 @@ test_that("filter collinear variables with cor_caret", {
   cor_spatraster_ken_sub <- filter_collinear(climate_present, max_cells = 200, cor_type = "kendall")
   expect_true(!identical(cor_spatraster_ken, cor_spatraster_ken_sub))
 })
+
+
+test_that("filter collinear variables with vif_step", {
+  lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+                                      package = "tidysdm"
+  ))
+  set.seed(123)
+  vars_to_keep <- filter_collinear(lacerta_thin, method="vif_step")
+  # we should remove two variables
+  expect_true(all(!c("bio01", "bio18") %in% vars_to_keep))
+  # now keep them in
+  expect_true(all(c("bio01", "bio18") %in% 
+                    filter_collinear(lacerta_thin, method="vif_step", 
+                                     to_keep = c("bio01", "bio18"))))
+})

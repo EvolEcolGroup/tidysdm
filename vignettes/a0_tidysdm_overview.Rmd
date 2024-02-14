@@ -218,6 +218,7 @@ We can use violin plots to compare the distribution of the climatic variables fo
 ```{r fig.height=11, fig.width=7}
 lacerta_thin %>% plot_pres_vs_bg(class)
 ```
+
 We want to choose variables for which presences use values different from the background (pseudo-absences).
 We can qualitatively look at the plots, or use a quantitative approach that ranks them based on the
 overlap of the respective density plots:
@@ -254,7 +255,7 @@ We can subset to variables below a certain threshold correlation (e.g. 0.7) with
 
 ```{r choose_var_cor_keep}
 climate_present <- climate_present[[suggested_vars]]
-vars_uncor <- filter_high_cor(climate_present, cutoff = 0.7)
+vars_uncor <- filter_collinear(climate_present, cutoff = 0.7, method = "cor_caret")
 vars_uncor
 ```
 
