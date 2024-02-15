@@ -31,4 +31,5 @@ Warren et al (2008), based on the Erratum for that paper.
 \references{
 Warren, D.L., Glor, R.E. & Turelli M. (2008) Environmental niche
 equivalency versus conservativism: quantitative approaches to niche evolution.
+Evolution 62: 2868-2883
 }

@@ -1,7 +1,7 @@
 #' Predict for a simple ensemble set
 #'
 #' Predict for a new dataset by using a simple ensemble. Predictions from individual
-#' models are combined according to `fun`
+#' models (i.e. workflows) are combined according to `fun`
 #' @param object an simple_ensemble object
 #' @param new_data a data frame in which to look for variables with which to predict.
 #' @param type the type of prediction, "prob" or "class".
