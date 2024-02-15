@@ -5,14 +5,18 @@
 #' 
 #' Note that Hellinger's distance is
 #'  normalised by dividing by square root of 2 (which is the correct
-#' asymptote for Hellinger's D), rather than the incorrect 2 used originally in 
-#' Warren et al (2008).
+#' asymptote for Hellinger's D), 
+#' rather than the incorrect 2 used originally in 
+#' Warren et al (2008), based on the Erratum for that paper.
 #' 
 #' @param x a [terra::SpatRaster] with a single layer
 #' @param y a [terra::SpatRaster] with a single layer
 #' @param method a string (or vector of strings) taking values "Schoener" and
 #' "Hellinger"
 #' @returns a list of overlap metrics, with slots *D* and *I* (depending on `method`)
+#' @references Warren, D.L., Glor, R.E. & Turelli M. (2008) Environmental niche
+#' equivalency versus conservativism: quantitative approaches to niche evolution.
+#' Evolution 62: 2868-2883
 #' @export
 #' 
 niche_overlap <- function (x, y, method = c("Schoener", "Hellinger")) {

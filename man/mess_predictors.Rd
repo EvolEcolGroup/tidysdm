@@ -2,20 +2,30 @@
 % Please edit documentation in R/mess_predictors.R
 \name{mess_predictors}
 \alias{mess_predictors}
+\alias{mess_predictors,SpatRaster-method}
+\alias{mess_predictors,data.frame-method}
+\alias{mess_predictors,SpatRasterDataset-method}
 \title{Multivariate environmental similarity surfaces (MESS)}
 \usage{
-mess_predictors(x, training, .col, ...)
+mess_predictors(x, training, ...)
+
+\S4method{mess_predictors}{SpatRaster}(x, training, .col, filename = "", ...)
+
+\S4method{mess_predictors}{data.frame}(x, training, .col)
+
+\S4method{mess_predictors}{SpatRasterDataset}(x, training, .col)
 }
 \arguments{
 \item{x}{\code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} or \code{\link{data.frame}}}
 
-\item{.col}{the column containing the presences (optional). If specified,
-it is excluded from the clamping.}
+\item{training}{matrix or data.frame or sf object containing the reference values; each column
+should correspond to one layer of the \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object, with the exception
+of the presences column defined in \code{.col} (optional).}
 
 \item{...}{additional arguments as for \code{\link[terra:writeRaster]{terra::writeRaster()}}}
 
-\item{v}{matrix or data.frame containing the reference values; each column
-should correspond to one layer of the \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object.}
+\item{.col}{the column containing the presences (optional). If specified,
+it is excluded when computing the MESS scores.}
 
 \item{filename}{character. Output filename (optional)}
 }
@@ -25,12 +35,16 @@ the MESS values.
 }
 \description{
 Compute multivariate environmental similarity surfaces (MESS), as described
-by Elith et al., 2010. This function is a modified version of \code{mess} in
-package \code{predicts}, with a method added to work on \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}}.
+by Elith et al., 2010.
 }
 \details{
-\code{v} can be obtained for a set of points using
-\code{\link[terra:extract]{terra::extract()}} .
+This function is a modified version of \code{mess} in
+package \code{predicts}, with a method added to work on \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}}.
+Note that the method for \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} assumes that each variables
+is stored as a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} with time information within \code{x}. Time
+is also assumed to be in \code{years}. If these conditions are not met, it is possible
+to manually extract a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} for each time step, and use
+\code{mess_predictors} on those \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}s
 }
 \references{
 Elith J., M. Kearney M., and S. Phillips, 2010. The art of

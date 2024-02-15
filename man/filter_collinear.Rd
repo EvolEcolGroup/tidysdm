@@ -121,3 +121,13 @@ below a certain cutoff. There are methods for \code{\link[terra:SpatRaster-class
 \code{\link{data.frame}} and \code{\link{matrix}}. For \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} and \code{data.frame}, only numeric variables will be
 considered.
 }
+\references{
+Naimi, B., Hamm, N.A.S., Groen, T.A., Skidmore, A.K., and
+Toxopeus, A.G. 2014. Where is positional uncertainty a problem for species
+distribution modelling?, Ecography 37 (2): 191-203.
+}
+\author{
+for \code{cor_caret}: Original R code by Dong Li, modified by Max Kuhn
+and Andrea Manica; for \code{vif_step} and \code{vif_cor}, original algorithm by Babak
+Naimi, rewritten by Andrea Manica for \code{tidysdm}
+}

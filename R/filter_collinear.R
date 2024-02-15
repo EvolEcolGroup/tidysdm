@@ -35,7 +35,12 @@
 #' (when \code{names = TRUE}), otherwise a vector of indices. Note that the indices
 #' are only for numeric variables (i.e. if factors are present, the indices do
 #' not take them into account).
-#'
+#' @author for `cor_caret`: Original R code by Dong Li, modified by Max Kuhn 
+#' and Andrea Manica; for `vif_step` and `vif_cor`, original algorithm by Babak
+#' Naimi, rewritten by Andrea Manica for `tidysdm`
+#' @references Naimi, B., Hamm, N.A.S., Groen, T.A., Skidmore, A.K., and 
+#' Toxopeus, A.G. 2014. Where is positional uncertainty a problem for species 
+#' distribution modelling?, Ecography 37 (2): 191-203. 
 #' @export
 
 filter_collinear <- function(x,

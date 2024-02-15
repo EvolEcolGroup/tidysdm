@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Fit species distribution models (SDMs) using the 'tidymodels' framework, which provides a standardised interface to define models and process their outputs. 'tidysdm' expands 'tidymodels' by providing methods for spatial objects, as well as a number of specialised functions to process presences and pseudoabsences for contemporary and palaeo datasets. The full functionalities of the package are described in Leonardi et al. (2023) \doi{10.1101/2023.07.24.550358}.
+Fit species distribution models (SDMs) using the 'tidymodels' framework, which provides a standardised interface to define models and process their outputs. 'tidysdm' expands 'tidymodels' by providing methods for spatial objects, models and metrics specific to SDMs, as well as a number of specialised functions to process occurrences for contemporary and palaeo datasets. The full functionalities of the package are described in Leonardi et al. (2023) \doi{10.1101/2023.07.24.550358}.
 }
 \seealso{
 Useful links:
