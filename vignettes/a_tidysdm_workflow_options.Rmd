@@ -1,0 +1,122 @@
+---
+title: "tidysdm workflow functionalities"
+output: rmarkdown::html_vignette
+#output: rmarkdown::pdf_document
+vignette: >
+  %\VignetteIndexEntry{tidysdm overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+# set options to limit threads used by imported libraries
+options(cores=2)
+options(mc.cores=2)
+# xgboost uses data.table
+data.table::setDTthreads(2)
+```
+
+# SDMs with `tidymodels` : an overview of the workflow and functionality
+
+[Intro/Abstract as in paper]
+
+## Background
+
+[intro to tidymodels]
+
+## Workflow with `tidysdm`
+
+### Assembling data - before modelling step
+
+explaining all the pre processing of data;
+
+introduce the problem that we work with only presences and (sometimes) biased presences);
+
+show different options of sampling background, pseudo-absences.
+
+Download presences
+
+Download climate
+
+Thin
+
+Sample background
+
+\- sample background
+
+\- sample pseudoabsences
+
+Choice of variables
+
+\- violinplot
+
+Remove collinear variables
+
+\- correlation
+
+\- VIF
+
+\- correlation and VIF
+
+### Pre-processing of models / Modelling
+
+[rationale for tidymodels: why are we using tidymodels, flexibility of having each step of the analysis under control (and with the option to parallelise for improving computing time) and easily add/chose various methods. ]
+
+\
+Creating workflow
+
+\- recipe
+
+\- model specifications
+
+Create data folds
+
+Tune the model
+
+\- algorithms available
+
+\- how to add additional algorithms (parsnip)
+
+###  **Evaluation**
+
+Metrics available
+
+### **Ensemble**
+
+Simple ensemble
+
+Stacked ensemble
+
+Repeated ensemble
+
+Ensemble from individual workflows
+
+Averaging ensembles
+
+Evaluation of ensembles
+
+### **Projection**
+
+Predict
+
+Predict_raster 
+
+\- same time slice
+
+\- different time slice
+
+Convert into binary
+
+Compare niche
+
+Managing extrapolation:
+
+\- MESS
+
+\- area of applicability (<https://rdrr.io/cran/waywiser/man/ww_area_of_applicability.html>)
+
+\- clamping
