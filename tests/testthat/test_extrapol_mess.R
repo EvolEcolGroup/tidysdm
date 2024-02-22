@@ -3,7 +3,7 @@ test_that("mess_predictor works on SpatRasters",{
   climate_future <- terra::rast(system.file("extdata/lacerta_climate_future_10m.nc",
                                      package = "tidysdm"
   ))
-  mess_rast <- mess_predictors(climate_future, training = lacerta_thin, .col= class)
+  mess_rast <- extrapol_mess(climate_future, training = lacerta_thin, .col= class)
   expect_true(inherits(mess_rast, "SpatRaster"))
 })
 
@@ -24,7 +24,7 @@ test_that("mess_predictor works on SpatRasterDatasets",{
   )
   # Just use the plain data.frame of env
   horses_env <- horses_df[,c("bio01","bio10","bio12") ]
-  mess_rast <- mess_predictors(climate_full, training=horses_env)
+  mess_rast <- extrapol_mess(climate_full, training=horses_env)
   expect_true(inherits(mess_rast,"SpatRaster"))
   expect_true(terra::timeInfo(mess_rast)$time)
   # We expect recent time steps to have a higher MESS than older time steps  

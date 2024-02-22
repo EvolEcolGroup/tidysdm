@@ -9,7 +9,7 @@
 #' is stored as a [`terra::SpatRaster`] with time information within `x`. Time
 #' is also assumed to be in `years`. If these conditions are not met, it is possible
 #' to manually extract a [`terra::SpatRaster`] for each time step, and use 
-#' `mess_predictors` on those [`terra::SpatRaster`]s
+#' `extrapol_mess` on those [`terra::SpatRaster`]s
 #' 
 #' 
 #' @param x [`terra::SpatRaster`], [`terra::SpatRasterDataset`] or [`data.frame`]
@@ -31,16 +31,16 @@
 # rewritten for predicts by RH
 # adapted for tidysdm by AM
 
-setGeneric("mess_predictors", function(x, training, ...) 
-  standardGeneric("mess_predictors") )
+setGeneric("extrapol_mess", function(x, training, ...) 
+  standardGeneric("extrapol_mess") )
 
 
-#' @rdname mess_predictors
+#' @rdname extrapol_mess
 #' @param .col the column containing the presences (optional). If specified,
 #' it is excluded when computing the MESS scores.
 #' @param filename character. Output filename (optional)
 #' @export
-setMethod("mess_predictors", signature(x="SpatRaster"), 
+setMethod("extrapol_mess", signature(x="SpatRaster"), 
 	function(x, training, .col, filename="", ...) {
 	  # remove the class column if it is present
 	  .col <- rlang::enquo(.col) %>%
@@ -91,11 +91,11 @@ setMethod("mess_predictors", signature(x="SpatRaster"),
 	}	
 )
 
-#' @rdname mess_predictors
+#' @rdname extrapol_mess
 #' @param .col the column containing the presences (optional). If specified,
 #' it is excluded when computing the MESS scores.
 #' @export
-setMethod("mess_predictors", signature(x="data.frame"), 
+setMethod("extrapol_mess", signature(x="data.frame"), 
 	function(x, training, .col) {
 	  # remove the class column if it is present
 	  .col <- rlang::enquo(.col) %>%
@@ -127,11 +127,11 @@ setMethod("mess_predictors", signature(x="data.frame"),
 	}
 )
 
-#' @rdname mess_predictors
+#' @rdname extrapol_mess
 #' @param .col the column containing the presences (optional). If specified,
 #' it is excluded when computing the MESS scores.
 #' @export
-setMethod("mess_predictors", signature(x="SpatRasterDataset"), 
+setMethod("extrapol_mess", signature(x="SpatRasterDataset"), 
 	function(x, training, .col) {
 	  # remove the class column if it is present
 	  .col <- rlang::enquo(.col) %>%
@@ -160,7 +160,7 @@ setMethod("mess_predictors", signature(x="SpatRasterDataset"),
     # get a slice
     this_slice <- pastclim::slice_region_series(x, time_ce = raster_times[i_time])
     # apply mess to the slice
-    this_mess <- mess_predictors(this_slice, training = training)
+    this_mess <- extrapol_mess(this_slice, training = training)
     if (is.null(mess_rast)){
       mess_rast <- this_mess
     } else {
