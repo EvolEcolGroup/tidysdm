@@ -127,15 +127,11 @@ be used).</p>
 <span class="r-in"><span><span class="co">#' # we use the two_class_example from `workflowsets`</span></span></span>
 <span class="r-in"><span><span class="va">two_class_ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="simple_ensemble.html">simple_ensemble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="add_member.html">add_member</a></span><span class="op">(</span><span class="va">two_class_res</span>, metric <span class="op">=</span> <span class="st">"roc_auc"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Formula</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: plotmo</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: plotrix</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘plotrix’</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:scales’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     rescale</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: TeachingDemos</span>
 <span class="r-in"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">two_class_ens</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="autoplot.simple_ensemble-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>

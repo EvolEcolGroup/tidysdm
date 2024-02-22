@@ -82,6 +82,9 @@
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/explain_tidysdm.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/extrapol_mess.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/filter_collinear.html</loc>
   </url>
   <url>
@@ -134,9 +137,6 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/maxnet_predict.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/mess_predictors.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/niche_overlap.html</loc>
