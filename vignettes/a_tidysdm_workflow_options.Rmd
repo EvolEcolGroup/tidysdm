@@ -32,7 +32,7 @@ data.table::setDTthreads(2)
 
 ### Accessing the data for this vignette: how to use `rgbif`
 
-In this vignette, we use a set of presences for a species of lizard that inhabits the Iberian peninsula, *Lacerta schreiberi*. This data is taken from GBIF: . We can easily access and manipulate this data using `rbgif`. We illustrate here how to do it:
+In this vignette, we use a set of presences for a species of lizard that inhabits the Iberian peninsula, *Lacerta schreiberi*. This data is taken from: GBIF Occurrence Download (6 July 2023) <https://doi.org/10.15468/dl.srq3b3>. We can easily access and manipulate this data using `rbgif`. We illustrate here how to do it:
 
 ```{r download_presences}
 
@@ -71,17 +71,22 @@ show different options of sampling background, pseudo-absences.
 
 Download presences
 
+```{r load_presences}
+
+lacerta
+```
+
 Download climate
 
-Thin
+#### Thin
 
-Sample background
+#### Sample background  or pseudo-absences
 
 \- sample background
 
 \- sample pseudoabsences
 
-Choice of variables
+#### Choice of variables
 
 \- violinplot
 
@@ -97,16 +102,21 @@ Remove collinear variables
 
 [rationale for tidymodels: why are we using tidymodels, flexibility of having each step of the analysis under control (and with the option to parallelise for improving computing time) and easily add/chose various methods. ]
 
+####  Creating workflow
+
+`tidymodels` allows to fit different models by changing the model specification with the same code defining the rest of the workflow. This step is standardised by using `workflowsets`:[explain]. Multiple algorithms can be easily investigated : [list/explain].
+
+`tidysdm` provides functions to simplify these steps (e.g., automatically generating model specifications with tuning for hyperparameters usually studied in SDMs) and expands methods from `tidymodels` that are not natively compatible with sf objects.
+
 \
-Creating workflow
 
 \- recipe
 
 \- model specifications
 
-Create data folds
+#### Create data folds
 
-Tune the model
+#### Tune the model
 
 \- algorithms available
 
