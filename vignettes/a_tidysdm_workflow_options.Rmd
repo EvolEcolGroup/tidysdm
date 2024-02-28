@@ -30,6 +30,37 @@ data.table::setDTthreads(2)
 
 ## Workflow with `tidysdm`
 
+### Accessing the data for this vignette: how to use `rgbif`
+
+In this vignette, we use a set of presences for a species of lizard that inhabits the Iberian peninsula, *Lacerta schreiberi*. This data is taken from GBIF: . We can easily access and manipulate this data using `rbgif`. We illustrate here how to do it:
+
+```{r download_presences}
+
+# download presences
+library(rgbif)
+# download file
+occ_download_get(key = "0068808-230530130749713", path = tempdir())
+
+# unzip file
+unzip(file.path(tempdir(), "0068808-230530130749713.zip"),  overwrite = TRUE,  exdir = tempdir(), unzip = "internal")
+
+@TODO https://stackoverflow.com/questions/12460938/r-reading-in-a-zip-data-file-without-unzipping-it
+
+# read file
+library(readr)
+# distrib <- data.table::fread(file.path(tempdir(),"0068808-230530130749713.csv"))
+distrib <- read.table(file.path(tempdir(), "0068808-230530130749713.csv"),  row.names = NULL)
+distrib <- readr::read_delim(file.path(tempdir(), "0068808-230530130749713.csv"))
+
+# keep the necessary columns
+lacerta <- distrib[, c("gbifID", "decimalLatitude", "decimalLongitude")]
+names(lacerta) <- c("ID", "latitude", "longitude")
+
+
+```
+
+\
+
 ### Assembling data - before modelling step
 
 explaining all the pre processing of data;
@@ -81,7 +112,7 @@ Tune the model
 
 \- how to add additional algorithms (parsnip)
 
-###  **Evaluation**
+### **Evaluation**
 
 Metrics available
 
