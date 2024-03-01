@@ -64,9 +64,6 @@
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/check_splits_balance.html</loc>
   </url>
   <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/clamp_predictors.html</loc>
-  </url>
-  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/collect_metrics.simple_ensemble.html</loc>
   </url>
   <url>
@@ -80,12 +77,6 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/explain_tidysdm.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/extrapol_mess.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/filter_collinear.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/filter_high_cor.html</loc>
@@ -139,9 +130,6 @@
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/maxnet_predict.html</loc>
   </url>
   <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/niche_overlap.html</loc>
-  </url>
-  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/optim_thresh.html</loc>
   </url>
   <url>
@@ -182,12 +170,6 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/repeat_ensemble.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/sample_background.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/sample_background_time.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/sample_pseudoabs.html</loc>
@@ -232,7 +214,7 @@
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/thin_by_dist_time.html</loc>
   </url>
   <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/tidysdm-package.html</loc>
+    <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/tidysdm.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/dev/reference/tss.html</loc>
