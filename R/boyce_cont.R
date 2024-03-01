@@ -83,8 +83,9 @@ boyce_cont_vec <- function(truth,
                            event_level = "first",
                            case_weights = NULL,
                            ...) {
-  utils::getFromNamespace("abort_if_class_pred", "yardstick")(truth)
-
+  #utils::getFromNamespace("abort_if_class_pred", "yardstick")(truth)
+  abort_if_class_pred(truth)
+  
   estimator <- yardstick::finalize_estimator(truth, estimator, "boyce_cont")
 
   yardstick::check_prob_metric(truth, estimate, case_weights, estimator)
@@ -113,7 +114,8 @@ boyce_cont_estimator_impl <- function(truth,
                                       estimator,
                                       event_level,
                                       case_weights) {
-  if (!utils::getFromNamespace("is_binary", "yardstick")(estimator)) {
+#  if (!utils::getFromNamespace("is_binary", "yardstick")(estimator)) {
+  if (!identical(estimator, "binary")){
     stop("boyce_cont is only available for binary classes; multiclass is not supported")
   }
   # separate estimates into presences and background
