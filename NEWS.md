@@ -1,3 +1,10 @@
+# `tidysdm` 0.9.4
+
+* fix a but in the 'predict*' functions that prevented a fixed threshold to be used
+  to assign classes
+* ensure compatibility with upcoming changes in `tune`
+
+
 # `tidysdm` 0.9.3
 
 * fix bug in `filter_high_cor` due to changes in `terra` 1.6.75
