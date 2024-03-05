@@ -81,9 +81,8 @@ predict.simple_ensemble <-
             ref_calib_tb$fun %in% fun,
         ]       
       } else { #if class_thresh is numeric, fake a calib table
-        ref_calib_tb <- tibble(fun = fun,
+        ref_calib_tb <- tibble::tibble(fun = fun,
                                optim_value = rep(class_thresh, length(fun)))
-       # browser()
       }
 
       #browser()
