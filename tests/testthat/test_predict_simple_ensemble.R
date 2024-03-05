@@ -55,6 +55,10 @@ test_that("simple_ensemble predictions", {
     fun = c("mean", "median")
   )
   expect_true(inherits(pred_class[, 1], "factor"))
+  pred_class <- predict(test_ens,
+                        new_data = two_class_dat, type = "class", class_thresh = 0.4,
+                        fun = c("mean", "median")
+  )  
 })
 
 
