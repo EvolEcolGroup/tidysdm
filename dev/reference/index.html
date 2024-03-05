@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.3.9002</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.3.9003</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,6 +110,11 @@
         <dd>Check the balance of presences vs pseudoabsences among splits</dd>
       </dl><dl><dt>
           
+          <code><a href="clamp_predictors.html">clamp_predictors()</a></code> 
+        </dt>
+        <dd>Clamp the predictors to match values in training set</dd>
+      </dl><dl><dt>
+          
           <code><a href="collect_metrics.simple_ensemble.html">collect_metrics(<i>&lt;simple_ensemble&gt;</i>)</a></code> <code><a href="collect_metrics.simple_ensemble.html">collect_metrics(<i>&lt;repeat_ensemble&gt;</i>)</a></code> 
         </dt>
         <dd>Obtain and format results produced by tuning functions for ensemble objects</dd>
@@ -130,7 +135,17 @@
         <dd>Create explainer from your tidysdm ensembles.</dd>
       </dl><dl><dt>
           
-          <code><a href="filter_high_cor.html">filter_high_cor()</a></code> <code><a href="filter_high_cor.html">filter_high_cor_algorithm()</a></code> 
+          <code><a href="extrapol_mess.html">extrapol_mess()</a></code> 
+        </dt>
+        <dd>Multivariate environmental similarity surfaces (MESS)</dd>
+      </dl><dl><dt>
+          
+          <code><a href="filter_collinear.html">filter_collinear()</a></code> 
+        </dt>
+        <dd>Filter to retain only variables that have low collinearity</dd>
+      </dl><dl><dt>
+          
+          <code><a href="filter_high_cor.html">filter_high_cor()</a></code> 
         </dt>
         <dd>Filter to retain only variables below a given correlation threshold</dd>
       </dl><dl><dt>
@@ -195,6 +210,11 @@
         <dd>Parameters for maxent models</dd>
       </dl><dl><dt>
           
+          <code><a href="niche_overlap.html">niche_overlap()</a></code> 
+        </dt>
+        <dd>Compute overlap metrics of the niche</dd>
+      </dl><dl><dt>
+          
           <code><a href="optim_thresh.html">optim_thresh()</a></code> 
         </dt>
         <dd>Find threshold that optimises a given metric</dd>
@@ -235,14 +255,24 @@
         <dd>Repeat ensemble</dd>
       </dl><dl><dt>
           
+          <code><a href="sample_background.html">sample_background()</a></code> 
+        </dt>
+        <dd>Sample background points for SDM analysis</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sample_background_time.html">sample_background_time()</a></code> 
+        </dt>
+        <dd>Sample background points for SDM analysis for points with a time point.</dd>
+      </dl><dl><dt>
+          
           <code><a href="sample_pseudoabs.html">sample_pseudoabs()</a></code> 
         </dt>
-        <dd>Sample pseudo-absence (or background) points for SDM analysis</dd>
+        <dd>Sample pseudo-absence points for SDM analysis</dd>
       </dl><dl><dt>
           
           <code><a href="sample_pseudoabs_time.html">sample_pseudoabs_time()</a></code> 
         </dt>
-        <dd>Sample pseudo-absence (or background) points for SDM analysis for points with a time point.</dd>
+        <dd>Sample pseudo-absence points for SDM analysis for points with a time point.</dd>
       </dl><dl><dt>
           
           <code><a href="sdm_metric_set.html">sdm_metric_set()</a></code> 
@@ -303,11 +333,6 @@
           <code><a href="thin_by_dist_time.html">thin_by_dist_time()</a></code> 
         </dt>
         <dd>Thin points dataset based on geographic and temporal distance</dd>
-      </dl><dl><dt>
-          
-          <code><a href="tidysdm.html">tidysdm</a></code> 
-        </dt>
-        <dd>tidysdm</dd>
       </dl><dl><dt>
           
           <code><a href="tss.html">tss()</a></code> 
