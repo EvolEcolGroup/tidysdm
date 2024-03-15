@@ -53,6 +53,34 @@ data(lacerta)
 lacerta
 ```
 
+This data is taken from: GBIF Occurrence Download (6 July 2023) <https://doi.org/10.15468/dl.srq3b3>. We can also easily access and manipulate this data using `rbgif`. We illustrate here how to do it:
+
+```{r download_presences}
+
+# download presences
+library(rgbif)
+# download file
+occ_download_get(key = "0068808-230530130749713", path = tempdir())
+
+# unzip file
+unzip(file.path(tempdir(), "0068808-230530130749713.zip"),  overwrite = TRUE,  exdir = tempdir(), unzip = "internal")
+
+#@TODO https://stackoverflow.com/questions/12460938/r-reading-in-a-zip-data-file-without-unzipping-it
+
+# read file
+library(readr)
+# distrib <- data.table::fread(file.path(tempdir(),"0068808-230530130749713.csv"))
+distrib <- read.table(file.path(tempdir(), "0068808-230530130749713.csv"),  row.names = NULL)
+distrib <- readr::read_delim(file.path(tempdir(), "0068808-230530130749713.csv"))
+
+# keep the necessary columns
+lacerta <- distrib[, c("gbifID", "decimalLatitude", "decimalLongitude")]
+names(lacerta) <- c("ID", "latitude", "longitude")
+
+
+```
+
+
 First, let us visualise our presences by plotting on a map. `tidysdm` works
 with `sf` objects to represent locations, so we will cast our coordinates
 into an `sf` object, and set its projections to standard lonlat (crs = 4326).
