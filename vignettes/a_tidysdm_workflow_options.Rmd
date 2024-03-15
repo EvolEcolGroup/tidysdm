@@ -30,61 +30,69 @@ data.table::setDTthreads(2)
 
 ## Workflow with `tidysdm`
 
-### Accessing the data for this vignette: how to use `rgbif`
-
-In this vignette, we use a set of presences for a species of lizard that inhabits the Iberian peninsula, *Lacerta schreiberi*. This data is taken from: GBIF Occurrence Download (6 July 2023) <https://doi.org/10.15468/dl.srq3b3>. We can easily access and manipulate this data using `rbgif`. We illustrate here how to do it:
-
-```{r download_presences}
-
-# download presences
-library(rgbif)
-# download file
-occ_download_get(key = "0068808-230530130749713", path = tempdir())
-
-# unzip file
-unzip(file.path(tempdir(), "0068808-230530130749713.zip"),  overwrite = TRUE,  exdir = tempdir(), unzip = "internal")
-
-@TODO https://stackoverflow.com/questions/12460938/r-reading-in-a-zip-data-file-without-unzipping-it
-
-# read file
-library(readr)
-# distrib <- data.table::fread(file.path(tempdir(),"0068808-230530130749713.csv"))
-distrib <- read.table(file.path(tempdir(), "0068808-230530130749713.csv"),  row.names = NULL)
-distrib <- readr::read_delim(file.path(tempdir(), "0068808-230530130749713.csv"))
-
-# keep the necessary columns
-lacerta <- distrib[, c("gbifID", "decimalLatitude", "decimalLongitude")]
-names(lacerta) <- c("ID", "latitude", "longitude")
-
-
-```
-
-\
-
 ### Assembling data - before modelling step
 
 explaining all the pre processing of data;
 
-introduce the problem that we work with only presences and (sometimes) biased presences);
+#### Climate data
 
-show different options of sampling background, pseudo-absences.
+In `tidysdm`, environmental raster data are manipulated with [terra](https://cran.r-project.org/package=terra), and it is possible to use any `terra` [SpatRasterDataset](https://rdrr.io/cran/terra/man/sds.html), in which each climatic variable is a `terra` `SpatRaster` with a time dimension.
 
-Download presences
+`tidysdm` is fully integrated with [pastclim](https://evolecolgroup.github.io/pastclim/dev/index.html). This offers several advantages:
 
-```{r load_presences}
+-   easy download of environmental data
+-   easy manipulation of present-day data, future predictions, and palaeoclimatic reconstructions
+-   numerous available [datasets](https://evolecolgroup.github.io/pastclim/articles/a1_available_datasets.html)
 
-lacerta
-```
+#### Species data
 
-Download climate
+Presences are represented as spatial point objects using the library [sf](#0). All functions in `tidysdm` can work with `sf` objects, and the package extends several methods from the `tidymodels` universe to handle them.
+
+-   introduce the problem that we work with only presences and (sometimes) biased presences)
+
+##### Present-day data
+
+Presences can be downloaded from online repositories (e.g GBIF) using packages such as [rgbif](https://cran.r-project.org/package=rgbif) . For an example on how to use `rgbif` see [Example 1](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html).
+
+##### Time-scattered data
+
+Palaeontological/archaeological data that need time series of palaeoclimatic reconstructions can be easily integrated as tidysdm does not limit the user to automatically associate points with a single raster. [Example 2](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html) shows how to use time-scattered data based on [horses](https://evolecolgroup.github.io/tidysdm/dev/reference/horses.html) dataset.
+
+Examples of how to use pastclim within tidysdm to perform SDM both on present-day and time-scattered data can be found in the respective vignettes: [Example 1](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) and [Example 2](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html).
+
+#### Sample background or pseudo-absences
+
+In most cases, true absences are rarely available. For this reason, there are various approaches implemented in `tidysdm` to sample pseudo-absences/background points.
+
+**Sample background**
+
+The `tidysdm` function `sample_background()` samples background points from a `raster` given a set of presences. The locations returned as the center points of the sampled cells, which can overlap with the presences (in contrast to pseudo-absences).
+
+-   random: background randomly sampled from the region covered by the `raster` (i.e. not NAs),
+
+-   maximum distance ('dist_max'): background randomly sampled from the unioned buffers of maximum distance (in meters or map units) from presences. Areas that are in multiple buffers are not over-sampled (i.e. union of buffers or "thickening"),
+
+-   'bias': background points are sampled according to a surface representing the biased sampling effort.
+
+**Sample pseudo-absences**
+
+The `tidysdm` function `sample_pseudoabs()` samples pseudo-absence points from a `raster` given a set of presences. The locations returned as the center points of the sampled cells, which can not overlap with the presences.
+
+It provides commonly adopted techniques including:
+
+-   random: pseudo-absences randomly sampled from the region covered by the raster (i.e. not NAs)
+
+-   minimum distance ('dist_min'): pseudo-absences randomly sampled from the region excluding a buffer of minimum distance (in meters or map units) from presences,
+
+-   maximum distance ('dist_max'): pseudo-absences randomly sampled from the unioned buffers of maximum distance (in meters or map units) from presences. Areas that are in multiple buffers are not over-sampled (i.e. union of buffers or "thickening"),
+
+-   a disc identified by minimum and maximum distance ('dist_disc'): pseudo-absences randomly sampled from the unioned discs around presences with the two values defining the minimum and maximum distance from presences.
 
 #### Thin
 
-#### Sample background  or pseudo-absences
+We start by reading in a set of presences for a species
 
-\- sample background
-
-\- sample pseudoabsences
+Download presences
 
 #### Choice of variables
 
@@ -102,7 +110,7 @@ Remove collinear variables
 
 [rationale for tidymodels: why are we using tidymodels, flexibility of having each step of the analysis under control (and with the option to parallelise for improving computing time) and easily add/chose various methods. ]
 
-####  Creating workflow
+#### Creating workflow
 
 `tidymodels` allows to fit different models by changing the model specification with the same code defining the rest of the workflow. This step is standardised by using `workflowsets`:[explain]. Multiple algorithms can be easily investigated : [list/explain].
 

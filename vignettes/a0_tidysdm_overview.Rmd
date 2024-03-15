@@ -44,16 +44,21 @@ packages necessary to fit models:
 library(tidysdm)
 ```
 
-# Preparing your data
+
+### Accessing the data for this vignette: how to use `rgbif`
 
 We start by reading in a set of presences for a species of lizard that inhabits
-the Iberian peninsula, *Lacerta schreiberi*.
+the Iberian peninsula, *Lacerta schreiberi*. This data is taken from: 
+GBIF Occurrence Download (6 July 2023) <https://doi.org/10.15468/dl.srq3b3>. 
+
+The dataset is already included in `tidysdm` package:
 ```{r load_presences}
 data(lacerta)
 lacerta
 ```
 
-This data is taken from: GBIF Occurrence Download (6 July 2023) <https://doi.org/10.15468/dl.srq3b3>. We can also easily access and manipulate this data using `rbgif`. We illustrate here how to do it:
+However, we can also easily access and manipulate this data using `rbgif`.
+We illustrate here how to do it:
 
 ```{r download_presences}
 
@@ -80,6 +85,8 @@ names(lacerta) <- c("ID", "latitude", "longitude")
 
 ```
 
+
+# Preparing your data
 
 First, let us visualise our presences by plotting on a map. `tidysdm` works
 with `sf` objects to represent locations, so we will cast our coordinates
