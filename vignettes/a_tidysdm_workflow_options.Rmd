@@ -46,6 +46,8 @@ In `tidysdm`, environmental raster data are manipulated with [terra](https://cra
 
 #### Species data
 
+Download presences
+
 Presences are represented as spatial point objects using the library [sf](#0). All functions in `tidysdm` can work with `sf` objects, and the package extends several methods from the `tidymodels` universe to handle them.
 
 -   introduce the problem that we work with only presences and (sometimes) biased presences)
@@ -68,11 +70,23 @@ In most cases, true absences are rarely available. For this reason, there are v
 
 The `tidysdm` function `sample_background()` samples background points from a `raster` given a set of presences. The locations returned as the center points of the sampled cells, which can overlap with the presences (in contrast to pseudo-absences).
 
+It provides commonly adopted techniques including:
+
 -   random: background randomly sampled from the region covered by the `raster` (i.e. not NAs),
 
 -   maximum distance ('dist_max'): background randomly sampled from the unioned buffers of maximum distance (in meters or map units) from presences. Areas that are in multiple buffers are not over-sampled (i.e. union of buffers or "thickening"),
 
 -   'bias': background points are sampled according to a surface representing the biased sampling effort.
+
+The `tidysdm` function `sample_background_time()` samples background points from a raster given a set of presences. The locations returned as the center points of the sampled cells,, which can overlap with the presences.
+
+It provides commonly adopted techniques including:
+
+-   random
+
+-   maximum distance ('dist_max')
+
+-   'bias': background points are sampled according to a surface representing the biased sampling effort. Note that the surface for each time step is normalised to sum to 1, it is possible to affect sampling effort within each time step (`n_per_time_step`).
 
 **Sample pseudo-absences**
 
@@ -88,11 +102,35 @@ It provides commonly adopted techniques including:
 
 -   a disc identified by minimum and maximum distance ('dist_disc'): pseudo-absences randomly sampled from the unioned discs around presences with the two values defining the minimum and maximum distance from presences.
 
-#### Thin
+The `tidysdm` function `sample_pseudoabs_time()` samples pseudo-absence points from a raster given a set of presences. The locations returned as the center points of the sampled cells, which can not overlap with the presences.
 
-We start by reading in a set of presences for a species
+It provides commonly adopted techniques including:
 
-Download presences
+-   random
+
+-   minimum distance ('dist_min')
+
+-   maximum distance ('dist_max')
+
+-   a disc identified by minimum and maximum distance ('dist_disc')
+
+#### Thinning
+
+Once we have a set of presences for a species we need to consider the collection/distribution of this data. Generally, presences are the collation of haphazard efforts, leading to spatial sampling biases. A common solution is to thin the data.
+
+**Cell-level thinning**
+
+The `tidysdm` function `thin_by_cell()` thins a dataset so that only one observation per `raster` cell is retained.
+
+The `tidysdm` function `thin_by_cell_time()` thins a dataset so that only one observation per `raster` cell per time slice is retained. We use a raster with layers as time slices to define the data cube on which thinning is enforced (see details below on how time should be formatted).
+
+**Distance-based thinning**
+
+The `tidysdm` function `thin_by_dist()` thins a dataset so that only observations that have a distance from each other greater than a minimum distance are retained (removing close-by points).
+
+The `tidysdm` function `thin_by_dist_time()` thins a dataset so that only observations that have a distance from each other greater than a minimum distance in space and minimum interval in time are retained.
+
+Further thinning can be achieved by aggregating cells in the raster before thinning, as achieved by setting `agg_fact` \> 1 (aggregation works in a manner equivalent to [`terra::aggregate()`](http://127.0.0.1:43143/help/library/terra/help/aggregate)).
 
 #### Choice of variables
 
