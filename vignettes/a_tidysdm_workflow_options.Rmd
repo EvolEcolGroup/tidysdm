@@ -46,11 +46,11 @@ In `tidysdm`, environmental raster data are manipulated with [terra](https://cra
 
 #### Species data
 
-Download presences
+##### Download presences
 
 Presences are represented as spatial point objects using the library [sf](#0). All functions in `tidysdm` can work with `sf` objects, and the package extends several methods from the `tidymodels` universe to handle them.
 
--   introduce the problem that we work with only presences and (sometimes) biased presences)
+-   introduce the problem that we work with only presences and (sometimes) biased presences
 
 ##### Present-day data
 
@@ -58,13 +58,13 @@ Presences can be downloaded from online repositories (e.g GBIF) using packages s
 
 ##### Time-scattered data
 
-Palaeontological/archaeological data that need time series of palaeoclimatic reconstructions can be easily integrated as tidysdm does not limit the user to automatically associate points with a single raster. [Example 2](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html) shows how to use time-scattered data based on [horses](https://evolecolgroup.github.io/tidysdm/dev/reference/horses.html) dataset.
+Palaeontological/archaeological data that need time series of palaeoclimatic reconstructions can be easily integrated as `tidysdm` does not limit the user to automatically associate points with a single raster. [Example 2](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html) shows how to use time-scattered data based on [horses](https://evolecolgroup.github.io/tidysdm/dev/reference/horses.html) dataset.
 
-Examples of how to use pastclim within tidysdm to perform SDM both on present-day and time-scattered data can be found in the respective vignettes: [Example 1](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) and [Example 2](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html).
+Examples of how to use `pastclim` within `tidysdm` to perform SDM both on present-day and time-scattered data can be found in the respective vignettes: [Example 1](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) and [Example 2](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html).
 
 #### Sample background or pseudo-absences
 
-In most cases, true absences are rarely available. For this reason, there are various approaches implemented in `tidysdm` to sample pseudo-absences/background points.
+In most cases, true absences are rarely available. For this reason, there are various approaches implemented in `tidysdm` to both sample pseudo-absences and background points.
 
 **Sample background**
 
@@ -72,21 +72,21 @@ The `tidysdm` function `sample_background()` samples background points from a `r
 
 It provides commonly adopted techniques including:
 
--   random: background randomly sampled from the region covered by the `raster` (i.e. not NAs),
+-   random sampling: the background points are randomly sampled from the region covered by the `raster` (i.e. not NAs),
 
--   maximum distance ('dist_max'): background randomly sampled from the unioned buffers of maximum distance (in meters or map units) from presences. Areas that are in multiple buffers are not over-sampled (i.e. union of buffers or "thickening"),
+-   sampling based on maximum distance (`dist_max`): the background points are randomly sampled from the unioned buffers of maximum distance (in meters or map units) from presences. Areas that are in multiple buffers are not over-sampled (i.e. union of buffers or "thickening"),
 
--   'bias': background points are sampled according to a surface representing the biased sampling effort.
+-   `bias`: background points are sampled according to a surface representing the biased sampling effort.
 
-The `tidysdm` function `sample_background_time()` samples background points from a raster given a set of presences. The locations returned as the center points of the sampled cells,, which can overlap with the presences.
+The `tidysdm` function `sample_background_time()` samples background points from a raster given a set of presences. The locations returned as the center points of the sampled cells, which can overlap with the presences.
 
 It provides commonly adopted techniques including:
 
--   random
+-   random sampling;
 
--   maximum distance ('dist_max')
+-   sampling based on maximum distance (`dist_max`);
 
--   'bias': background points are sampled according to a surface representing the biased sampling effort. Note that the surface for each time step is normalised to sum to 1, it is possible to affect sampling effort within each time step (`n_per_time_step`).
+-   `bias`: background points are sampled according to a surface representing the biased sampling effort. Note that the surface for each time step is normalised to sum to 1, it is possible to affect sampling effort within each time step (`n_per_time_step`).
 
 **Sample pseudo-absences**
 
@@ -94,25 +94,25 @@ The `tidysdm` function `sample_pseudoabs()` samples pseudo-absence points from a
 
 It provides commonly adopted techniques including:
 
--   random: pseudo-absences randomly sampled from the region covered by the raster (i.e. not NAs)
+-   random sampling: pseudo-absences randomly sampled from the region covered by the raster (i.e. not NAs)
 
--   minimum distance ('dist_min'): pseudo-absences randomly sampled from the region excluding a buffer of minimum distance (in meters or map units) from presences,
+-   minimum distance (`dist_min`): pseudo-absences randomly sampled from the region excluding a buffer of minimum distance (in meters or map units) from presences,
 
--   maximum distance ('dist_max'): pseudo-absences randomly sampled from the unioned buffers of maximum distance (in meters or map units) from presences. Areas that are in multiple buffers are not over-sampled (i.e. union of buffers or "thickening"),
+-   maximum distance (`dist_max`): pseudo-absences randomly sampled from the unioned buffers of maximum distance (in meters or map units) from presences. Areas that are in multiple buffers are not over-sampled (i.e. union of buffers or "thickening"),
 
--   a disc identified by minimum and maximum distance ('dist_disc'): pseudo-absences randomly sampled from the unioned discs around presences with the two values defining the minimum and maximum distance from presences.
+-   a disc identified by minimum and maximum distance (`dist_disc`): pseudo-absences randomly sampled from the unioned discs around presences with the two values defining the minimum and maximum distance from presences.
 
 The `tidysdm` function `sample_pseudoabs_time()` samples pseudo-absence points from a raster given a set of presences. The locations returned as the center points of the sampled cells, which can not overlap with the presences.
 
 It provides commonly adopted techniques including:
 
--   random
+-   random sampling;
 
--   minimum distance ('dist_min')
+-   sampling based on minimum distance (`dist_min`);
 
--   maximum distance ('dist_max')
+-   sampling based on maximum distance (`dist_max`);
 
--   a disc identified by minimum and maximum distance ('dist_disc')
+-   a disc identified by minimum and maximum distance (`dist_disc`).
 
 #### Thinning
 
@@ -134,15 +134,24 @@ Further thinning can be achieved by aggregating cells in the raster before thinn
 
 #### Choice of variables
 
-\- violinplot
+Variables are chosen according to their relevance to the focal species. If information on this is lacking, it is possible to identify informative variables exploring the differences between the distribution of climate values for presences and for background. This is implemented in `tidysdm` as:
 
-Remove collinear variables
+-   **violinplot**: the function `plot_pres_vs_bg()` uses violin plots to compare presences and pseudo-absences in their distributions over the variable space, which helps choosing variables for which they differ;
 
-\- correlation
+-   a **quantitative approach**: the function `dist_pres_vs_bg()` ranks variables based on the proportional overlap of the respective density plots. For each environmental variable, this function computes the density functions of presences and absences and returns (1-overlap), which is a measure of the distance between the two distributions. Variables with a high distance are good candidates for SDMs, as species occurrences are confined to a subset of the available background.
 
-\- VIF
+#### Remove collinear variables
 
-\- correlation and VIF
+The variables of interest can be pruned for collinearity. \
+The `tidysdm` function `filter_collinear` is a **step-wise approach** that allows the user to find a subset of variables that have low collinearity and to set a correlation cutoff. This function offer three methods:
+
+-   a method based on the **greatest mean correlation** (`cor_caret`): this method removes variables with a pairwise correlation above a given cutoff, choosing the variable with the greatest mean correlation; this approach is based on the algorithm in `caret::findCorrelation`;
+
+-   a method based on a **variance inflation factor** `(vif_step)`: this method removes variables with a variance inflation factor above a given cutoff (based on the algorithm in `usdm::vifstep`);
+
+-   a method based on the **largest variance inflation factor** `(vif_cor)`: this method finds, at each step, the pair of variables with the highest correlation above the cutoff and removes the one with the largest *vif* such that all have a correlation below a certain cutoff.
+
+This function provides a sensible set of uncorrelated variables to be used with algorithms such as GLMs and GAMSs, but other such sets will likely exist and might be even better: we recommend that users inspect the variables with care and make decisions based on their biological understanding of the system.
 
 ### Pre-processing of models / Modelling
 
