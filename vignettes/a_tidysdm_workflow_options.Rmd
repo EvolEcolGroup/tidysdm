@@ -142,7 +142,7 @@ Variables are chosen according to their relevance to the focal species. If infor
 
 #### Remove collinear variables
 
-The variables of interest can be pruned for collinearity. \
+The variables of interest can be pruned for collinearity.\
 The `tidysdm` function `filter_collinear` is a **step-wise approach** that allows the user to find a subset of variables that have low collinearity and to set a correlation cutoff. This function offer three methods:
 
 -   a method based on the **greatest mean correlation** (`cor_caret`): this method removes variables with a pairwise correlation above a given cutoff, choosing the variable with the greatest mean correlation; this approach is based on the algorithm in `caret::findCorrelation`;
