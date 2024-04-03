@@ -153,33 +153,76 @@ The `tidysdm` function `filter_collinear` is a **step-wise approach** that allow
 
 This function provides a sensible set of uncorrelated variables to be used with algorithms such as GLMs and GAMSs, but other such sets will likely exist and might be even better: we recommend that users inspect the variables with care and make decisions based on their biological understanding of the system.
 
-### Pre-processing of models / Modelling
+### Pre-processing of models
 
 [rationale for tidymodels: why are we using tidymodels, flexibility of having each step of the analysis under control (and with the option to parallelise for improving computing time) and easily add/chose various methods. ]
 
-#### Creating workflow
+Once the presences and pseudo-absences or background have been selected and associated with the climatic variables of interest, modelling is performed with `tidymodels`. This is done through:
 
-`tidymodels` allows to fit different models by changing the model specification with the same code defining the rest of the workflow. This step is standardised by using `workflowsets`:[explain]. Multiple algorithms can be easily investigated : [list/explain].
+1.  creating a workflow fitting different models;
 
-`tidysdm` provides functions to simplify these steps (e.g., automatically generating model specifications with tuning for hyperparameters usually studied in SDMs) and expands methods from `tidymodels` that are not natively compatible with sf objects.
+2.  creating datafolds;
 
-\
+3.  tuning the model.
 
-\- recipe
+#### 1. Creating workflow
 
-\- model specifications
+`tidymodels` allows to easily fit different models by defining a **workflow** (a "fixed" framework) that accommodates different `model specification` (changes according to the models that will be used). The **workflow** is created by combining:
 
-#### Create data folds
+-   a `recipe` or formula (i.e. a "preprocessor") to process the data;
 
-#### Tune the model
+-   a `model specification`, which can have a few selected values for the `hyperparameters` (i.e., model parameters that cannot be learned directly by training the dataset and should be defined by the user) or can prescribe their tuning.
 
-\- algorithms available
+To build a `workflow_set` of different models, the `hyperparameters` we want to tune need to be defined. To do so, there are several algorithm available, and additional algorithms can be easily added.
 
-\- how to add additional algorithms (parsnip)
+-   **algorithms available**
+
+For the most commonly used models, `tidysdm` automatically chooses the most important parameters:\
+- Generalised Linear Model, using `sdm_spec_glm()`,
+
+\- General Additive Model, using `sdm_spec_gam()`,
+
+\- random forest specs with tuning, using `sdm_spec_rf()`,
+
+\- boosted tree model (gbm) specs with tuning, using `sdm_spec_boost_tree()`,
+
+\- maxent specs with tuning, using `sdm_spec_maxent()`
+
+It is possible to fully customise model specifications (e.g. see the help for `sdm_spec_rf()`).
+
+-   **additional algorithms can be added (based on `parsnip`)**
+
+This step uses `workflowsets` (you can find more information [here](https://workflowsets.tidymodels.org/articles/tuning-and-comparing-models.html)).
+
+Further options for tuning or re-sampling can be added to the models using the `workflowsets::option_add()` (see [Example 1](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html)).
+
+#### 2. Create data folds
+
+Before tuning and assessing the chosen models, `tidysdm` allows us to set up a spatial block cross-validation scheme.
+
+We use the `spatial_block_cv` function from the package `spatialsample`. The function `blockcv2rsample()` convert objects created with `blockCV` into an `rsample` object suitable to `tisysdm`
+
+#### 3. Tune the model
+
+Then, the obtained block CV folds are used to tune and assess the models. We can create combination of hyperparameters per model based on `workflowsets::workflow_map()` and `tidysdm::sdm_metric_set()`.
+
+##### Troubleshooting models that fail
+
+See tutorial [here](https://evolecolgroup.github.io/tidysdm/articles/a3_troubleshooting.html).
 
 ### **Evaluation**
 
 Metrics available
+
+The `tidysdm` function `sdm_metric_set()` offers the most commonly used metrics for SDM:
+
+-   Boyce continuous index (BCI), using `boyce_cont()`,
+
+-   Area under the receiver operator curve, using `roc_auc()`,
+
+-   Maximum True Skill Statistics, using `tss_max()`.
+
+Other metrics can be added using `yardstick::metric_set()`.\
 
 ### **Ensemble**
 
