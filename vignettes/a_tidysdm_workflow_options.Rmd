@@ -278,6 +278,8 @@ Instead of probability of occurrence, it is also possible to obtain binary predi
 
 #### Compare niche
 
+The `tidysdm` function `niche_overlap()` computes overlap metrics between two `rasters` ([`terra::SpatRaster`](http://127.0.0.1:32097/help/library/terra/help/SpatRaster-class) with a single layer). It currently implements Schoener's D and the inverse I of Hellinger's distance.
+
 #### Managing extrapolation:
 
 \- MESS
@@ -285,3 +287,5 @@ Instead of probability of occurrence, it is also possible to obtain binary predi
 \- area of applicability (<https://rdrr.io/cran/waywiser/man/ww_area_of_applicability.html>)
 
 \- clamping
+
+It is possible to clamp the predictors to match values in training set with the `tidysdm` function `clamp_predictors()`. This function clamps the environmental variables in a [`terra::SpatRaster`](http://127.0.0.1:32097/help/library/terra/help/SpatRaster-class) or [`terra::SpatRasterDataset`](http://127.0.0.1:32097/help/library/terra/help/SpatRaster-class) so that their minimum and maximum values do not exceed the range in the training dataset.
