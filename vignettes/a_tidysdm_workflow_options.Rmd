@@ -250,7 +250,7 @@ Instead of building a simple ensemble with the best version of each model type, 
 
 **Evaluation of ensembles**
 
-### **Projection** 
+### **Projection**
 
 #### Predict
 
@@ -285,6 +285,14 @@ The `tidysdm` function `niche_overlap()` computes overlap metrics between two `r
 \- MESS
 
 \- area of applicability (<https://rdrr.io/cran/waywiser/man/ww_area_of_applicability.html>)
+
+In case of prediction covering areas beyond sampling locations (i.e. the new areas may have different properties ), the areas of applicability of the model need to be assessed.
+
+In the `tidymodels` framework it is possible to include methods for assessing models fit to spatial data based on `waywiser::ww_area_of_applicability()` . This includes:
+
+-   assessing models fit
+
+-   measuring the spatial structure of model errors.
 
 \- clamping
 
