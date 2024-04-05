@@ -631,3 +631,5 @@ ggplot() +
   geom_spatraster(data = lacerta_rep_ens, aes(fill = median)) +
   scale_fill_terrain_c()
 ```
+
+@TODO show use of area of applicability
