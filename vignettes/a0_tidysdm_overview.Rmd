@@ -74,8 +74,8 @@ unzip(file.path(tempdir(), "0068808-230530130749713.zip"),  overwrite = TRUE,  e
 
 # read file
 library(readr)
-# distrib <- data.table::fread(file.path(tempdir(),"0068808-230530130749713.csv"))
-distrib <- read.table(file.path(tempdir(), "0068808-230530130749713.csv"),  row.names = NULL)
+distrib <- data.table::fread(file.path(tempdir(),"0068808-230530130749713.csv"))
+#distrib <- read.table(file.path(tempdir(), "0068808-230530130749713.csv"),  row.names = NULL)
 distrib <- readr::read_delim(file.path(tempdir(), "0068808-230530130749713.csv"))
 
 # keep the necessary columns
@@ -190,18 +190,56 @@ ggplot() +
   geom_sf(data = lacerta_thin)
 ```
 
-Now we sample pseudo-absences (we will constrain them to be at least 50km away
-from any presences), selecting as 3 times as many points as presences:
-```{r sample_pseudoabs}
-set.seed(1234567)
-lacerta_thin <- sample_pseudoabs(lacerta_thin,
-  n = 3 * nrow(lacerta_thin),
-  raster = land_mask,
-  method = c("dist_min", km2m(50))
-)
+
+Now we sample the background. In theory, we could also sample
+pseudo-absences (constraining them to be at least 50km away
+from any presences and selecting as 3 times as many points as presences) using sample_pseudoabs().
+Here, we will use *Lacertidae* records in the Iberian peninsula. This data is taken from: 
+GBIF Occurrence Download (08 April 2024) <https://doi.org/10.15468/dl.53js5z>. 
+
+First download species sampled in the Lacerta area, covering 8 genera of Lacertidae:
+```{r download_background}
+# download presences
+library(rgbif)
+# download file
+occ_download_get(key = "0121761-240321170329656", path = tempdir())
+
+# unzip file
+unzip(file.path(tempdir(), "0121761-240321170329656.zip"),  overwrite = TRUE,  exdir = tempdir(), unzip = "internal")
+
+# read file
+library(readr)
+backg_distrib <- data.table::fread(file.path(tempdir(),"0121761-240321170329656.csv"))
+#backg_distrib <- read.table(file.path(tempdir(), "0121761-240321170329656.csv"),  row.names = NULL)
+backg_distrib <- readr::read_delim(file.path(tempdir(), "0121761-240321170329656.csv"))
+
+# keep the necessary columns
+lacertidae_background <- backg_distrib[, c("gbifID", "decimalLatitude", "decimalLongitude")]
+names(lacertidae_background) <- c("ID", "latitude", "longitude")
+
+lacertidae_background <- st_as_sf(lacertidae_background, coords = c("longitude", "latitude"))
+st_crs(lacertidae_background) <- 4326
 ```
 
-Let's see our presences and absences:
+At this point our background species distribution sf object needs to be converted
+to 
+```{r background_to_raster}
+lacertidae_background_raster <- rasterize(lacertidae_background, land_mask, fun = "count")
+
+```
+
+
+Then sample the background, we are choosing here the 'random' sampling, 
+where background randomly sampled from the region covered by the raster:
+```{r sample_background}
+lacerta_thin <- sample_background(data = lacerta_thin, raster = lacertidae_background_raster, 
+                  n = 3 * nrow(lacerta_thin),
+                  method = "random", 
+                  class_label = "background",
+                  return_pres = TRUE)
+```
+
+Let's see our presences and background:
 ```{r plot_sample_pseudoabs, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
@@ -251,6 +289,8 @@ lacerta_thin <- lacerta_thin %>%
 We can use violin plots to compare the distribution of the climatic variables for presences and pseudo-absences:
 
 ```{r fig.height=11, fig.width=7}
+lacerta_thin <- na.omit(lacerta_thin)
+
 lacerta_thin %>% plot_pres_vs_bg(class)
 ```
 
@@ -276,20 +316,23 @@ to be important for the distribution of the species of interest. Based on
 this paper (https://doi.org/10.1007/s10531-010-9865-2), we are interested in:
 
 ```{r climate_variables}
-suggested_vars <- c("bio05", "bio06", "bio13", "bio14", "bio15")
+#@TODO we have to drop bio06 here
+#suggested_vars <- c("bio05", "bio13", "bio14", "bio15")
 ```
 
 Environmental variables are often highly correlated, and collinearity is an issue
 for several types of models. We can inspect the correlation among variables with:
 ```{r, fig.width=7, fig.height=8}
-pairs(climate_present[[suggested_vars]])
+#pairs(climate_present[[suggested_vars]])
+pairs(climate_present[[vars_to_keep]])
 ```
 
 We can see that some variables have rather high correlation (e.g. bio05 vs bio14).
 We can subset to variables below a certain threshold correlation (e.g. 0.7) with:
 
 ```{r choose_var_cor_keep}
-climate_present <- climate_present[[suggested_vars]]
+#climate_present <- climate_present[[suggested_vars]]
+climate_present <- climate_present[[vars_to_keep]]
 vars_uncor <- filter_collinear(climate_present, cutoff = 0.7, method = "cor_caret")
 vars_uncor
 ```
@@ -395,7 +438,16 @@ to tune for the glm and gam). We will use the Boyce continuous index as our metr
 to choose the best random forest and boosted tree. When adding members to an ensemble, they are
 automatically fitted to the full training dataset, and so ready to make predictions.
 
+# error
+Error in tune::select_best(member, metric) : 
+✖ Problematic argument:
+• ..1 = metric
+ℹ Did you forget to name an argument?
 ```{r}
+lacerta_ensemble <- simple_ensemble() %>%
+  add_member(lacerta_models, metric = "boyce_cont")
+lacerta_ensemble
+
 lacerta_ensemble <- simple_ensemble() %>%
   add_member(lacerta_models, metric = "boyce_cont")
 lacerta_ensemble
