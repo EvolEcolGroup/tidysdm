@@ -6,8 +6,8 @@
 #' @param metric_thresh a vector of length 2 giving a metric and its threshold,
 #' which will be used to prune
 #' which models in the ensemble will be used for the prediction. The 'metrics'
-#' need to have been computed when the workflow was tuned. Examples are
-#' c("accuracy",0.8) or c("boyce_cont",0.7)
+#' need to have been computed when the workflow was tuned. The metric's threshold needs to match the value 
+#' used during prediction. Examples are c("accuracy",0.8) or c("boyce_cont",0.7).
 #' @param class_thresh probability threshold used to convert probabilities into
 #' classes. It can be a number (between 0 and 1), or a character metric (currently
 #' "tss_max", "kap_max" or "sensitivity"). For sensitivity, an additional target value is passed
