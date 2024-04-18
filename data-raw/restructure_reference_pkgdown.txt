@@ -1,5 +1,5 @@
 reference:
-  - title: "Getting datasets"
+  - title: "Getting example data"
     desc: "Functions to download example data and example models"
     contents: 
       - lacerta
@@ -23,12 +23,14 @@ reference:
     desc: "Functions for identifying informative variables and pruning them for collinearity."
     contents:
       - plot_pres_vs_bg
+      - geom_split_violin	
       - dist_pres_vs_bg
       - filter_collinear
   - title: "Models pre-processing: creating a workflow"
     desc: "Functions for creating a workflow fitting different models."
     contents:
       - recipe
+      - spatial_recipe
       - check_sdm_presence
       - workflow_set
       - option_add
@@ -46,7 +48,10 @@ reference:
     contents:
       - spatial_block_cv
       - blockcv2rsample
+      - spatial_initial_split
       - autoplot.spatial_initial_split
+      - grid_offset
+      - grid_cellsize
   - title: "Models pre-processing: tune the model"
     desc: "Functions for creating combinations of hyperparameters per model."
     contents:
@@ -60,7 +65,14 @@ reference:
       - boyce_cont.sf
       - boyce_cont_vec
       - roc_auc
+      - roc_aunp.sf
+      - roc_aunu.sf
       - tss_max
+      - tss
+      - tss.data.frame
+      - tss_max.data.frame
+      - tss_max.sf
+      - tss_max_vec
       - brier_class.sf
       - prob_metrics
   - title: "Ensemble"
