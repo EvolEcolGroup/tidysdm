@@ -1,0 +1,96 @@
+reference:
+  - title: "Getting datasets"
+    desc: "Functions to download example data and example models"
+    contents: 
+      - lacerta
+      - lacerta_ensemble
+      - lacerta_rep_ens
+  - title: "Sampling pseudo-absences/background points"
+    desc: "Functions for sampling pseudo-absences and background points."
+    contents:
+      - sample_background
+      - sample_background_time
+      - sample_pseudoabs
+      - sample_pseudoabs_time
+  - title: "Thinning"
+    desc: "Functions for thinnig presence data for a species, considering the data collection and distribution."
+    contents:
+      - thin_by_cell
+      - thin_by_cell_time
+      - thin_by_dist
+      - thin_by_dist_time
+  - title: "Choice of variables"
+    desc: "Functions for identifying informative variables and pruning them for collinearity."
+    contents:
+      - plot_pres_vs_bg
+      - dist_pres_vs_bg
+      - filter_collinear
+  - title: "Models pre-processing: creating a workflow"
+    desc: "Functions for creating a workflow fitting different models."
+    contents:
+      - recipe
+      - check_sdm_presence
+      - workflow_set
+      - option_add
+  - title: "Models pre-processing: workflow input"
+    desc: "Algorithms for creating a workflow fitting different models."
+    contents:
+      - sdm_spec_glm
+      - sdm_spec_gam
+      - sdm_spec_rf
+      - sdm_spec_boost_tree
+      - sdm_spec_maxent
+      - sdm_spec_rf
+  - title: "Models pre-processing: creating data folds"
+    desc: "Functions for seting up a spatial block cross-validation scheme."
+    contents:
+      - spatial_block_cv
+      - blockcv2rsample
+      - autoplot.spatial_initial_split
+  - title: "Models pre-processing: tune the model"
+    desc: "Functions for creating combinations of hyperparameters per model."
+    contents:
+      - workflow_map
+      - sdm_metric_set
+  - title: "Evaluation"
+    desc: "Metrics for assessing the models."
+    contents:
+      - boyce_cont
+      - boyce_cont.data.frame
+      - boyce_cont.sf
+      - boyce_cont_vec
+      - roc_auc
+      - tss_max
+      - brier_class.sf
+      - prob_metrics
+  - title: "Ensemble"
+    desc: "Functions for creating an ensemble selecting the best set of parameters for each model."
+    contents:
+      - simple_ensemble
+      - add_best_candidates
+      - autoplo_simple_ensemble
+      - repeat_ensembles
+      - add_member
+      - add_repeat
+      - stacks
+      - collect_metrics
+  - title: "Predict"
+    desc: "Functions for making predictions."
+    contents:
+      - predict_raster
+      - metric_thresh
+      - conf_matrix_df
+  - title: "Predict binary"
+    desc: "Functions for converting probability of occurrence into binary predictions."
+    contents:
+      - calib_class_thresh
+  - title: "Compare niche"
+    desc: "Functions for computing overlap metrics between two rasters."
+    contents:
+      - niche_overlap
+  - title: "Managing extrapolation"
+    desc: "Functions for ."
+    contents:
+      - niche_overlap
+      - extrapol_mess
+      - clamp_predictors
