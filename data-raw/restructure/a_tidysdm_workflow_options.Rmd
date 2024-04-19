@@ -153,66 +153,147 @@ The `tidysdm` function `filter_collinear` is a **step-wise approach** that allow
 
 This function provides a sensible set of uncorrelated variables to be used with algorithms such as GLMs and GAMSs, but other such sets will likely exist and might be even better: we recommend that users inspect the variables with care and make decisions based on their biological understanding of the system.
 
-### Pre-processing of models / Modelling
+### Pre-processing of models
 
 [rationale for tidymodels: why are we using tidymodels, flexibility of having each step of the analysis under control (and with the option to parallelise for improving computing time) and easily add/chose various methods. ]
 
-#### Creating workflow
+Once the presences and pseudo-absences or background have been selected and associated with the climatic variables of interest, modelling is performed with `tidymodels`. This is done through:
 
-`tidymodels` allows to fit different models by changing the model specification with the same code defining the rest of the workflow. This step is standardised by using `workflowsets`:[explain]. Multiple algorithms can be easily investigated : [list/explain].
+1.  creating a workflow fitting different models;
 
-`tidysdm` provides functions to simplify these steps (e.g., automatically generating model specifications with tuning for hyperparameters usually studied in SDMs) and expands methods from `tidymodels` that are not natively compatible with sf objects.
+2.  creating datafolds;
 
-\
+3.  tuning the model.
 
-\- recipe
+#### 1. Creating workflow
 
-\- model specifications
+`tidymodels` allows to easily fit different models by defining a **workflow** (a "fixed" framework) that accommodates different `model specification` (changes according to the models that will be used). The **workflow** is created by combining:
 
-#### Create data folds
+-   a `recipe` or formula (i.e. a "preprocessor") to process the data;
 
-#### Tune the model
+-   a `model specification`, which can have a few selected values for the `hyperparameters` (i.e., model parameters that cannot be learned directly by training the dataset and should be defined by the user) or can prescribe their tuning.
 
-\- algorithms available
+To build a `workflow_set` of different models, the `hyperparameters` we want to tune need to be defined. To do so, there are several algorithm available, and additional algorithms can be easily added.
 
-\- how to add additional algorithms (parsnip)
+-   **algorithms available**
+
+For the most commonly used models, `tidysdm` automatically chooses the most important parameters:\
+- Generalised Linear Model, using `sdm_spec_glm()`,
+
+\- General Additive Model, using `sdm_spec_gam()`,
+
+\- random forest specs with tuning, using `sdm_spec_rf()`,
+
+\- boosted tree model (gbm) specs with tuning, using `sdm_spec_boost_tree()`,
+
+\- maxent specs with tuning, using `sdm_spec_maxent()`
+
+It is possible to fully customise model specifications (e.g. see the help for `sdm_spec_rf()`).
+
+-   **additional algorithms can be added (based on `parsnip`)**
+
+This step uses `workflowsets` (you can find more information [here](https://workflowsets.tidymodels.org/articles/tuning-and-comparing-models.html)).
+
+Further options for tuning or re-sampling can be added to the models using the `workflowsets::option_add()` (see [Example 1](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html)).
+
+#### 2. Create data folds
+
+Before tuning and assessing the chosen models, `tidysdm` allows us to set up a spatial block cross-validation scheme.
+
+We use the `spatial_block_cv` function from the package `spatialsample`. The function `blockcv2rsample()` convert objects created with `blockCV` into an `rsample` object suitable to `tisysdm`
+
+#### 3. Tune the model
+
+Then, the obtained block CV folds are used to tune and assess the models. We can create combination of hyperparameters per model based on `workflowsets::workflow_map()` and `tidysdm::sdm_metric_set()`.
+
+##### Troubleshooting models that fail
+
+See tutorial [here](https://evolecolgroup.github.io/tidysdm/articles/a3_troubleshooting.html).
 
 ### **Evaluation**
 
-Metrics available
+The `tidysdm` function `sdm_metric_set()` offers the most commonly used metrics for SDM:
+
+-   Boyce continuous index (BCI), using `boyce_cont()`,
+
+-   Area under the receiver operator curve, using `roc_auc()`,
+
+-   Maximum True Skill Statistics, using `tss_max()`.
+
+Other metrics can be added using `yardstick::metric_set()`. This function allows the user to set options for the metrics (see `help` page).
 
 ### **Ensemble**
 
-Simple ensemble
+Then, it is possible to create an **ensemble** selecting the best set of parameters for each model. When adding members to an ensemble, they areautomatically fitted to the full training dataset, and so ready to make predictions.
 
-Stacked ensemble
+`tidysdm` offers three options: simple ensemble, stacked ensemble, and repeated ensemble.
 
-Repeated ensemble
+**Simple ensemble**
 
-Ensemble from individual workflows
+The `tidysdm` function `simple_ensemble()` creates a collection of workflows for which predictions will be combined in a simple way (e.g. by taking either the mean or median). Members are added with `add_best_candidates()`.
 
-Averaging ensembles
+Usually these workflows will consists each of the best version of a given model algorithm following tuning. The **workflows** are fitted to the full training dataset before making predictions.
 
-Evaluation of ensembles
+**Repeated ensemble**
+
+As the steps of of thinning and sampling pseudo-absences or background are stochastic and might impact on the performance of SDMs, it is good practice to further explore their effect. In `tidysdm`, the user can repeate the analysis and then create ensembles of models over these repeats through `repeat_ensembles`.
+
+This is done by creating a list of `simple_ensembles`, and then by looping through the SDM pipeline, adding members to the list with `add_member` and finally creating a `repeat_ensemble` from the list with `add_repeat`.
+
+**Stacked ensemble**
+
+Instead of building a simple ensemble with the best version of each model type, it is possible to build a stack ensemble with `stacks()`. Stacking uses a meta-learning algorithm to learn how to best combine multiple models, including multiple versions of the same algorithm with different hyper-parameters (see package `stacks`).
+
+**Ensemble from individual workflows**
+
+**Averaging ensembles**
+
+**Evaluation of ensembles**
 
 ### **Projection**
 
-Predict
+#### Predict
 
-Predict_raster 
+After creating the ensemble, it is possible to make predictions with `predict_raster()`.
+
+The ensemble can be subsetted to only use the best models:
+
+-   the default option takes the mean of the predictions from each model
+
+-   the median of the available model predictions can be obtained
+
+-   it is possible to set a minimum threshold for a chosen metric adding `metric_thresh` to `predict_raster()` (e.g. Boyce continuous index, AUC, TSS).
 
 \- same time slice
 
 \- different time slice
 
-Convert into binary
+##### Convert into binary
 
-Compare niche
+Instead of probability of occurrence, it is also possible to obtain binary predictions (presence vs absence) with `tidysdm`:
 
-Managing extrapolation:
+-   first need to calibrate the thresholdused to convert probabilities into classes using a metric (e.g. TSS) with `calib_class_thresh()`
+
+-   then, predict again with `predict_raster()`.
+
+#### Compare niche
+
+The `tidysdm` function `niche_overlap()` computes overlap metrics between two `rasters` ([`terra::SpatRaster`](http://127.0.0.1:32097/help/library/terra/help/SpatRaster-class) with a single layer). It currently implements Schoener's D and the inverse I of Hellinger's distance.
+
+#### Managing extrapolation:
 
 \- MESS
 
 \- area of applicability (<https://rdrr.io/cran/waywiser/man/ww_area_of_applicability.html>)
 
+In case of prediction covering areas beyond sampling locations (i.e. the new areas may have different properties ), the areas of applicability of the model need to be assessed.
+
+In the `tidymodels` framework it is possible to include methods for assessing models fit to spatial data based on `waywiser::ww_area_of_applicability()` . This includes:
+
+-   assessing models fit
+
+-   measuring the spatial structure of model errors.
+
 \- clamping
+
+It is possible to clamp the predictors to match values in training set with the `tidysdm` function `clamp_predictors()`. This function clamps the environmental variables in a [`terra::SpatRaster`](http://127.0.0.1:32097/help/library/terra/help/SpatRaster-class) or [`terra::SpatRasterDataset`](http://127.0.0.1:32097/help/library/terra/help/SpatRaster-class) so that their minimum and maximum values do not exceed the range in the training dataset.
