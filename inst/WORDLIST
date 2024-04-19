@@ -19,6 +19,7 @@ Hijmans
 Hirzel
 LGM
 Lacerta
+Lacertidae
 MaxEnt
 Maxent
 Maxnet
@@ -33,7 +34,6 @@ Schmiegelow
 Schoener
 Schoener's
 Sexpr
-SpatRaster
 SpatRasterDataset
 StackOverflow
 TSS
@@ -76,6 +76,7 @@ jlx
 kap
 kendall
 lacerta
+lacertidae
 lh
 lonlat
 lqpht

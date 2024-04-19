@@ -201,7 +201,7 @@ Iberian peninsula. This data is taken from: GBIF Occurrence Download (08
 April 2024) <https://doi.org/10.15468/dl.53js5z>.
 
 We will start by downloading records from 8 genera
-of *Lacertidae*, coering the same geographic region of the Iberian peninsula:
+of *Lacertidae*, covering the same geographic region of the Iberian peninsula:
 
 ```{r download_background, eval=FALSE}
 # download presences
