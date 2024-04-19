@@ -1,5 +1,5 @@
-This is a minor bug fix that deals with changes in the latest version
-of `terra` (1.6.75).
+This is a minor bug fix that deals with an incompatibility with the upcoming
+version of tune.
 
 ## Test environments
 - R-hub windows-x86_64-devel (r-devel)

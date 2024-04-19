@@ -529,7 +529,8 @@ classes (in this case, we optimise the TSS):
 
 ```{r}
 lacerta_ensemble <- calib_class_thresh(lacerta_ensemble,
-  class_thresh = "tss_max"
+  class_thresh = "tss_max", 
+  metric_thresh = c("boyce_cont", 0.8)
 )
 ```
 
@@ -539,7 +540,8 @@ And now we can predict for the whole continent:
 prediction_present_binary <- predict_raster(lacerta_ensemble,
   climate_present,
   type = "class",
-  class_thresh = c("tss_max")
+  class_thresh = c("tss_max"), 
+  metric_thresh = c("boyce_cont", 0.8)
 )
 ggplot() +
   geom_spatraster(data = prediction_present_binary, aes(fill = binary_mean)) +

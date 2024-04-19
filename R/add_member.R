@@ -54,7 +54,7 @@ add_member.tune_results <- function(x, member, metric = NULL, id = NULL, ...) {
   }
 
   # get the best config, metric, etc.
-  best_config <- tune::select_best(member, metric)$.config
+  best_config <- tune::select_best(member, metric = metric)$.config
   best_metrics <- tune::collect_metrics(member) %>%
     dplyr::filter(.data$.config == best_config) %>%
     dplyr::select(dplyr::all_of(c(".metric", "mean", "std_err", "n"))) %>%

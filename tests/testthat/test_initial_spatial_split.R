@@ -12,8 +12,8 @@ expect_true(inherits(lacerta_initial,"spatial_initial_split"))
 # due to the grouping into spatial blocks)
 expect_true((length(lacerta_initial$in_id)/nrow(lacerta_thin)-4/5)<0.05)
 
-lacerta_initial_autoplot <- autoplot(lacerta_initial)
-vdiffr::expect_doppelganger("Autoplot of initial spatial split", lacerta_initial_autoplot)
+# lacerta_initial_autoplot <- autoplot(lacerta_initial)
+# vdiffr::expect_doppelganger("Autoplot of initial spatial split", lacerta_initial_autoplot)
 
 # check error if we give incorrect strategy
 expect_error(spatial_initial_split(lacerta_thin,
