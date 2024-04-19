@@ -58,6 +58,7 @@ Suggests:
     overlapping,
     pastclim (>= 2.0.0),
     ranger,
+    rgbif,
     rmarkdown,
     spelling,
     stacks,

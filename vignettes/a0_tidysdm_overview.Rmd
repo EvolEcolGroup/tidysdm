@@ -61,7 +61,6 @@ However, we can also easily access and manipulate this data using `rbgif`.
 We illustrate here how to do it:
 
 ```{r download_presences}
-
 # download presences
 library(rgbif)
 # download file
