@@ -55,70 +55,28 @@ library(tidysdm)
 
 We start by reading in a set of presences for a species of lizard that
 inhabits the Iberian peninsula, *Lacerta schreiberi*. This data is taken
-from: GBIF Occurrence Download (6 July 2023)
-<https://doi.org/10.15468/dl.srq3b3>.
-
-The dataset is already included in `tidysdm` package:
+from GBIF Occurrence Download (6 July 2023)
+<https://doi.org/10.15468/dl.srq3b3>. The dataset is already included in 
+the `tidysdm` package:
 
 ```{r load_presences}
-# data(lacerta)
-# lacerta
+ data(lacerta)
+ lacerta
 ```
 
-However, we can also easily access and manipulate this data using
-`rbgif`. We illustrate here how to do it:
+Alternatively, we can easily access and manipulate this dataset using
+`rbgif`:
 
-```{r download_presences}
-#@TODO delete this section
-
-# # download presences
-# library(rgbif)
-# # download file
-# occ_download_get(key = "0068808-230530130749713", path = tempdir())
-# 
-# # unzip file
-# unzip(file.path(tempdir(), "0068808-230530130749713.zip"),  overwrite = TRUE,  exdir = tempdir(), unzip = "internal")
-# 
-# #@TODO https://stackoverflow.com/questions/12460938/r-reading-in-a-zip-data-file-without-unzipping-it
-# 
-# # read file
-# library(readr)
-# distrib <- data.table::fread(file.path(tempdir(),"0068808-230530130749713.csv"))
-# #distrib <- read.table(file.path(tempdir(), "0068808-230530130749713.csv"),  row.names = NULL)
-# distrib <- readr::read_delim(file.path(tempdir(), "0068808-230530130749713.csv"))
-# 
-# # keep the necessary columns
-# lacerta <- distrib[, c("gbifID", "decimalLatitude", "decimalLongitude")]
-# names(lacerta) <- c("ID", "latitude", "longitude")
-# 
-
-```
-
-GBIF.org (09 April 2024) GBIF Occurrence Download
-<https://doi.org/10.15468/dl.yqszft>
-
-```{r download_presences}
+```{r download_presences, eval = FALSE}
 # download presences
 library(rgbif)
-# download file
-occ_download_get(key = "0128228-240321170329656", path = tempdir())
-
-# unzip file
-unzip(file.path(tempdir(), "0128228-240321170329656.zip"),  overwrite = TRUE,  exdir = tempdir(), unzip = "internal")
-
-#@TODO https://stackoverflow.com/questions/12460938/r-reading-in-a-zip-data-file-without-unzipping-it
-
+occ_download_get(key = "0068808-230530130749713", path = tempdir())
 # read file
 library(readr)
-distrib <- data.table::fread(file.path(tempdir(),"0128228-240321170329656.csv"))
-#distrib <- read.table(file.path(tempdir(), "0068808-230530130749713.csv"),  row.names = NULL)
-distrib <- readr::read_delim(file.path(tempdir(), "0128228-240321170329656.csv"))
-
-# keep the necessary columns
-lacerta <- distrib[, c("gbifID", "decimalLatitude", "decimalLongitude")]
-names(lacerta) <- c("ID", "latitude", "longitude")
-
-
+distrib <- read_delim(file.path(tempdir(), "0068808-230530130749713.zip"))
+# keep the necessary columns and rename them
+lacerta <- distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
+  rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
 ```
 
 # Preparing your data
@@ -230,41 +188,47 @@ ggplot() +
   geom_sf(data = lacerta_thin)
 ```
 
-Now we sample the background. In theory, we could also sample
-pseudo-absences (constraining them to be at least 50km away from any
-presences and selecting as 3 times as many points as presences) using
-`sample_pseudoabs()`. Here, we will use *Lacertidae* records in the
+We now need to select points that represent the potential available area
+for the species. There are two approaches, we can either sample the background
+with `sample_background()`,
+or we can generate pseudo-absences with `sample_pseudoabs()`. In this example,
+we will sample the background; more specifically, we will attempt to account for potential
+sampling biases by using a target group approach, where presences from other species
+within the same taxonomic group are used to condition the sampling of the background,
+providing information on differential sampling of different areas within the region
+of interest. We will use *Lacertidae* records in the
 Iberian peninsula. This data is taken from: GBIF Occurrence Download (08
 April 2024) <https://doi.org/10.15468/dl.53js5z>.
 
-First download species sampled in the *Lacerta* area, covering 8 genera
-of *Lacertidae*:
+We will start by downloading records from 8 genera
+of *Lacertidae*, coering the same geographic region of the Iberian peninsula:
 
-```{r download_background}
+```{r download_background, eval=FALSE}
 # download presences
 library(rgbif)
 # download file
 occ_download_get(key = "0121761-240321170329656", path = tempdir())
-
-# unzip file
-unzip(file.path(tempdir(), "0121761-240321170329656.zip"),  overwrite = TRUE,  exdir = tempdir(), unzip = "internal")
-
 # read file
 library(readr)
-backg_distrib <- data.table::fread(file.path(tempdir(),"0121761-240321170329656.csv"))
-#backg_distrib <- read.table(file.path(tempdir(), "0121761-240321170329656.csv"),  row.names = NULL)
-backg_distrib <- readr::read_delim(file.path(tempdir(), "0121761-240321170329656.csv"))
+backg_distrib <- readr::read_delim(file.path(tempdir(), "0121761-240321170329656.zip"))
 
 # keep the necessary columns
-lacertidae_background <- backg_distrib[, c("gbifID", "decimalLatitude", "decimalLongitude")]
-names(lacertidae_background) <- c("ID", "latitude", "longitude")
+lacertidae_background <- backg_distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
+  rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
 
 lacertidae_background <- st_as_sf(lacertidae_background, coords = c("longitude", "latitude"))
 st_crs(lacertidae_background) <- 4326
 ```
 
-At this point our background species distribution `sf` object needs to
-be converted to:
+```{r echo=FALSE}
+data("lacertidae_background")
+lacertidae_background <- st_as_sf(lacertidae_background, coords = c("longitude", "latitude"))
+st_crs(lacertidae_background) <- 4326
+```
+
+We need to convert these observations into a raster whose values are the number
+of records (which will be later used to determine how likely each cell is to
+be used as a background point):
 
 ```{r background_to_raster}
 lacertidae_background_raster <- rasterize(lacertidae_background, land_mask, fun = "count")
@@ -273,8 +237,9 @@ plot(lacertidae_background_raster)
 
 ```
 
-Then sample the background, we are choosing here the 'random' sampling,
-where background randomly sampled from the region covered by the raster:
+We can see that the sampling is far from random, with certain locations having 
+very large number of records. We can now sample the background, using the 'bias'
+method to represent this heterogeneity in sampling effort:
 
 ```{r sample_background}
 lacerta_thin <- sample_background(data = lacerta_thin, raster = lacertidae_background_raster,

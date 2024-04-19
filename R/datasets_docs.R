@@ -36,3 +36,17 @@
 #'
 #' @format A [`repeat_ensemble`] object
 "lacerta_rep_ens"
+
+#' Coordinates of presences for lacertidae in the Iberian peninsula
+#'
+#' Coordinates for presences of lacertidae, used as background for the [`lacerta`]
+#' dataset.. The variables are as
+#' follows:
+#'
+#' @format An `tibble` with 1,297 rows and 3 variables:
+#' \describe{
+#'   \item{ID}{ids from GBIF}
+#'   \item{latitude}{latitudes in degrees}
+#'   \item{longitude}{longitudes in degrees}
+#' }
+"lacertidae_background"

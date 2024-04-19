@@ -84,3 +84,14 @@ ncdf4::nc_close(nc_in)
 # lacerta_thin (present, absences plus all climatic variables)
 # lacerta ensemble
 usethis::use_data(lacerta_ens, overwrite=TRUE)
+
+################################
+occ_download_get(key = "0121761-240321170329656", path = tempdir())
+# read file
+library(readr)
+backg_distrib <- readr::read_delim(file.path(tempdir(), "0121761-240321170329656.zip"))
+
+# keep the necessary columns
+lacertidae_background <- backg_distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
+  rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
+usethis::use_data(lacertidae_background, overwrite=TRUE)
