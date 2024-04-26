@@ -149,8 +149,10 @@ library(tidyterra)
 library(ggplot2)
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta)
+  geom_sf(data = lacerta) + scale_fill_gradient(na.value = "transparent") # removed NA (sea) grey background, if people prefer like this
+
 ```
+@TODO remove that presence outliner 
 
 # Thinning step
 
@@ -166,7 +168,7 @@ nrow(lacerta)
 ```{r plot_thin_by_cell, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta)
+  geom_sf(data = lacerta) + scale_fill_gradient(na.value = "transparent")
 ```
 
 Now, we thin further to remove points that are closer than 20km.
@@ -185,7 +187,7 @@ Let's see what we have left of our points:
 ```{r plot_thin_by_dist, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta_thin)
+  geom_sf(data = lacerta_thin) + scale_fill_gradient(na.value = "transparent")
 ```
 
 We now need to select points that represent the potential available area
@@ -254,7 +256,7 @@ Let's see our presences and background:
 ```{r plot_sample_pseudoabs, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta_thin, aes(col = class))
+  geom_sf(data = lacerta_thin, aes(col = class)) + scale_fill_gradient(na.value = "transparent")
 ```
 
 Generally, we can use `pastclim` to check what variables are available
@@ -334,6 +336,7 @@ So, removing bio14 leaves us with a set of uncorrelated variables.
 ```{r}
 lacerta_thin <- lacerta_thin %>% select(all_of(c(vars_uncor, "class")))
 climate_present <- climate_present[[vars_uncor]]
+names(climate_present) # added to highlight which variables are retained in the end
 ```
 
 # Fit the model by cross-validation
