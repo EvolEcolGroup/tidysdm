@@ -708,4 +708,65 @@ ggplot() +
   scale_fill_terrain_c()
 ```
 
-@TODO show use of area of applicability
+# Multivariate environmental similarity surfaces (MESS)
+
+The total area of projection of the model may include environmental condition which lye outside the range of conditions covered by the calibration dataset. This phenomenon can lead to misinterpretation of the SDM outcomes due to spatial extrapolation. 
+
+Multivariate environmental similarity surfaces (MESS) (Elith et al. 2010) can be used to highlight areas where extrapolation occurs and thus provide details regarding the prediction's uncertainty.
+
+Firstly, we can estimate MESS for present predictions
+
+```{r}
+lacerta_mess_present <- extrapol_mess(x = climate_present, training = lacerta_thin, .col = "class")
+
+ggplot() + geom_spatraster(data = lacerta_mess_present) + scale_fill_viridis_b(na.value = "transparent")
+```
+
+Extrapolation occurs in areas where MESS values are negative. 
+
+We can now overlay MESS values with current prediction to visualize areas characterized by spatial extrapolation. 
+
+```{r}
+# subset mess 
+lacerta_mess_present_subset <- lacerta_mess_present
+lacerta_mess_present_subset[lacerta_mess_present_subset >= 0] <- NA
+lacerta_mess_present_subset[lacerta_mess_present_subset < 0] <- 1
+
+# convert into polygon
+lacerta_mess_present_subset <- as.polygons(lacerta_mess_present_subset)
+
+# plot as a mask 
+terra::plot(prediction_present, fun = function() polys(lacerta_mess_present_subset, col = "black", lwd = 0.5))
+```
+
+Estimating MESS it is also useful for assess for extrapolation among different time periods, where novel climatic conditions may arise. 
+
+We can compute MESS for future predictions in the same way we have done previosuly
+
+```{r}
+lacerta_mess_future <- extrapol_mess(x = climate_future, training = lacerta_thin, .col = "class")
+
+ggplot() + geom_spatraster(data = lacerta_mess_future) + scale_fill_viridis_b(na.value = "transparent")
+```
+
+We can now mask areas of future prediction chatacterised by negative MESS values 
+
+```{r}
+# subset mess 
+lacerta_mess_future_subset <- lacerta_mess_future
+lacerta_mess_future_subset[lacerta_mess_future_subset >= 0] <- NA
+lacerta_mess_future_subset[lacerta_mess_future_subset < 0] <- 1
+
+# convert into polygon
+lacerta_mess_future_subset <- as.polygons(lacerta_mess_future_subset)
+
+# plot as a mask 
+terra::plot(prediction_future, fun = function() polys(lacerta_mess_future_subset, col = "black", lwd = 0.5))
+```
+@TODO maybe need to make the mask more transparent? 
+@TODO potentially re-do the plots in ggplot? 
+
+It is is important to keep in mind that MESS provide a scale of values, which means that not all the areas characterised by negative MESS values have the same level of extrapolation. 
+
+@TODO maybe a brie mention within this section on the use of area of applicability? 
+
