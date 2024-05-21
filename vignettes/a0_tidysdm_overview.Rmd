@@ -56,7 +56,7 @@ library(tidysdm)
 We start by reading in a set of presences for a species of lizard that
 inhabits the Iberian peninsula, *Lacerta schreiberi*. This data is taken
 from GBIF Occurrence Download (6 July 2023)
-<https://doi.org/10.15468/dl.srq3b3>. The dataset is already included in 
+<https://doi.org/10.15468/dl.srq3b3>. The dataset is already included in
 the `tidysdm` package:
 
 ```{r load_presences}
@@ -77,6 +77,23 @@ distrib <- read_delim(file.path(tempdir(), "0068808-230530130749713.zip"))
 # keep the necessary columns and rename them
 lacerta <- distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
   rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
+```
+
+It is also possible to have further quality checks and filter the
+dataset using `CoordinateCleaner v3.0`, this will also help in excluding
+outliers:
+
+```{r presences_coord_clean}
+library(CoordinateCleaner)
+
+lacerta_df <- data.frame(lacerta)
+
+flags <- clean_coordinates(x = lacerta_df, 
+                           lon = "longitude", 
+                           lat = "latitude",
+                           species = "ID")
+
+lacerta <- lacerta_df[flags$.summary,]
 ```
 
 # Preparing your data
@@ -149,10 +166,10 @@ library(tidyterra)
 library(ggplot2)
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta) + scale_fill_gradient(na.value = "transparent") # removed NA (sea) grey background, if people prefer like this
+  geom_sf(data = lacerta) + scale_fill_gradient(na.value = "transparent")
 
 ```
-@TODO remove that presence outliner 
+
 
 # Thinning step
 
@@ -191,18 +208,18 @@ ggplot() +
 ```
 
 We now need to select points that represent the potential available area
-for the species. There are two approaches, we can either sample the background
-with `sample_background()`,
-or we can generate pseudo-absences with `sample_pseudoabs()`. In this example,
-we will sample the background; more specifically, we will attempt to account for potential
-sampling biases by using a target group approach, where presences from other species
-within the same taxonomic group are used to condition the sampling of the background,
-providing information on differential sampling of different areas within the region
-of interest.
+for the species. There are two approaches, we can either sample the
+background with `sample_background()`, or we can generate
+pseudo-absences with `sample_pseudoabs()`. In this example, we will
+sample the background; more specifically, we will attempt to account for
+potential sampling biases by using a target group approach, where
+presences from other species within the same taxonomic group are used to
+condition the sampling of the background, providing information on
+differential sampling of different areas within the region of interest.
 
-We will start by downloading records from 8 genera
-of *Lacertidae*, covering the same geographic region of the Iberian peninsula
-from GBIF <https://doi.org/10.15468/dl.53js5z>:
+We will start by downloading records from 8 genera of *Lacertidae*,
+covering the same geographic region of the Iberian peninsula from GBIF
+<https://doi.org/10.15468/dl.53js5z>:
 
 ```{r download_background, eval=FALSE}
 # download presences
@@ -221,15 +238,16 @@ lacertidae_background <- st_as_sf(lacertidae_background, coords = c("longitude",
 st_crs(lacertidae_background) <- 4326
 ```
 
+
 ```{r echo=FALSE}
 data("lacertidae_background")
 lacertidae_background <- st_as_sf(lacertidae_background, coords = c("longitude", "latitude"))
 st_crs(lacertidae_background) <- 4326
 ```
 
-We need to convert these observations into a raster whose values are the number
-of records (which will be later used to determine how likely each cell is to
-be used as a background point):
+We need to convert these observations into a raster whose values are the
+number of records (which will be later used to determine how likely each
+cell is to be used as a background point):
 
 ```{r background_to_raster}
 lacertidae_background_raster <- rasterize(lacertidae_background, land_mask, fun = "count")
@@ -238,9 +256,10 @@ plot(lacertidae_background_raster)
 
 ```
 
-We can see that the sampling is far from random, with certain locations having 
-very large number of records. We can now sample the background, using the 'bias'
-method to represent this heterogeneity in sampling effort:
+We can see that the sampling is far from random, with certain locations
+having very large number of records. We can now sample the background,
+using the 'bias' method to represent this heterogeneity in sampling
+effort:
 
 ```{r sample_background}
 lacerta_thin <- sample_background(data = lacerta_thin, raster = lacertidae_background_raster,
@@ -294,17 +313,15 @@ climate_present <- pastclim::region_slice(
 )
 ```
 
-Next, we extract climate
-for all presences and background_points:
+Next, we extract climate for all presences and background_points:
 
 ```{r}
 lacerta_thin <- lacerta_thin %>%
   bind_cols(terra::extract(climate_present, lacerta_thin, ID = FALSE))
 ```
 
-Based on this paper
-(<https://doi.org/10.1007/s10531-010-9865-2>), we are interested in
-these variables:
+Based on this paper (<https://doi.org/10.1007/s10531-010-9865-2>), we
+are interested in these variables:
 
 ```{r climate_variables}
 
@@ -498,7 +515,6 @@ absence), rather than the probability of occurrence. To do so, we first
 need to calibrate the threshold used to convert probabilities into
 classes (in this case, we optimise the TSS):
 
-@TODO update metrics
 
 ```{r}
 lacerta_ensemble <- calib_class_thresh(lacerta_ensemble,
@@ -708,4 +724,3 @@ ggplot() +
   scale_fill_terrain_c()
 ```
 
-@TODO show use of area of applicability
