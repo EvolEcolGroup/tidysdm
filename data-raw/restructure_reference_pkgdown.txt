@@ -46,7 +46,6 @@ reference:
   - title: "Models pre-processing: creating data folds"
     desc: "Functions for seting up a spatial block cross-validation scheme."
     contents:
-      - spatial_block_cv
       - blockcv2rsample
       - spatial_initial_split
       - autoplot.spatial_initial_split
