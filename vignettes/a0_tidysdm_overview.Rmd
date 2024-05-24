@@ -81,9 +81,9 @@ lacerta <- distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
 
 It is also possible to have further quality checks and filter the
 dataset using `CoordinateCleaner v3.0`, this will also help in excluding
-outliers:
+outliers (it may take some time, depending on the size of the dataset):
 
-```{r presences_coord_clean}
+```{r presences_coord_clean, eval = FALSE}
 library(CoordinateCleaner)
 
 lacerta_df <- data.frame(lacerta)
@@ -94,6 +94,13 @@ flags <- clean_coordinates(x = lacerta_df,
                            species = "ID")
 
 lacerta <- lacerta_df[flags$.summary,]
+
+# save cleaned dataset
+saveRDS(lacerta, "../data/lacerta_cleaned.rda")
+```
+
+```{r save_and_read, echo=FALSE}
+lacerta <- readRDS("../data/lacerta_cleaned.rda")
 ```
 
 # Preparing your data
