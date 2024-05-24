@@ -322,7 +322,6 @@ non-overlapping distribution between presences and background:
 ```{r}
 vars_to_keep <- lacerta_thin %>% dist_pres_vs_bg(class)
 vars_to_keep <- names(vars_to_keep[vars_to_keep > 0.30])
-lacerta_thin <- lacerta_thin %>% select(all_of(c(vars_to_keep, "class")))
 vars_to_keep
 ```
 
