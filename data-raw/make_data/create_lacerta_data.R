@@ -18,6 +18,19 @@ distrib <- readr::read_delim(file.path(tempdir(), "0068808-230530130749713.csv")
 lacerta <- distrib[, c("gbifID", "decimalLatitude", "decimalLongitude")]
 names(lacerta) <- c("ID", "latitude", "longitude")
 
+# quality checks and filter and exclude outliers 
+# (it may take some time, depending on the size of the dataset):
+library(CoordinateCleaner)
+
+lacerta_df <- data.frame(lacerta)
+
+flags <- clean_coordinates(x = lacerta_df,
+                           lon = "longitude",
+                           lat = "latitude",
+                           species = "ID")
+
+lacerta <- lacerta_df[flags$.summary,]
+
 usethis::use_data(lacerta, overwrite = TRUE)
 # saveRDS(lacerta, file="./inst/extdata/lacerta_coords.RDS")
 

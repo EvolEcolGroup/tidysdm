@@ -79,29 +79,6 @@ lacerta <- distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
   rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
 ```
 
-It is also possible to have further quality checks and filter the
-dataset using `CoordinateCleaner v3.0`, this will also help in excluding
-outliers (it may take some time, depending on the size of the dataset):
-
-```{r presences_coord_clean, eval = FALSE}
-library(CoordinateCleaner)
-
-lacerta_df <- data.frame(lacerta)
-
-flags <- clean_coordinates(x = lacerta_df, 
-                           lon = "longitude", 
-                           lat = "latitude",
-                           species = "ID")
-
-lacerta <- lacerta_df[flags$.summary,]
-
-# save cleaned dataset
-saveRDS(lacerta, "../data/lacerta_cleaned.rda")
-```
-
-```{r save_and_read, echo=FALSE}
-lacerta <- readRDS("../data/lacerta_cleaned.rda")
-```
 
 # Preparing your data
 
@@ -345,7 +322,6 @@ non-overlapping distribution between presences and background:
 ```{r}
 vars_to_keep <- lacerta_thin %>% dist_pres_vs_bg(class)
 vars_to_keep <- names(vars_to_keep[vars_to_keep > 0.30])
-lacerta_thin <- lacerta_thin %>% select(all_of(c(vars_to_keep, "class")))
 vars_to_keep
 ```
 
