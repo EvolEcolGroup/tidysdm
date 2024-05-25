@@ -1,7 +1,7 @@
 #' Model specification for a MaxEnt for SDM
 #'
 #' This function returns a [parsnip::model_spec] for a MaxEnt model to
-#' be used as a classifier of presences and absences in Species Distribution
+#' be used in Species Distribution
 #' Models.
 #'
 #' @param ... parameters to be passed to [maxent()] to
