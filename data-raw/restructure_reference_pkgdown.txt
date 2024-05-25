@@ -129,8 +129,13 @@ reference:
     contents:
       - niche_overlap
   - title: "Managing extrapolation"
-    desc: "Functions for ."
+    desc: "Functions for managing extrapolation."
     contents:
       - niche_overlap
       - extrapol_mess
       - clamp_predictors
+  - title: "Other"
+    desc: "Additional functions."
+    contents:
+      - km2m
+      - y2d
