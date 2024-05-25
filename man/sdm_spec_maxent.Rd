@@ -12,7 +12,7 @@ customise the model. See the help of that function for details.}
 
 \item{tune}{character defining the tuning strategy. Valid strategies are:
 \itemize{
-\item "sdm" chooses hyperparameters that are most important to tune for
+\item "sdm" chooses hyper-parameters that are most important to tune for
 an sdm (for \emph{maxent}, 'mtry')
 \item "all" tunes all hyperparameters (for \emph{maxent}, 'mtry', 'trees' and 'min')
 \item "custom" passes the options from '...'
@@ -24,7 +24,7 @@ a \link[parsnip:model_spec]{parsnip::model_spec} of the model.
 }
 \description{
 This function returns a \link[parsnip:model_spec]{parsnip::model_spec} for a MaxEnt model to
-be used as a classifier of presences and absences in Species Distribution
+be used in Species Distribution
 Models.
 }
 \examples{

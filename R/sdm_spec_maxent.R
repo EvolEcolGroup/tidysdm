@@ -7,7 +7,7 @@
 #' @param ... parameters to be passed to [maxent()] to
 #' customise the model. See the help of that function for details.
 #' @param tune character defining the tuning strategy. Valid strategies are:
-#' * "sdm" chooses hyperparameters that are most important to tune for
+#' * "sdm" chooses hyper-parameters that are most important to tune for
 #' an sdm (for *maxent*, 'mtry')
 #' * "all" tunes all hyperparameters (for *maxent*, 'mtry', 'trees' and 'min')
 #' * "custom" passes the options from '...'
