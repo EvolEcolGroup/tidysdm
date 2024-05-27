@@ -246,6 +246,7 @@ using the 'bias' method to represent this heterogeneity in sampling
 effort:
 
 ```{r sample_background}
+set.seed(1234567)
 lacerta_thin <- sample_background(data = lacerta_thin, raster = lacertidae_background_raster,
                   n = 3 * nrow(lacerta_thin),
                   method = "bias",
@@ -500,7 +501,7 @@ ggplot() +
 ```
 
 We can subset the ensemble to only use the best models, based on the
-Boyce continuous index, by setting a minimum threshold of 0.8 for that
+Boyce continuous index, by setting a minimum threshold of 0.7 for that
 metric. We will also take the median of the available model predictions
 (instead of the mean, which is the default). The plot does not change
 much (the models are quite consistent).
@@ -526,7 +527,7 @@ classes (in this case, we optimise the TSS):
 ```{r}
 lacerta_ensemble <- calib_class_thresh(lacerta_ensemble,
   class_thresh = "tss_max", 
-  metric_thresh = c("boyce_cont", 0.8)
+  metric_thresh = c("boyce_cont", 0.7)
 )
 ```
 
@@ -537,7 +538,7 @@ prediction_present_binary <- predict_raster(lacerta_ensemble,
   climate_present,
   type = "class",
   class_thresh = c("tss_max"), 
-  metric_thresh = c("boyce_cont", 0.8)
+  metric_thresh = c("boyce_cont", 0.7)
 )
 ggplot() +
   geom_spatraster(data = prediction_present_binary, aes(fill = binary_mean)) +
