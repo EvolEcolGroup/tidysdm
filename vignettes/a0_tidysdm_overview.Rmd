@@ -304,31 +304,23 @@ lacerta_thin <- lacerta_thin %>%
   bind_cols(terra::extract(climate_present, lacerta_thin, ID = FALSE))
 ```
 
-We can use violin plots to compare the distribution of the climatic variables for presences and the background:
+Based on this paper (<https://doi.org/10.1007/s10531-010-9865-2>), we
+are interested in these variables: "bio06", "bio05", "bio13", "bio14", "bio15".
+We can visualise the differences between presences and the background using violin plots:
 
 ```{r fig.height=11, fig.width=7}
 lacerta_thin %>% plot_pres_vs_bg(class)
 ```
-We want to choose variables for which presences use values different from the background.
-We can qualitatively look at the plots, or use a quantitative approach that 
-ranks them based on the overlap of the respective density plots:
+We can see that all the variables of interest do seem to have a different distribution
+between presences and the background. We can formally quantify the mismatch between the two 
+by computing the overlap:
+
 ```{r}
 lacerta_thin %>% dist_pres_vs_bg(class)
 ```
 
-As a first step, we can focus on variables that have at least 30% of 
-non-overlapping distribution between presences and background:
-
-```{r}
-vars_to_keep <- lacerta_thin %>% dist_pres_vs_bg(class)
-vars_to_keep <- names(vars_to_keep[vars_to_keep > 0.30])
-vars_to_keep
-```
-
-These are still a lot of variables. Among them, there are several that have been 
-argued in the past to be important for the distribution of the species of interest. 
-Based on this paper (<https://doi.org/10.1007/s10531-010-9865-2>), we
-are interested in these variables:
+Again, we can see that the variables of interest seem good candidates with a clear
+signal. Let us then focus on those variables:
 
 ```{r climate_variables}
 
@@ -355,7 +347,10 @@ vars_uncor <- filter_collinear(climate_present, cutoff = 0.7, method = "cor_care
 vars_uncor
 ```
 
-So, removing bio14 leaves us with a set of uncorrelated variables.
+So, removing bio14 leaves us with a set of uncorrelated variables. Note that
+`filter_collinear` has other methods based on variable inflation that would also
+be worth exploring. For this examle, we will remove bio14 and work with the remaining
+variables.
 
 ```{r}
 lacerta_thin <- lacerta_thin %>% select(all_of(c(vars_uncor, "class")))
