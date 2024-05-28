@@ -37,4 +37,3 @@ This function clamps the environmental variables in a \code{\link[terra:SpatRast
 or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} so that their minimum and maximum values
 do not exceed the range in the training dataset.
 }
-\keyword{export}

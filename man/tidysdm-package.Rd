@@ -26,6 +26,7 @@ Authors:
 \itemize{
   \item Michela Leonardi
   \item Margherita Colucci
+  \item Andrea Pozzi
 }
 
 }
