@@ -29,7 +29,11 @@ predict_raster.default <- function(object, raster, ...) {
   # and now fill in the values, adding a layer for each aggregating function we used
   pred_raster[raster_df$cell] <- pred_df %>% dplyr::pull(1)
   if (is.factor(pred_df %>% dplyr::pull(1))) {
-    levels(pred_raster) <- data.frame(id = 1:2, class = levels(pred_df %>% dplyr::pull(1)))
+    #levels(pred_raster) <- data.frame(id = 1:2, class = levels(pred_df %>% dplyr::pull(1)))
+    # make predict_raster work with multilevel predictions
+    # edit by @piabenaud
+    levels(pred_raster) <- data.frame(id = 1:length(dplyr::pull(unique(pred_df))),
+                                      class = levels(pred_df %>% dplyr::pull(1)))
   }
 
 
