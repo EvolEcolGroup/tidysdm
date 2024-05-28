@@ -350,7 +350,7 @@ vars_uncor
 
 So, removing bio14 leaves us with a set of uncorrelated variables. Note that
 `filter_collinear` has other methods based on variable inflation that would also
-be worth exploring. For this examle, we will remove bio14 and work with the remaining
+be worth exploring. For this example, we will remove bio14 and work with the remaining
 variables.
 
 ```{r}

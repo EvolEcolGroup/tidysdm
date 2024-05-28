@@ -34,3 +34,4 @@ test_ens <- calib_class_thresh(test_ens, class_thresh = "tss_max")
 test_ens <- calib_class_thresh(test_ens, class_thresh = "kap_max")
 test_ens <- calib_class_thresh(test_ens, class_thresh = c("sens", 0.9))
 }
+\keyword{predict}

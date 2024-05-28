@@ -2,7 +2,7 @@
 % Please edit documentation in R/niche_overlap.R
 \name{niche_overlap}
 \alias{niche_overlap}
-\title{Compute overlap metrics of the niche}
+\title{Compute overlap metrics of the two niches}
 \usage{
 niche_overlap(x, y, method = c("Schoener", "Hellinger"))
 }

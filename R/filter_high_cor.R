@@ -1,4 +1,4 @@
-#' Filter to retain only variables below a given correlation threshold
+#' Deprecated: Filter to retain only variables below a given correlation threshold
 #'
 #' THIS FUNCTION IS DEPRECATED. USE `filter_collinear` with `method=cor_caret` instead
 #'

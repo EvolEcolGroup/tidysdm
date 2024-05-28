@@ -24,6 +24,7 @@
 #' modelling range-shifting species. Methods in Ecology and Evolution
 #' 1:330-342.
 #' @export
+#' @keywords extrapolation
 
 # author: Jean-Pierre Rossi <jean-pierre.rossi@supagro.inra.fr>
 # modifications by Robert Hijmans and Paulo van Breugel

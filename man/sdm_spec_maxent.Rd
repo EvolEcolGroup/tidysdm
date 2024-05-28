@@ -33,3 +33,11 @@ test_maxent_spec
 # setting specific values
 sdm_spec_maxent(tune = "custom", feature_classes = "lq")
 }
+\seealso{
+Other "sdm model specifications": 
+\code{\link{sdm_spec_boost_tree}()},
+\code{\link{sdm_spec_gam}()},
+\code{\link{sdm_spec_glm}()},
+\code{\link{sdm_spec_rand_forest}()}
+}
+\concept{"sdm model specifications"}

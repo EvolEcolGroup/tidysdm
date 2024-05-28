@@ -19,6 +19,7 @@
 #' # setting specific values
 #' sdm_spec_maxent(tune = "custom", feature_classes = "lq")
 #' @export
+#' @family "sdm model specifications"
 
 sdm_spec_maxent <- function(..., tune = c("sdm", "all", "custom", "none")) {
   tune <- rlang::arg_match(tune)

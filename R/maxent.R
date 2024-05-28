@@ -1,8 +1,8 @@
-#' Maxent model
+#' MaxEnt model
 #'
 #' [maxent] defines the MaxEnt model as used in Species
 #' Distribution Models.
-#' A good guide to how options of a Maxent model work can be found in
+#' A good guide to how options of a MaxEnt model work can be found in
 #' https://onlinelibrary.wiley.com/doi/full/10.1111/j.1600-0587.2013.07872.x
 #'
 #' @param mode A single character string for the type of model. The only

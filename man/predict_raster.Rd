@@ -25,3 +25,4 @@ a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} with the predictions
 This function allows to use a raster as data to make predictions from a
 variety of \link{tidymodels} objects, such as \code{\link{simple_ensemble}} or \code{stacks::linear_stack}
 }
+\keyword{predict}

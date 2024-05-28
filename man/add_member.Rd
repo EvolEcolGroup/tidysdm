@@ -36,3 +36,4 @@ best member from each workflow provided. It is possible to pass individual
 \code{tune_results} objects from a tuned \code{workflow}, or a
 \code{\link[workflowsets:workflow_set]{workflowsets::workflow_set()}}.
 }
+\keyword{ensemble}

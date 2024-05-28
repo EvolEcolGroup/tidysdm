@@ -58,3 +58,4 @@ two_class_ens <- simple_ensemble() \%>\%
 autoplot(two_class_ens)
 }
 }
+\keyword{ensemble}

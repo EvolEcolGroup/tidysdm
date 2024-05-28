@@ -9,6 +9,7 @@
 #' for the appropriate object type (e.g. `metrich_thresh` or `class_thresh`).
 #' @returns a [`terra::SpatRaster`] with the predictions
 #' @export
+#' @keywords predict
 #'
 predict_raster <- function(object, raster, ...) {
   UseMethod("predict_raster", object)

@@ -6,7 +6,7 @@
 \alias{filter_high_cor.SpatRaster}
 \alias{filter_high_cor.data.frame}
 \alias{filter_high_cor.matrix}
-\title{Filter to retain only variables below a given correlation threshold}
+\title{Deprecated: Filter to retain only variables below a given correlation threshold}
 \usage{
 filter_high_cor(x, cutoff = 0.7, verbose = FALSE, names = TRUE, to_keep = NULL)
 

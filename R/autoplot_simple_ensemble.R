@@ -36,6 +36,8 @@
 #' autoplot(two_class_ens)
 #' }
 #' @export
+#' @keywords ensemble
+
 autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
                                      std_errs = stats::qnorm(0.95), ...) {
   # get metrics table

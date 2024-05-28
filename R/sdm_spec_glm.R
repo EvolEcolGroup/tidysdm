@@ -13,6 +13,7 @@
 #' @examples
 #' my_spec_glm <- sdm_spec_glm()
 #' @export
+#' @family "sdm model specifications"
 
 sdm_spec_glm <- function(..., tune = "none") {
   tune <- rlang::arg_match(tune)

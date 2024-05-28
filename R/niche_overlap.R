@@ -1,4 +1,4 @@
-#' Compute overlap metrics of the niche
+#' Compute overlap metrics of the two niches
 #'
 #' This function computes overlap metrics between two rasters. It currently
 #' implements Schoener's D and the inverse I of Hellinger's distance. 

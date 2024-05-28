@@ -57,3 +57,4 @@ modelling range-shifting species. Methods in Ecology and Evolution
 \author{
 Jean-Pierre Rossi, Robert Hijmans, Paulo van Breugel, Andrea Manica
 }
+\keyword{extrapolation}
