@@ -25,3 +25,11 @@ be used as a classifier of presences and absences in Species Distribution Model.
 \examples{
 my_spec_glm <- sdm_spec_glm()
 }
+\seealso{
+Other "sdm model specifications": 
+\code{\link{sdm_spec_boost_tree}()},
+\code{\link{sdm_spec_gam}()},
+\code{\link{sdm_spec_maxent}()},
+\code{\link{sdm_spec_rand_forest}()}
+}
+\concept{"sdm model specifications"}

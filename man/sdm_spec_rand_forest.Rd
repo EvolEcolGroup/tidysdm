@@ -41,3 +41,11 @@ test_rf_spec
 # combining tuning with specific values for other hyperparameters
 sdm_spec_rf(tune = "sdm", trees = 100)
 }
+\seealso{
+Other "sdm model specifications": 
+\code{\link{sdm_spec_boost_tree}()},
+\code{\link{sdm_spec_gam}()},
+\code{\link{sdm_spec_glm}()},
+\code{\link{sdm_spec_maxent}()}
+}
+\concept{"sdm model specifications"}

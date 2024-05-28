@@ -5,14 +5,11 @@
 #' @param object the [`tidymodels`] object of interest
 #' @param raster the [`terra::SpatRaster`] with the input data. It has to include
 #' levels with the same names as the variables used in `object`
-#' @param metric_thresh a vector of length 2 giving a metric and its threshold,
-#' which will be used to prune
-#' which models in the ensemble will be used for the prediction. The metric's threshold needs to match 
-#' the value used in [`calib_class_thresh`]. Examples are c("accuracy",0.8) or c("boyce_cont",0.7).
 #' @param ... parameters to be passed to the standard `predict()` function
-#' for the appropriate object type.
+#' for the appropriate object type (e.g. `metrich_thresh` or `class_thresh`).
 #' @returns a [`terra::SpatRaster`] with the predictions
 #' @export
+#' @keywords predict
 #'
 predict_raster <- function(object, raster, ...) {
   UseMethod("predict_raster", object)

@@ -2,18 +2,21 @@
 % Please edit documentation in R/extrapol_mess.R
 \name{extrapol_mess}
 \alias{extrapol_mess}
-\alias{extrapol_mess,SpatRaster-method}
-\alias{extrapol_mess,data.frame-method}
-\alias{extrapol_mess,SpatRasterDataset-method}
+\alias{extrapol_mess.default}
+\alias{extrapol_mess.SpatRaster}
+\alias{extrapol_mess.data.frame}
+\alias{extrapol_mess.SpatRasterDataset}
 \title{Multivariate environmental similarity surfaces (MESS)}
 \usage{
-extrapol_mess(x, training, ...)
+extrapol_mess(x, training, .col, ...)
 
-\S4method{extrapol_mess}{SpatRaster}(x, training, .col, filename = "", ...)
+\method{extrapol_mess}{default}(x, training, ...)
 
-\S4method{extrapol_mess}{data.frame}(x, training, .col)
+\method{extrapol_mess}{SpatRaster}(x, training, .col, filename = "", ...)
 
-\S4method{extrapol_mess}{SpatRasterDataset}(x, training, .col)
+\method{extrapol_mess}{data.frame}(x, training, .col, ...)
+
+\method{extrapol_mess}{SpatRasterDataset}(x, training, .col, ...)
 }
 \arguments{
 \item{x}{\code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} or \code{\link{data.frame}}}
@@ -22,10 +25,10 @@ extrapol_mess(x, training, ...)
 should correspond to one layer of the \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object, with the exception
 of the presences column defined in \code{.col} (optional).}
 
-\item{...}{additional arguments as for \code{\link[terra:writeRaster]{terra::writeRaster()}}}
-
 \item{.col}{the column containing the presences (optional). If specified,
 it is excluded when computing the MESS scores.}
+
+\item{...}{additional arguments as for \code{\link[terra:writeRaster]{terra::writeRaster()}}}
 
 \item{filename}{character. Output filename (optional)}
 }
@@ -49,9 +52,9 @@ to manually extract a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} fo
 \references{
 Elith J., M. Kearney M., and S. Phillips, 2010. The art of
 modelling range-shifting species. Methods in Ecology and Evolution
-1:330-342. c("\\Sexpr[results=rd]{tools:::Rd_expr_doi(\"#1\")}",
-"10.1111/j.2041-210X.2010.00036.x")\Sexpr{tools:::Rd_expr_doi("10.1111/j.2041-210X.2010.00036.x")}
+1:330-342.
 }
 \author{
 Jean-Pierre Rossi, Robert Hijmans, Paulo van Breugel, Andrea Manica
 }
+\keyword{extrapolation}

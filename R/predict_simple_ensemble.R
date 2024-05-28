@@ -27,6 +27,8 @@
 #' @returns a tibble of predictions
 #' @method predict simple_ensemble
 #' @export
+#' @keywords predict
+
 predict.simple_ensemble <-
   function(object,
            new_data,

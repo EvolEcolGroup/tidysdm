@@ -36,3 +36,11 @@ standard_bt_spec <- sdm_spec_boost_tree()
 full_bt_spec <- sdm_spec_boost_tree(tune = "all")
 custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune())
 }
+\seealso{
+Other "sdm model specifications": 
+\code{\link{sdm_spec_gam}()},
+\code{\link{sdm_spec_glm}()},
+\code{\link{sdm_spec_maxent}()},
+\code{\link{sdm_spec_rand_forest}()}
+}
+\concept{"sdm model specifications"}

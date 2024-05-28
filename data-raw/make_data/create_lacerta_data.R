@@ -18,6 +18,19 @@ distrib <- readr::read_delim(file.path(tempdir(), "0068808-230530130749713.csv")
 lacerta <- distrib[, c("gbifID", "decimalLatitude", "decimalLongitude")]
 names(lacerta) <- c("ID", "latitude", "longitude")
 
+# quality checks and filter and exclude outliers 
+# (it may take some time, depending on the size of the dataset):
+library(CoordinateCleaner)
+
+lacerta_df <- data.frame(lacerta)
+
+flags <- clean_coordinates(x = lacerta_df,
+                           lon = "longitude",
+                           lat = "latitude",
+                           species = "ID")
+
+lacerta <- lacerta_df[flags$.summary,]
+
 usethis::use_data(lacerta, overwrite = TRUE)
 # saveRDS(lacerta, file="./inst/extdata/lacerta_coords.RDS")
 
@@ -84,3 +97,14 @@ ncdf4::nc_close(nc_in)
 # lacerta_thin (present, absences plus all climatic variables)
 # lacerta ensemble
 usethis::use_data(lacerta_ens, overwrite=TRUE)
+
+################################
+occ_download_get(key = "0121761-240321170329656", path = tempdir())
+# read file
+library(readr)
+backg_distrib <- readr::read_delim(file.path(tempdir(), "0121761-240321170329656.zip"))
+
+# keep the necessary columns
+lacertidae_background <- backg_distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
+  rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
+usethis::use_data(lacertidae_background, overwrite=TRUE)

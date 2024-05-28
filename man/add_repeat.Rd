@@ -31,3 +31,4 @@ This function adds repeat(s) to a \code{\link{repeat_ensemble}} object, where ea
 repeat is a \code{\link{simple_ensemble}}. All repeats must contain the same members,
 selected using the same metric.
 }
+\keyword{ensemble}

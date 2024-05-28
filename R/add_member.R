@@ -12,6 +12,7 @@
 #' @param ... not used at the moment.
 #' @returns a [simple_ensemble] with additional member(s)
 #' @export
+#' @keywords ensemble
 
 # Note that `add_member` is tested in `test_simple_ensemble.R`
 

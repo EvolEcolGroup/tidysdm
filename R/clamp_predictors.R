@@ -14,8 +14,8 @@
 #' range.
 #' @returns a [`terra::SpatRaster`] or [`terra::SpatRasterDataset`] clamped to
 #' the ranges in `training`
-#' @keywords export
-
+#' @export
+#' @keywords extrapolation
 
 clamp_predictors <- function(x, training, .col, use_na) {
   UseMethod("clamp_predictors", object = x)

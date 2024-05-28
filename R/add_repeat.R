@@ -10,6 +10,7 @@
 #' @param ... not used at the moment.
 #' @returns a [repeat_ensemble] with additional repeat(s)
 #' @export
+#' @keywords ensemble
 
 # Note that `add_repeat` is tested in `test_repeat_ensemble.R`
 

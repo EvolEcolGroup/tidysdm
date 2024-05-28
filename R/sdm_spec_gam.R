@@ -12,6 +12,7 @@
 #' @returns a [parsnip::model_spec] of the model.
 #' @examples
 #' my_gam_spec <- sdm_spec_gam()
+#' @family "sdm model specifications"
 #' @export
 
 sdm_spec_gam <- function(..., tune = "none") {
