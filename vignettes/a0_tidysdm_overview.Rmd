@@ -622,7 +622,8 @@ in the calibration set:
 climate_future_clamped <- clamp_predictors(climate_future, 
                                            training = lacerta_thin,
                                            .col= class)
-prediction_future_clamped <- predict_raster(lacerta_ensemble, climate_future_clamped)
+prediction_future_clamped <- predict_raster(lacerta_ensemble, 
+                                            raster = climate_future_clamped)
 
 ggplot() +
   geom_spatraster(data = prediction_future_clamped, aes(fill = mean)) +
@@ -663,7 +664,8 @@ lacerta_mess_future_subset[lacerta_mess_future_subset < 0] <- 1
 lacerta_mess_future_subset <- as.polygons(lacerta_mess_future_subset)
 
 # plot as a mask 
-terra::plot(prediction_future, fun = function() polys(lacerta_mess_future_subset, col = "lightgray", alpha=0.5, lwd = 0.5))
+terra::plot(prediction_future, fun = function() 
+  polys(lacerta_mess_future_subset, col = "lightgray", alpha=0.5, lwd = 0.5))
 ```
 
 Note that clamping and MESS are not only useful when making predictions into the future, but also into the past and present (in the latter case, it allows us to make
