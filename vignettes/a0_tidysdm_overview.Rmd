@@ -615,53 +615,43 @@ which lie outside the range of conditions covered by the calibration dataset.
 This phenomenon can lead to misinterpretation of the SDM outcomes due to 
 spatial extrapolation.
 
-`tidysdm` offers a couple of approaches to deal with this problem. The simplest one is that we can clamp the environemntal variations to stay within the limits observed
+`tidysdm` offers a couple of approaches to deal with this problem. The simplest one is that we can clamp the environmental variables to stay within the limits observed
 in the calibration set:
 
 ```{r}
-#TODO
+climate_future_clamped <- clamp_predictors(climate_future, 
+                                           training = lacerta_thin,
+                                           .col= class)
+prediction_future_clamped <- predict_raster(lacerta_ensemble, climate_future_clamped)
 
+ggplot() +
+  geom_spatraster(data = prediction_future_clamped, aes(fill = mean)) +
+  scale_fill_terrain_c()
 ```
+
+The predictions seem to have changed very little.
 
 An alternative is to allow values to exceed the ranges of the calibration set,
 but compute the Multivariate environmental similarity surfaces (MESS) (Elith et al. 2010) to highlight areas where extrapolation occurs and thus visualise the prediction's uncertainty.
 
-Firstly, we can estimate MESS for present predictions
+We estimate the MESS for the same future time slice used above:
 
 ```{r}
-lacerta_mess_present <- extrapol_mess(x = climate_present, training = lacerta_thin, .col = "class")
+lacerta_mess_future <- extrapol_mess(x = climate_future, 
+                                      training = lacerta_thin, 
+                                      .col = "class")
 
-ggplot() + geom_spatraster(data = lacerta_mess_present) + scale_fill_viridis_b(na.value = "transparent")
+ggplot() + geom_spatraster(data = lacerta_mess_future) + 
+  scale_fill_viridis_b(na.value = "transparent")
 ```
 
-Extrapolation occurs in areas where MESS values are negative. 
+Extrapolation occurs in areas where MESS values are negative, with the magnitude
+of the negative values indicating how extreme is in the interpolation. From
+this plot, we can see that the area of extrapolation is where the model already
+predicted a suitability of zero. This explains why clamping did little to our
+predictions.
 
 We can now overlay MESS values with current prediction to visualize areas characterized by spatial extrapolation. 
-
-```{r}
-# subset mess 
-lacerta_mess_present_subset <- lacerta_mess_present
-lacerta_mess_present_subset[lacerta_mess_present_subset >= 0] <- NA
-lacerta_mess_present_subset[lacerta_mess_present_subset < 0] <- 1
-
-# convert into polygon
-lacerta_mess_present_subset <- as.polygons(lacerta_mess_present_subset)
-
-# plot as a mask 
-terra::plot(prediction_present, fun = function() polys(lacerta_mess_present_subset, col = "black", lwd = 0.5))
-```
-
-Estimating MESS it is also useful for assess for extrapolation among different time periods, where novel climatic conditions may arise. 
-
-We can compute MESS for future predictions in the same way we have done previously
-
-```{r}
-lacerta_mess_future <- extrapol_mess(x = climate_future, training = lacerta_thin, .col = "class")
-
-ggplot() + geom_spatraster(data = lacerta_mess_future) + scale_fill_viridis_b(na.value = "transparent")
-```
-
-We can now mask areas of future prediction characterised by negative MESS values 
 
 ```{r}
 # subset mess 
@@ -673,10 +663,12 @@ lacerta_mess_future_subset[lacerta_mess_future_subset < 0] <- 1
 lacerta_mess_future_subset <- as.polygons(lacerta_mess_future_subset)
 
 # plot as a mask 
-terra::plot(prediction_future, fun = function() polys(lacerta_mess_future_subset, col = "black", lwd = 0.5))
+terra::plot(prediction_future, fun = function() polys(lacerta_mess_future_subset, col = "lightgray", alpha=0.5, lwd = 0.5))
 ```
 
-It is is important to keep in mind that MESS provide a scale of values, which means that not all the areas characterised by negative MESS values have the same level of extrapolation. 
+Note that clamping and MESS are not only useful when making predictions into the future, but also into the past and present (in the latter case, it allows us to make
+sure that the background/pseudoabsences do cover the full range of predictor
+variables over the area of interest).
 
 The `tidymodels` universe also includes functions to estimate the area of 
 applicability in the package `waywiser`, which can be used with `tidysdm`.
