@@ -1,4 +1,4 @@
-library(blockCV)
+suppressPackageStartupMessages(library(blockCV))
 test_that("blockcv2rsample conversion", {
   
   # we use examples from the blockcv library for spatial blocks

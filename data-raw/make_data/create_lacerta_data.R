@@ -96,7 +96,7 @@ ncdf4::nc_close(nc_in)
 # from the vignette, we save
 # lacerta_thin (present, absences plus all climatic variables)
 # lacerta ensemble
-usethis::use_data(lacerta_ens, overwrite=TRUE)
+usethis::use_data(lacerta_ensemble, overwrite=TRUE)
 
 ################################
 occ_download_get(key = "0121761-240321170329656", path = tempdir())

@@ -41,9 +41,9 @@ test_that("clamping_predictor works on SpatRasters",{
 })
 
 test_that("clamping_predictor works on SpatRasterDatasets",{
-  library(pastclim)
+  suppressPackageStartupMessages(library(pastclim))
   set_data_path(on_CRAN = TRUE)
-  library(sf)
+  suppressPackageStartupMessages(library(sf))
   climate_vars <- c("bio01", "bio10", "bio12")
   climate_full <- pastclim::region_series(
     bio_variables = climate_vars,
