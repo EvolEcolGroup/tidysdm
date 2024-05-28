@@ -12,7 +12,7 @@ by Elith et al., 2010."><meta property="og:image" content="https://evolecolgroup
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.4.9004</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.4.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,16 +63,19 @@ by Elith et al., 2010.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">extrapol_mess</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">extrapol_mess</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for SpatRaster</span></span>
+<span><span class="co"># S3 method for default</span></span>
+<span><span class="fu">extrapol_mess</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for SpatRaster</span></span>
 <span><span class="fu">extrapol_mess</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span>, filename <span class="op">=</span> <span class="st">""</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for data.frame</span></span>
-<span><span class="fu">extrapol_mess</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span><span class="op">)</span></span>
+<span><span class="co"># S3 method for data.frame</span></span>
+<span><span class="fu">extrapol_mess</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S4 method for SpatRasterDataset</span></span>
-<span><span class="fu">extrapol_mess</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># S3 method for SpatRasterDataset</span></span>
+<span><span class="fu">extrapol_mess</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -87,13 +90,13 @@ should correspond to one layer of the <code><a href="https://rspatial.github.io/
 of the presences column defined in <code>.col</code> (optional).</p></dd>
 
 
-<dt>...</dt>
-<dd><p>additional arguments as for <code><a href="https://rspatial.github.io/terra/reference/writeRaster.html" class="external-link">terra::writeRaster()</a></code></p></dd>
-
-
 <dt>.col</dt>
 <dd><p>the column containing the presences (optional). If specified,
 it is excluded when computing the MESS scores.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>additional arguments as for <code><a href="https://rspatial.github.io/terra/reference/writeRaster.html" class="external-link">terra::writeRaster()</a></code></p></dd>
 
 
 <dt>filename</dt>
@@ -121,8 +124,7 @@ to manually extract a <code><a href="https://rspatial.github.io/terra/reference/
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Elith J., M. Kearney M., and S. Phillips, 2010. The art of
 modelling range-shifting species. Methods in Ecology and Evolution
-1:330-342. c("\Sexpr[results=rd]tools:::Rd_expr_doi(\"#1\")",
-"10.1111/j.2041-210X.2010.00036.x")<a href="https://doi.org/10.1111/j.2041-210X.2010.00036.x" class="external-link">doi:10.1111/j.2041-210X.2010.00036.x</a></p>
+1:330-342.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

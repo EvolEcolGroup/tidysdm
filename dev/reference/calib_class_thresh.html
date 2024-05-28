@@ -12,7 +12,7 @@ models are combined according to fun"><meta property="og:image" content="https:/
     
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.4.9004</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.4.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,8 +83,8 @@ along as a second element of a vector, e.g. c("sensitivity",0.8).</p></dd>
 <dd><p>a vector of length 2 giving a metric and its threshold,
 which will be used to prune
 which models in the ensemble will be used for the prediction. The 'metrics'
-need to have been computed when the workflow was tuned. Examples are
-c("accuracy",0.8) or c("boyce_cont",0.7)</p></dd>
+need to have been computed when the workflow was tuned. The metric's threshold needs to match the value
+used during prediction. Examples are c("accuracy",0.8) or c("boyce_cont",0.7).</p></dd>
 
 </dl></div>
     <div class="section level2">
