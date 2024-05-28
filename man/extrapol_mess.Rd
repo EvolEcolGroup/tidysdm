@@ -14,9 +14,9 @@ extrapol_mess(x, training, .col, ...)
 
 \method{extrapol_mess}{SpatRaster}(x, training, .col, filename = "", ...)
 
-\method{extrapol_mess}{data.frame}(x, training, .col)
+\method{extrapol_mess}{data.frame}(x, training, .col, ...)
 
-\method{extrapol_mess}{SpatRasterDataset}(x, training, .col)
+\method{extrapol_mess}{SpatRasterDataset}(x, training, .col, ...)
 }
 \arguments{
 \item{x}{\code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} or \code{\link{data.frame}}}
@@ -52,8 +52,7 @@ to manually extract a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} fo
 \references{
 Elith J., M. Kearney M., and S. Phillips, 2010. The art of
 modelling range-shifting species. Methods in Ecology and Evolution
-1:330-342. c("\\Sexpr[results=rd]{tools:::Rd_expr_doi(\"#1\")}",
-"10.1111/j.2041-210X.2010.00036.x")\Sexpr{tools:::Rd_expr_doi("10.1111/j.2041-210X.2010.00036.x")}
+1:330-342.
 }
 \author{
 Jean-Pierre Rossi, Robert Hijmans, Paulo van Breugel, Andrea Manica

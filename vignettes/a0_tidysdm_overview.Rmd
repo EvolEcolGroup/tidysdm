@@ -734,9 +734,14 @@ ggplot() +
 
 # Multivariate environmental similarity surfaces (MESS)
 
-The total area of projection of the model may include environmental condition which lye outside the range of conditions covered by the calibration dataset. This phenomenon can lead to misinterpretation of the SDM outcomes due to spatial extrapolation. 
+The total area of projection of the model may include environmental conditions 
+which lie outside the range of conditions covered by the calibration dataset. 
+This phenomenon can lead to misinterpretation of the SDM outcomes due to 
+spatial extrapolation. 
 
-Multivariate environmental similarity surfaces (MESS) (Elith et al. 2010) can be used to highlight areas where extrapolation occurs and thus provide details regarding the prediction's uncertainty.
+Multivariate environmental similarity surfaces (MESS) (Elith et al. 2010) can be
+used to highlight areas where extrapolation occurs and thus provide details 
+regarding the prediction's uncertainty.
 
 Firstly, we can estimate MESS for present predictions
 

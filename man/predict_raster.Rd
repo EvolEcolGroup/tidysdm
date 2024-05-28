@@ -16,12 +16,7 @@ predict_raster(object, raster, ...)
 levels with the same names as the variables used in \code{object}}
 
 \item{...}{parameters to be passed to the standard \code{predict()} function
-for the appropriate object type.}
-
-\item{metric_thresh}{a vector of length 2 giving a metric and its threshold,
-which will be used to prune
-which models in the ensemble will be used for the prediction. The metric's threshold needs to match
-the value used in \code{\link{calib_class_thresh}}. Examples are c("accuracy",0.8) or c("boyce_cont",0.7).}
+for the appropriate object type (e.g. \code{metrich_thresh} or \code{class_thresh}).}
 }
 \value{
 a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} with the predictions

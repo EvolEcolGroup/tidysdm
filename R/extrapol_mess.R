@@ -22,9 +22,8 @@
 #' @author Jean-Pierre Rossi, Robert Hijmans, Paulo van Breugel, Andrea Manica
 #' @references Elith J., M. Kearney M., and S. Phillips, 2010. The art of
 #' modelling range-shifting species. Methods in Ecology and Evolution
-#' 1:330-342. c("\\Sexpr[results=rd]{tools:::Rd_expr_doi(\"#1\")}",
-#' "10.1111/j.2041-210X.2010.00036.x")\Sexpr{tools:::Rd_expr_doi("10.1111/j.2041-210X.2010.00036.x")}
- 
+#' 1:330-342.
+#' @export
 
 # author: Jean-Pierre Rossi <jean-pierre.rossi@supagro.inra.fr>
 # modifications by Robert Hijmans and Paulo van Breugel
@@ -101,7 +100,8 @@ extrapol_mess.SpatRaster <- function(x, training, .col, filename="", ...) {
 #' @param .col the column containing the presences (optional). If specified,
 #' it is excluded when computing the MESS scores.
 #' @export
-extrapol_mess.data.frame <- function(x, training, .col) {
+extrapol_mess.data.frame <- function(x, training, .col, ...) {
+  rlang::check_dots_empty()
 	  # remove the class column if it is present
 	  .col <- rlang::enquo(.col) %>%
 	    rlang::quo_get_expr() %>%
@@ -136,7 +136,8 @@ extrapol_mess.data.frame <- function(x, training, .col) {
 #' @param .col the column containing the presences (optional). If specified,
 #' it is excluded when computing the MESS scores.
 #' @export
-extrapol_mess.SpatRasterDataset <- function(x, training, .col) {
+extrapol_mess.SpatRasterDataset <- function(x, training, .col, ...) {
+  rlang::check_dots_empty()
 	  # remove the class column if it is present
 	  .col <- rlang::enquo(.col) %>%
 	    rlang::quo_get_expr() %>%
