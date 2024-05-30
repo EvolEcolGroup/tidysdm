@@ -664,8 +664,9 @@ lacerta_mess_future_subset[lacerta_mess_future_subset < 0] <- 1
 lacerta_mess_future_subset <- as.polygons(lacerta_mess_future_subset)
 
 # plot as a mask 
-terra::plot(prediction_future, fun = function() 
-  polys(lacerta_mess_future_subset, col = "lightgray", alpha=0.5, lwd = 0.5))
+ggplot() + geom_spatraster(data = prediction_future) + 
+  scale_fill_viridis_b(na.value = "transparent") + geom_sf(data = lacerta_mess_future_subset, fill= "lightgray", alpha = 0.5, linewidth = 0.5)
+
 ```
 
 Note that clamping and MESS are not only useful when making predictions into the future, but also into the past and present (in the latter case, it allows us to make
