@@ -18,10 +18,6 @@
 
 
 spatial_initial_split <- function(data, prop, strategy, ...) {
-  # load spatialsample if we need it
-  if (!isNamespaceLoaded("spatialsample")) {
-    attachNamespace("spatialsample")
-  }
 
   # check that strategy is a spatialsample function
   if (!exists(deparse(substitute(strategy)),
@@ -32,7 +28,7 @@ spatial_initial_split <- function(data, prop, strategy, ...) {
   }
 
   if (!is.numeric(prop) || prop >= 1 || prop <= 0) {
-    rlang::abort("`prop` must be a number on (0, 1).")
+    rlang::abort("`prop` must be a number between 0 and 1")
   } else {
     v <- round(1 / prop, digits = 0)
   }

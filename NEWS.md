@@ -1,3 +1,9 @@
+# `tidysdm` 0.9.5
+
+* implement clamping and MESS to manage extrapolation
+* clearly separate sampling of background vs pseudo-absences
+* update vignettes
+
 # `tidysdm` 0.9.4
 
 * fix a but in the 'predict*' functions that prevented a fixed threshold to be used

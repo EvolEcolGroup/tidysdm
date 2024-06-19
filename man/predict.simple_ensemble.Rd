@@ -51,5 +51,6 @@ a tibble of predictions
 }
 \description{
 Predict for a new dataset by using a simple ensemble. Predictions from individual
-models are combined according to \code{fun}
+models (i.e. workflows) are combined according to \code{fun}
 }
+\keyword{predict}

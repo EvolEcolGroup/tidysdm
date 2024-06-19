@@ -31,10 +31,19 @@
 #' autoplot(sb1_rsample)
 #' }
 blockcv2rsample <- function(x, data) {
+  if (!requireNamespace("blockCV", quietly = TRUE)) {
+    stop(
+      "to use this function, first install package 'blockCV' with\n",
+      "install.packages('blockCV')")   
+  }
   if(!(any(inherits(x,"cv_spatial"),
            inherits(x,"cv_cluster")))){
-    stop("this function does support this object type\n",
+    stop("this function does not support this object type\n",
          "only objects of class cv_spatial or cv_cluster are supported.")
+  }
+  if (inherits(data,"SpatialPointsDataFrame")){
+    stop("data is a `SpatialPointsDataFrame`; this object type is deprecated\n",
+         "convert your data to `sf` and rebuild your `blockCV` object with it")
   }
   splits <- lapply(
     x$folds_list,

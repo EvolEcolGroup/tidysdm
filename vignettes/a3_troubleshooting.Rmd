@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 options(cores=2)
 options(mc.cores=2)
 # xgboost uses data.table
-data.table::setDTthreads(1)
+data.table::setDTthreads(2)
 ```
 
 In this vignette, we illustrate how to troubleshoot tuning errors. This is not a 
@@ -213,7 +213,7 @@ lacerta_models <-
 
 Note that the step of defining a formula is incompatible with using `step_cor`
 in a recipe. `step_cor` removes correlated variables in recipes, using a similar
-algorithm to `filter_high_cor`. However, the algorithm is fitted to each data
+algorithm to `filter_collinear` using method `cor_caret`. However, the algorithm is fitted to each data
 split when cross-validating. This means that different variables will eventually
 be presented to the model when it is fitted for each split, leading to an error
 as there will be a mismatch between the formula and the available variables. This

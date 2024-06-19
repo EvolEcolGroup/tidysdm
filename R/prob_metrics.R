@@ -1,10 +1,17 @@
 #' Probability metrics for `sf` objects
 #'
-#' `tidysdm` provides methods to handle [sf::sf] objects for the following
-#' [yardstick] metrics:
+#' `tidysdm` provides specialised metrics for SDMs, which have their own
+#' help pages([boyce_cont()], [kap_max()], and [tss_max()]). Additionally, it also 
+#' provides methods to handle [sf::sf] objects for the following
+#' standard [yardstick] metrics:
+#' 
+#' Note that `roc_aunp` and `roc_aunu` are multiclass metrics, and as such are
+#' are not relevant for SDMs (which work on a binary response). They are included
+#' for completeness, so that all class probability metrics from `yardstick` have
+#' an `sf` method, for applications other than SDMs.
 #' @param data an [sf::sf] object
 #' @param ... any other parameters to pass to the `data.frame` version of
-#' the metric.
+#' the metric. See the specific man page for the metric of interest.
 #' @returns A tibble with columns `.metric`, `.estimator`, and `.estimate`
 #'  and 1 row of values.
 #' @import yardstick

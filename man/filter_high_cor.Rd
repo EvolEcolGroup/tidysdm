@@ -6,8 +6,7 @@
 \alias{filter_high_cor.SpatRaster}
 \alias{filter_high_cor.data.frame}
 \alias{filter_high_cor.matrix}
-\alias{filter_high_cor_algorithm}
-\title{Filter to retain only variables below a given correlation threshold}
+\title{Deprecated: Filter to retain only variables below a given correlation threshold}
 \usage{
 filter_high_cor(x, cutoff = 0.7, verbose = FALSE, names = TRUE, to_keep = NULL)
 
@@ -18,8 +17,6 @@ filter_high_cor(x, cutoff = 0.7, verbose = FALSE, names = TRUE, to_keep = NULL)
 \method{filter_high_cor}{data.frame}(x, cutoff = 0.7, verbose = FALSE, names = TRUE, to_keep = NULL)
 
 \method{filter_high_cor}{matrix}(x, cutoff = 0.7, verbose = FALSE, names = TRUE, to_keep = NULL)
-
-filter_high_cor_algorithm(x, cutoff = 0.7, verbose = FALSE)
 }
 \arguments{
 \item{x}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object, a data.frame (with only numeric
@@ -43,6 +40,9 @@ are only for numeric variables (i.e. if factors are present, the indices do
 not take them into account).
 }
 \description{
+THIS FUNCTION IS DEPRECATED. USE \code{filter_collinear} with \code{method=cor_caret} instead
+}
+\details{
 This method finds a subset of variable such that all have a correlation
 below a certain cutoff. There are methods for \code{\link[terra:SpatRaster-class]{terra::SpatRaster}},
 \code{\link{data.frame}}, and to work directly on a correlation matrix that was
@@ -53,8 +53,7 @@ The absolute values of pair-wise correlations are considered. If two
 variables have a high correlation, the function looks at the mean absolute
 correlation of each variable and removes the variable with the largest mean
 absolute correlation.
-}
-\details{
+
 There are several function in the package \code{subselect}
 that can also be used to accomplish
 the same goal but tend to retain more predictors.

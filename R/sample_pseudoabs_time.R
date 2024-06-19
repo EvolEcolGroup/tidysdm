@@ -1,19 +1,19 @@
-#' Sample pseudo-absence (or background) points for SDM analysis for points with a time point.
+#' Sample pseudo-absence points for SDM analysis for points with a time point.
 #'
-#' This function samples pseudo-absence (or background, the naming is a matter
-#' of semantics) points from a raster given a set of presences.
+#' This function samples pseudo-absence points from a raster given a set of presences.
 #' The locations returned as the center points of the sampled cells, which can
-#' not overlap with the presences. The following methods are implemented:
-#' * 'random': pseudo-absences/background randomly sampled from the region covered by the
+#' not overlap with the presences (in contrast to background points, see 
+#' [sample_background_time]). The following methods are implemented:
+#' * 'random': pseudo-absences randomly sampled from the region covered by the
 #' raster (i.e. not NAs).
-#' * 'dist_min': pseudo-absences/background randomly sampled from the region excluding a buffer
+#' * 'dist_min': pseudo-absences randomly sampled from the region excluding a buffer
 #' of 'dist_min' from presences (distances in 'm' for lonlat rasters, and in map
 #' units for projected rasters).
-#' * 'dist_max': pseudo-absences/background randomly sampled from the unioned buffers
+#' * 'dist_max': pseudo-absences randomly sampled from the unioned buffers
 #' of 'dist_max' from presences (distances in 'm' for lonlat rasters, and in map
 #' units for projected rasters). Using the union of buffers means that areas that
 #' are in multiple buffers are not oversampled. This is also referred to as "thickening".
-#' * 'dist_disc': pseudo-absences/background randomly sampled from the unioned discs around presences
+#' * 'dist_disc': pseudo-absences randomly sampled from the unioned discs around presences
 #' with the two values of 'dist_disc' defining the minimum and maximum distance from
 #' presences.
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
@@ -22,7 +22,7 @@
 #' @param raster the [terra::SpatRaster] or [terra::SpatRasterDataset] from which cells will be sampled.
 #' If a [terra::SpatRasterDataset], the first dataset will be used to define which cells are valid,
 #' and which are NAs.
-#' @param n_per_presence number of pseudoabsence/background points to sample for
+#' @param n_per_presence number of pseudoabsence points to sample for
 #' each presence
 #' @param coords a vector of length two giving the names of the "x" and "y"
 #' coordinates, as found in `data`. If left to NULL, the function will
@@ -34,7 +34,7 @@
 #' @param method sampling method. One of 'random', 'dist_min', 'dist_max', or
 #' 'dist_disc'.
 #' @param class_label the label given to the sampled points. Defaults to `pseudoabs`
-#' @param return_pres return presences together with pseudoabsences/background
+#' @param return_pres return presences together with pseudoabsences
 #'  in a single tibble
 #' @param time_buffer the buffer on the time axis around presences that defines their effect when
 #'  sampling pseudoabsences. If set to zero, presences have an effect only on the time step to which
@@ -64,14 +64,13 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
   time_lub_min <- time_lub-lubridate::days(time_buffer)
   time_lub_max <- time_lub+lubridate::days(time_buffer)
 
-  ## TODO it would be easier to just get the first dataset from raster and rename it raster!
+  # if it is a SpatRasterDataset, use the first dataset
+  if (inherits(raster, "SpatRasterDataset")) {
+    raster <- raster[[1]]
+  } 
   
   # get the time steps
-  if (inherits(raster, "SpatRasterDataset")) {
-    time_steps <- terra::time(raster)[[1]]
-  } else {
-    time_steps <- terra::time(raster)
-  }
+  time_steps <- terra::time(raster)
   if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)
   }
@@ -102,11 +101,8 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
       i_index >= time_indices_min & i_index <=time_indices_max)
 
     # slice the region series based on the index;
-    if (inherits(raster, "SpatRasterDataset")) {
-      raster_sub <- pastclim::slice_region_series(raster, time_bp = pastclim::time_bp(raster[[1]])[i_index])
-    } else {
-      raster_sub <- terra::subset(raster, i_index)
-    }
+    raster_sub <- terra::subset(raster, i_index)
+
     data_sub <- sample_pseudoabs(
       data = data_sub,
       raster = raster_sub,

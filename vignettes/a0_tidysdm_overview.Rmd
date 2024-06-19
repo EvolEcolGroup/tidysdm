@@ -4,8 +4,11 @@ output: rmarkdown::html_vignette
 #output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{tidysdm overview}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r, include = FALSE}
@@ -17,45 +20,72 @@ knitr::opts_chunk$set(
 options(cores=2)
 options(mc.cores=2)
 # xgboost uses data.table
-data.table::setDTthreads(1)
+data.table::setDTthreads(2)
 ```
+
 # SDMs with `tidymodels`
 
-Species Distribution Modelling relies on several algorithms, many of which
-have a number of hyperparameters that require turning. The `tidymodels` universe
-includes a number of packages specifically design to fit, tune and validate
-models. The advantage of `tidymodels` is that the models syntax and the results
-returned to the users are standardised, thus providing a coherent interface to
-modelling. Given the variety of models required for SDM, `tidymodels` is an
-ideal framework. `tidysdm` provides a number of wrappers and specialised
+Species Distribution Modelling relies on several algorithms, many of
+which have a number of hyperparameters that require turning. The
+`tidymodels` universe includes a number of packages specifically design
+to fit, tune and validate models. The advantage of `tidymodels` is that
+the models syntax and the results returned to the users are
+standardised, thus providing a coherent interface to modelling. Given
+the variety of models required for SDM, `tidymodels` is an ideal
+framework. `tidysdm` provides a number of wrappers and specialised
 functions to facilitate the fitting of SDM with `tidymodels`.
 
-This article provides an overview of the how `tidysdm` facilitates fitting
-SDMs. Further articles, detailing how to use the package for palaeodata, 
-fitting more complex models and how to troubleshoot models can be found
-on the [`tidisdm` website](https://evolecolgroup.github.io/tidysdm/). 
-As `tidysdm` relies on `tidymodels`, users are advised to familiarise 
-themselves with the introductory
-tutorials on the [`tidymodels` website](https://www.tidymodels.org/start/).
+This article provides an overview of the how `tidysdm` facilitates
+fitting SDMs. Further articles, detailing how to use the package for
+palaeodata, fitting more complex models and how to troubleshoot models
+can be found on the [`tidisdm`
+website](https://evolecolgroup.github.io/tidysdm/). As `tidysdm` relies
+on `tidymodels`, users are advised to familiarise themselves with the
+introductory tutorials on the [`tidymodels`
+website](https://www.tidymodels.org/start/).
 
-When we load `tidysdm`, it automatically loads `tidymodels` and all associated
-packages necessary to fit models:
+When we load `tidysdm`, it automatically loads `tidymodels` and all
+associated packages necessary to fit models:
+
 ```{r libraries}
 library(tidysdm)
 ```
 
-# Preparing your data
+### Accessing the data for this vignette: how to use `rgbif`
 
-We start by reading in a set of presences for a species of lizard that inhabits
-the Iberian peninsula, *Lacerta schreiberi*.
+We start by reading in a set of presences for a species of lizard that
+inhabits the Iberian peninsula, *Lacerta schreiberi*. This data is taken
+from GBIF Occurrence Download (6 July 2023)
+<https://doi.org/10.15468/dl.srq3b3>. The dataset is already included in
+the `tidysdm` package:
+
 ```{r load_presences}
-data(lacerta)
-lacerta
+ data(lacerta)
+ lacerta
 ```
 
-First, let us visualise our presences by plotting on a map. `tidysdm` works
-with `sf` objects to represent locations, so we will cast our coordinates
-into an `sf` object, and set its projections to standard lonlat (crs = 4326).
+Alternatively, we can easily access and manipulate this dataset using
+`rbgif`:
+
+```{r download_presences, eval = FALSE}
+# download presences
+library(rgbif)
+occ_download_get(key = "0068808-230530130749713", path = tempdir())
+# read file
+library(readr)
+distrib <- read_delim(file.path(tempdir(), "0068808-230530130749713.zip"))
+# keep the necessary columns and rename them
+lacerta <- distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
+  rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
+```
+
+
+# Preparing your data
+
+First, let us visualise our presences by plotting on a map. `tidysdm`
+works with `sf` objects to represent locations, so we will cast our
+coordinates into an `sf` object, and set its projections to standard
+'lonlat' (`crs` = 4326).
 
 ```{r cast_to_sf}
 library(sf)
@@ -63,18 +93,19 @@ lacerta <- st_as_sf(lacerta, coords = c("longitude", "latitude"))
 st_crs(lacerta) <- 4326
 ```
 
-It is usually
-advisable to plot the locations directly on the raster that will be used to
-extract climatic variables, to see how the locations fall within the discrete
-space of the raster. For this vignette, we will use WorldClim as our source of
-climatic information. We will access the WorldClim data via the library `pastclim`;
-even though this library, as the name suggests, is mostly designed to handle palaeoclimatic
-reconstructions, it also provides convenient functions to access present day
-reconstructions and future projections. `pastclim` has a handy function to get
-the land mask for the available datasets, which we can use as background for our
-locations. We will cut the raster to the Iberian peninsula, where 
-our lizard lives. For this simply illustration, we will not bother to
-project the raster, but an equal area projection would be desirable...
+It is usually advisable to plot the locations directly on the raster
+that will be used to extract climatic variables, to see how the
+locations fall within the discrete space of the raster. For this
+vignette, we will use WorldClim as our source of climatic information.
+We will access the WorldClim data via the library `pastclim`; even
+though this library, as the name suggests, is mostly designed to handle
+palaeoclimatic reconstructions, it also provides convenient functions to
+access present day reconstructions and future projections. `pastclim`
+has a handy function to get the land mask for the available datasets,
+which we can use as background for our locations. We will cut the raster
+to the Iberian peninsula, where our lizard lives. For this simply
+illustration, we will not bother to project the raster, but an equal
+area projection would be desirable...
 
 ```{r land_mask, eval=FALSE}
 library(pastclim)
@@ -111,22 +142,24 @@ land_mask <- rast(system.file("extdata/lacerta_land_mask.nc",
 ))
 ```
 
-For
-plotting, we will take advantage of `tidyterra`, which makes handling of `terra`
-rasters with `ggplot` a breeze. 
+For plotting, we will take advantage of `tidyterra`, which makes
+handling of `terra` rasters with `ggplot` a breeze.
 
 ```{r, fig.width=6, fig.height=4}
 library(tidyterra)
 library(ggplot2)
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta)
+  geom_sf(data = lacerta) + scale_fill_gradient(na.value = "transparent")
+
 ```
+
 
 # Thinning step
 
-Now, we thin the observations to have one per cell in the raster (it would be better
-if we had an equal area projection...):
+Now, we thin the observations to have one per cell in the raster (it
+would be better if we had an equal area projection...):
+
 ```{r thin_by_cell}
 set.seed(1234567)
 lacerta <- thin_by_cell(lacerta, raster = land_mask)
@@ -136,12 +169,14 @@ nrow(lacerta)
 ```{r plot_thin_by_cell, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta)
+  geom_sf(data = lacerta) + scale_fill_gradient(na.value = "transparent")
 ```
 
-Now, we thin further to remove points that are closer than 20km. However, note that
-the standard map units for a 'lonlat' projection are meters. `tidysdm` provides
-a convening conversion function, `km2m()`, to avoid having to write lots of zeroes):
+Now, we thin further to remove points that are closer than 20km.
+However, note that the standard map units for a 'lonlat' projection are
+meters. `tidysdm` provides a convening conversion function, `km2m()`, to
+avoid having to write lots of zeroes):
+
 ```{r thin_by_dist}
 set.seed(1234567)
 lacerta_thin <- thin_by_dist(lacerta, dist_min = km2m(20))
@@ -149,32 +184,88 @@ nrow(lacerta_thin)
 ```
 
 Let's see what we have left of our points:
+
 ```{r plot_thin_by_dist, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta_thin)
+  geom_sf(data = lacerta_thin) + scale_fill_gradient(na.value = "transparent")
 ```
 
-Now we sample pseudo-absences (we will constrain them to be at least 50km away
-from any presences), selecting as 3 times as many points as presences:
-```{r sample_pseudoabs}
+We now need to select points that represent the potential available area
+for the species. There are two approaches, we can either sample the
+background with `sample_background()`, or we can generate
+pseudo-absences with `sample_pseudoabs()`. In this example, we will
+sample the background; more specifically, we will attempt to account for
+potential sampling biases by using a target group approach, where
+presences from other species within the same taxonomic group are used to
+condition the sampling of the background, providing information on
+differential sampling of different areas within the region of interest.
+
+We will start by downloading records from 8 genera of *Lacertidae*,
+covering the same geographic region of the Iberian peninsula from GBIF
+<https://doi.org/10.15468/dl.53js5z>:
+
+```{r download_background, eval=FALSE}
+# download presences
+library(rgbif)
+# download file
+occ_download_get(key = "0121761-240321170329656", path = tempdir())
+# read file
+library(readr)
+backg_distrib <- readr::read_delim(file.path(tempdir(), "0121761-240321170329656.zip"))
+
+# keep the necessary columns
+lacertidae_background <- backg_distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
+  rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
+
+lacertidae_background <- st_as_sf(lacertidae_background, coords = c("longitude", "latitude"))
+st_crs(lacertidae_background) <- 4326
+```
+
+
+```{r echo=FALSE}
+data("lacertidae_background")
+lacertidae_background <- st_as_sf(lacertidae_background, coords = c("longitude", "latitude"))
+st_crs(lacertidae_background) <- 4326
+```
+
+We need to convert these observations into a raster whose values are the
+number of records (which will be later used to determine how likely each
+cell is to be used as a background point):
+
+```{r background_to_raster}
+lacertidae_background_raster <- rasterize(lacertidae_background, land_mask, fun = "count")
+
+plot(lacertidae_background_raster)
+
+```
+
+We can see that the sampling is far from random, with certain locations
+having very large number of records. We can now sample the background,
+using the 'bias' method to represent this heterogeneity in sampling
+effort:
+
+```{r sample_background}
 set.seed(1234567)
-lacerta_thin <- sample_pseudoabs(lacerta_thin,
-  n = 3 * nrow(lacerta_thin),
-  raster = land_mask,
-  method = c("dist_min", km2m(50))
-)
+lacerta_thin <- sample_background(data = lacerta_thin, raster = lacertidae_background_raster,
+                  n = 3 * nrow(lacerta_thin),
+                  method = "bias",
+                  class_label = "background",
+                  return_pres = TRUE)
+
 ```
 
-Let's see our presences and absences:
+Let's see our presences and background:
+
 ```{r plot_sample_pseudoabs, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta_thin, aes(col = class))
+  geom_sf(data = lacerta_thin, aes(col = class)) + scale_fill_gradient(na.value = "transparent")
 ```
 
-Generally, we can use `pastclim` to check what variables are 
-available for the WorldClim dataset:
+Generally, we can use `pastclim` to check what variables are available
+for the WorldClim dataset:
+
 ```{r load_climate, eval=FALSE}
 climate_vars <- get_vars_for_dataset("WorldClim_2.1_10m")
 ```
@@ -187,15 +278,17 @@ climate_present <- rast(system.file("extdata/lacerta_climate_present_10m.nc",
 climate_vars <- names(climate_present)
 ```
 
+We first download the dataset at the right resolution (here 10
+arc-minutes):
 
-We first download the dataset at the right resolution (here 10 arc-minutes):
 ```{r eval=FALSE}
 download_dataset("WorldClim_2.1_10m")
 ```
 
-And then create a `terra` SpatRaster object. The dataset covers the period 1970-2000,
-so `pastclim` dates it as 1985 (the midpoint). 
-We can directly crop to the Iberian peninsula:
+And then create a `terra` `SpatRaster` object. The dataset covers the
+period 1970-2000, so `pastclim` dates it as 1985 (the midpoint). We can
+directly crop to the Iberian peninsula:
+
 ```{r climate_worldclim, eval=FALSE}
 climate_present <- pastclim::region_slice(
   time_ce = 1985,
@@ -205,95 +298,99 @@ climate_present <- pastclim::region_slice(
 )
 ```
 
-We start by selecting variables for which presences are markedly different from
-the underlying background. First, let's extract climate for all presences and
-pseudo-absences:
+Next, we extract climate for all presences and background points:
+
 ```{r}
 lacerta_thin <- lacerta_thin %>%
   bind_cols(terra::extract(climate_present, lacerta_thin, ID = FALSE))
 ```
 
-We can use violin plots to compare the distribution of the climatic variables for presences and pseudo-absences:
+Based on this paper (<https://doi.org/10.1007/s10531-010-9865-2>), we
+are interested in these variables: "bio06", "bio05", "bio13", "bio14", "bio15".
+We can visualise the differences between presences and the background using violin plots:
 
 ```{r fig.height=11, fig.width=7}
 lacerta_thin %>% plot_pres_vs_bg(class)
 ```
-We want to choose variables for which presences use values different from the background (pseudo-absences).
-We can qualitatively look at the plots, or use a quantitative approach that ranks them based on the
-overlap of the respective density plots:
+We can see that all the variables of interest do seem to have a different distribution
+between presences and the background. We can formally quantify the mismatch between the two 
+by computing the overlap:
+
 ```{r}
 lacerta_thin %>% dist_pres_vs_bg(class)
 ```
 
-As a first step, we can focus on variables that have at least 30% of non-overlapping distribution
-between presences and pseudo-absences:
-
-```{r}
-vars_to_keep <- lacerta_thin %>% dist_pres_vs_bg(class)
-vars_to_keep <- names(vars_to_keep[vars_to_keep > 0.30])
-lacerta_thin <- lacerta_thin %>% select(all_of(c(vars_to_keep, "class")))
-vars_to_keep
-```
-
-These are still a lot of variables. Among them, there are several that have been argued in the past
-to be important for the distribution of the species of interest. Based on
-this paper (https://doi.org/10.1007/s10531-010-9865-2), we are interested in:
+Again, we can see that the variables of interest seem good candidates with a clear
+signal. Let us then focus on those variables:
 
 ```{r climate_variables}
-suggested_vars <- c("bio05", "bio06", "bio13", "bio14", "bio15")
+
+suggested_vars <- c("bio06", "bio05", "bio13", "bio14", "bio15")
 ```
 
-Environmental variables are often highly correlated, and collinearity is an issue
-for several types of models. We can inspect the correlation among variables with:
+Environmental variables are often highly correlated, and collinearity is
+an issue for several types of models. We can inspect the correlation
+among variables with:
+
 ```{r, fig.width=7, fig.height=8}
 pairs(climate_present[[suggested_vars]])
+
 ```
 
-We can see that some variables have rather high correlation (e.g. bio05 vs bio14).
-We can subset to variables below a certain threshold correlation (e.g. 0.7) with:
+We can see that some variables have rather high correlation (e.g. bio05
+vs bio14). We can subset to variables below a certain threshold
+correlation (e.g. 0.7) with:
 
 ```{r choose_var_cor_keep}
 climate_present <- climate_present[[suggested_vars]]
-vars_uncor <- filter_high_cor(climate_present, cutoff = 0.7)
+
+vars_uncor <- filter_collinear(climate_present, cutoff = 0.7, method = "cor_caret")
 vars_uncor
 ```
 
-So, removing bio14 leaves us with a set of uncorrelated variables.
+So, removing bio14 leaves us with a set of uncorrelated variables. Note that
+`filter_collinear` has other methods based on variable inflation that would also
+be worth exploring. For this example, we will remove bio14 and work with the remaining
+variables.
 
 ```{r}
 lacerta_thin <- lacerta_thin %>% select(all_of(c(vars_uncor, "class")))
 climate_present <- climate_present[[vars_uncor]]
+names(climate_present) # added to highlight which variables are retained in the end
 ```
-
 
 # Fit the model by cross-validation
 
-Next, we need to set up a `recipe` to define how to handle our dataset. We don't
-want to do anything to our data in terms of transformations, so we just
-need to define the formula (*class* is the `outcome`,
-all other variables are `predictor`s; note that, for `sf` objects, `geometry` is
-automatically replaced by `X` and `Y` columns which are assigned a role of
-`coords`, and thus not used as predictors):
+Next, we need to set up a `recipe` to define how to handle our dataset.
+We don't want to do anything to our data in terms of transformations, so
+we just need to define the formula (*class* is the `outcome`, all other
+variables are `predictors`; note that, for `sf` objects, `geometry` is
+automatically replaced by `X` and `Y` columns which are assigned a role
+of `coords`, and thus not used as predictors):
+
 ```{r recipe}
 lacerta_rec <- recipe(lacerta_thin, formula = class ~ .)
 lacerta_rec
 ```
 
-In classification models for `tidymodels`, the assumption is that the level of
-interest for the response (in our case, presences) is the reference level. We
-can confirm that we have the data correctly formatted with:
+In classification models for `tidymodels`, the assumption is that the
+level of interest for the response (in our case, presences) is the
+reference level. We can confirm that we have the data correctly
+formatted with:
+
 ```{r}
 lacerta_thin %>% check_sdm_presence(class)
 ```
 
-We now build a `workflow_set` of different models, defining which 
+We now build a `workflow_set` of different models, defining which
 hyperparameters we want to tune. We will use *glm*, *random forest*,
-*boosted_trees* and *maxent* as
-our models (for more details on how
-to use `workflow_set`s, see [this tutorial](https://workflowsets.tidymodels.org/articles/tuning-and-comparing-models.html)). The latter three models have tunable hyperparameters. For the most
+*boosted_trees* and *maxent* as our models (for more details on how to
+use `workflow_set`s, see [this
+tutorial](https://workflowsets.tidymodels.org/articles/tuning-and-comparing-models.html)).
+The latter three models have tunable hyperparameters. For the most
 commonly used models, `tidysdm` automatically chooses the most important
-parameters, but it is possible to fully customise model specifications (e.g. see the
-help for `sdm_spec_rf`). 
+parameters, but it is possible to fully customise model specifications
+(e.g. see the help for `sdm_spec_rf`).
 
 ```{r workflow_set}
 lacerta_models <-
@@ -317,25 +414,28 @@ lacerta_models <-
   option_add(control = control_ensemble_grid())
 ```
 
-We now want to set up a spatial block cross-validation scheme to tune and assess
-our models. We will do an 80:20 split, by creating 5 folds. We use the 
-`spatial_block_cv` function from the package `spatialsample`. `spatialsample`
-offers a number of sampling approaches for spatial data; it is also possible to
-convert objects created with `blockCV` (which offers further features
-for spatial sampling, such as stratified sampling) into an `rsample` object 
-suitable to `tisysdm` with the
+We now want to set up a spatial block cross-validation scheme to tune
+and assess our models. We will split the data by creating 3 folds. We
+use the `spatial_block_cv` function from the package `spatialsample`.
+`spatialsample` offers a number of sampling approaches for spatial data;
+it is also possible to convert objects created with `blockCV` (which
+offers further features for spatial sampling, such as stratified
+sampling) into an `rsample` object suitable to `tisysdm` with the
 function `blockcv2rsample`.
 
 ```{r training_cv, fig.width=6, fig.height=4}
 library(tidysdm)
 set.seed(100)
-lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
+#lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
+
+lacerta_cv <- spatial_block_cv(data = lacerta_thin, v = 3, n = 5)
 autoplot(lacerta_cv)
 ```
 
-We can now use the block CV folds to
-tune and assess the models (to keep computations fast, we will only explore 3
-combination of hyperparameters per model; this is far too little in real life!):
+We can now use the block CV folds to tune and assess the models (to keep
+computations fast, we will only explore 3 combination of hyperparameters
+per model; this is far too little in real life!):
+
 ```{r tune_grid}
 set.seed(1234567)
 lacerta_models <-
@@ -346,38 +446,45 @@ lacerta_models <-
   )
 ```
 
-Note that `workflow_set` correctly detects that we have no tuning parameters for 
-*glm*. We can have a look at the performance of our models with:
+Note that `workflow_set` correctly detects that we have no tuning
+parameters for *glm*. We can have a look at the performance of our
+models with:
 
 ```{r autoplot_models, fig.width=7, fig.height=4}
 autoplot(lacerta_models)
 ```
 
-Now let's create an ensemble, selecting the best set of parameters for each model
-(this is really only relevant for the random forest, as there were not hype-parameters
-to tune for the glm and gam). We will use the Boyce continuous index as our metric
-to choose the best random forest and boosted tree. When adding members to an ensemble, they are
-automatically fitted to the full training dataset, and so ready to make predictions.
+Now let's create an ensemble, selecting the best set of parameters for
+each model (this is really only relevant for the random forest, as there
+were not hype-parameters to tune for the *glm* and *gam*). We will use
+the Boyce continuous index as our metric to choose the best random
+forest and boosted tree. When adding members to an ensemble, they are
+automatically fitted to the full training dataset, and so ready to make
+predictions.
 
 ```{r}
 lacerta_ensemble <- simple_ensemble() %>%
   add_member(lacerta_models, metric = "boyce_cont")
 lacerta_ensemble
+
 ```
 
 And visualise it
+
 ```{r autoplot_ens, fig.width=7, fig.height=4}
 autoplot(lacerta_ensemble)
 ```
 
 A tabular form of the model metrics can be obtained with:
+
 ```{r}
 lacerta_ensemble %>% collect_metrics()
 ```
 
 # Projecting to the present
-We can now make predictions with this ensemble (using the default option of taking
-the mean of the predictions from each model).
+
+We can now make predictions with this ensemble (using the default option
+of taking the mean of the predictions from each model).
 
 ```{r plot_present, fig.width=6, fig.height=4}
 prediction_present <- predict_raster(lacerta_ensemble, climate_present)
@@ -388,15 +495,16 @@ ggplot() +
   geom_sf(data = lacerta_thin %>% filter(class == "presence"))
 ```
 
-We can subset the ensemble to only use the best models, based on the Boyce continuous index,
-by setting a minimum threshold of 0.8 for that metric. We will also take the 
-median of the available model predictions (instead of the mean, which is the default).
-The plot does not change much (the models are
-quite consistent).
+We can subset the ensemble to only use the best models, based on the
+Boyce continuous index, by setting a minimum threshold of 0.7 for that
+metric. We will also take the median of the available model predictions
+(instead of the mean, which is the default). The plot does not change
+much (the models are quite consistent).
 
 ```{r plot_present_best, fig.width=6, fig.height=4}
+
 prediction_present_boyce <- predict_raster(lacerta_ensemble, climate_present,
-  metric_thresh = c("boyce_cont", 0.8),
+  metric_thresh = c("boyce_cont", 0.7),
   fun = "median"
 )
 ggplot() +
@@ -404,21 +512,28 @@ ggplot() +
   scale_fill_terrain_c() +
   geom_sf(data = lacerta_thin %>% filter(class == "presence"))
 ```
-Sometimes, it is desirable to have binary predictions (presence vs absence), rather
-than the probability of occurrence. To do so, we first need to calibrate the threshold
-used to convert probabilities into classes (in this case, we optimise the TSS):
+
+Sometimes, it is desirable to have binary predictions (presence vs
+absence), rather than the probability of occurrence. To do so, we first
+need to calibrate the threshold used to convert probabilities into
+classes (in this case, we optimise the TSS):
+
+
 ```{r}
 lacerta_ensemble <- calib_class_thresh(lacerta_ensemble,
-  class_thresh = "tss_max"
+  class_thresh = "tss_max", 
+  metric_thresh = c("boyce_cont", 0.7)
 )
 ```
 
 And now we can predict for the whole continent:
+
 ```{r, fig.width=6, fig.height=4}
 prediction_present_binary <- predict_raster(lacerta_ensemble,
   climate_present,
   type = "class",
-  class_thresh = c("tss_max")
+  class_thresh = c("tss_max"), 
+  metric_thresh = c("boyce_cont", 0.7)
 )
 ggplot() +
   geom_spatraster(data = prediction_present_binary, aes(fill = binary_mean)) +
@@ -426,14 +541,20 @@ ggplot() +
 ```
 
 # Projecting to the future
-WorldClim has a wide selection of projections for the future based on different
-models and Shared Socio-economic Pathways (SSP). Type `help("WorldClim_2.1")`
-for a full list. We will use predictions based on "HadGEM3-GC31-LL" model for SSP 245 (intermediate green
-house gas emissions) at the same resolution as the present day data (10 arc-minutes). We first download the data:
+
+WorldClim has a wide selection of projections for the future based on
+different models and Shared Socio-economic Pathways (SSP). Type
+`help("WorldClim_2.1")` for a full list. We will use predictions based
+on "HadGEM3-GC31-LL" model for SSP 245 (intermediate green house gas
+emissions) at the same resolution as the present day data (10
+arc-minutes). We first download the data:
+
 ```{r eval=FALSE}
 download_dataset("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
 ```
+
 Let's see what times are available:
+
 ```{r eval=FALSE}
 get_time_ce_steps("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
 ```
@@ -442,9 +563,11 @@ get_time_ce_steps("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
 c(2030, 2050, 2070, 2090)
 ```
 
-We will predict for 2090, the further prediction in the future that is available. 
+We will predict for 2090, the further prediction in the future that is
+available.
 
 Let's now check the available variables:
+
 ```{r eval=FALSE}
 get_vars_for_dataset("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
 ```
@@ -453,10 +576,11 @@ get_vars_for_dataset("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
 climate_vars[-length(climate_vars)]
 ```
 
-Note that future predictions do not include *altitude* (as that does not change with time), 
-so if we needed it, we would have to copy it over from the present. 
-However, it is not in our set of uncorrelated variables that
-we used earlier, so we don't need to worry about it.
+Note that future predictions do not include *altitude* (as that does not
+change with time), so if we needed it, we would have to copy it over
+from the present. However, it is not in our set of uncorrelated
+variables that we used earlier, so we don't need to worry about it.
+
 ```{r eval=FALSE}
 climate_future <- pastclim::region_slice(
   time_ce = 2090,
@@ -473,8 +597,8 @@ climate_future <- rast(system.file("extdata/lacerta_climate_future_10m.nc",
 ))
 ```
 
-
 And predict using the ensemble:
+
 ```{r plot_future, fig.width=6, fig.height=4}
 prediction_future <- predict_raster(lacerta_ensemble, climate_future)
 
@@ -483,18 +607,88 @@ ggplot() +
   scale_fill_terrain_c()
 ```
 
+
+# Dealing with extrapolation
+
+The total area of projection of the model may include environmental conditions 
+which lie outside the range of conditions covered by the calibration dataset. 
+This phenomenon can lead to misinterpretation of the SDM outcomes due to 
+spatial extrapolation.
+
+`tidysdm` offers a couple of approaches to deal with this problem. The simplest one is that we can clamp the environmental variables to stay within the limits observed
+in the calibration set:
+
+```{r}
+climate_future_clamped <- clamp_predictors(climate_future, 
+                                           training = lacerta_thin,
+                                           .col= class)
+prediction_future_clamped <- predict_raster(lacerta_ensemble, 
+                                            raster = climate_future_clamped)
+
+ggplot() +
+  geom_spatraster(data = prediction_future_clamped, aes(fill = mean)) +
+  scale_fill_terrain_c()
+```
+
+The predictions seem to have changed very little.
+
+An alternative is to allow values to exceed the ranges of the calibration set,
+but compute the Multivariate environmental similarity surfaces (MESS) (Elith et al. 2010) to highlight areas where extrapolation occurs and thus visualise the prediction's uncertainty.
+
+We estimate the MESS for the same future time slice used above:
+
+```{r}
+lacerta_mess_future <- extrapol_mess(x = climate_future, 
+                                      training = lacerta_thin, 
+                                      .col = "class")
+
+ggplot() + geom_spatraster(data = lacerta_mess_future) + 
+  scale_fill_viridis_b(na.value = "transparent")
+```
+
+Extrapolation occurs in areas where MESS values are negative, with the magnitude
+of the negative values indicating how extreme is in the interpolation. From
+this plot, we can see that the area of extrapolation is where the model already
+predicted a suitability of zero. This explains why clamping did little to our
+predictions.
+
+We can now overlay MESS values with current prediction to visualize areas characterized by spatial extrapolation. 
+
+```{r}
+# subset mess 
+lacerta_mess_future_subset <- lacerta_mess_future
+lacerta_mess_future_subset[lacerta_mess_future_subset >= 0] <- NA
+lacerta_mess_future_subset[lacerta_mess_future_subset < 0] <- 1
+
+# convert into polygon
+lacerta_mess_future_subset <- as.polygons(lacerta_mess_future_subset)
+
+# plot as a mask 
+ggplot() + geom_spatraster(data = prediction_future) + 
+  scale_fill_viridis_b(na.value = "transparent") + geom_sf(data = lacerta_mess_future_subset, fill= "lightgray", alpha = 0.5, linewidth = 0.5)
+
+```
+
+Note that clamping and MESS are not only useful when making predictions into the future, but also into the past and present (in the latter case, it allows us to make
+sure that the background/pseudoabsences do cover the full range of predictor
+variables over the area of interest).
+
+The `tidymodels` universe also includes functions to estimate the area of 
+applicability in the package `waywiser`, which can be used with `tidysdm`.
+
 # Visualising the contribution of individual variables
 
 It is sometimes of interest to understand the relative contribution of
-individual variables to the prediction. This is a complex task, especially if
-there are interactions among variables. For simpler linear models, it is possible
-to obtain marginal response curves (which show the effect of a variable whilst
-keeping all other variables to their mean) using `step_profile()` from the
-`recipes` package. We use `step_profile()` to define a new recipe which we
-can then bake to generate the appropriate dataset
-to make the marginal prediction. We can then plot the predictions
-against the values of the variable of interest. For example,
-to investigate the contribution of `bio05`, we would:
+individual variables to the prediction. This is a complex task,
+especially if there are interactions among variables. For simpler linear
+models, it is possible to obtain marginal response curves (which show
+the effect of a variable whilst keeping all other variables to their
+mean) using `step_profile()` from the `recipes` package. We use
+`step_profile()` to define a new recipe which we can then bake to
+generate the appropriate dataset to make the marginal prediction. We can
+then plot the predictions against the values of the variable of
+interest. For example, to investigate the contribution of `bio05`, we
+would:
 
 ```{r}
 bio05_prof <- lacerta_rec %>%
@@ -512,19 +706,21 @@ ggplot(bio05_data, aes(x = bio05, y = pred)) +
   geom_point(alpha = .5, cex = 1)
 ```
 
-It is also possible to use [DALEX](https://modeloriented.github.io/DALEX/),to
-explore `tidysdm` models; see more details in the [tidymodels additions](https://evolecolgroup.github.io/tidysdm/dev/articles/a2_tidymodels_additions.html)
+It is also possible to use
+[DALEX](https://modeloriented.github.io/DALEX/),to explore `tidysdm`
+models; see more details in the [tidymodels
+additions](https://evolecolgroup.github.io/tidysdm/dev/articles/a2_tidymodels_additions.html)
 article.
-
 
 # Repeated ensembles
 
-The steps of thinning and sampling pseudo-absences can have a bit impact on the
-performance of SDMs. As these steps are stochastic, it is good practice to
-explore their effect by repeating them, and then creating ensembles of models
-over these repeats. In `tidysdm`, it is possible to create `repeat_ensembles`.
-We start by creating a list of `simple_ensembles`, by looping through the
-SDM pipeline. We will just use two fast models to speed up the process.
+The steps of thinning and sampling pseudo-absences can have a bit impact
+on the performance of SDMs. As these steps are stochastic, it is good
+practice to explore their effect by repeating them, and then creating
+ensembles of models over these repeats. In `tidysdm`, it is possible to
+create `repeat_ensembles`. We start by creating a list of
+`simple_ensembles`, by looping through the SDM pipeline. We will just
+use two fast models to speed up the process.
 
 ```{r}
 # empty object to store the simple ensembles that we will create
@@ -578,15 +774,19 @@ for (i_repeat in 1:3) {
 ```
 
 Now we can create a `repeat_ensemble` from the list:
+
 ```{r}
 lacerta_rep_ens <- repeat_ensemble() %>% add_repeat(ensemble_list)
 lacerta_rep_ens
 ```
 
-We can summarise the goodness of fit of models for each repeat with `collect_metrics()`,
-but there is no `autoplot()` function for `repeated_ensemble` objects.
+We can summarise the goodness of fit of models for each repeat with
+`collect_metrics()`, but there is no `autoplot()` function for
+`repeated_ensemble` objects.
 
-We can then predict in the usual way (we will take the mean and median of all models):
+We can then predict in the usual way (we will take the mean and median
+of all models):
+
 ```{r, fig.width=6, fig.height=4}
 lacerta_rep_ens <- predict_raster(lacerta_rep_ens, climate_present,
   fun = c("mean", "median")

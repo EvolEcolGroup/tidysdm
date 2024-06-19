@@ -35,15 +35,17 @@
 \item{data}{an \link[sf:sf]{sf::sf} object}
 
 \item{...}{any other parameters to pass to the \code{data.frame} version of
-the metric.}
+the metric. See the specific man page for the metric of interest.}
 }
 \value{
 A tibble with columns \code{.metric}, \code{.estimator}, and \code{.estimate}
 and 1 row of values.
 }
 \description{
-\code{tidysdm} provides methods to handle \link[sf:sf]{sf::sf} objects for the following
-\link{yardstick} metrics:
+\code{tidysdm} provides specialised metrics for SDMs, which have their own
+help pages(\code{\link[=boyce_cont]{boyce_cont()}}, \code{\link[=kap_max]{kap_max()}}, and \code{\link[=tss_max]{tss_max()}}). Additionally, it also
+provides methods to handle \link[sf:sf]{sf::sf} objects for the following
+standard \link{yardstick} metrics:
 
 \code{\link[yardstick:average_precision]{yardstick::average_precision()}}
 
@@ -62,4 +64,10 @@ and 1 row of values.
 \code{\link[yardstick:roc_aunp]{yardstick::roc_aunp()}}
 
 \code{\link[yardstick:roc_aunu]{yardstick::roc_aunu()}}
+}
+\details{
+Note that \code{roc_aunp} and \code{roc_aunu} are multiclass metrics, and as such are
+are not relevant for SDMs (which work on a binary response). They are included
+for completeness, so that all class probability metrics from \code{yardstick} have
+an \code{sf} method, for applications other than SDMs.
 }

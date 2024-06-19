@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample_pseudoabs_time.R
 \name{sample_pseudoabs_time}
 \alias{sample_pseudoabs_time}
-\title{Sample pseudo-absence (or background) points for SDM analysis for points with a time point.}
+\title{Sample pseudo-absence points for SDM analysis for points with a time point.}
 \usage{
 sample_pseudoabs_time(
   data,
@@ -26,7 +26,7 @@ These can be defined in \code{coords}, unless they have standard names
 If a \link[terra:SpatRaster-class]{terra::SpatRasterDataset}, the first dataset will be used to define which cells are valid,
 and which are NAs.}
 
-\item{n_per_presence}{number of pseudoabsence/background points to sample for
+\item{n_per_presence}{number of pseudoabsence points to sample for
 each presence}
 
 \item{coords}{a vector of length two giving the names of the "x" and "y"
@@ -44,7 +44,7 @@ use \code{lubridate_fun} to provide a function that can be used to convert appro
 
 \item{class_label}{the label given to the sampled points. Defaults to \code{pseudoabs}}
 
-\item{return_pres}{return presences together with pseudoabsences/background
+\item{return_pres}{return presences together with pseudoabsences
 in a single tibble}
 
 \item{time_buffer}{the buffer on the time axis around presences that defines their effect when
@@ -60,21 +60,21 @@ presence level is set as the reference (to match the expectations in the
 \code{yardstick} package that considers the first level to be the event)
 }
 \description{
-This function samples pseudo-absence (or background, the naming is a matter
-of semantics) points from a raster given a set of presences.
+This function samples pseudo-absence points from a raster given a set of presences.
 The locations returned as the center points of the sampled cells, which can
-not overlap with the presences. The following methods are implemented:
+not overlap with the presences (in contrast to background points, see
+\link{sample_background_time}). The following methods are implemented:
 \itemize{
-\item 'random': pseudo-absences/background randomly sampled from the region covered by the
+\item 'random': pseudo-absences randomly sampled from the region covered by the
 raster (i.e. not NAs).
-\item 'dist_min': pseudo-absences/background randomly sampled from the region excluding a buffer
+\item 'dist_min': pseudo-absences randomly sampled from the region excluding a buffer
 of 'dist_min' from presences (distances in 'm' for lonlat rasters, and in map
 units for projected rasters).
-\item 'dist_max': pseudo-absences/background randomly sampled from the unioned buffers
+\item 'dist_max': pseudo-absences randomly sampled from the unioned buffers
 of 'dist_max' from presences (distances in 'm' for lonlat rasters, and in map
 units for projected rasters). Using the union of buffers means that areas that
 are in multiple buffers are not oversampled. This is also referred to as "thickening".
-\item 'dist_disc': pseudo-absences/background randomly sampled from the unioned discs around presences
+\item 'dist_disc': pseudo-absences randomly sampled from the unioned discs around presences
 with the two values of 'dist_disc' defining the minimum and maximum distance from
 presences.
 }

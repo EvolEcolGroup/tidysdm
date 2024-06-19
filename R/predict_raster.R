@@ -6,9 +6,10 @@
 #' @param raster the [`terra::SpatRaster`] with the input data. It has to include
 #' levels with the same names as the variables used in `object`
 #' @param ... parameters to be passed to the standard `predict()` function
-#' for the appropriate object type.
+#' for the appropriate object type (e.g. `metrich_thresh` or `class_thresh`).
 #' @returns a [`terra::SpatRaster`] with the predictions
 #' @export
+#' @keywords predict
 #'
 predict_raster <- function(object, raster, ...) {
   UseMethod("predict_raster", object)
@@ -28,7 +29,11 @@ predict_raster.default <- function(object, raster, ...) {
   # and now fill in the values, adding a layer for each aggregating function we used
   pred_raster[raster_df$cell] <- pred_df %>% dplyr::pull(1)
   if (is.factor(pred_df %>% dplyr::pull(1))) {
-    levels(pred_raster) <- data.frame(id = 1:2, class = levels(pred_df %>% dplyr::pull(1)))
+    #levels(pred_raster) <- data.frame(id = 1:2, class = levels(pred_df %>% dplyr::pull(1)))
+    # make predict_raster work with multilevel predictions
+    # edit by @piabenaud
+    levels(pred_raster) <- data.frame(id = 1:length(dplyr::pull(unique(pred_df))),
+                                      class = levels(pred_df %>% dplyr::pull(1)))
   }
 
 

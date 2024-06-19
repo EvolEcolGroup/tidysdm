@@ -22,6 +22,7 @@
 #' full_bt_spec <- sdm_spec_boost_tree(tune = "all")
 #' custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune())
 #' @export
+#' @family "sdm model specifications"
 
 sdm_spec_boost_tree <- function(..., tune = c("sdm", "all", "custom", "none")) {
   tune <- rlang::arg_match(tune)

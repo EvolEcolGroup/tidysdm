@@ -3,3 +3,98 @@ template:
   bootstrap: 5
 development:
   mode: auto
+reference:
+  - title: "Data preparation"
+    desc: "Functions for sampling background/pseudo-absences points and thinning the data."
+    contents:
+      - sample_background
+      - sample_background_time
+      - sample_pseudoabs
+      - sample_pseudoabs_time
+      - thin_by_cell
+      - thin_by_cell_time
+      - thin_by_dist
+      - thin_by_dist_time
+
+  - title: "Choice of predictor variables"
+    desc: "Functions for removing collinearity and visualising the distribution of predictors."
+    contents:
+      - filter_collinear
+      - plot_pres_vs_bg
+      - geom_split_violin	
+      - dist_pres_vs_bg
+  - title: "Recipes"
+    desc: "Functions for recipes with spatial SDM data (additional steps can be added with standard `recipes` functions)."
+    contents:
+      - recipe.sf
+      - spatial_recipe
+      - check_sdm_presence
+  - title: "Models specification"
+    desc: "Predefined model specifications (custom models can be added with standard `parsnip` model specifications)."
+    contents:
+      - sdm_spec_glm
+      - sdm_spec_gam
+      - gam_formula
+      - sdm_spec_rand_forest
+      - sdm_spec_boost_tree
+      - sdm_spec_maxent
+      - maxent
+      - regularization_multiplier
+      - feature_classes
+  - title: "Data splitting"
+    desc: "Functions for splitting the data into folds (in additiona to standard `spatialsample` functions."
+    contents:
+      - spatial_initial_split
+      - blockcv2rsample
+      - check_splits_balance
+      - autoplot.spatial_initial_split
+      - grid_offset
+      - grid_cellsize
+  - title: "Metrics"
+    desc: "Specialised metrics for SDM, and methods of metrics from `yardstick` adapted to work on `sf` objects"
+    contents:
+      - sdm_metric_set
+      - optim_thresh
+      - boyce_cont
+      - kap_max
+      - tss_max
+      - tss
+      - prob_metrics_sf
+  - title: "Ensemble"
+    desc: "Functions for creating an ensemble selecting the best set of 
+    parameters for each model."
+    contents:
+      - simple_ensemble
+      - autoplot.simple_ensemble
+      - repeat_ensemble
+      - add_member
+      - add_repeat
+      - collect_metrics.simple_ensemble
+      - collect_metrics.repeat_ensemble
+      - control_ensemble_grid
+      - control_ensemble_resamples
+      - control_ensemble_bayes
+      - explain_tidysdm
+  - title: "Project SDM to present, past and future"
+    desc: "Functions for making predictions."
+    contents:
+      - has_keyword("predict")
+  - title: "Managing extrapolation"
+    desc: "Functions for managing extrapolation."
+    contents:
+      - has_keyword("extrapolation")
+  - title: "Other"
+    desc: "Additional helpful functions."
+    contents:
+      - niche_overlap
+      - km2m
+      - y2d
+      - filter_high_cor
+  - title: "Example data"
+    desc: "Example datasets and simple models used in the documentation"
+    contents: 
+      - horses 
+      - lacerta
+      - lacertidae_background
+      - lacerta_ensemble
+      - lacerta_rep_ens

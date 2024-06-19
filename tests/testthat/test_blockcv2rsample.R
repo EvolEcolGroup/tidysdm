@@ -1,4 +1,4 @@
-library(blockCV)
+suppressPackageStartupMessages(library(blockCV))
 test_that("blockcv2rsample conversion", {
   
   # we use examples from the blockcv library for spatial blocks
@@ -56,7 +56,7 @@ nndm <- cv_nndm(x = pa_data,
                 plot = FALSE, 
                 report = FALSE)
 expect_error(blockcv2rsample(nndm, pa_data),
-             "this function does support this object type")
+             "this function does not support this object type")
 
 
 

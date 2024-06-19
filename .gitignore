@@ -7,3 +7,5 @@ inst/doc
 docs
 /doc/
 /Meta/
+/tests/testthat/Rplots.pdf
+tests/testthat/Rplots.pdf

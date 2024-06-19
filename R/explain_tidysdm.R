@@ -168,6 +168,9 @@ explain_simple_ensemble <- function(
     # note that we need presences to be 1 and absences to be zero
     y <- (as.numeric(workflowsets::extract_mold(model$workflow[[1]])$outcomes %>% dplyr::pull()) - 2) * -1
   } else {
+    # TODO it would be better if we used check_sdm_presence to make sure that the
+    # response variable is properly formatted (and not just a factor)
+    # the error message suggests as much.
     if (!is.factor(y)) {
       stop("y should be a factor with presences as reference levels")
     } else {
