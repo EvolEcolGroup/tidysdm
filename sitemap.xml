@@ -67,6 +67,9 @@
     <loc>https://evolecolgroup.github.io/tidysdm/reference/check_splits_balance.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/clamp_predictors.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/collect_metrics.simple_ensemble.html</loc>
   </url>
   <url>
@@ -80,6 +83,12 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/explain_tidysdm.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/extrapol_mess.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/filter_collinear.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/filter_high_cor.html</loc>
@@ -121,6 +130,9 @@
     <loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta_rep_ens.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/lacertidae_background.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/maxent.html</loc>
   </url>
   <url>
@@ -131,6 +143,9 @@
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/maxnet_predict.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/niche_overlap.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh.html</loc>
@@ -175,6 +190,12 @@
     <loc>https://evolecolgroup.github.io/tidysdm/reference/repeat_ensemble.html</loc>
   </url>
   <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/sample_background.html</loc>
+  </url>
+  <url>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/sample_background_time.html</loc>
+  </url>
+  <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/sample_pseudoabs.html</loc>
   </url>
   <url>
@@ -217,7 +238,7 @@
     <loc>https://evolecolgroup.github.io/tidysdm/reference/thin_by_dist_time.html</loc>
   </url>
   <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/tidysdm.html</loc>
+    <loc>https://evolecolgroup.github.io/tidysdm/reference/tidysdm-package.html</loc>
   </url>
   <url>
     <loc>https://evolecolgroup.github.io/tidysdm/reference/tss.html</loc>
