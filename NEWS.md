@@ -1,4 +1,4 @@
-# `tidysdm` `dev`
+# `tidysdm` 0.9.5
 
 * implement clamping and MESS to manage extrapolation
 * clearly separate sampling of background vs pseudo-absences
