@@ -1,5 +1,4 @@
-This is a minor bug fix that deals with an incompatibility with the upcoming
-version of tune.
+This is a minor update, adding a few methods and improving the vignettes.
 
 ## Test environments
 - R-hub windows-x86_64-devel (r-devel)
