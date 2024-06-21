@@ -17,8 +17,8 @@ along as a second element of a vector, e.g. c("sensitivity",0.8).}
 \item{metric_thresh}{a vector of length 2 giving a metric and its threshold,
 which will be used to prune
 which models in the ensemble will be used for the prediction. The 'metrics'
-need to have been computed when the workflow was tuned. Examples are
-c("accuracy",0.8) or c("boyce_cont",0.7)}
+need to have been computed when the workflow was tuned. The metric's threshold needs to match the value
+used during prediction. Examples are c("accuracy",0.8) or c("boyce_cont",0.7).}
 }
 \value{
 a \link{simple_ensemble} object

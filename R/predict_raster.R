@@ -20,11 +20,11 @@ predict_raster <- function(object, raster, ...) {
 
 #' @rdname predict_raster
 #' @export
-predict_raster.default <- function(object, raster, ...) {
+predict_raster.default <- function(object, raster, metric_thresh = NULL, ...) {
   # create a dataframe
   raster_df <- terra::as.data.frame(raster, cell = TRUE, na.rm = TRUE)
   # create a vector of predictions by dispatching to the predict generics
-  pred_df <- stats::predict(object, raster_df, ...)
+  pred_df <- stats::predict(object, raster_df, metric_thresh = metric_thresh, ...)
 
   # create an empty raster where to put the predictions (using the original raster as a template)
   pred_raster <- terra::rast(raster[[1]])

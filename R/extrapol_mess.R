@@ -22,17 +22,17 @@
 #' @author Jean-Pierre Rossi, Robert Hijmans, Paulo van Breugel, Andrea Manica
 #' @references Elith J., M. Kearney M., and S. Phillips, 2010. The art of
 #' modelling range-shifting species. Methods in Ecology and Evolution
-#' 1:330-342. c("\\Sexpr[results=rd]{tools:::Rd_expr_doi(\"#1\")}",
-#' "10.1111/j.2041-210X.2010.00036.x")\Sexpr{tools:::Rd_expr_doi("10.1111/j.2041-210X.2010.00036.x")}
- 
+#' 1:330-342. doi://10.1111/j.2041-210X.2010.00036.x
+#' @export
 
 # author: Jean-Pierre Rossi <jean-pierre.rossi@supagro.inra.fr>
 # modifications by Robert Hijmans and Paulo van Breugel
 # rewritten for predicts by RH
 # adapted for tidysdm by AM
 
-setGeneric("extrapol_mess", function(x, training, ...) 
-  standardGeneric("extrapol_mess") )
+extrapol_mess <- function(x, training, ...) {
+  UseMethod("extrapol_mess", object = x)
+}
 
 
 #' @rdname extrapol_mess
@@ -40,7 +40,7 @@ setGeneric("extrapol_mess", function(x, training, ...)
 #' it is excluded when computing the MESS scores.
 #' @param filename character. Output filename (optional)
 #' @export
-setMethod("extrapol_mess", signature(x="SpatRaster"), 
+extrapol_mess.SpatRaster <- 
 	function(x, training, .col, filename="", ...) {
 	  # remove the class column if it is present
 	  .col <- rlang::enquo(.col) %>%
@@ -89,14 +89,14 @@ setMethod("extrapol_mess", signature(x="SpatRaster"),
 		terra::writeStop(out)
 		out
 	}	
-)
 
 #' @rdname extrapol_mess
 #' @param .col the column containing the presences (optional). If specified,
 #' it is excluded when computing the MESS scores.
 #' @export
-setMethod("extrapol_mess", signature(x="data.frame"), 
-	function(x, training, .col) {
+extrapol_mess.data.frame <-
+	function(x, training, .col, ...) {
+	  rlang::check_dots_empty()
 	  # remove the class column if it is present
 	  .col <- rlang::enquo(.col) %>%
 	    rlang::quo_get_expr() %>%
@@ -125,14 +125,15 @@ setMethod("extrapol_mess", signature(x="data.frame"),
 				data.frame(mess=rmess)
 		}	
 	}
-)
+
 
 #' @rdname extrapol_mess
 #' @param .col the column containing the presences (optional). If specified,
 #' it is excluded when computing the MESS scores.
 #' @export
-setMethod("extrapol_mess", signature(x="SpatRasterDataset"), 
-	function(x, training, .col) {
+extrapol_mess.SpatRasterDataset <-
+	function(x, training, .col, ...) {
+	  rlang::check_dots_empty()
 	  # remove the class column if it is present
 	  .col <- rlang::enquo(.col) %>%
 	    rlang::quo_get_expr() %>%
@@ -172,7 +173,7 @@ setMethod("extrapol_mess", signature(x="SpatRasterDataset"),
   terra::time(mess_rast)<-terra::time(x[[1]])
 	return(mess_rast)
 	}
-)
+
 
 
 .messi <- function(p, v) {
