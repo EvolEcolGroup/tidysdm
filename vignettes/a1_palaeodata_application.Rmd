@@ -71,7 +71,6 @@ And use `tidyterra` to plot:
 library(tidyterra)
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
-  scale_fill_terrain_c() +
   geom_sf(data = horses, aes(col = time_bp))
 ```
 
@@ -93,7 +92,6 @@ And see what we have left:
 ```{r plot_thinned, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
-  scale_fill_terrain_c() +
   geom_sf(data = horses, aes(col = time_bp))
 ```
 
@@ -132,7 +130,6 @@ Let's see what we have left of our points:
 ```{r, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
-  scale_fill_terrain_c() +
   geom_sf(data = horses, aes(col = time_bp))
 ```
 
@@ -153,7 +150,6 @@ Let's see our presences and absences:
 ```{r, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
-  scale_fill_terrain_c() +
   geom_sf(data = horses, aes(col = class))
 ```
 
