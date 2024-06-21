@@ -9,3 +9,6 @@ This is a minor update, adding a few methods and improving the vignettes.
 
 ## R CMD check results
 Not issues on any system.
+
+## Issues with previous version on CRAN
+Status OK for all tests, nothing to fix.

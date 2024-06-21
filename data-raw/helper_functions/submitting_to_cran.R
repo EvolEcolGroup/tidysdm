@@ -26,7 +26,10 @@ source("./data-raw/helper_functions/check_returns_in_documentation.R")
 
 
 # first check with rhub
-tidysdm_checks <- rhub::check_for_cran()
+rhub::rhub_doctor()
+rhub::rhub_check()
+# answer 1,2,3,4
+
 
 # check on macos and windows via devtools
 devtools::check_mac_release()
