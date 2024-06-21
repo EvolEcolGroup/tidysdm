@@ -16,7 +16,7 @@ predict_raster(object, raster, ...)
 levels with the same names as the variables used in \code{object}}
 
 \item{...}{parameters to be passed to the standard \code{predict()} function
-for the appropriate object type (e.g. \code{metrich_thresh} or \code{class_thresh}).}
+for the appropriate object type (e.g. \code{metric_thresh} or \code{class_thresh}).}
 }
 \value{
 a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} with the predictions

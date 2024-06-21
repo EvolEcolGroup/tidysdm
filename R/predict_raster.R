@@ -6,7 +6,7 @@
 #' @param raster the [`terra::SpatRaster`] with the input data. It has to include
 #' levels with the same names as the variables used in `object`
 #' @param ... parameters to be passed to the standard `predict()` function
-#' for the appropriate object type (e.g. `metrich_thresh` or `class_thresh`).
+#' for the appropriate object type (e.g. `metric_thresh` or `class_thresh`).
 #' @returns a [`terra::SpatRaster`] with the predictions
 #' @export
 #' @keywords predict
