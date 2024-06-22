@@ -9,8 +9,8 @@
 #' Trang Q. Nguyen for adding the nudge parameter.
 #'
 #' @inheritParams ggplot2::geom_violin
-#' @param stat Use to override the default connection between [geom_violin()]
-#' and [stat_ydensity()].
+#' @param stat Use to override the default connection between [ggplot2::geom_violin()]
+#' and [ggplot2::stat_ydensity()].
 #' @param nudge Add space between the half-violin and the middle of the space
 #' allotted to a given factor on the x-axis.
 #' @returns a [`ggplot2::layer`] object

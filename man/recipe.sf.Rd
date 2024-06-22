@@ -16,7 +16,7 @@ spatial_recipe(x, ...)
 }
 \value{
 An object of class \code{spatial_recipe}, which is a derived version of
-\link[recipes:recipe]{recipes::recipe} , see
+\code{\link[recipes:recipe]{recipes::recipe()}} , see
 the manpage for \code{\link[recipes:recipe]{recipes::recipe()}} for details.
 }
 \description{

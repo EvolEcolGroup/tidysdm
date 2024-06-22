@@ -21,7 +21,7 @@
 #' @param x An [sf::sf] data frame.
 #' @param ... parameters to be passed to [recipes::recipe()]
 #' @returns An object of class `spatial_recipe`, which is a derived version of
-#'  [recipes::recipe] , see
+#'  [recipes::recipe()] , see
 #' the manpage for [recipes::recipe()] for details.
 #' @export
 #' @import recipes

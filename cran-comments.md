@@ -1,4 +1,5 @@
-This is a minor update, adding a few methods and improving the vignettes.
+This is a resubmission. The previous version raised a problem of some missing package
+anchors. All documentation should not include the required package anchors.
 
 ## Test environments
 - R-hub linux (r-devel)

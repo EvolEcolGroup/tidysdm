@@ -1,6 +1,6 @@
 #' MaxEnt model
 #'
-#' [maxent] defines the MaxEnt model as used in Species
+#' `maxent` defines the MaxEnt model as used in Species
 #' Distribution Models.
 #' A good guide to how options of a MaxEnt model work can be found in
 #' https://onlinelibrary.wiley.com/doi/full/10.1111/j.1600-0587.2013.07872.x
@@ -12,7 +12,7 @@
 #' @param feature_classes character, continuous feature classes desired, either
 #'   "default" or any subset of "lqpht" (for example, "lh")
 #' @param regularization_multiplier  numeric, a constant to adjust regularization
-#' @returns a [`model_spec`] for a `maxent` model
+#' @returns a [`parsnip::model_spec`] for a `maxent` model
 #' @examples
 #' \donttest{
 #' # format the data
