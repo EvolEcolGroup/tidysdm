@@ -4,12 +4,12 @@
 #' case when `x` is an [sf::sf] object, as commonly
 #' used in Species Distribution Model, and generates a `spatial_recipe`.
 #'
-#' [recipes] are not natively compatible with [sf::sf] objects. The problem is that
+#' [recipes::recipe()] are not natively compatible with [sf::sf] objects. The problem is that
 #' the `geometry` column of [sf::sf] objects is a list, which is incompatible with
-#' the translation of formulae in [recipe]. This method strips the `geometry`
+#' the translation of formulae in [recipes::recipe()]. This method strips the `geometry`
 #' column from the [data.frame] and replaces it with a simple `X` and `Y` columns
 #' before any further operations, thus allowing
-#' the usual processing by [recipe()] to succeed (`X` and `Y` are give the role
+#' the usual processing by [recipes::recipe()] to succeed (`X` and `Y` are give the role
 #' of coords in a spatial recipe). When prepping and baking a `spatial_recipe`,
 #' if a data.frame or tibble without coordinates is used as `training` or
 #' `new_data`, dummy `X` and `Y` columns
