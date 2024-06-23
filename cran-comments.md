@@ -1,5 +1,5 @@
-This is a resubmission. The previous version raised a problem of some missing package
-anchors. All documentation should not include the required package anchors.
+This is a resubmission. The previous version raised a problem of some remaining missing package
+anchors. All documentation should now include the required package anchors.
 
 ## Test environments
 - R-hub linux (r-devel)
