@@ -1,11 +1,11 @@
 #' Simple Training/Test Set Splitting for spatial data
 #'
 #' `spatial_initial_split` creates a single binary split of the data into a training
-#'  set and testing set. All strategies from the package [spatialsample] are available;
+#'  set and testing set. All strategies from the package `spatialsample` are available;
 #'  a random split from that strategy will be used to generate the initial split.
 #' @param data A dataset (data.frame or tibble)
 #' @param prop The proportion of data to be retained for modelling/analysis.
-#' @param strategy A sampling strategy from [spatialsample]
+#' @param strategy A sampling strategy from `spatialsample`
 #' @param ... parameters to be passed to the `strategy`
 #' @returns An `rsplit` object that can be used with the [rsample::training] and [rsample::testing]
 #'  functions to extract the data in each split.

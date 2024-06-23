@@ -11,7 +11,7 @@ spatial_initial_split(data, prop, strategy, ...)
 
 \item{prop}{The proportion of data to be retained for modelling/analysis.}
 
-\item{strategy}{A sampling strategy from \link{spatialsample}}
+\item{strategy}{A sampling strategy from \code{spatialsample}}
 
 \item{...}{parameters to be passed to the \code{strategy}}
 }
@@ -21,7 +21,7 @@ functions to extract the data in each split.
 }
 \description{
 \code{spatial_initial_split} creates a single binary split of the data into a training
-set and testing set. All strategies from the package \link{spatialsample} are available;
+set and testing set. All strategies from the package \code{spatialsample} are available;
 a random split from that strategy will be used to generate the initial split.
 }
 \examples{

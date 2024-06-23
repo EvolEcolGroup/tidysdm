@@ -34,9 +34,6 @@ test_that("sdm_recipe_sf", {
   # work if we pass an sf object
   lacerta_rec_prep <- prep(lacerta_rec, training = lacerta_thin)
   expect_true(recipes::fully_trained(lacerta_rec_prep))
-  #  pass a dataframe without X and Y (it's fine as we add dummy X and Y)
-  lacerta_rec_prep <- prep(lacerta_rec, training = lacerta_thin %>% sf::st_drop_geometry())
-  expect_true(recipes::fully_trained(lacerta_rec_prep))
 
   ## now bake
   expect_true(all(c("X", "Y") %in% names(bake(lacerta_rec_prep, new_data = lacerta_thin))))

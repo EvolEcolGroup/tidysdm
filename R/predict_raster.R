@@ -1,12 +1,12 @@
 #' Make predictions for a whole raster
 #'
 #' This function allows to use a raster as data to make predictions from a
-#' variety of [tidymodels] objects, such as [`simple_ensemble`] or `stacks::linear_stack`
-#' @param object the [`tidymodels`] object of interest
+#' variety of `tidymodels` objects, such as [`simple_ensemble`] or [`stacks::stacks`]
+#' @param object the `tidymodels` object of interest
 #' @param raster the [`terra::SpatRaster`] with the input data. It has to include
 #' levels with the same names as the variables used in `object`
 #' @param ... parameters to be passed to the standard `predict()` function
-#' for the appropriate object type (e.g. `metrich_thresh` or `class_thresh`).
+#' for the appropriate object type (e.g. `metric_thresh` or `class_thresh`).
 #' @returns a [`terra::SpatRaster`] with the predictions
 #' @export
 #' @keywords predict
