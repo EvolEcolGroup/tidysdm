@@ -92,12 +92,12 @@ the manpage for <code><a href="https://recipes.tidymodels.org/reference/recipe.h
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>recipes are not natively compatible with <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::sf</a> objects. The problem is that
+    <p><code><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipes::recipe()</a></code> are not natively compatible with <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::sf</a> objects. The problem is that
 the <code>geometry</code> column of <a href="https://r-spatial.github.io/sf/reference/sf.html" class="external-link">sf::sf</a> objects is a list, which is incompatible with
-the translation of formulae in recipe. This method strips the <code>geometry</code>
+the translation of formulae in <code><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipes::recipe()</a></code>. This method strips the <code>geometry</code>
 column from the <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> and replaces it with a simple <code>X</code> and <code>Y</code> columns
 before any further operations, thus allowing
-the usual processing by <code>recipe()</code> to succeed (<code>X</code> and <code>Y</code> are give the role
+the usual processing by <code><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipes::recipe()</a></code> to succeed (<code>X</code> and <code>Y</code> are give the role
 of coords in a spatial recipe). When prepping and baking a <code>spatial_recipe</code>,
 if a data.frame or tibble without coordinates is used as <code>training</code> or
 <code>new_data</code>, dummy <code>X</code> and <code>Y</code> columns
