@@ -61,7 +61,7 @@ the `tidysdm` package:
 
 ```{r load_presences}
  data(lacerta)
- lacerta
+ head(lacerta)
 ```
 
 Alternatively, we can easily access and manipulate this dataset using
