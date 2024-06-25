@@ -60,8 +60,8 @@ from GBIF Occurrence Download (6 July 2023)
 the `tidysdm` package:
 
 ```{r load_presences}
- data(lacerta)
- lacerta
+data(lacerta)
+head(lacerta)
 ```
 
 Alternatively, we can easily access and manipulate this dataset using
