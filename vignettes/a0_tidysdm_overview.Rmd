@@ -21,6 +21,8 @@ options(cores=2)
 options(mc.cores=2)
 # xgboost uses data.table
 data.table::setDTthreads(2)
+
+build_data = TRUE
 ```
 
 # SDMs with `tidymodels`
@@ -107,7 +109,7 @@ to the Iberian peninsula, where our lizard lives. For this simply
 illustration, we will not bother to project the raster, but an equal
 area projection would be desirable...
 
-```{r land_mask, eval=FALSE}
+```{r land_mask, eval= build_data}
 library(pastclim)
 download_dataset(dataset = "WorldClim_2.1_10m")
 land_mask <-
@@ -129,7 +131,8 @@ land_mask <- crop(land_mask, iberia_poly)
 land_mask <- mask(land_mask, iberia_poly)
 ```
 
-```{r echo=FALSE, results='hide'}
+```{r echo=FALSE, eval=FALSE}
+# results='hide'
 library(pastclim)
 set_data_path(on_CRAN = TRUE)
 # Iberia peninsula extension
@@ -150,7 +153,7 @@ library(tidyterra)
 library(ggplot2)
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta) + scale_fill_gradient(na.value = "transparent")
+  geom_sf(data = lacerta) + scale_fill_discrete(na.value = "transparent")
 
 ```
 
