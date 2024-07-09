@@ -153,7 +153,8 @@ library(tidyterra)
 library(ggplot2)
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta) + scale_fill_discrete(na.value = "transparent")
+  geom_sf(data = lacerta) + scale_fill_discrete(na.value = "transparent") + 
+  guides(fill="none")
 
 ```
 
@@ -172,7 +173,8 @@ nrow(lacerta)
 ```{r plot_thin_by_cell, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta) + scale_fill_gradient(na.value = "transparent")
+  geom_sf(data = lacerta) + scale_fill_discrete(na.value = "transparent") + 
+  guides(fill="none")
 ```
 
 Now, we thin further to remove points that are closer than 20km.
@@ -191,7 +193,8 @@ Let's see what we have left of our points:
 ```{r plot_thin_by_dist, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta_thin) + scale_fill_gradient(na.value = "transparent")
+  geom_sf(data = lacerta_thin) + scale_fill_discrete(na.value = "transparent") +
+  guides(fill="none")
 ```
 
 We now need to select points that represent the potential available area
@@ -263,7 +266,9 @@ Let's see our presences and background:
 ```{r plot_sample_pseudoabs, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta_thin, aes(col = class)) + scale_fill_gradient(na.value = "transparent")
+  geom_sf(data = lacerta_thin, aes(col = class)) + 
+  scale_fill_discrete(na.value = "transparent") +
+  guides(fill="none")
 ```
 
 Generally, we can use `pastclim` to check what variables are available
@@ -540,7 +545,8 @@ prediction_present_binary <- predict_raster(lacerta_ensemble,
 )
 ggplot() +
   geom_spatraster(data = prediction_present_binary, aes(fill = binary_mean)) +
-  geom_sf(data = lacerta_thin %>% filter(class == "presence"))
+  geom_sf(data = lacerta_thin %>% filter(class == "presence")) + 
+  scale_fill_discrete(na.value = "transparent")
 ```
 
 # Projecting to the future
