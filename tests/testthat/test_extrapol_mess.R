@@ -1,6 +1,6 @@
 test_that("mess_predictor works on SpatRasters",{
   # now get future climate
-  climate_future <- terra::rast(system.file("extdata/lacerta_climate_future_10m.nc",
+  climate_future <- terra::readRDS(system.file("extdata/lacerta_climate_future_10m.rds",
                                      package = "tidysdm"
   ))
   mess_rast <- extrapol_mess(climate_future, training = lacerta_thin, .col= class)

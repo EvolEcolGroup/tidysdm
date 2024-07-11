@@ -18,6 +18,9 @@ options(cores=2)
 options(mc.cores=2)
 # xgboost uses data.table
 data.table::setDTthreads(2)
+
+download_data = FALSE
+# note that data were created in the overview vignette
 ```
 
 # Additional features of `tidymodels`
@@ -292,7 +295,7 @@ sdm_metric_set()(data = lacerta_test_pred, truth = class, .pred_presence)
 
 We can now make predictions with this stacked ensemble. We start by extracting the climate for the variables of interest
 
-```{r eval=FALSE}
+```{r eval=download_data}
 download_dataset("WorldClim_2.1_10m")
 climate_vars <- lacerta_rec_all$var_info %>%
   filter(role == "predictor") %>%
@@ -306,10 +309,9 @@ climate_present <- pastclim::region_slice(
 )
 ```
 
-```{r echo=FALSE, results='hide'}
-terra::gdal(warn = 3)
-climate_present <- terra::rast(
-  system.file("extdata/lacerta_climate_present_10m.nc", package = "tidysdm")
+```{r echo=FALSE, results='hide', eval=!download_data}
+climate_present <- terra::readRDS(
+  system.file("extdata/lacerta_climate_present_10m.rds", package = "tidysdm")
 )
 climate_vars <- lacerta_rec_all$var_info %>%
   filter(role == "predictor") %>%

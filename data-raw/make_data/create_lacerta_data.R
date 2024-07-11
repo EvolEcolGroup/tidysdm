@@ -1,3 +1,6 @@
+### THIS IS NOW OBSOLETE AS THE DATASETS ARE GENERATED IN THE OVERVIEW VIGNETTE
+
+
 # download presences
 library(rgbif)
 # download file
@@ -50,13 +53,7 @@ land_mask <- crop(land_mask, iberia_poly)
 # and mask to the polygon
 land_mask <- mask(land_mask, iberia_poly)
 gdal(warn = 3)
-writeCDF(land_mask, "./inst/extdata/lacerta_land_mask.nc",
-  compression = 9, split = TRUE, overwrite = TRUE
-)
-# fix time axis (this is a workaround if we open the file with sf)
-nc_in <- ncdf4::nc_open("./inst/extdata/lacerta_land_mask.nc", write = TRUE)
-ncdf4::ncatt_put(nc_in, varid = "time", attname = "axis", attval = "T")
-ncdf4::nc_close(nc_in)
+terra::saveRDS(land_mask, "./inst/extdata/lacerta_land_mask.rds")
 
 
 climate_vars <- get_vars_for_dataset("WorldClim_2.1_10m")
@@ -67,13 +64,14 @@ climate_present <- pastclim::region_slice(
   crop = iberia_poly
 )
 
-writeCDF(climate_present, "./inst/extdata/lacerta_climate_present_10m.nc",
-  compression = 9, split = TRUE, overwrite = TRUE
-)
+terra::saveRDS(climate_present, "./inst/extdata/lacerta_climate_present_10m.rds")
+#writeCDF(climate_present, "./inst/extdata/lacerta_climate_present_10m.nc",
+#  compression = 9, split = TRUE, overwrite = TRUE
+#)
 # fix time axis (this is a workaround if we open the file with sf)
-nc_in <- ncdf4::nc_open("./inst/extdata/lacerta_climate_present_10m.nc", write = TRUE)
-ncdf4::ncatt_put(nc_in, varid = "time", attname = "axis", attval = "T")
-ncdf4::nc_close(nc_in)
+#nc_in <- ncdf4::nc_open("./inst/extdata/lacerta_climate_present_10m.nc", write = TRUE)
+#ncdf4::ncatt_put(nc_in, varid = "time", attname = "axis", attval = "T")
+#ncdf4::nc_close(nc_in)
 
 
 vars_uncor <- c("bio15", "bio05", "bio13", "bio06")
@@ -84,13 +82,14 @@ climate_future <- pastclim::region_slice(
   dataset = "WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m",
   crop = iberia_poly
 )
-writeCDF(climate_future, "./inst/extdata/lacerta_climate_future_10m.nc",
-  compression = 9, split = TRUE, overwrite = TRUE
-)
+terra::saveRDS(climate_future, "./inst/extdata/lacerta_climate_future_10m.rds")
+#writeCDF(climate_future, "./inst/extdata/lacerta_climate_future_10m.nc",
+#  compression = 9, split = TRUE, overwrite = TRUE
+#)
 # fix time axis (this is a workaround if we open the file with sf)
-nc_in <- ncdf4::nc_open("./inst/extdata/lacerta_climate_future_10m.nc", write = TRUE)
-ncdf4::ncatt_put(nc_in, varid = "time", attname = "axis", attval = "T")
-ncdf4::nc_close(nc_in)
+#nc_in <- ncdf4::nc_open("./inst/extdata/lacerta_climate_future_10m.nc", write = TRUE)
+#ncdf4::ncatt_put(nc_in, varid = "time", attname = "axis", attval = "T")
+#ncdf4::nc_close(nc_in)
 
 #####
 # from the vignette, we save
