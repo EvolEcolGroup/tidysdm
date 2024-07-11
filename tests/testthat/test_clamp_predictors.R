@@ -1,12 +1,12 @@
 test_that("clamping_predictor works on SpatRasters",{
   # get current climate and subset to 3 variables
-  climate_present <- terra::rast(system.file("extdata/lacerta_climate_present_10m.nc",
+  climate_present <- terra::readRDS(system.file("extdata/lacerta_climate_present_10m.rds",
                                 package = "tidysdm"
   ))
   climate_present <- climate_present[[c("bio05","bio13","bio06","bio15")]]
   lacerta_env <- bind_cols(terra::extract(climate_present, lacerta[,c(3,2)], ID = FALSE))
   # now get future climate
-  climate_future <- terra::rast(system.file("extdata/lacerta_climate_future_10m.nc",
+  climate_future <- terra::readRDS(system.file("extdata/lacerta_climate_future_10m.rds",
                                      package = "tidysdm"
   ))
   climate_future <- climate_future [[names(climate_present)]]

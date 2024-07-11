@@ -21,6 +21,13 @@ options(cores=2)
 options(mc.cores=2)
 # xgboost uses data.table
 data.table::setDTthreads(2)
+
+# set the two variables below to FALSE for a normal vignette using the data included in the package
+download_data = FALSE
+create_sample_data = FALSE
+if (create_sample_data) {
+  download_data = TRUE # we need to download the data to create the sample data
+}
 ```
 
 # SDMs with `tidymodels`
@@ -65,9 +72,12 @@ head(lacerta)
 ```
 
 Alternatively, we can easily access and manipulate this dataset using
-`rbgif`:
+`rbgif`. Note that the data from GBIF often requires some level of cleaning. Here
+we will use a simple cleaning function from the `CoordinateCleaner`; in general,
+we recommend to inspect the data that are flagged as problematic, rather than
+just accepting them as we do here:
 
-```{r download_presences, eval = FALSE}
+```{r download_presences, eval = download_data}
 # download presences
 library(rgbif)
 occ_download_get(key = "0068808-230530130749713", path = tempdir())
@@ -77,8 +87,17 @@ distrib <- read_delim(file.path(tempdir(), "0068808-230530130749713.zip"))
 # keep the necessary columns and rename them
 lacerta <- distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
   rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
+# clean up the data
+library(CoordinateCleaner)
+lacerta <- clean_coordinates(x = lacerta,
+                           lon = "longitude",
+                           lat = "latitude",
+                           species = "ID",
+                           value = "clean")
 ```
-
+```{r echo=FALSE, results='hide', eval=create_sample_data}
+usethis::use_data(lacerta, overwrite=TRUE)
+```
 
 # Preparing your data
 
@@ -107,7 +126,7 @@ to the Iberian peninsula, where our lizard lives. For this simply
 illustration, we will not bother to project the raster, but an equal
 area projection would be desirable...
 
-```{r land_mask, eval=FALSE}
+```{r land_mask, eval= download_data}
 library(pastclim)
 download_dataset(dataset = "WorldClim_2.1_10m")
 land_mask <-
@@ -129,7 +148,14 @@ land_mask <- crop(land_mask, iberia_poly)
 land_mask <- mask(land_mask, iberia_poly)
 ```
 
-```{r echo=FALSE, results='hide'}
+```{r land_mask_save, echo=FALSE, results = 'hide', eval=create_sample_data}
+terra::saveRDS(land_mask, "../inst/extdata/lacerta_land_mask.rds")
+
+```
+
+
+```{r land_mask_load, echo=FALSE, eval=!download_data}
+# results='hide'
 library(pastclim)
 set_data_path(on_CRAN = TRUE)
 # Iberia peninsula extension
@@ -137,7 +163,7 @@ iberia_poly <- terra::vect("POLYGON((-9.8 43.3,-7.8 44.1,-2.0 43.7,3.6 42.5,3.8 
 
 crs(iberia_poly) <- "lonlat"
 gdal(warn = 3)
-land_mask <- rast(system.file("extdata/lacerta_land_mask.nc",
+land_mask <- terra::readRDS(system.file("extdata/lacerta_land_mask.rds",
   package = "tidysdm"
 ))
 ```
@@ -150,7 +176,8 @@ library(tidyterra)
 library(ggplot2)
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta) + scale_fill_gradient(na.value = "transparent")
+  geom_sf(data = lacerta) + scale_fill_discrete(na.value = "transparent") + 
+  guides(fill="none")
 
 ```
 
@@ -169,7 +196,8 @@ nrow(lacerta)
 ```{r plot_thin_by_cell, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta) + scale_fill_gradient(na.value = "transparent")
+  geom_sf(data = lacerta) + scale_fill_discrete(na.value = "transparent") + 
+  guides(fill="none")
 ```
 
 Now, we thin further to remove points that are closer than 20km.
@@ -188,7 +216,8 @@ Let's see what we have left of our points:
 ```{r plot_thin_by_dist, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta_thin) + scale_fill_gradient(na.value = "transparent")
+  geom_sf(data = lacerta_thin) + scale_fill_discrete(na.value = "transparent") +
+  guides(fill="none")
 ```
 
 We now need to select points that represent the potential available area
@@ -206,22 +235,21 @@ covering the same geographic region of the Iberian peninsula from GBIF
 <https://doi.org/10.15468/dl.53js5z>:
 
 ```{r download_background, eval=FALSE}
-# download presences
 library(rgbif)
-# download file
 occ_download_get(key = "0121761-240321170329656", path = tempdir())
-# read file
 library(readr)
 backg_distrib <- readr::read_delim(file.path(tempdir(), "0121761-240321170329656.zip"))
-
 # keep the necessary columns
 lacertidae_background <- backg_distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
   rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
-
+# convert to an sf object
 lacertidae_background <- st_as_sf(lacertidae_background, coords = c("longitude", "latitude"))
 st_crs(lacertidae_background) <- 4326
-```
 
+```
+```{r echo=FALSE, results='hide', eval=create_sample_data}
+usethis::use_data(lacertidae_background, overwrite=TRUE)
+```
 
 ```{r echo=FALSE}
 data("lacertidae_background")
@@ -233,7 +261,7 @@ We need to convert these observations into a raster whose values are the
 number of records (which will be later used to determine how likely each
 cell is to be used as a background point):
 
-```{r background_to_raster}
+```{r background_to_raster, fig.width=6, fig.height=4}
 lacertidae_background_raster <- rasterize(lacertidae_background, land_mask, fun = "count")
 
 plot(lacertidae_background_raster)
@@ -245,7 +273,7 @@ having very large number of records. We can now sample the background,
 using the 'bias' method to represent this heterogeneity in sampling
 effort:
 
-```{r sample_background}
+```{r sample_background,}
 set.seed(1234567)
 lacerta_thin <- sample_background(data = lacerta_thin, raster = lacertidae_background_raster,
                   n = 3 * nrow(lacerta_thin),
@@ -260,36 +288,19 @@ Let's see our presences and background:
 ```{r plot_sample_pseudoabs, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta_thin, aes(col = class)) + scale_fill_gradient(na.value = "transparent")
+  geom_sf(data = lacerta_thin, aes(col = class)) + 
+  scale_fill_discrete(na.value = "transparent") +
+  guides(fill="none")
 ```
 
-Generally, we can use `pastclim` to check what variables are available
-for the WorldClim dataset:
+We can use `pastclim` to download the WorldClim dataset (we'll use the 10 arc-minute
+resolution) and extract the bioclimatic
+variables that are available (but you do not have to use `pastclim`, you could 
+use any raster dataset you have access to, loading it directly with `terra`):
 
-```{r load_climate, eval=FALSE}
-climate_vars <- get_vars_for_dataset("WorldClim_2.1_10m")
-```
-
-```{r echo=FALSE, results='hide'}
-gdal(warn = 3)
-climate_present <- rast(system.file("extdata/lacerta_climate_present_10m.nc",
-  package = "tidysdm"
-))
-climate_vars <- names(climate_present)
-```
-
-We first download the dataset at the right resolution (here 10
-arc-minutes):
-
-```{r eval=FALSE}
+```{r load_climate, eval=download_data}
 download_dataset("WorldClim_2.1_10m")
-```
-
-And then create a `terra` `SpatRaster` object. The dataset covers the
-period 1970-2000, so `pastclim` dates it as 1985 (the midpoint). We can
-directly crop to the Iberian peninsula:
-
-```{r climate_worldclim, eval=FALSE}
+climate_vars <- get_vars_for_dataset("WorldClim_2.1_10m")
 climate_present <- pastclim::region_slice(
   time_ce = 1985,
   bio_variables = climate_vars,
@@ -297,6 +308,23 @@ climate_present <- pastclim::region_slice(
   crop = iberia_poly
 )
 ```
+
+```{r echo=FALSE, results='hide', eval=create_sample_data}
+terra::saveRDS(climate_present, "../inst/extdata/lacerta_climate_present_10m.rds")
+
+```
+
+
+```{r echo=FALSE, results='hide', eval=!download_data}
+climate_present <- terra::readRDS(system.file("extdata/lacerta_climate_present_10m.rds",
+  package = "tidysdm"
+))
+climate_vars <- names(climate_present)
+```
+
+Note that the dataset covers the
+period 1970-2000, so `pastclim` dates it as 1985 (the midpoint). We have also cropped
+it directly to the Iberian peninsula.
 
 Next, we extract climate for all presences and background points:
 
@@ -469,6 +497,10 @@ lacerta_ensemble
 
 ```
 
+```{r echo=FALSE, results='hide', eval=create_sample_data}
+usethis::use_data(lacerta_ensemble, overwrite=TRUE)
+```
+
 And visualise it
 
 ```{r autoplot_ens, fig.width=7, fig.height=4}
@@ -537,7 +569,8 @@ prediction_present_binary <- predict_raster(lacerta_ensemble,
 )
 ggplot() +
   geom_spatraster(data = prediction_present_binary, aes(fill = binary_mean)) +
-  geom_sf(data = lacerta_thin %>% filter(class == "presence"))
+  geom_sf(data = lacerta_thin %>% filter(class == "presence")) + 
+  scale_fill_discrete(na.value = "transparent")
 ```
 
 # Projecting to the future
@@ -549,7 +582,7 @@ on "HadGEM3-GC31-LL" model for SSP 245 (intermediate green house gas
 emissions) at the same resolution as the present day data (10
 arc-minutes). We first download the data:
 
-```{r eval=FALSE}
+```{r eval=download_data}
 download_dataset("WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m")
 ```
 
@@ -581,7 +614,7 @@ change with time), so if we needed it, we would have to copy it over
 from the present. However, it is not in our set of uncorrelated
 variables that we used earlier, so we don't need to worry about it.
 
-```{r eval=FALSE}
+```{r eval=download_data}
 climate_future <- pastclim::region_slice(
   time_ce = 2090,
   bio_variables = vars_uncor,
@@ -590,9 +623,12 @@ climate_future <- pastclim::region_slice(
 )
 ```
 
-```{r echo=FALSE, results='asis'}
-gdal(warn = 3)
-climate_future <- rast(system.file("extdata/lacerta_climate_future_10m.nc",
+```{r echo=FALSE, results='hide', eval=create_sample_data}
+terra::saveRDS(climate_future, "../inst/extdata/lacerta_climate_future_10m.rds")
+```
+
+```{r echo=FALSE, results='asis', eval=!download_data}
+climate_future <- terra::readRDS(system.file("extdata/lacerta_climate_future_10m.rds",
   package = "tidysdm"
 ))
 ```
@@ -618,7 +654,7 @@ spatial extrapolation.
 `tidysdm` offers a couple of approaches to deal with this problem. The simplest one is that we can clamp the environmental variables to stay within the limits observed
 in the calibration set:
 
-```{r}
+```{r, fig.width=6, fig.height=4}
 climate_future_clamped <- clamp_predictors(climate_future, 
                                            training = lacerta_thin,
                                            .col= class)
@@ -637,7 +673,7 @@ but compute the Multivariate environmental similarity surfaces (MESS) (Elith et 
 
 We estimate the MESS for the same future time slice used above:
 
-```{r}
+```{r, fig.width=6, fig.height=4}
 lacerta_mess_future <- extrapol_mess(x = climate_future, 
                                       training = lacerta_thin, 
                                       .col = "class")
@@ -654,7 +690,7 @@ predictions.
 
 We can now overlay MESS values with current prediction to visualize areas characterized by spatial extrapolation. 
 
-```{r}
+```{r, fig.width=6, fig.height=4}
 # subset mess 
 lacerta_mess_future_subset <- lacerta_mess_future
 lacerta_mess_future_subset[lacerta_mess_future_subset >= 0] <- NA
@@ -690,7 +726,7 @@ then plot the predictions against the values of the variable of
 interest. For example, to investigate the contribution of `bio05`, we
 would:
 
-```{r}
+```{r, fig.width=6, fig.height=4}
 bio05_prof <- lacerta_rec %>%
   step_profile(-bio05, profile = vars(bio05)) %>%
   prep(training = lacerta_thin)
@@ -779,6 +815,11 @@ Now we can create a `repeat_ensemble` from the list:
 lacerta_rep_ens <- repeat_ensemble() %>% add_repeat(ensemble_list)
 lacerta_rep_ens
 ```
+
+```{r echo=FALSE, results='hide', eval=create_sample_data}
+usethis::use_data(lacerta_rep_ens, overwrite=TRUE)
+```
+
 
 We can summarise the goodness of fit of models for each repeat with
 `collect_metrics()`, but there is no `autoplot()` function for
