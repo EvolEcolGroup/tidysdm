@@ -1,252 +1,86 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/404.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/articles/a3_troubleshooting.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/index.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/add_member.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/add_repeat.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/autoplot.simple_ensemble.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/autoplot.spatial_initial_split.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/blockcv2rsample.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/boyce_cont.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/calib_class_thresh.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/check_coords_names.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/check_sdm_presence.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/check_splits_balance.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/clamp_predictors.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/collect_metrics.simple_ensemble.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/conf_matrix_df.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/control_ensemble.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/dist_pres_vs_bg.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/explain_tidysdm.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/extrapol_mess.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/filter_collinear.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/filter_high_cor.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/form_resp.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/gam_formula.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/geom_split_violin.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/grid_cellsize.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/grid_offset.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/horses.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/kap_max.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/km2m.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta_ensemble.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta_rep_ens.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/lacertidae_background.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/maxent.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/maxent_params.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/maxnet_fit.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/maxnet_predict.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/niche_overlap.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh_kap_max.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh_sens.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh_tss_max.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/out_of_range_warning.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/plot_pres_vs_bg.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/predict.repeat_ensemble.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/predict.simple_ensemble.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/predict_raster.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/prob_metrics_sf.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/prob_to_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/recipe.sf.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/repeat_ensemble.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/sample_background.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/sample_background_time.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/sample_pseudoabs.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/sample_pseudoabs_time.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_metric_set.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_spec_boost_tree.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_spec_gam.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_spec_glm.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_spec_maxent.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_spec_rand_forest.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/simple_ensemble.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/spatial_initial_split.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/thin_by_cell.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/thin_by_cell_time.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/thin_by_dist.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/thin_by_dist_time.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/tidysdm-package.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/tss.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/tss_max.html</loc>
-  </url>
-  <url>
-    <loc>https://evolecolgroup.github.io/tidysdm/reference/y2d.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://evolecolgroup.github.io/tidysdm/404.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/CONTRIBUTING.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/LICENSE.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/articles/a3_troubleshooting.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/articles/index.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/authors.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/index.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/news/index.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/add_member.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/add_repeat.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/autoplot.simple_ensemble.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/autoplot.spatial_initial_split.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/blockcv2rsample.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/boyce_cont.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/calib_class_thresh.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/check_coords_names.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/check_sdm_presence.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/check_splits_balance.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/clamp_predictors.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/collect_metrics.simple_ensemble.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/conf_matrix_df.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/control_ensemble.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/dist_pres_vs_bg.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/explain_tidysdm.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/extrapol_mess.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/filter_collinear.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/filter_high_cor.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/form_resp.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/gam_formula.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/geom_split_violin.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/grid_cellsize.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/grid_offset.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/horses.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/index.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/kap_max.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/km2m.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta_ensemble.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta_rep_ens.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/lacertidae_background.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/maxent.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/maxent_params.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/maxnet_fit.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/maxnet_predict.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/niche_overlap.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh_kap_max.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh_sens.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh_tss_max.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/out_of_range_warning.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/pipe.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/plot_pres_vs_bg.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/predict.repeat_ensemble.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/predict.simple_ensemble.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/predict_raster.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/prob_metrics_sf.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/prob_to_binary.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/recipe.sf.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/repeat_ensemble.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/sample_background.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/sample_background_time.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/sample_pseudoabs.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/sample_pseudoabs_time.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_metric_set.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_spec_boost_tree.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_spec_gam.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_spec_glm.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_spec_maxent.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/sdm_spec_rand_forest.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/simple_ensemble.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/spatial_initial_split.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/thin_by_cell.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/thin_by_cell_time.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/thin_by_dist.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/thin_by_dist_time.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/tidysdm-package.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/tss.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/tss_max.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/y2d.html</loc></url>
 </urlset>
+
