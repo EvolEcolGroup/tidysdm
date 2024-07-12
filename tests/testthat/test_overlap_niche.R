@@ -1,9 +1,9 @@
 test_that("niche_overlap quantifies difference between rasters",{
-climate_present <- terra::rast(system.file("extdata/lacerta_climate_present_10m.nc",
+climate_present <- terra::readRDS(system.file("extdata/lacerta_climate_present_10m.rds",
                                            package = "tidysdm"
 ))
 
-climate_future <- terra::rast(system.file("extdata/lacerta_climate_future_10m.nc",
+climate_future <- terra::readRDS(system.file("extdata/lacerta_climate_future_10m.rds",
                                           package = "tidysdm"
 ))
 lacerta_present<-predict_raster(lacerta_ensemble, climate_present)

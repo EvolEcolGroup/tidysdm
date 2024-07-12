@@ -43,7 +43,7 @@ test_that("filter collinear variables with cor_caret", {
   
   
   # test method on SpatRaster
-  climate_present <- terra::rast(system.file("extdata/lacerta_climate_present_10m.nc",
+  climate_present <- terra::readRDS(system.file("extdata/lacerta_climate_present_10m.rds",
                                       package = "tidysdm"
   ))
   cor_spatraster_ken <- filter_collinear(climate_present, cor_type = "kendall")
