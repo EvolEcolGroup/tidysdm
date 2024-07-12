@@ -176,7 +176,7 @@ library(tidyterra)
 library(ggplot2)
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta) + scale_fill_discrete(na.value = "transparent") + 
+  geom_sf(data = lacerta) + 
   guides(fill="none")
 
 ```
@@ -196,7 +196,7 @@ nrow(lacerta)
 ```{r plot_thin_by_cell, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta) + scale_fill_discrete(na.value = "transparent") + 
+  geom_sf(data = lacerta) + 
   guides(fill="none")
 ```
 
@@ -216,7 +216,7 @@ Let's see what we have left of our points:
 ```{r plot_thin_by_dist, fig.width=6, fig.height=4}
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
-  geom_sf(data = lacerta_thin) + scale_fill_discrete(na.value = "transparent") +
+  geom_sf(data = lacerta_thin) +
   guides(fill="none")
 ```
 
@@ -238,12 +238,15 @@ covering the same geographic region of the Iberian peninsula from GBIF
 library(rgbif)
 occ_download_get(key = "0121761-240321170329656", path = tempdir())
 library(readr)
-backg_distrib <- readr::read_delim(file.path(tempdir(), "0121761-240321170329656.zip"))
+backg_distrib <- readr::read_delim(file.path(tempdir(), 
+                                             "0121761-240321170329656.zip"))
 # keep the necessary columns
-lacertidae_background <- backg_distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
+lacertidae_background <- backg_distrib %>% 
+  select(gbifID, decimalLatitude, decimalLongitude) %>%
   rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
 # convert to an sf object
-lacertidae_background <- st_as_sf(lacertidae_background, coords = c("longitude", "latitude"))
+lacertidae_background <- st_as_sf(lacertidae_background, 
+                                  coords = c("longitude", "latitude"))
 st_crs(lacertidae_background) <- 4326
 
 ```
@@ -253,7 +256,8 @@ usethis::use_data(lacertidae_background, overwrite=TRUE)
 
 ```{r echo=FALSE}
 data("lacertidae_background")
-lacertidae_background <- st_as_sf(lacertidae_background, coords = c("longitude", "latitude"))
+lacertidae_background <- st_as_sf(lacertidae_background, 
+                                  coords = c("longitude", "latitude"))
 st_crs(lacertidae_background) <- 4326
 ```
 
@@ -262,7 +266,8 @@ number of records (which will be later used to determine how likely each
 cell is to be used as a background point):
 
 ```{r background_to_raster, fig.width=6, fig.height=4}
-lacertidae_background_raster <- rasterize(lacertidae_background, land_mask, fun = "count")
+lacertidae_background_raster <- rasterize(lacertidae_background, land_mask, 
+                                          fun = "count")
 
 plot(lacertidae_background_raster)
 
@@ -289,7 +294,6 @@ Let's see our presences and background:
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
   geom_sf(data = lacerta_thin, aes(col = class)) + 
-  scale_fill_discrete(na.value = "transparent") +
   guides(fill="none")
 ```
 
@@ -701,7 +705,9 @@ lacerta_mess_future_subset <- as.polygons(lacerta_mess_future_subset)
 
 # plot as a mask 
 ggplot() + geom_spatraster(data = prediction_future) + 
-  scale_fill_viridis_b(na.value = "transparent") + geom_sf(data = lacerta_mess_future_subset, fill= "lightgray", alpha = 0.5, linewidth = 0.5)
+  scale_fill_viridis_b(na.value = "transparent") + 
+  geom_sf(data = lacerta_mess_future_subset, 
+          fill= "lightgray", alpha = 0.5, linewidth = 0.5)
 
 ```
 
