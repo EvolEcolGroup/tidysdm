@@ -1,3 +1,7 @@
+# `tidysdm` development version
+
+* implement `make_mask_from_presence` to define the area of interest
+
 # `tidysdm` 0.9.5
 
 * implement clamping and MESS to manage extrapolation
@@ -6,7 +10,7 @@
 
 # `tidysdm` 0.9.4
 
-* fix a but in the 'predict*' functions that prevented a fixed threshold to be used
+* fix a but in the `predict*` functions that prevented a fixed threshold to be used
   to assign classes
 * ensure compatibility with upcoming changes in `tune`
 

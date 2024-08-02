@@ -15,6 +15,7 @@ reference:
       - thin_by_cell_time
       - thin_by_dist
       - thin_by_dist_time
+      - make_mask_from_presence
 
   - title: "Choice of predictor variables"
     desc: "Functions for removing collinearity and visualising the distribution of predictors."
