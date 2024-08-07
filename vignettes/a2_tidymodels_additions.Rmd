@@ -351,7 +351,7 @@ library(tidysdm)
 lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
   package = "tidysdm"
 ))
-# select variables of interest
+# create a topography variable with 3 levels based on altitude
 lacerta_thin$topography <- cut(lacerta_thin$altitude,
                 breaks = c(-Inf, 200, 800, Inf),
                 labels = c("plains", "hills", "mountains"))
@@ -360,6 +360,7 @@ table(lacerta_thin$topography)
 
 We then create the recipe by adding a step to create dummy variables for the `topography` variable.
 ```{r}
+# subset to variable of interest
 lacerta_thin <- lacerta_thin %>% select(class, bio05, bio06, bio12, bio15, topography)
 
 lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%

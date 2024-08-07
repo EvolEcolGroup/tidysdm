@@ -299,7 +299,7 @@ ggplot() +
 We can use `pastclim` to download the WorldClim dataset (we'll use the 10 arc-minute
 resolution) and extract the bioclimatic
 variables that are available (but you do not have to use `pastclim`, you could 
-use any raster dataset you have access to, loading it directly with `terra`):
+use any raster dataset you have access to, loading it directly with `terra`).
 
 ```{r load_climate, eval=download_data}
 download_dataset("WorldClim_2.1_10m")
@@ -328,6 +328,13 @@ climate_vars <- names(climate_present)
 Note that the dataset covers the
 period 1970-2000, so `pastclim` dates it as 1985 (the midpoint). We have also cropped
 it directly to the Iberian peninsula.
+
+Note that, in this vignette, we focus on continuous variables; most machine learning algorithms
+do not natively cope with multi-level factors, but it is possible to use `recipes::step_dummy()`
+to generate dummy variables from factors. A worked example can be found in the
+[article on additional features of tidymodels with tidysdm](https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html).
+
+
 
 Next, we extract climate for all presences and background points:
 
