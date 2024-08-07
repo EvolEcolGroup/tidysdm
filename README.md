@@ -56,7 +56,7 @@ you can find Articles giving you a step-by-step [overview of the
 fitting SDMs to contemporary species](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html),
 as well as an equivalent [tutorial for using palaeontological data](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html).
 Furthermore, there is an [Article with examples of how to leverage various
-features of tidymodels](https://evolecolgroup.github.io/tidysdm/dev/articles/a2_tidymodels_additions.html) that are not commonly adopted in SDM pipelines
+features of tidymodels](https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html) that are not commonly adopted in SDM pipelines
 
 There is also a [dev
 version](https://evolecolgroup.github.io/tidysdm/dev/) of the site
