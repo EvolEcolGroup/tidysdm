@@ -1,6 +1,9 @@
 ---
 title: "Examples of additional tidymodels features"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+  
 #output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{Examples of additional tidymodels features}
@@ -23,7 +26,6 @@ download_data = FALSE
 # note that data were created in the overview vignette
 ```
 
-# Additional features of `tidymodels`
 
 In this vignette, we illustrate how a number of features from `tidymodels` can
 be used to enhance a conventional SDM pipeline. We recommend users first become familiar with `tidymodels`;
@@ -31,6 +33,8 @@ there are a number of excellent tutorials (both introductory and advanced) on it
 We reuse the example on the Iberian lizard that we used
 in the 
 [`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article.
+
+
 
 # Exploring models with `DALEX`
 
@@ -43,7 +47,7 @@ Here we demonstrate how to use [DALEX](https://modeloriented.github.io/DALEX/), 
 that has methods to deal with `tidymodels`. `tidysdm` contains additional functions that
 allow use to use the DALEX functions directly on `tidysdm` ensembles. 
 
-We will use a simple ensemble that we built in the 
+We will use a simple ensemble that we built in the overview vignette.
 
 ```{r}
 library(tidysdm)
@@ -334,4 +338,88 @@ ggplot() +
   geom_sf(data = lacerta_thin %>% filter(class == "presence"))
 ```
 
+# Using multi-level factors as predictors
+
+Most machine learning algorithms do not natively use multilevel factors as predictors.
+The solution is to create dummy variables, which are binary variables that represent
+the levels of the factor. In `tidymodels`, this is done using the `step_dummy` function.
+
+Let's create a factor variable with 3 levels based on altitude.
+```{r}
+library(tidysdm)
+# load the dataset
+lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+  package = "tidysdm"
+))
+# select variables of interest
+lacerta_thin$topography <- cut(lacerta_thin$altitude,
+                breaks = c(-Inf, 200, 800, Inf),
+                labels = c("plains", "hills", "mountains"))
+table(lacerta_thin$topography)
+```
+
+We then create the recipe by adding a step to create dummy variables for the `topography` variable.
+```{r}
+lacerta_thin <- lacerta_thin %>% select(class, bio05, bio06, bio12, bio15, topography)
+
+lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
+  step_dummy(topography)
+lacerta_rec
+```
+
+Let's us see what this does:
+```{r}
+lacerta_prep <- prep(lacerta_rec)
+summary(lacerta_prep)
+```
+We have added two "derived" variables, *topography_hills* and *topography_mountains*, which are binary
+variables that 
+allow us to code topography (with plains
+being used as the reference level, which is coded by both hills and mountains being 0 for a given location).
+We can look at the first few rows of the data to see the new variables by baking the recipe:
+
+```{r}
+lacerta_bake <- bake(lacerta_prep, new_data = lacerta_thin)
+glimpse(lacerta_bake)
+```
+
+We can now run the sdm as usual:
+```{r}
+# define the models
+lacerta_models <-
+  # create the workflow_set
+  workflow_set(
+    preproc = list(default = lacerta_rec),
+    models = list(
+      # the standard glm specs
+      glm = sdm_spec_glm(),
+      # rf specs with tuning
+      rf = sdm_spec_rf()
+    ),
+    # make all combinations of preproc and models,
+    cross = TRUE
+  ) %>%
+  # tweak controls to store information needed later to create the ensemble
+  option_add(control = control_ensemble_grid())
+# tune
+set.seed(100)
+lacerta_cv <- spatial_block_cv(lacerta_thin, v = 3)
+lacerta_models <-
+  lacerta_models %>%
+  workflow_map("tune_grid",
+    resamples = lacerta_cv, grid = 3,
+    metrics = sdm_metric_set(), verbose = TRUE
+  )
+# fit the ensemble
+lacerta_ensemble <- simple_ensemble() %>%
+  add_member(lacerta_models, metric = "boyce_cont")
+```
+
+We can now verify that the dummy variables were used by extracting the model fit from
+one of the models in the ensemble:
+```{r}
+lacerta_ensemble$workflow[[1]] %>% extract_fit_parsnip()
+```
+
+We can see that we have coefficients for *topography_hills* and *topography_mountains*.
 
