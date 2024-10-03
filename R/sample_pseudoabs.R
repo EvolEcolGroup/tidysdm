@@ -19,7 +19,7 @@
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
-#' @param raster the [terra::SpatRaster] from which cells will be sampled
+#' @param raster the [terra::SpatRaster] or `stars` from which cells will be sampled
 #' @param n number of pseudoabsence points to sample
 #' @param coords a vector of length two giving the names of the "x" and "y"
 #' coordinates, as found in `data`. If left to NULL, the function will
@@ -40,6 +40,7 @@
 sample_pseudoabs <- function(data, raster, n, coords = NULL,
                              method = "random", class_label = "pseudoabs",
                              return_pres = TRUE) {
+  if(inherits(raster, "stars")) raster <- as(raster, "SpatRaster")
   return_sf <- FALSE # flag whether we need to return an sf object
   if (inherits(data, "sf")) {
     bind_col <- TRUE

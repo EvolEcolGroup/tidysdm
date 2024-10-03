@@ -12,7 +12,7 @@
 #' `extrapol_mess` on those [`terra::SpatRaster`]s
 #' 
 #' 
-#' @param x [`terra::SpatRaster`], [`terra::SpatRasterDataset`] or [`data.frame`]
+#' @param x [`terra::SpatRaster`], `stars`, [`terra::SpatRasterDataset`] or [`data.frame`]
 #' @param training matrix or data.frame or sf object containing the reference values; each column
 #' should correspond to one layer of the [`terra::SpatRaster`] object, with the exception
 #' of the presences column defined in `.col` (optional).
@@ -41,6 +41,13 @@ extrapol_mess.default <- function(x, training, ...) {
   stop("no method available for this object type")
 }
 
+
+#' @rdname extrapol_mess
+#' @export
+extrapol_mess.stars <- function(x, ...) {
+  extrapol_mess(as(x, "SpatRaster"),  ...) |>
+    stars::st_as_stars(as_attributes = TRUE)
+}
 
 #' @rdname extrapol_mess
 #' @param .col the column containing the presences (optional). If specified,

@@ -3,11 +3,11 @@
 #' This function allows to use a raster as data to make predictions from a
 #' variety of `tidymodels` objects, such as [`simple_ensemble`] or [`stacks::stacks`]
 #' @param object the `tidymodels` object of interest
-#' @param raster the [`terra::SpatRaster`] with the input data. It has to include
+#' @param raster the [`terra::SpatRaster`] or `stars` with the input data. It has to include
 #' levels with the same names as the variables used in `object`
 #' @param ... parameters to be passed to the standard `predict()` function
 #' for the appropriate object type (e.g. `metric_thresh` or `class_thresh`).
-#' @returns a [`terra::SpatRaster`] with the predictions
+#' @returns a [`terra::SpatRaster`] (or `stars` if that is the input) with the predictions
 #' @export
 #' @keywords predict
 #'
@@ -15,9 +15,16 @@ predict_raster <- function(object, raster, ...) {
   UseMethod("predict_raster", object)
 }
 
+
 #' @rdname predict_raster
 #' @export
 predict_raster.default <- function(object, raster, ...) {
+  if(inherits(raster, "stars")) {
+    is_stars = TRUE
+    raster = as(raster, "SpatRaster")
+  } else {
+    is_stars = FALSE
+  }
   # create a dataframe
   raster_df <- terra::as.data.frame(raster, cell = TRUE, na.rm = TRUE)
   # create a vector of predictions by dispatching to the predict generics
@@ -47,6 +54,9 @@ predict_raster.default <- function(object, raster, ...) {
   names(pred_raster) <- names(pred_df)
   if (is.factor(pred_df %>% dplyr::pull(1))) {
     names(pred_raster) <- paste0("binary_", names(pred_raster))
+  }
+  if (is_stars){
+    pred_raster <- stars::st_as_stars(pred_raster, as_attributes = TRUE)
   }
   pred_raster
 }

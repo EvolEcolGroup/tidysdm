@@ -4,7 +4,7 @@
 #' or [`terra::SpatRasterDataset`] so that their minimum and maximum values
 #' do not exceed the range in the training dataset. 
 #'
-#' @param x a [`terra::SpatRaster`] or [`terra::SpatRasterDataset`] to clamp.
+#' @param x a [`terra::SpatRaster`], `stars` or [`terra::SpatRasterDataset`] to clamp.
 #' @param training the training dataset (a [`data.frame`] or a [`sf::sf`] object.
 #' @param .col the column containing the presences (optional). If specified,
 #' it is excluded from the clamping.
@@ -25,6 +25,14 @@ clamp_predictors <- function(x, training, .col, use_na) {
 #' @export
 clamp_predictors.default <- function(x, training, .col, use_na) {
   stop("no method available for this object type")
+}
+
+#' @rdname clamp_predictors
+#' @export
+clamp_predictors.stars <- function(x, ...){
+  x = as(x, "SpatRaster")
+  clamp_predictors(x, ...) |>
+    stars::st_as_stars(as_attributes = TRUE)
 }
 
 #' @rdname clamp_predictors

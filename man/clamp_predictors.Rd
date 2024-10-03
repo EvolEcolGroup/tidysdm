@@ -3,6 +3,7 @@
 \name{clamp_predictors}
 \alias{clamp_predictors}
 \alias{clamp_predictors.default}
+\alias{clamp_predictors.stars}
 \alias{clamp_predictors.SpatRaster}
 \alias{clamp_predictors.SpatRasterDataset}
 \title{Clamp the predictors to match values in training set}
@@ -11,12 +12,14 @@ clamp_predictors(x, training, .col, use_na)
 
 \method{clamp_predictors}{default}(x, training, .col, use_na)
 
+\method{clamp_predictors}{stars}(x, ...)
+
 \method{clamp_predictors}{SpatRaster}(x, training, .col, use_na = FALSE)
 
 \method{clamp_predictors}{SpatRasterDataset}(x, training, .col, use_na = FALSE)
 }
 \arguments{
-\item{x}{a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} to clamp.}
+\item{x}{a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{stars} or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} to clamp.}
 
 \item{training}{the training dataset (a \code{\link{data.frame}} or a \code{\link[sf:sf]{sf::sf}} object.}
 
