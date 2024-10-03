@@ -3,6 +3,7 @@
 \name{filter_collinear}
 \alias{filter_collinear}
 \alias{filter_collinear.default}
+\alias{filter_collinear.stars}
 \alias{filter_collinear.SpatRaster}
 \alias{filter_collinear.data.frame}
 \alias{filter_collinear.matrix}
@@ -31,6 +32,8 @@ filter_collinear(
   max_cells = Inf,
   ...
 )
+
+\method{filter_collinear}{stars}(x, ...)
 
 \method{filter_collinear}{SpatRaster}(
   x,
@@ -70,7 +73,7 @@ filter_collinear(
 )
 }
 \arguments{
-\item{x}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object, a data.frame (with only numeric
+\item{x}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{stars} object, a data.frame (with only numeric
 variables)}
 
 \item{cutoff}{A numeric value used as a threshold to remove variables.

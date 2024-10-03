@@ -16,7 +16,7 @@
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
-#' @param raster the [terra::SpatRaster] or [terra::SpatRasterDataset] from which cells will be sampled.
+#' @param raster the [terra::SpatRaster], `stars` or [terra::SpatRasterDataset] from which cells will be sampled.
 #' If a [terra::SpatRasterDataset], the first dataset will be used to define which cells are valid,
 #' and which are NAs.
 #' @param n_per_time_step number of background points to sample for
@@ -71,6 +71,8 @@ sample_background_time <- function(data, raster, n_per_time_step, coords = NULL,
   if (inherits(raster, "SpatRasterDataset")) {
     raster <- raster[[1]]
   } 
+  
+  if (inherits(raster, "stars")) raster <- as(raster, "SpatRaster")
 
   if (length(n_per_time_step)!=terra::nlyr(raster)){
     stop("length of 'n_per_time_step' should be the same as the number of layers in 'raster'")

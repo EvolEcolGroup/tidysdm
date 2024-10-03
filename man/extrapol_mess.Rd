@@ -3,6 +3,7 @@
 \name{extrapol_mess}
 \alias{extrapol_mess}
 \alias{extrapol_mess.default}
+\alias{extrapol_mess.stars}
 \alias{extrapol_mess.SpatRaster}
 \alias{extrapol_mess.data.frame}
 \alias{extrapol_mess.SpatRasterDataset}
@@ -12,6 +13,8 @@ extrapol_mess(x, training, .col, ...)
 
 \method{extrapol_mess}{default}(x, training, ...)
 
+\method{extrapol_mess}{stars}(x, ...)
+
 \method{extrapol_mess}{SpatRaster}(x, training, .col, filename = "", ...)
 
 \method{extrapol_mess}{data.frame}(x, training, .col, ...)
@@ -19,7 +22,7 @@ extrapol_mess(x, training, .col, ...)
 \method{extrapol_mess}{SpatRasterDataset}(x, training, .col, ...)
 }
 \arguments{
-\item{x}{\code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} or \code{\link{data.frame}}}
+\item{x}{\code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{stars}, \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} or \code{\link{data.frame}}}
 
 \item{training}{matrix or data.frame or sf object containing the reference values; each column
 should correspond to one layer of the \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object, with the exception

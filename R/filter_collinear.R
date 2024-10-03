@@ -13,7 +13,7 @@
 #' considered.
 
 #'
-#' @param x A [`terra::SpatRaster`] object, a data.frame (with only numeric
+#' @param x A [`terra::SpatRaster`] or `stars` object, a data.frame (with only numeric
 #' variables)
 #' @param cutoff A numeric value used as a threshold to remove variables. 
 #' For, "cor_caret" and "vif_cor",
@@ -66,9 +66,19 @@ filter_collinear.default <- function(x,
                                     cor_type = "pearson",
                                     max_cells = Inf,
                                     ...) {
-  stop("no method available for this object type")
+  stop("no method available for class object type: ", paste(class(x), collapse = " "))
 }
 
+#' @rdname filter_collinear
+#' @param exhaustive boolean. Used only for [`terra::SpatRaster`] when downsampling
+#' to `max_cells`, if we require the `exhaustive` approach in [terra::spatSample()].
+#' This is only needed for rasters that are very sparse and not too large, see the help
+#' page of [terra::spatSample()] for details.
+#' @export
+filter_collinear.stars <-
+  function(x, ...) {
+    filter_collinear(as(x, "SpatRaster"), ...)
+}
 
 #' @rdname filter_collinear
 #' @param exhaustive boolean. Used only for [`terra::SpatRaster`] when downsampling

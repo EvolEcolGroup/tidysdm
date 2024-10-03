@@ -17,7 +17,7 @@
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
-#' @param raster the [terra::SpatRaster] from which cells will be sampled (the first layer
+#' @param raster the [terra::SpatRaster] or `stars` from which cells will be sampled (the first layer
 #' will be used to determine which cells are NAs, and thus can not be sampled). If
 #' sampling is "biased", then the sampling probability will be proportional to the values on
 #' the first layer (i.e. band) of the raster. 
@@ -41,6 +41,7 @@
 sample_background <- function(data, raster, n, coords = NULL,
                              method = "random", class_label = "background",
                              return_pres = TRUE) {
+  if(inherits(raster, "stars")) raster <- as(raster, "SpatRaster")
   return_sf <- FALSE # flag whether we need to return an sf object
   if (inherits(data, "sf")) {
     bind_col <- TRUE
