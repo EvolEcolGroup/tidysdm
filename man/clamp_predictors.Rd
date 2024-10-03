@@ -30,6 +30,8 @@ it is excluded from the clamping.}
 of the training dataset are removed (set to NA). If FALSE (the default),
 values outside the training range are replaced with the extremes of the training
 range.}
+
+\item{...}{additional arguments specific to a given object type}
 }
 \value{
 a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} clamped to

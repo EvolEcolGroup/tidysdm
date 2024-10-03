@@ -12,6 +12,7 @@
 #' of the training dataset are removed (set to NA). If FALSE (the default),
 #' values outside the training range are replaced with the extremes of the training
 #' range.
+#' @param ... additional arguments specific to a given object type
 #' @returns a [`terra::SpatRaster`] or [`terra::SpatRasterDataset`] clamped to
 #' the ranges in `training`
 #' @export

@@ -1,6 +1,7 @@
 # `tidysdm` development version
 
 * implement `make_mask_from_presence` to define the area of interest
+* add interoperability with `stars`
 
 # `tidysdm` 0.9.5
 
