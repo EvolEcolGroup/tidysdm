@@ -28,9 +28,8 @@ Depends:
     spatialsample,
     R (>= 3.50)
 Imports:
-    dials,
     DALEX,
-    DALEXtra,
+    dials,
     dplyr,
     ggplot2,
     lubridate,
@@ -53,6 +52,7 @@ Imports:
 Suggests:
     blockCV,
     data.table,
+    DALEXtra,
     doParallel,
     earth,
     kernlab,

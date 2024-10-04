@@ -260,6 +260,13 @@ explain_simple_ensemble_by_workflow <- function(
   if (type != "classification") {
     stop("type has to be classification for a tidysdm ensemble")
   }
+
+  if (!requireNamespace("DALEXtra", quietly = TRUE)) {
+    stop(
+      "to use this function, first install package 'DALEXtra' with\n",
+      "install.packages('DALEXtra')")
+  }
+
   explainer_list <- list()
   for (i in seq_len(nrow(model))) {
     if (is.null(data)) {
