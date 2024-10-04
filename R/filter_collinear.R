@@ -66,7 +66,7 @@ filter_collinear.default <- function(x,
                                     cor_type = "pearson",
                                     max_cells = Inf,
                                     ...) {
-  stop("no method available for class object type: ", paste(class(x), collapse = " "))
+  stop("no method available for this object type")
 }
 
 #' @rdname filter_collinear

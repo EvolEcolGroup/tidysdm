@@ -34,7 +34,7 @@ test_that("filter collinear variables with cor_caret", {
   # error for defautl object
   expect_error(
     filter_collinear("blah"),
-    "^no method available for this object type"
+    "no method available for this object type"
   )
 
   # sample from data.frame
