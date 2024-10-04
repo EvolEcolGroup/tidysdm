@@ -34,14 +34,14 @@ test_that("filter collinear variables with cor_caret", {
   # error for defautl object
   expect_error(
     filter_collinear("blah"),
-    "no method available for this object type"
+    "^no method available for this object type"
   )
-  
+
   # sample from data.frame
   set.seed(123)
   expect_true(!identical(filter_collinear(lacerta_thin, max_cells = 100), vars_to_keep))
-  
-  
+
+
   # test method on SpatRaster
   climate_present <- terra::readRDS(system.file("extdata/lacerta_climate_present_10m.rds",
                                       package = "tidysdm"
@@ -61,8 +61,8 @@ test_that("filter collinear variables with vif_step", {
   # we should remove two variables
   expect_true(all(!c("bio01", "bio18") %in% vars_to_keep))
   # now keep them in
-  expect_true(all(c("bio01", "bio18") %in% 
-                    filter_collinear(lacerta_thin, method="vif_step", 
+  expect_true(all(c("bio01", "bio18") %in%
+                    filter_collinear(lacerta_thin, method="vif_step",
                                      to_keep = c("bio01", "bio18"))))
 })
 
@@ -75,7 +75,7 @@ test_that("filter collinear variables with vif_cor", {
   # we should remove two variables
   expect_true(all(!c("bio01", "bio18") %in% vars_to_keep))
   # now keep them in
-  expect_true(all(c("bio01", "bio18") %in% 
-                    filter_collinear(lacerta_thin, method="vif_cor", 
+  expect_true(all(c("bio01", "bio18") %in%
+                    filter_collinear(lacerta_thin, method="vif_cor",
                                      to_keep = c("bio01", "bio18"))))
 })
