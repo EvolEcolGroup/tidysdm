@@ -108,7 +108,7 @@ vignette.</p>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Learn how to get started at <span style="color: #00BB00;">https://www.tidymodels.org/start/</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Dig deeper into tidy modeling with R at <span style="color: #00BB00;">https://www.tmwr.org</span></span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span>
 <span><span class="va">lacerta_ensemble</span></span>
 <span><span class="co">#&gt; A simple_ensemble of models</span></span>
@@ -395,12 +395,12 @@ variables in the dataset. So, before tuning, we need to finalise
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (342ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (301ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 3 tuning:     all_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> No improvement for 10 iterations; returning current results.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (16.6s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (16s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 3 tuning:     all_svm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (21.7s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (19.8s)</span></span></span></code></pre></div>
 <p>We can have a look at the performance of our models with:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_models</span><span class="op">)</span></span></code></pre></div>
@@ -589,10 +589,10 @@ baking the recipe:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (205ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (192ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (1s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (952ms)</span></span></span>
 <span><span class="co"># fit the ensemble</span></span>
 <span><span class="va">lacerta_ensemble</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simple_ensemble.html">simple_ensemble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_member.html">add_member</a></span><span class="op">(</span><span class="va">lacerta_models</span>, metric <span class="op">=</span> <span class="st">"boyce_cont"</span><span class="op">)</span></span></code></pre></div>
@@ -618,6 +618,35 @@ the model fit from one of the models in the ensemble:</p>
 <span><span class="co">#&gt; Residual Deviance: 189.5     AIC: 203.5</span></span></code></pre></div>
 <p>We can see that we have coefficients for <em>topography_hills</em>
 and <em>topography_mountains</em>.</p>
+<p>Let us now predict the presence of the lizard in the Iberian
+Peninsula using the ensemble. Note that, for
+<code><a href="../reference/predict_raster.html">predict_raster()</a></code> to work, the name and levels for a
+categorical variable need to match with those used when training the
+models (i.e. in the recipe with <code>step_dummy()</code>):</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">climate_present</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_present_10m.rds"</span>,</span>
+<span>                                              package <span class="op">=</span> <span class="st">"tidysdm"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># first we add a topography variable to the climate data</span></span>
+<span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span> <span class="op">&lt;-</span> <span class="va">climate_present</span><span class="op">$</span><span class="va">altitude</span></span>
+<span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/classify.html" class="external-link">classify</a></span><span class="op">(</span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span>, rcl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">200</span>, <span class="fl">800</span>, <span class="cn">Inf</span><span class="op">)</span>, include.lowest<span class="op">=</span><span class="cn">TRUE</span>, brackets<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; terra 1.7.78</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'terra'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:kernlab':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     buffer, size</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:tidyr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     extract</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:scales':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     rescale</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span><span class="op">)</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>, topography <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plains"</span>, <span class="st">"hills"</span>, <span class="st">"mountains"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># now we can predict</span></span>
+<span><span class="va">predict_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span>, <span class="va">climate_present</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">predict_factor</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a2_tidymodels_additions_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
