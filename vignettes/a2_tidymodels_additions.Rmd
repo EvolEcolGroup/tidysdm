@@ -424,3 +424,17 @@ lacerta_ensemble$workflow[[1]] %>% extract_fit_parsnip()
 
 We can see that we have coefficients for *topography_hills* and *topography_mountains*.
 
+Let us now predict the presence of the lizard in the Iberian Peninsula using the ensemble. Note that,
+for `predict_raster()` to work, the name and levels for a categorical variable need to match with those used
+when training the models (i.e. in the recipe with `step_dummy()`):
+```{r}
+climate_present <- terra::readRDS(system.file("extdata/lacerta_climate_present_10m.rds",
+                                              package = "tidysdm"))
+# first we add a topography variable to the climate data
+climate_present$topography <- climate_present$altitude
+climate_present$topography <- classify(climate_present$topography, rcl = c(-Inf, 200, 800, Inf), include.lowest=TRUE, brackets=TRUE)
+levels(climate_present$topography)  <- data.frame(ID = c(0,1,2), topography = c("plains", "hills", "mountains"))
+# now we can predict
+predict_factor <- predict_raster(lacerta_ensemble, climate_present)
+plot(predict_factor)
+```
