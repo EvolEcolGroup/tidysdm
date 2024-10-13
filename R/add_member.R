@@ -23,7 +23,7 @@ add_member <- function(x, member, ...) {
 #' @rdname add_member
 #' @export
 add_member.default <- function(x, member, ...) {
-  stop("no method available for this object type")
+  stop("no method available for this object type: ", class(member))
 }
 
 #' @param id the name to be given to this workflow in the `wflow_id` column.
@@ -88,6 +88,10 @@ add_member.tune_results <- function(x, member, metric = NULL, id = NULL, ...) {
 add_member.workflow_set <- function(x, member, metric = NULL, ...) {
   for (i_wflow in member$wflow_id) {
     this_res <- workflowsets::extract_workflow_set_result(member, id = i_wflow)
+    # if the result is an empty list, throw an error (how did we get to such a situation?)
+    if (length(this_res)==0) {
+      stop("no result found for workflow ", i_wflow, "; did you forget to fit the workflow?")
+    }
     x <- x %>% add_member(this_res, metric = metric, id = i_wflow)
   }
   x

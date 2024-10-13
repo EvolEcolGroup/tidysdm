@@ -428,7 +428,10 @@ tutorial](https://workflowsets.tidymodels.org/articles/tuning-and-comparing-mode
 The latter three models have tunable hyperparameters. For the most
 commonly used models, `tidysdm` automatically chooses the most important
 parameters, but it is possible to fully customise model specifications
-(e.g. see the help for `sdm_spec_rf`).
+(e.g. see the help for `sdm_spec_rf`). Note that, if you used GAMs with `sdm_spec_gam()`,
+it is necessary to update the model with `gam_formula()` due to the non-standard
+formula notation of GAMs (see the help
+of `sdm_spec_gam()` for an example of how to do this).
 
 ```{r workflow_set}
 lacerta_models <-

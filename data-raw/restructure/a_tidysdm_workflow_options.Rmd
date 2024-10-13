@@ -180,7 +180,7 @@ To build a `workflow_set` of different models, the `hyperparameters` we want to 
 For the most commonly used models, `tidysdm` automatically chooses the most important parameters:\
 - Generalised Linear Model, using `sdm_spec_glm()`,
 
-\- General Additive Model, using `sdm_spec_gam()`,
+\- General Additive Model, using `sdm_spec_gam()` (note that because of the non-standard formula interface of `mgcv`, it is necessary to update the model with `gam_formula()`),
 
 \- random forest specs with tuning, using `sdm_spec_rf()`,
 
