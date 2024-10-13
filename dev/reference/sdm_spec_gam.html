@@ -72,8 +72,23 @@ case.</p></dd>
     <p>a <a href="https://parsnip.tidymodels.org/reference/model_spec.html" class="external-link">parsnip::model_spec</a> of the model.</p>
     </div>
     <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Note that, when using GAMs in a <code>workflow_set()</code>, it is necessary to
+update the model with <code><a href="gam_formula.html">gam_formula()</a></code> (see <code><a href="https://parsnip.tidymodels.org/reference/model_formula.html" class="external-link">parsnip::model_formula</a></code> for a
+discussion of formulas with special terms in <code>tidymodels</code>):</p><div class="sourceCode"><pre><code><span></span>
+<span><span class="fu">workflow_set</span><span class="op">(</span></span>
+<span>  preproc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>default <span class="op">=</span> <span class="va">my_recipe</span><span class="op">)</span>,</span>
+<span>  models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>gam <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_gam.html">sdm_spec_gam</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  cross <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">update_workflow_model</span><span class="op">(</span><span class="st">"default_gam"</span>,</span>
+<span>                            spec <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_gam.html">sdm_spec_gam</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                            formula <span class="op">=</span> <span class="fu"><a href="../reference/gam_formula.html">gam_formula</a></span><span class="op">(</span><span class="va">my_recipe</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Other "sdm model specifications":
+    <div class="dont-index"><p><code><a href="https://parsnip.tidymodels.org/reference/gen_additive_mod.html" class="external-link">parsnip::gen_additive_mod()</a></code> <code><a href="gam_formula.html">gam_formula()</a></code></p>
+<p>Other "sdm model specifications":
 <code><a href="sdm_spec_boost_tree.html">sdm_spec_boost_tree</a>()</code>,
 <code><a href="sdm_spec_glm.html">sdm_spec_glm</a>()</code>,
 <code><a href="sdm_spec_maxent.html">sdm_spec_maxent</a>()</code>,
