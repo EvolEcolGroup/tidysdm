@@ -114,6 +114,15 @@ test_that("handling of data frames and sf objects", {
   )
 })
 
+
+test_that("sample_background works with stars", {
+  set.seed(123)
+  expect_no_error(sample_background(locations,
+                                 n = 25, 
+                                 raster = stars::st_as_stars(grid_raster, as_attributes = TRUE),
+                                 return_pres = FALSE))
+})
+
 # sample code to plot points in and buffers
 # plot(grid_raster,colNA="darkgray")
 # polys(terra::as.polygons(grid_raster))
