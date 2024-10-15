@@ -26,7 +26,7 @@ RoxygenNote: 7.3.2
 Depends:
     tidymodels,
     spatialsample,
-    R (>= 3.50)
+    R (>= 3.5.0)
 Imports:
     DALEX,
     dials,
