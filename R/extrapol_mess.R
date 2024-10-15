@@ -45,7 +45,7 @@ extrapol_mess.default <- function(x, training, ...) {
 #' @rdname extrapol_mess
 #' @export
 extrapol_mess.stars <- function(x, ...) {
-  extrapol_mess(as(x, "SpatRaster"),  ...) |>
+  extrapol_mess(as(x, "SpatRaster"),  ...) %>%
     stars::st_as_stars(as_attributes = TRUE)
 }
 

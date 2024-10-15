@@ -60,7 +60,7 @@ test_that("clamping_predictor works on stars",{
   climate_future <- terra::readRDS(system.file("extdata/lacerta_climate_future_10m.rds",
                                                package = "tidysdm"
   ))
-  climate_future <- climate_future [[names(climate_present)]] |>
+  climate_future <- climate_future [[names(climate_present)]] %>%
     stars::st_as_stars(as_attributes = TRUE)
   # and clamp it
   clamped_raster <- clamp_predictors(climate_future, lacerta_env)
@@ -78,7 +78,7 @@ test_that("clamping_predictor works on stars",{
   expect_true(all(training_minmax[1,]<=clamped_minmax[1,]))
   expect_true(all(training_minmax[2,]>=clamped_minmax[2,]))
   # get error for missing variable
-  climate_sub<-climate_present[[1:2]] |> stars::st_as_stars(as_attributes = TRUE)
+  climate_sub<-climate_present[[1:2]] %>% stars::st_as_stars(as_attributes = TRUE)
   expect_error(clamp_predictors(climate_sub, training=lacerta_env),
                "`x` is missing the following")
   #error for missing class

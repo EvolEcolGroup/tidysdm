@@ -76,9 +76,41 @@ filter_collinear.default <- function(x,
 #' page of [terra::spatSample()] for details.
 #' @export
 filter_collinear.stars <-
-  function(x, ...) {
-    filter_collinear(as(x, "SpatRaster"), ...)
-}
+    function(x,
+             cutoff = NULL,
+             verbose = FALSE,
+             names = TRUE,
+             to_keep = NULL,
+             method = "cor_caret",
+             cor_type = "pearson",
+             max_cells = Inf,
+             exhaustive = FALSE,
+             ...) {
+      
+      N = prod(dim(x))
+      maxcells = pmin(N, max_cells)
+      ix = sample(N, maxcells, replace = FALSE)
+      x_matrix = sapply(names(x),
+                 function(name, x = NULL, index = NULL){
+                   x[[name]][index]
+                 }, x = x, index = ix, simplify = FALSE) %>%
+        as.data.frame() %>%
+        stats::na.omit() %>%
+        as.matrix()
+
+      # now dispatch to the matrix method
+      filter_collinear(
+        x_matrix,
+        cutoff = cutoff,
+        verbose = verbose,
+        names = names,
+        to_keep = to_keep,
+        method = method,
+        cor_type = cor_type,
+        max_cells = max_cells
+      )
+    }
+
 
 #' @rdname filter_collinear
 #' @param exhaustive boolean. Used only for [`terra::SpatRaster`] when downsampling

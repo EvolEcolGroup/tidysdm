@@ -32,7 +32,7 @@ clamp_predictors.default <- function(x, training, .col, use_na) {
 #' @export
 clamp_predictors.stars <- function(x, ...){
   x = as(x, "SpatRaster")
-  clamp_predictors(x, ...) |>
+  clamp_predictors(x, ...) %>%
     stars::st_as_stars(as_attributes = TRUE)
 }
 

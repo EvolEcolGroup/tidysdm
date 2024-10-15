@@ -33,7 +33,18 @@ filter_collinear(
   ...
 )
 
-\method{filter_collinear}{stars}(x, ...)
+\method{filter_collinear}{stars}(
+  x,
+  cutoff = NULL,
+  verbose = FALSE,
+  names = TRUE,
+  to_keep = NULL,
+  method = "cor_caret",
+  cor_type = "pearson",
+  max_cells = Inf,
+  exhaustive = FALSE,
+  ...
+)
 
 \method{filter_collinear}{SpatRaster}(
   x,

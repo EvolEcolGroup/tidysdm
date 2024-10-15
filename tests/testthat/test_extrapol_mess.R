@@ -9,7 +9,7 @@ test_that("mess_predictor works on SpatRasters",{
 
 test_that("mess_predictor works on stars", {
   climate_future <- terra::readRDS(system.file("extdata/lacerta_climate_future_10m.rds",
-                                               package = "tidysdm" )) |>
+                                               package = "tidysdm" )) %>%
     stars::st_as_stars(as_attributes = TRUE)
   mess_rast <- extrapol_mess(climate_future, training = lacerta_thin, .col= class)
   expect_true(inherits(mess_rast, "stars"))
