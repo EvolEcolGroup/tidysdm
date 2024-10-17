@@ -91,6 +91,7 @@ reference:
       - km2m
       - y2d
       - filter_high_cor
+      - "pairs,stars-method"
   - title: "Example data"
     desc: "Example datasets and simple models used in the documentation"
     contents: 
