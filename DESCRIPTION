@@ -1,11 +1,12 @@
 Package: tidysdm
 Title: Species Distribution Models with Tidymodels
-Version: 0.9.6.9002
+Version: 0.9.6.9003
 Authors@R: c(
     person("Michela", "Leonardi", role = "aut"),
     person("Margherita", "Colucci", role = "aut"),
     person("Andrea Vittorio", "Pozzi", role = "aut"),
     person("Eleanor M.L.","Scerri", role = "aut"),
+    person("Ben","Tupper", role = "ctb"),
     person("Andrea", "Manica", email = "am315@cam.ac.uk", role = c("aut", "cre")))
 Description: Fit species distribution models (SDMs) using the 'tidymodels' framework, 
   which provides a standardised interface to define models and process their 
