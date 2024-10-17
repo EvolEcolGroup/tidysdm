@@ -100,6 +100,20 @@ considered.</p>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for class 'stars'</span></span>
+<span><span class="fu">filter_collinear</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  cutoff <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  names <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  to_keep <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"cor_caret"</span>,</span>
+<span>  cor_type <span class="op">=</span> <span class="st">"pearson"</span>,</span>
+<span>  max_cells <span class="op">=</span> <span class="cn">Inf</span>,</span>
+<span>  exhaustive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for class 'SpatRaster'</span></span>
 <span><span class="fu">filter_collinear</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
@@ -146,7 +160,7 @@ considered.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> object, a data.frame (with only numeric
+<dd><p>A <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> or <code>stars</code> object, a data.frame (with only numeric
 variables)</p></dd>
 
 

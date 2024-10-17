@@ -56,6 +56,9 @@ do not exceed the range in the training dataset.</p>
 <span><span class="co"># Default S3 method</span></span>
 <span><span class="fu">clamp_predictors</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span>, <span class="va">use_na</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for class 'stars'</span></span>
+<span><span class="fu">clamp_predictors</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for class 'SpatRaster'</span></span>
 <span><span class="fu">clamp_predictors</span><span class="op">(</span><span class="va">x</span>, <span class="va">training</span>, <span class="va">.col</span>, use_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -68,7 +71,7 @@ do not exceed the range in the training dataset.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>a <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> or <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRasterDataset</a></code> to clamp.</p></dd>
+<dd><p>a <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code>, <code>stars</code> or <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRasterDataset</a></code> to clamp.</p></dd>
 
 
 <dt id="arg-training">training<a class="anchor" aria-label="anchor" href="#arg-training"></a></dt>
@@ -85,6 +88,10 @@ it is excluded from the clamping.</p></dd>
 of the training dataset are removed (set to NA). If FALSE (the default),
 values outside the training range are replaced with the extremes of the training
 range.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>additional arguments specific to a given object type</p></dd>
 
 </dl></div>
     <div class="section level2">

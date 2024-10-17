@@ -63,7 +63,7 @@ variety of <code>tidymodels</code> objects, such as <code><a href="simple_ensemb
 
 
 <dt id="arg-raster">raster<a class="anchor" aria-label="anchor" href="#arg-raster"></a></dt>
-<dd><p>the <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> with the input data. It has to include
+<dd><p>the <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> or <code>stars</code> with the input data. It has to include
 levels with the same names as the variables used in <code>object</code></p></dd>
 
 
@@ -74,7 +74,7 @@ for the appropriate object type (e.g. <code>metric_thresh</code> or <code>class_
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> with the predictions</p>
+    <p>a <code><a href="https://rspatial.github.io/terra/reference/SpatRaster-class.html" class="external-link">terra::SpatRaster</a></code> (or <code>stars</code> if that is the input) with the predictions</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
