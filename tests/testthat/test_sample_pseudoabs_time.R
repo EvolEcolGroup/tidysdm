@@ -98,6 +98,21 @@ test_that("sample_pseudoabs_time samples in the right places", {
   
 })
 
+test_that("sample_pseudoabs_time works with stars", {
+  set.seed(123)
+  
+  grid_stars <- stars::st_as_stars(grid_raster, as_attributes = FALSE)
+  d = stars::st_dimensions(grid_stars)
+  d$time$refsys = terra::timeInfo(grid_raster)$step[1]
+  stars::st_dimensions(grid_stars) <- d
+  expect_no_error(sample_pseudoabs_time(locations,
+                                        n = n_pt, 
+                                        raster = grid_stars, 
+                                        lubridate_fun = pastclim::ybp2date,
+                                        method = c("dist_min", buf_dist),
+                                        return_pres = FALSE))
+})
+
 # sample code to plot points
 # i <- 2
 # plot(grid_raster[[i]],colNA="darkgray")

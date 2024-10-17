@@ -19,7 +19,7 @@
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
-#' @param raster the [terra::SpatRaster] or [terra::SpatRasterDataset] from which cells will be sampled.
+#' @param raster the [terra::SpatRaster], `stars` or [terra::SpatRasterDataset] from which cells will be sampled.
 #' If a [terra::SpatRasterDataset], the first dataset will be used to define which cells are valid,
 #' and which are NAs.
 #' @param n_per_presence number of pseudoabsence points to sample for
@@ -52,6 +52,14 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
                                   lubridate_fun = c,
                                   method = "random", class_label = "pseudoabs",
                                   return_pres = TRUE, time_buffer = 0) {
+  
+  if(inherits(raster, "stars")) {
+    d <- stars::st_dimensions(raster)
+    time <- stars::st_get_dimension_values(raster, "time")
+    raster <- as(raster, "SpatRaster")
+    terra::time(raster, tstep = d$time$refsys) <- time
+  }
+  
   # create a vector of times formatted as proper dates
   time_lub <- data %>%
     sf::st_drop_geometry() %>%

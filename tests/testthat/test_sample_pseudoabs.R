@@ -106,6 +106,15 @@ test_that("sample_pseudoabs samples in the right places", {
   )
 })
 
+
+test_that("sample_pseudoabs samples in the right places", {
+  set.seed(123)
+  expect_no_error(sample_pseudoabs(locations,
+                                n = 25, 
+                                raster = stars::st_as_stars(grid_raster, as_attributes = TRUE),
+                                return_pres = FALSE ))
+})
+
 test_that("handling of data frames and sf objects", {
   locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>% sf::st_set_crs(4326)
   expect_error(

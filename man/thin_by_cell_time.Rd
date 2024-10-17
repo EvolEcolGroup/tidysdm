@@ -19,7 +19,7 @@ thin_by_cell_time(
 These can be defined in \code{coords}, unless they have standard names
 (see details below).}
 
-\item{raster}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object that defined the grid with layers
+\item{raster}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{stars} object that defined the grid with layers
 corresponding to the time slices (times should be set as either POSIXlt or
 "years", see \code{\link[terra:time]{terra::time()}} for details), or a \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}}
 where the first dataset will be

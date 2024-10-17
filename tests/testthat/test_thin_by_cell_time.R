@@ -89,6 +89,19 @@ test_that("thin_by_cell_time removes the correct points", {
   expect_true(all(thin_100k_t$id == thin_100k_sd$id))
 })
 
+test_that("thin_by_cell_time works with stars", {
+  pastclim::time_bp(grid_raster) <- c(0, -10)
+  S <- stars::st_as_stars(grid_raster, as_attributes = FALSE)
+  d <- stars::st_dimensions(S)
+  d$time$refsys <- terra::timeInfo(grid_raster)$step[1]
+  stars::st_dimensions(S) <- d
+  set.seed(123)
+  expect_no_error(thin_by_cell_time(locations,
+                                 raster = S, 
+                                 time_col = "time_bp",
+                                 lubridate_fun = pastclim::ybp2date))
+})
+  
 # sample code to plot the small world to inspect what is going on
 # plot(grid_raster,colNA="darkgray")
 # polys(terra::as.polygons(grid_raster))

@@ -34,7 +34,7 @@ test_that("filter collinear variables with cor_caret", {
   # error for defautl object
   expect_error(
     filter_collinear("blah"),
-    "^no method available for this object type"
+    "no method available for this object type"
   )
 
   # sample from data.frame
@@ -49,6 +49,13 @@ test_that("filter collinear variables with cor_caret", {
   cor_spatraster_ken <- filter_collinear(climate_present, cor_type = "kendall")
   cor_spatraster_ken_sub <- filter_collinear(climate_present, max_cells = 200, cor_type = "kendall")
   expect_true(!identical(cor_spatraster_ken, cor_spatraster_ken_sub))
+  
+  # test method on stars
+  climate_present_stars = stars::st_as_stars(climate_present, as_attributes = TRUE) 
+  cor_spatraster_ken <- filter_collinear(climate_present_stars, cor_type = "kendall")
+  cor_spatraster_ken_sub <- filter_collinear(climate_present_stars, max_cells = 200, cor_type = "kendall")
+  expect_true(!identical(cor_spatraster_ken, cor_spatraster_ken_sub))
+  
 })
 
 

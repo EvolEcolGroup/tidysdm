@@ -19,7 +19,7 @@ sample_pseudoabs(
 These can be defined in \code{coords}, unless they have standard names
 (see details below).}
 
-\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} from which cells will be sampled}
+\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} or \code{stars} from which cells will be sampled}
 
 \item{n}{number of pseudoabsence points to sample}
 

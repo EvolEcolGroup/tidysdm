@@ -20,6 +20,10 @@
 #' @export
 #' 
 niche_overlap <- function (x, y, method = c("Schoener", "Hellinger")) {
+  
+  if (inherits(x, 'stars')) x <- as(x, "SpatRaster")
+  if (inherits(y, 'stars')) y <- as(y, "SpatRaster")
+  
   if (any(terra::nlyr(x)!=1,terra::nlyr(y)!=1)){
     stop("x and y are expected to each contain one layer")
   }

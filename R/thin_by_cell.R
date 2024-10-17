@@ -10,7 +10,7 @@
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
-#' @param raster A [`terra::SpatRaster`] object that defined the grid
+#' @param raster A [`terra::SpatRaster`] or `stars` object that defined the grid
 #' @param coords a vector of length two giving the names of the "x" and "y"
 #' coordinates, as found in `data`. If left to NULL, the function will
 #' try to guess the columns based on standard names `c("x", "y")`, `c("X","Y")`,
@@ -32,7 +32,7 @@ thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE, agg_fact =
       "use `thin_by_cell_time()`"
     )
   }
-
+  if (inherits(raster, "stars")) raster <- as(raster, "SpatRaster")
   # add type checks for these parameters
   return_sf <- FALSE # flag whether we need to return an sf object
   if (inherits(data, "sf")) {

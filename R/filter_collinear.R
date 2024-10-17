@@ -13,7 +13,7 @@
 #' considered.
 
 #'
-#' @param x A [`terra::SpatRaster`] object, a data.frame (with only numeric
+#' @param x A [`terra::SpatRaster`] or `stars` object, a data.frame (with only numeric
 #' variables)
 #' @param cutoff A numeric value used as a threshold to remove variables.
 #' For, "cor_caret" and "vif_cor",
@@ -68,6 +68,48 @@ filter_collinear.default <- function(x,
                                     ...) {
   stop("no method available for this object type")
 }
+
+#' @rdname filter_collinear
+#' @param exhaustive boolean. Used only for [`terra::SpatRaster`] when downsampling
+#' to `max_cells`, if we require the `exhaustive` approach in [terra::spatSample()].
+#' This is only needed for rasters that are very sparse and not too large, see the help
+#' page of [terra::spatSample()] for details.
+#' @export
+filter_collinear.stars <-
+    function(x,
+             cutoff = NULL,
+             verbose = FALSE,
+             names = TRUE,
+             to_keep = NULL,
+             method = "cor_caret",
+             cor_type = "pearson",
+             max_cells = Inf,
+             exhaustive = FALSE,
+             ...) {
+      
+      N = prod(dim(x))
+      maxcells = pmin(N, max_cells)
+      ix = sample(N, maxcells, replace = FALSE)
+      x_matrix = sapply(names(x),
+                 function(name, x = NULL, index = NULL){
+                   x[[name]][index]
+                 }, x = x, index = ix, simplify = FALSE) %>%
+        as.data.frame() %>%
+        stats::na.omit() %>%
+        as.matrix()
+
+      # now dispatch to the matrix method
+      filter_collinear(
+        x_matrix,
+        cutoff = cutoff,
+        verbose = verbose,
+        names = names,
+        to_keep = to_keep,
+        method = method,
+        cor_type = cor_type,
+        max_cells = max_cells
+      )
+    }
 
 
 #' @rdname filter_collinear

@@ -12,7 +12,7 @@
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
-#' @param raster A [`terra::SpatRaster`] object that defined the grid with layers
+#' @param raster A [`terra::SpatRaster`] or `stars` object that defined the grid with layers
 #' corresponding to the time slices (times should be set as either POSIXlt or
 #'  "years", see [terra::time()] for details), or a [`terra::SpatRasterDataset`]
 #'   where the first dataset will be
@@ -49,6 +49,14 @@ thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
   if (inherits(raster, "SpatRasterDataset")) {
     raster <- raster[[1]]
   }
+  
+  if(inherits(raster, "stars")) {
+    d <- stars::st_dimensions(raster)
+    time <- stars::st_get_dimension_values(raster, "time")
+    raster <- as(raster, "SpatRaster")
+    terra::time(raster, tstep = d$time$refsys) <- time
+  }
+  
   time_steps <- terra::time(raster)
 
   if (any(is.na(time_steps))) {

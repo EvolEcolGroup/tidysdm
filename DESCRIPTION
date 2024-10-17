@@ -42,6 +42,7 @@ Imports:
     rsample,
     rlang (>= 1.0.0),
     stats,
+    stars,
     sf,
     terra,
     tibble,
