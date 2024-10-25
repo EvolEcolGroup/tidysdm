@@ -33,6 +33,7 @@ SSP
 Schmiegelow
 Schoener
 Schoener's
+SpatRaster
 StackOverflow
 TSS
 Tidymodels
@@ -110,6 +111,7 @@ stackexchange
 stackoverflow
 stat's
 svm
+terra
 thres
 tibble
 tibbles
@@ -117,6 +119,7 @@ tidymodels
 tn
 tp
 tss
+tstep
 unioned
 vec
 vif

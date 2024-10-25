@@ -79,3 +79,7 @@ with the two values of 'dist_disc' defining the minimum and maximum distance fro
 presences.
 }
 }
+\details{
+#' @details Note that the time axis of the raster should be in \code{POSIXct} or \code{Date} format,
+or use `tstep="years"'. See \code{\link[terra:time]{terra::time()}} for details on how to set the time axis.
+}

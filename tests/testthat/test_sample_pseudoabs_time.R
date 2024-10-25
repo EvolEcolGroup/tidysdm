@@ -121,3 +121,42 @@ test_that("sample_pseudoabs_time works with stars", {
 # points(terra::vect(pa_random %>% 
 #               dplyr::filter(time_step==as.Date("1952-01-01"))), col="blue")
 # polys(min_buffer)
+
+
+test_that("sample_pseudoabs_time treats time correctly", {
+  # change time of raster to POSIX
+  time(grid_raster) <- lubridate::date_decimal(time(grid_raster))
+  expect_true(inherits(time(grid_raster),"POSIXct"))
+  # this should work just fine
+  set.seed(123)
+  pa_random <- sample_pseudoabs_time(locations,
+                                     n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+                                     method = c("dist_min", buf_dist),
+                                     return_pres = FALSE
+  )
+  # we have the right number of pseudoabsences per time
+  expect_true(all(table(locations$time)*n_pt==table(pa_random$time_step)))
+  
+  # Now change it to dates
+  time(grid_raster) <- as.Date(time(grid_raster))
+  expect_true(inherits(time(grid_raster),"Date"))
+  set.seed(123)
+  pa_random <- sample_pseudoabs_time(locations,
+                                     n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+                                     method = c("dist_min", buf_dist),
+                                     return_pres = FALSE
+  )  
+  # we have the right number of pseudoabsences per time
+  expect_true(all(table(locations$time)*n_pt==table(pa_random$time_step)))
+  
+  # now set the time to raw units to trigger error
+  pastclim::time_bp(grid_raster)<-0:4
+  time(grid_raster)<-time(grid_raster)
+  expect_true(timeInfo(grid_raster)$step=="raw")
+  expect_error(sample_pseudoabs_time(locations,
+                                     n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+                                     method = c("dist_min", buf_dist),
+                                     return_pres = FALSE
+  ), "the units of the time axis of the raster are not defined")
+})
+    

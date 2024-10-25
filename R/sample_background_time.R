@@ -13,6 +13,9 @@
 #' * 'bias': background points are sampled according to a surface representing
 #' the biased sampling effort. Note that the surface for each time step is normalised to
 #' sum to 1;use `n_per_time_step` to affect sampling effort within each time step.
+#' 
+#' @details Note that the time axis of the raster should be in `POSIXct` or `Date` format,
+#' or use `tstep="years"'. See [terra::time()] for details on how to set the time axis.
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
@@ -82,6 +85,14 @@ sample_background_time <- function(data, raster, n_per_time_step, coords = NULL,
   time_steps <- terra::time(raster)
   if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)
+  }
+  if (inherits(time_steps,"Date")){
+    time_steps <- as.POSIXct(time_steps)
+  }
+  # check that time_steps is POSIXct
+  if (!inherits(time_steps, "POSIXct")) {
+    stop("the units of the time axis of the raster are not defined;\n",
+         "when using terra::time() use either POSIXct or Dates, or set tstep to 'years'")
   }
   out_of_range_warning(time_lub, time_steps)
 

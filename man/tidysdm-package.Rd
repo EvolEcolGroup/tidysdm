@@ -30,5 +30,10 @@ Authors:
   \item Eleanor M.L. Scerri
 }
 
+Other contributors:
+\itemize{
+  \item Ben Tupper [contributor]
+}
+
 }
 \keyword{internal}

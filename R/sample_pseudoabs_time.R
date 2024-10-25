@@ -16,6 +16,9 @@
 #' * 'dist_disc': pseudo-absences randomly sampled from the unioned discs around presences
 #' with the two values of 'dist_disc' defining the minimum and maximum distance from
 #' presences.
+#' 
+#' #' @details Note that the time axis of the raster should be in `POSIXct` or `Date` format,
+#' or use `tstep="years"'. See [terra::time()] for details on how to set the time axis.
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
 #' (see details below).
@@ -75,13 +78,22 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
   # if it is a SpatRasterDataset, use the first dataset
   if (inherits(raster, "SpatRasterDataset")) {
     raster <- raster[[1]]
-  } 
+  }
   
   # get the time steps
   time_steps <- terra::time(raster)
   if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)
   }
+  if (inherits(time_steps,"Date")){
+    time_steps <- as.POSIXct(time_steps)
+  }
+  # check that time_steps is POSIXct
+  if (!inherits(time_steps, "POSIXct")) {
+    stop("the units of the time axis of the raster are not defined;\n",
+         "when using terra::time() use either POSIXct or Dates, or set tstep to 'years'")
+  }
+  
   out_of_range_warning(time_lub, time_steps)
 
   # convert time_lub dates into indices for the SpatRasterDatset
