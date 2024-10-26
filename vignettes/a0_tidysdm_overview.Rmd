@@ -183,8 +183,22 @@ ggplot() +
 
 # Thinning step
 
-Now, we thin the observations to have one per cell in the raster (it
-would be better if we had an equal area projection...):
+When thinning data and later for measuring areas, it is best to work with an equal area projection. Here we will use the Albers equal area projection for the Iberian peninsula. We will project the land mask and the lizard locations to this projection.
+
+```{r project_iberia, fig.width=6, fig.height=4}
+crs_iberia <- "+proj=aea +lat_0=30 +lon_0=10 +lat_1=43 +lat_2=62 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs"
+land_mask <- project(land_mask, y = crs_iberia)
+lacerta <- st_transform(lacerta, crs = crs_iberia)
+ggplot() +
+  geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
+  geom_sf(data = lacerta) + 
+  guides(fill="none")
+
+```
+
+
+Now, we thin the observations to have one per cell in the raster (given
+our project, each cell is approximately the same size):
 
 ```{r thin_by_cell}
 set.seed(1234567)
@@ -247,6 +261,7 @@ lacertidae_background <- backg_distrib %>%
 lacertidae_background <- st_as_sf(lacertidae_background, 
                                   coords = c("longitude", "latitude"))
 st_crs(lacertidae_background) <- 4326
+lacertidae_background <- st_transform(lacertidae_background, crs = crs_iberia)
 
 ```
 ```{r echo=FALSE, results='hide', eval=create_sample_data}
@@ -255,6 +270,7 @@ usethis::use_data(lacertidae_background, overwrite=TRUE)
 
 ```{r echo=FALSE}
 data("lacertidae_background")
+## TODO check here
 lacertidae_background <- st_as_sf(lacertidae_background, 
                                   coords = c("longitude", "latitude"))
 st_crs(lacertidae_background) <- 4326
