@@ -2,6 +2,8 @@
 
 * implement `make_mask_from_presence` to define the area of interest
 * add interoperability with `stars` (thanks to @btupper)
+* check time units of rasters for `sample_background_time()` and 
+  `sample_pseudo_absences_time()` (thanks to @zpmdal)
 
 # `tidysdm` 0.9.5
 
