@@ -76,6 +76,6 @@ test_that("sdm_recipe_sf works with a geometry named differently", {
                  metrics = sdm_metric_set(), verbose = FALSE
     )
   res <- collect_notes(.Last.tune.result) %>% dplyr::distinct(type, note)
-  # expect no warnings
+  # expect no errors
   expect_true(nrow(res) == 0)
 })

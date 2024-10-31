@@ -5,8 +5,11 @@ prep.spatial_recipe <- function(x, training = NULL, fresh = FALSE, verbose = FAL
   if (!is.null(training)) {
     # sometimes we have a tibble with a geometry column but not cast into an sf object
     # (this is the case when running a workflow)
-
-    geom_col <- names(training)[unlist(lapply(training, inherits, "sfc"))]
+    if (inherits(training,"sf")){
+      geom_col <- attributes(training)$sf_column
+    } else {
+      geom_col <- names(training)[unlist(lapply(training, inherits, "sfc"))]
+    }
     if (length(geom_col) > 0) {
       geom_col <- geom_col[1]
       training <- training %>%
@@ -38,7 +41,11 @@ bake.spatial_recipe <- function(object, new_data, ..., composition = "tibble") {
   if (!is.null(new_data)) {
     # sometimes we have a tibble with a geometry column but not cast into an sf object
     # (this is the case when running a workflow)
-    geom_col <- names(new_data)[unlist(lapply(new_data, inherits, "sfc"))]
+    if (inherits(new_data,"sf")){
+      geom_col <- attributes(new_data)$sf_column
+    } else {
+      geom_col <- names(new_data)[unlist(lapply(new_data, inherits, "sfc"))]
+    }
     if (length(geom_col) > 0) {
       geom_col <- geom_col[1]
       new_data <- new_data %>%
