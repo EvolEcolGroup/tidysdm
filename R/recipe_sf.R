@@ -41,8 +41,6 @@ recipe.sf <- function(x, ...) {
       sf::st_drop_geometry()
   }
 
-
-
   rec <- recipe(x, ...) %>%
     update_role(dplyr::any_of(c("X", "Y")), new_role = "coords")
   class(rec) <- c("spatial_recipe", class(rec))

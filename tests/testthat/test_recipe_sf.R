@@ -44,3 +44,38 @@ test_that("sdm_recipe_sf", {
   # X should just be a dummy variable
   expect_true(all(is.na(baked_no_xy$X)))
 })
+
+test_that("sdm_recipe_sf works with a geometry named differently", {
+  lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+    package = "tidysdm"
+  ))
+  sf::st_geometry(lacerta_thin) <- "geom"
+  lacerta_rec <- recipe(lacerta_thin, formula = class ~ .)
+
+  lacerta_models <-
+    # create the workflow_set
+    workflow_set(
+      preproc = list(default = lacerta_rec),
+      models = list(
+        # the standard glm specs
+        glm = sdm_spec_glm(),
+        # rf specs with tuning
+        rf = sdm_spec_rf()
+      ),
+      # make all combinations of preproc and models,
+      cross = TRUE
+    ) %>%
+    # tweak controls to store information needed later to create the ensemble
+    option_add(control = control_ensemble_grid())
+  set.seed(100)
+  lacerta_cv <- spatial_block_cv(data = lacerta_thin, v = 3, n = 5)
+  lacerta_models <-
+    lacerta_models %>%
+    workflow_map("tune_grid",
+                 resamples = lacerta_cv, grid = 3,
+                 metrics = sdm_metric_set(), verbose = FALSE
+    )
+  res <- collect_notes(.Last.tune.result) %>% dplyr::distinct(type, note)
+  # expect no warnings
+  expect_true(nrow(res) == 0)
+})
