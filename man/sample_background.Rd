@@ -21,7 +21,7 @@ These can be defined in \code{coords}, unless they have standard names
 
 \item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} or \code{stars} from which cells will be sampled (the first layer
 will be used to determine which cells are NAs, and thus can not be sampled). If
-sampling is "biased", then the sampling probability will be proportional to the values on
+sampling is "bias", then the sampling probability will be proportional to the values on
 the first layer (i.e. band) of the raster.}
 
 \item{n}{number of background points to sample.}
@@ -31,7 +31,7 @@ coordinates, as found in \code{data}. If left to NULL, the function will
 try to guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
 \code{c("longitude", "latitude")}, or \code{c("lon", "lat")}.}
 
-\item{method}{sampling method. One of 'random', 'dist_max', and 'targeted'.
+\item{method}{sampling method. One of 'random', 'dist_max', and 'bias'.
 For dist_max, the maximum distance is set as an additional element of a vector,
 e.g c('dist_max',70000).}
 

@@ -19,14 +19,14 @@
 #' (see details below).
 #' @param raster the [terra::SpatRaster] or `stars` from which cells will be sampled (the first layer
 #' will be used to determine which cells are NAs, and thus can not be sampled). If
-#' sampling is "biased", then the sampling probability will be proportional to the values on
+#' sampling is "bias", then the sampling probability will be proportional to the values on
 #' the first layer (i.e. band) of the raster. 
 #' @param n number of background points to sample.
 #' @param coords a vector of length two giving the names of the "x" and "y"
 #' coordinates, as found in `data`. If left to NULL, the function will
 #' try to guess the columns based on standard names `c("x", "y")`, `c("X","Y")`,
 #'  `c("longitude", "latitude")`, or `c("lon", "lat")`.
-#' @param method sampling method. One of 'random', 'dist_max', and 'targeted'.
+#' @param method sampling method. One of 'random', 'dist_max', and 'bias'.
 #' For dist_max, the maximum distance is set as an additional element of a vector,
 #' e.g c('dist_max',70000).
 #' @param class_label the label given to the sampled points. Defaults to `background`
@@ -68,14 +68,14 @@ sample_background <- function(data, raster, n, coords = NULL,
     }
     dist_max <- as.numeric(method[2])
   } else if (!method[1] %in% c("random", "bias")) {
-    stop("method has to be one of 'random', 'dist_min', 'dist_max', or 'dist_disc'")
+    stop("method has to be one of 'random', 'dist_max', or 'bias'")
   }
   xy_pres <- as.matrix(as.data.frame(data)[, coords])
   # get a one layer raster
   sampling_raster <- raster[[1]]
   names(sampling_raster) <- "class"
 
-  # remove buffer >dist_max (or second parameter for disc)
+  # remove buffer >dist_max
   if (!is.null(dist_max)) {
     max_buffer <- terra::buffer(
       terra::vect(xy_pres,

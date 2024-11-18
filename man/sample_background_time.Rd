@@ -39,8 +39,8 @@ use \code{lubridate_fun} to provide a function that can be used to convert appro
 
 \item{lubridate_fun}{function to convert the time column into a lubridate object}
 
-\item{method}{sampling method. One of 'random', 'dist_min', 'dist_max', or
-'dist_disc'.}
+\item{method}{sampling method. One of 'random', 'dist_max', or
+'bias'.}
 
 \item{class_label}{the label given to the sampled points. Defaults to \code{background}}
 
@@ -61,7 +61,7 @@ presence level is set as the reference (to match the expectations in the
 }
 \description{
 This function samples background points from a raster given a set of presences.
-The locations returned as the center points of the sampled cells,, which can
+The locations returned as the center points of the sampled cells, which can
 overlap with the presences (in contrast to pseudo-absences, see
 \link{sample_pseudoabs_time}). The following methods are implemented:
 \itemize{

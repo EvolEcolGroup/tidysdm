@@ -1,7 +1,7 @@
 #' Sample background points for SDM analysis for points with a time point.
 #'
 #' This function samples background points from a raster given a set of presences.
-#' The locations returned as the center points of the sampled cells,, which can
+#' The locations returned as the center points of the sampled cells, which can
 #' overlap with the presences (in contrast to pseudo-absences, see 
 #' [sample_pseudoabs_time]). The following methods are implemented:
 #' * 'random': background points randomly sampled from the region covered by the
@@ -31,8 +31,8 @@
 #' @param time_col The name of the column with time; if time is not a lubridate object,
 #' use `lubridate_fun` to provide a function that can be used to convert appropriately
 #' @param lubridate_fun function to convert the time column into a lubridate object
-#' @param method sampling method. One of 'random', 'dist_min', 'dist_max', or
-#' 'dist_disc'.
+#' @param method sampling method. One of 'random', 'dist_max', or
+#' 'bias'.
 #' @param class_label the label given to the sampled points. Defaults to `background`
 #' @param return_pres return presences together with background
 #'  in a single tibble
@@ -55,7 +55,6 @@ sample_background_time <- function(data, raster, n_per_time_step, coords = NULL,
   if (time_buffer!=0 & method[1]!="dist_max"){
     stop("'time_buffer' should only be set with method 'dist_max'")
   }
-  
   
   # create a vector of times formatted as proper dates
   time_lub <- data %>%
