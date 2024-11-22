@@ -104,12 +104,12 @@ usethis::use_data(lacerta, overwrite=TRUE)
 First, let us visualise our presences by plotting on a map. `tidysdm`
 works with `sf` objects to represent locations, so we will cast our
 coordinates into an `sf` object, and set its projections to standard
-'lonlat' (`crs` = 4326).
+'lonlat' using the proj4 string "+proj=longlat".
 
 ```{r cast_to_sf}
 library(sf)
 lacerta <- st_as_sf(lacerta, coords = c("longitude", "latitude"))
-st_crs(lacerta) <- 4326
+st_crs(lacerta) <- "+proj=longlat"
 ```
 
 It is usually advisable to plot the locations directly on the raster
@@ -122,9 +122,9 @@ palaeoclimatic reconstructions, it also provides convenient functions to
 access present day reconstructions and future projections. `pastclim`
 has a handy function to get the land mask for the available datasets,
 which we can use as background for our locations. We will cut the raster
-to the Iberian peninsula, where our lizard lives. For this simply
-illustration, we will not bother to project the raster, but an equal
-area projection would be desirable...
+to the Iberian peninsula, where our lizard lives. 
+
+For this example:
 
 ```{r land_mask, eval= download_data}
 library(pastclim)
@@ -153,7 +153,6 @@ terra::saveRDS(land_mask, "../inst/extdata/lacerta_land_mask.rds")
 
 ```
 
-
 ```{r land_mask_load, echo=FALSE, eval=!download_data}
 # results='hide'
 library(pastclim)
@@ -180,15 +179,36 @@ ggplot() +
 
 ```
 
+# Geographic projection
 
-# Thinning step
+Before we start thinning the data we need to make sure that all our data (points and rasters) have the same geographic coordinate reference system (CRS) by projecting them. In some of the pipeline steps (e.g. thinning data, measuring areas) using an equal area projection may make a significant difference, expecially for large-scale projects.
 
-When thinning data and later for measuring areas, it is best to work with an equal area projection. Here we will use the Albers equal area projection for the Iberian peninsula. We will project the land mask and the lizard locations to this projection.
+You can use the website `projectionwizard.org` (https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9) to find an appropriate equal area projection for any region. 
+
+To define our projection within the code, we will use a proj4 string, which provides information on the type of projection, its parameters and the units of distance in which the new coordinates will be expressed (if you are using `projectionwizard.org` it will provide yo  with the string as well). 
+
+In this case, we will use a Albers Equal Area Conic projection centered on the Iberian peninsula, with km as units. The proj4 string is:
+
+```{r}
+iberia_proj4 <- "+proj=aea +lon_0=-4.0429687 +lat_1=36.7790694 +lat_2=42.6258819 +lat_0=39.7024757 +datum=WGS84 +units=km +no_defs"
+```
+
+For rasters (maps), we use the `terra` function `project` to change the CRS. We pass the raster object and the proj4 string as arguments:
+
+```{r}
+land_mask <- terra::project(land_mask, y = iberia_proj4)
+```
+
+Now we need to project the data points to the same CRS as the raster. We will do so using the appropriate `sf` function:
+
+```{r}
+lacerta <- st_transform(lacerta, iberia_proj4)
+```
+
+Plotting the data, we will see that the shape of the land mask has slightly changed following the new projection.
 
 ```{r project_iberia, fig.width=6, fig.height=4}
-crs_iberia <- "+proj=aea +lat_0=30 +lon_0=10 +lat_1=43 +lat_2=62 +x_0=0 +y_0=0 +ellps=intl +units=m +no_defs"
-land_mask <- project(land_mask, y = crs_iberia)
-lacerta <- st_transform(lacerta, crs = crs_iberia)
+
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
   geom_sf(data = lacerta) + 
@@ -196,6 +216,7 @@ ggplot() +
 
 ```
 
+# Thinning step
 
 Now, we thin the observations to have one per cell in the raster (given
 our project, each cell is approximately the same size):
@@ -220,7 +241,7 @@ avoid having to write lots of zeroes):
 
 ```{r thin_by_dist}
 set.seed(1234567)
-lacerta_thin <- thin_by_dist(lacerta, dist_min = km2m(20))
+lacerta_thin <- thin_by_dist(lacerta, dist_min = 20)
 nrow(lacerta_thin)
 ```
 
@@ -257,11 +278,19 @@ backg_distrib <- readr::read_delim(file.path(tempdir(),
 lacertidae_background <- backg_distrib %>% 
   select(gbifID, decimalLatitude, decimalLongitude) %>%
   rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
+
+```
+
+In this case as well, we need to use the appropriate projection (the same defined before) for the background. If the projections do not correspond the analyses will stop giving an error message. 
+
+```{r projection_background, eval=FALSE}
+
 # convert to an sf object
 lacertidae_background <- st_as_sf(lacertidae_background, 
                                   coords = c("longitude", "latitude"))
+
 st_crs(lacertidae_background) <- 4326
-lacertidae_background <- st_transform(lacertidae_background, crs = crs_iberia)
+lacertidae_background <- st_transform(lacertidae_background, crs = iberia_proj4)
 
 ```
 ```{r echo=FALSE, results='hide', eval=create_sample_data}
@@ -274,6 +303,7 @@ data("lacertidae_background")
 lacertidae_background <- st_as_sf(lacertidae_background, 
                                   coords = c("longitude", "latitude"))
 st_crs(lacertidae_background) <- 4326
+
 ```
 
 We need to convert these observations into a raster whose values are the
