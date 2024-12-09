@@ -8,8 +8,8 @@
 <title>Species Distribution Models with Tidymodels • tidysdm</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Species Distribution Models with Tidymodels">
 <meta name="description" content="Fit species distribution models (SDMs) using the tidymodels framework, which provides a standardised interface to define models and process their outputs. tidysdm expands tidymodels by providing methods for spatial objects, models and metrics specific to SDMs, as well as a number of specialised functions to process occurrences for contemporary and palaeo datasets. The full functionalities of the package are described in Leonardi et al. (2023) &lt;doi:10.1101/2023.07.24.550358&gt;.">
 <meta property="og:description" content="Fit species distribution models (SDMs) using the tidymodels framework, which provides a standardised interface to define models and process their outputs. tidysdm expands tidymodels by providing methods for spatial objects, models and metrics specific to SDMs, as well as a number of specialised functions to process occurrences for contemporary and palaeo datasets. The full functionalities of the package are described in Leonardi et al. (2023) &lt;doi:10.1101/2023.07.24.550358&gt;.">
@@ -73,8 +73,12 @@
 <p><code>tidysdm</code> is on CRAN, and the easiest way to install it is with:</p>
 <pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"tidysdm"</span><span class="op">)</span></span></code></pre>
 <p>The version on CRAN is recommended for every day use. New features and bug fixes appear first on the <code>dev</code> branch on GitHub, before they make their way to CRAN. If you need to have early access to these new features, you can install <code>tidysdm</code> directly from GitHub. To install from GitHub, you will need to use <code>devtools</code>; if you haven’t done so already, get it from CRAN with <code>install.packages("devtools")</code>.</p>
-<p>You can install the latest <code>dev</code> version of tidysdm from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install the latest <code>dev</code> version of <code>tidysdm</code> from r-universe with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"tidysdm"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://evolecolgroup.r-universe.dev"</span>, </span>
+<span>                                      <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Alternatively, you can also use <code>devtools</code> and install the package from source, but you might need to set up your development environment first:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"EvolEcolGroup/tidysdm"</span>, ref <span class="op">=</span> <span class="st">"dev"</span><span class="op">)</span></span></code></pre></div>
 </div>
