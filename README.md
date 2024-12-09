@@ -41,8 +41,15 @@ features, you can install `tidysdm` directly from GitHub. To install
 from GitHub, you will need to use `devtools`; if you haven't done so
 already, get it from CRAN with `install.packages("devtools")`.
 
+You can install the latest `dev` version of `tidysdm` from r-universe with:
 
-You can install the latest `dev` version of tidysdm from [GitHub](https://github.com/) with:
+``` r
+install.packages("tidysdm", repos = c("https://evolecolgroup.r-universe.dev", 
+                                      "https://cloud.r-project.org"))
+```
+
+Alternatively, you can also use `devtools` and install the package from source, but you
+might need to set up your development environment first:
 
 ``` r
 # install.packages("devtools")
