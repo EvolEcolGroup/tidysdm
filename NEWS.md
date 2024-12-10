@@ -4,6 +4,9 @@
 * add interoperability with `stars` (thanks to @btupper)
 * check time units of rasters for `sample_background_time()` and 
   `sample_pseudo_absences_time()` (thanks to @zpmdal)
+* show the use of map projections in the overview vignette, and make sure that
+  projections are properly handled in the functions such as `thin_by_cell`
+  and `thin_by_dist`
 
 # `tidysdm` 0.9.5
 
