@@ -216,6 +216,7 @@ ggplot() +
 
 ```
 
+
 # Thinning step
 
 Now, we thin the observations to have one per cell in the raster (given
@@ -226,6 +227,13 @@ set.seed(1234567)
 lacerta <- thin_by_cell(lacerta, raster = land_mask)
 nrow(lacerta)
 ```
+
+```{r}
+pres_data <- terra::extract(land_mask, lacerta)
+summary(pres_data)
+
+```
+
 
 ```{r plot_thin_by_cell, fig.width=6, fig.height=4}
 ggplot() +
@@ -309,12 +317,14 @@ lacertidae_background <- st_transform(lacertidae_background, crs = iberia_proj4)
 
 We need to convert these observations into a raster whose values are the
 number of records (which will be later used to determine how likely each
-cell is to be used as a background point):
+cell is to be used as a background point). We will also mask the resulting background raster to match the land mask of interest.
 
 ```{r background_to_raster, fig.width=6, fig.height=4}
-lacertidae_background_raster <- rasterize(lacertidae_background, land_mask, 
+lacertidae_background_raster <- rasterize(lacertidae_background,
+                                          land_mask, 
                                           fun = "count")
-
+lacertidae_background_raster <- mask(lacertidae_background_raster,
+                                     land_mask)
 ggplot() +
   geom_spatraster(data = lacertidae_background_raster, aes(fill = count)) +
   scale_fill_viridis_b( na.value = "transparent")
@@ -396,6 +406,21 @@ Next, we extract climate for all presences and background points:
 lacerta_thin <- lacerta_thin %>%
   bind_cols(terra::extract(climate_present, lacerta_thin, ID = FALSE))
 ```
+
+Before going forward with the analysis, we should make  sure that there
+are no missing values in the climate that we extracted:
+```{r}
+summary(lacerta_thin)
+```
+We can see that there are no missing values in any of the
+extracted climate variables. If that was not the case, we would have
+to go back to the climate raster and homogenise the NAs
+across layers (i.e. variables). This can be achieved either by 
+setting the same cells to NA in all layers (including the land mask
+that we used to thin the data), or by interpolating the layers with less
+information to fill the gaps (e.g. cloud cover in some remote sensed data).
+interpolate the missing
+
 
 Based on this paper (<https://doi.org/10.1007/s10531-010-9865-2>), we
 are interested in these variables: "bio06", "bio05", "bio13", "bio14", "bio15".
@@ -595,7 +620,7 @@ ggplot() +
 ```
 
 We can subset the ensemble to only use the best models, based on the
-Boyce continuous index, by setting a minimum threshold of 0.7 for that
+Boyce continuous index, by setting a minimum threshold of 0.6 for that
 metric. We will also take the median of the available model predictions
 (instead of the mean, which is the default). The plot does not change
 much (the models are quite consistent).
@@ -603,7 +628,7 @@ much (the models are quite consistent).
 ```{r plot_present_best, fig.width=6, fig.height=4}
 
 prediction_present_boyce <- predict_raster(lacerta_ensemble, climate_present,
-  metric_thresh = c("boyce_cont", 0.7),
+  metric_thresh = c("boyce_cont", 0.6),
   fun = "median"
 )
 ggplot() +
@@ -621,7 +646,7 @@ classes (in this case, we optimise the TSS):
 ```{r}
 lacerta_ensemble <- calib_class_thresh(lacerta_ensemble,
   class_thresh = "tss_max", 
-  metric_thresh = c("boyce_cont", 0.7)
+  metric_thresh = c("boyce_cont", 0.6)
 )
 ```
 
@@ -632,7 +657,7 @@ prediction_present_binary <- predict_raster(lacerta_ensemble,
   climate_present,
   type = "class",
   class_thresh = c("tss_max"), 
-  metric_thresh = c("boyce_cont", 0.7)
+  metric_thresh = c("boyce_cont", 0.6)
 )
 ggplot() +
   geom_spatraster(data = prediction_present_binary, aes(fill = binary_mean)) +
@@ -825,12 +850,13 @@ practice to explore their effect by repeating them, and then creating
 ensembles of models over these repeats. In `tidysdm`, it is possible to
 create `repeat_ensembles`. We start by creating a list of
 `simple_ensembles`, by looping through the SDM pipeline. We will just
-use two fast models to speed up the process.
+use two fast models to speed up the process,
+and use pseudo-absences instead of background.
 
 ```{r}
 # empty object to store the simple ensembles that we will create
 ensemble_list <- list()
-set.seed(123) # make sure you set the seed OUTSIDE the loop
+set.seed(1234) # make sure you set the seed OUTSIDE the loop
 for (i_repeat in 1:3) {
   # thin the data
   lacerta_thin_rep <- thin_by_cell(lacerta, raster = climate_present)
@@ -845,7 +871,7 @@ for (i_repeat in 1:3) {
   lacerta_thin_rep <- lacerta_thin_rep %>%
     bind_cols(terra::extract(climate_present, lacerta_thin_rep, ID = FALSE))
   # create folds
-  lacerta_thin_rep_cv <- spatial_block_cv(lacerta_thin_rep, v = 5)
+  lacerta_thin_rep_cv <- spatial_block_cv(lacerta_thin_rep, v = 3, n = 5)
   # create a recipe
   lacerta_thin_rep_rec <- recipe(lacerta_thin_rep, formula = class ~ .)
   # create a workflow_set
@@ -869,7 +895,7 @@ for (i_repeat in 1:3) {
   lacerta_thin_rep_models <-
     lacerta_thin_rep_models %>%
     workflow_map("tune_grid",
-      resamples = lacerta_thin_rep_cv, grid = 10,
+      resamples = lacerta_thin_rep_cv, grid = 3,
       metrics = sdm_metric_set(), verbose = TRUE
     )
   # make an simple ensemble and add it to the list
