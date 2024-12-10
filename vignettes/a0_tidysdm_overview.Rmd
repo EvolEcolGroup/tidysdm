@@ -104,12 +104,12 @@ usethis::use_data(lacerta, overwrite=TRUE)
 First, let us visualise our presences by plotting on a map. `tidysdm`
 works with `sf` objects to represent locations, so we will cast our
 coordinates into an `sf` object, and set its projections to standard
-'lonlat' (`crs` = 4326).
+'lonlat' using the proj4 string "+proj=longlat".
 
 ```{r cast_to_sf}
 library(sf)
 lacerta <- st_as_sf(lacerta, coords = c("longitude", "latitude"))
-st_crs(lacerta) <- 4326
+st_crs(lacerta) <- "+proj=longlat"
 ```
 
 It is usually advisable to plot the locations directly on the raster
@@ -122,9 +122,9 @@ palaeoclimatic reconstructions, it also provides convenient functions to
 access present day reconstructions and future projections. `pastclim`
 has a handy function to get the land mask for the available datasets,
 which we can use as background for our locations. We will cut the raster
-to the Iberian peninsula, where our lizard lives. For this simply
-illustration, we will not bother to project the raster, but an equal
-area projection would be desirable...
+to the Iberian peninsula, where our lizard lives. 
+
+For this example:
 
 ```{r land_mask, eval= download_data}
 library(pastclim)
@@ -141,7 +141,7 @@ iberia_poly <-
     -9.8 43.3))"
   )
 
-crs(iberia_poly) <- "lonlat"
+crs(iberia_poly) <- "+proj=longlat"
 # crop the extent
 land_mask <- crop(land_mask, iberia_poly)
 # and mask to the polygon
@@ -153,7 +153,6 @@ terra::saveRDS(land_mask, "../inst/extdata/lacerta_land_mask.rds")
 
 ```
 
-
 ```{r land_mask_load, echo=FALSE, eval=!download_data}
 # results='hide'
 library(pastclim)
@@ -161,7 +160,7 @@ set_data_path(on_CRAN = TRUE)
 # Iberia peninsula extension
 iberia_poly <- terra::vect("POLYGON((-9.8 43.3,-7.8 44.1,-2.0 43.7,3.6 42.5,3.8 41.5,1.3 40.8,0.3 39.5,0.9 38.6,-0.4 37.5,-1.6 36.7,-2.3 36.3,-4.1 36.4,-4.5 36.4,-5.0 36.1,-5.6 36.0,-6.3 36.0,-7.1 36.9,-9.5 36.6,-9.4 38.0,-10.6 38.9,-9.5 40.8,-9.8 43.3))")
 
-crs(iberia_poly) <- "lonlat"
+crs(iberia_poly) <- "+proj=longlat"
 land_mask <- terra::readRDS(system.file("extdata/lacerta_land_mask.rds",
   package = "tidysdm"
 ))
@@ -180,17 +179,61 @@ ggplot() +
 
 ```
 
+# Map projection
+
+Before we start thinning the data we need to make sure that all our data (points and rasters) have the same geographic coordinate reference system (CRS) by projecting them. In some of the pipeline steps (e.g. thinning data, measuring areas) using an equal area projection may make a significant difference, especially for large-scale projects.
+
+You can use the website `projectionwizard.org` (https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9) to find an appropriate equal area projection for any region. 
+
+To define our projection within the code, we will use a proj4 string, which provides information on the type of projection, its parameters and the units of distance in which the new coordinates will be expressed (if you are using `projectionwizard.org` it will provide yo  with the string as well). 
+
+In this case, we will use a Albers Equal Area Conic projection centred on the Iberian peninsula, with km as units. The proj4 string is:
+
+```{r}
+iberia_proj4 <- "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+```
+
+For rasters (maps), we use the `terra` function `project` to change the CRS. We pass the raster object and the proj4 string as arguments:
+
+```{r}
+land_mask <- terra::project(land_mask, y = iberia_proj4)
+```
+
+Now we need to project the data points to the same CRS as the raster. We will do so using the appropriate `sf` function:
+
+```{r}
+lacerta <- st_transform(lacerta, iberia_proj4)
+```
+
+Plotting the data, we will see that the shape of the land mask has slightly changed following the new projection.
+
+```{r project_iberia, fig.width=6, fig.height=4}
+
+ggplot() +
+  geom_spatraster(data = land_mask, aes(fill = land_mask_1985)) +
+  geom_sf(data = lacerta) + 
+  guides(fill="none")
+
+```
+
 
 # Thinning step
 
-Now, we thin the observations to have one per cell in the raster (it
-would be better if we had an equal area projection...):
+Now, we thin the observations to have one per cell in the raster (given
+our project, each cell is approximately the same size):
 
 ```{r thin_by_cell}
 set.seed(1234567)
 lacerta <- thin_by_cell(lacerta, raster = land_mask)
 nrow(lacerta)
 ```
+
+```{r}
+pres_data <- terra::extract(land_mask, lacerta)
+summary(pres_data)
+
+```
+
 
 ```{r plot_thin_by_cell, fig.width=6, fig.height=4}
 ggplot() +
@@ -199,10 +242,10 @@ ggplot() +
   guides(fill="none")
 ```
 
-Now, we thin further to remove points that are closer than 20km.
-However, note that the standard map units for a 'lonlat' projection are
-meters. `tidysdm` provides a convening conversion function, `km2m()`, to
-avoid having to write lots of zeroes):
+Now, we thin further to remove points that are closer than 20km. As the units
+of our projection are m (the default for most projections), we use a
+a convenient conversion function, `km2m()`, to
+avoid having to write lots of zeroes:
 
 ```{r thin_by_dist}
 set.seed(1234567)
@@ -243,10 +286,19 @@ backg_distrib <- readr::read_delim(file.path(tempdir(),
 lacertidae_background <- backg_distrib %>% 
   select(gbifID, decimalLatitude, decimalLongitude) %>%
   rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
+
+```
+
+In this case as well, we need to use the appropriate projection (the same defined before) for the background. If the projections do not correspond the analyses will stop giving an error message. 
+
+```{r projection_background, eval=FALSE}
+
 # convert to an sf object
 lacertidae_background <- st_as_sf(lacertidae_background, 
                                   coords = c("longitude", "latitude"))
-st_crs(lacertidae_background) <- 4326
+
+st_crs(lacertidae_background) <- "+proj=longlat"
+lacertidae_background <- st_transform(lacertidae_background, crs = iberia_proj4)
 
 ```
 ```{r echo=FALSE, results='hide', eval=create_sample_data}
@@ -257,18 +309,25 @@ usethis::use_data(lacertidae_background, overwrite=TRUE)
 data("lacertidae_background")
 lacertidae_background <- st_as_sf(lacertidae_background, 
                                   coords = c("longitude", "latitude"))
-st_crs(lacertidae_background) <- 4326
+st_crs(lacertidae_background) <- "+proj=longlat"
+lacertidae_background <- st_transform(lacertidae_background, crs = iberia_proj4)
+
 ```
 
 We need to convert these observations into a raster whose values are the
 number of records (which will be later used to determine how likely each
-cell is to be used as a background point):
+cell is to be used as a background point). We will also mask the resulting background raster to match the land mask of interest.
 
 ```{r background_to_raster, fig.width=6, fig.height=4}
-lacertidae_background_raster <- rasterize(lacertidae_background, land_mask, 
+lacertidae_background_raster <- rasterize(lacertidae_background,
+                                          land_mask, 
                                           fun = "count")
-
-plot(lacertidae_background_raster)
+lacertidae_background_raster <- mask(lacertidae_background_raster,
+                                     land_mask)
+ggplot() +
+  geom_spatraster(data = lacertidae_background_raster, aes(fill = count)) +
+  scale_fill_viridis_b( na.value = "transparent")
+  guides(fill="none")
 
 ```
 
@@ -334,7 +393,11 @@ do not natively cope with multi-level factors, but it is possible to use `recipe
 to generate dummy variables from factors. A worked example can be found in the
 [article on additional features of tidymodels with tidysdm](https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html).
 
-
+And now we project the climate variables in the same way as we did for all previous
+spatial data:
+```{r}
+climate_present <- terra::project(climate_present, y = iberia_proj4)
+```
 
 Next, we extract climate for all presences and background points:
 
@@ -342,6 +405,21 @@ Next, we extract climate for all presences and background points:
 lacerta_thin <- lacerta_thin %>%
   bind_cols(terra::extract(climate_present, lacerta_thin, ID = FALSE))
 ```
+
+Before going forward with the analysis, we should make  sure that there
+are no missing values in the climate that we extracted:
+```{r}
+summary(lacerta_thin)
+```
+We can see that there are no missing values in any of the
+extracted climate variables. If that was not the case, we would have
+to go back to the climate raster and homogenise the NAs
+across layers (i.e. variables). This can be achieved either by 
+setting the same cells to NA in all layers (including the land mask
+that we used to thin the data), or by interpolating the layers with less
+information to fill the gaps (e.g. cloud cover in some remote sensed data).
+interpolate the missing
+
 
 Based on this paper (<https://doi.org/10.1007/s10531-010-9865-2>), we
 are interested in these variables: "bio06", "bio05", "bio13", "bio14", "bio15".
@@ -541,15 +619,16 @@ ggplot() +
 ```
 
 We can subset the ensemble to only use the best models, based on the
-Boyce continuous index, by setting a minimum threshold of 0.7 for that
-metric. We will also take the median of the available model predictions
+Boyce continuous index, by setting a minimum threshold of 0.6 for that
+metric (this is somewhat low, for a real analysis we would recommend a higher value
+of 0.7 or higher). We will also take the median of the available model predictions
 (instead of the mean, which is the default). The plot does not change
 much (the models are quite consistent).
 
 ```{r plot_present_best, fig.width=6, fig.height=4}
 
 prediction_present_boyce <- predict_raster(lacerta_ensemble, climate_present,
-  metric_thresh = c("boyce_cont", 0.7),
+  metric_thresh = c("boyce_cont", 0.6),
   fun = "median"
 )
 ggplot() +
@@ -567,7 +646,7 @@ classes (in this case, we optimise the TSS):
 ```{r}
 lacerta_ensemble <- calib_class_thresh(lacerta_ensemble,
   class_thresh = "tss_max", 
-  metric_thresh = c("boyce_cont", 0.7)
+  metric_thresh = c("boyce_cont", 0.6)
 )
 ```
 
@@ -578,7 +657,7 @@ prediction_present_binary <- predict_raster(lacerta_ensemble,
   climate_present,
   type = "class",
   class_thresh = c("tss_max"), 
-  metric_thresh = c("boyce_cont", 0.7)
+  metric_thresh = c("boyce_cont", 0.6)
 )
 ggplot() +
   geom_spatraster(data = prediction_present_binary, aes(fill = binary_mean)) +
@@ -644,6 +723,12 @@ terra::saveRDS(climate_future, "../inst/extdata/lacerta_climate_future_10m.rds")
 climate_future <- terra::readRDS(system.file("extdata/lacerta_climate_future_10m.rds",
   package = "tidysdm"
 ))
+```
+
+Project the climatic raster with the same projection that we have been using for the
+analysis:
+```{r}
+climate_future <- terra::project(climate_future, y = iberia_proj4)
 ```
 
 And predict using the ensemble:
@@ -771,12 +856,13 @@ practice to explore their effect by repeating them, and then creating
 ensembles of models over these repeats. In `tidysdm`, it is possible to
 create `repeat_ensembles`. We start by creating a list of
 `simple_ensembles`, by looping through the SDM pipeline. We will just
-use two fast models to speed up the process.
+use two fast models to speed up the process,
+and use pseudo-absences instead of background.
 
 ```{r}
 # empty object to store the simple ensembles that we will create
 ensemble_list <- list()
-set.seed(123) # make sure you set the seed OUTSIDE the loop
+set.seed(1234) # make sure you set the seed OUTSIDE the loop
 for (i_repeat in 1:3) {
   # thin the data
   lacerta_thin_rep <- thin_by_cell(lacerta, raster = climate_present)
@@ -791,7 +877,7 @@ for (i_repeat in 1:3) {
   lacerta_thin_rep <- lacerta_thin_rep %>%
     bind_cols(terra::extract(climate_present, lacerta_thin_rep, ID = FALSE))
   # create folds
-  lacerta_thin_rep_cv <- spatial_block_cv(lacerta_thin_rep, v = 5)
+  lacerta_thin_rep_cv <- spatial_block_cv(lacerta_thin_rep, v = 3, n = 5)
   # create a recipe
   lacerta_thin_rep_rec <- recipe(lacerta_thin_rep, formula = class ~ .)
   # create a workflow_set
@@ -815,7 +901,7 @@ for (i_repeat in 1:3) {
   lacerta_thin_rep_models <-
     lacerta_thin_rep_models %>%
     workflow_map("tune_grid",
-      resamples = lacerta_thin_rep_cv, grid = 10,
+      resamples = lacerta_thin_rep_cv, grid = 3,
       metrics = sdm_metric_set(), verbose = TRUE
     )
   # make an simple ensemble and add it to the list
@@ -840,8 +926,8 @@ We can summarise the goodness of fit of models for each repeat with
 `collect_metrics()`, but there is no `autoplot()` function for
 `repeated_ensemble` objects.
 
-We can then predict in the usual way (we will take the mean and median
-of all models):
+We can then predict in the usual way. We will take the mean and median
+of all models, without filtering by performance, and plot the results:
 
 ```{r, fig.width=6, fig.height=4}
 lacerta_rep_ens <- predict_raster(lacerta_rep_ens, climate_present,
@@ -851,3 +937,7 @@ ggplot() +
   geom_spatraster(data = lacerta_rep_ens, aes(fill = median)) +
   scale_fill_terrain_c()
 ```
+
+Note that the predictions are quite similar to the ones we obtained
+before, but the predicted suitable range is somewhat larger, probably because we
+included models that are not very good (as we did not filter by performance) in the ensemble.

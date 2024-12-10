@@ -10,7 +10,8 @@ thin_by_dist_time(
   interval_min,
   coords = NULL,
   time_col = "time",
-  lubridate_fun = c
+  lubridate_fun = c,
+  dist_method = c("great_circle", "euclidean")
 )
 }
 \arguments{
@@ -32,6 +33,9 @@ try to guess the columns based on standard names \code{c("x", "y")}, \code{c("X"
 use \code{lubridate_fun} to provide a function that can be used to convert appropriately}
 
 \item{lubridate_fun}{function to convert the time column into a lubridate object}
+
+\item{dist_method}{method to compute distance, either "euclidean" or "great_circle".
+Defaults to "great_circle", which is more accurate but takes slightly longer.}
 }
 \value{
 An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link{data.frame}}, the same as "data".

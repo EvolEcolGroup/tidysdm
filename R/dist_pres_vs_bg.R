@@ -37,8 +37,11 @@ dist_pres_vs_bg <- function(
     if (inherits(.data, "sf")) {
       .data <- .data %>% sf::st_drop_geometry()
     }
-    # subset to only columns which are numeric
+    # subset to only columns which are numeric and check for NAs
     num_vars <- names(.data)[!names(.data) %in% .col]
+    if (any(is.na(.data[num_vars]))) {
+      stop("NAs in the dataframe")
+    }
     dist_vec <- numeric()
     for (i_var in num_vars) {
       vals_list <- list(

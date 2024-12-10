@@ -6,6 +6,9 @@
 #' Further thinning can be achieved by aggregating cells in the raster
 #' before thinning, as achieved by setting `agg_fact` > 1 (aggregation works in a
 #' manner equivalent to [terra::aggregate()]).
+#' Note that if `data` is an `sf` object, the function will transform the coordinates
+#' to the same projection as the `raster` (recommended); if `data` is a data.frame, it is up
+#' to the user to ensure that the coordinates are in the correct units.
 #'
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
@@ -36,6 +39,7 @@ thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE, agg_fact =
   # add type checks for these parameters
   return_sf <- FALSE # flag whether we need to return an sf object
   if (inherits(data, "sf")) {
+    data <- data %>% sf::st_transform(terra::crs(raster))
     if (all(c("X", "Y") %in% names(data))) {
       if (!all(data[, c("X", "Y")] %>% sf::st_drop_geometry() %>% as.matrix() == sf::st_coordinates(data)) |
         any(is.na(data[, c("X", "Y")]))) {
