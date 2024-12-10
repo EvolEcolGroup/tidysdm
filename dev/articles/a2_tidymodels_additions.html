@@ -135,16 +135,16 @@ generate our explainer:</p>
 <code class="sourceCode R"><span><span class="va">explainer_lacerta_ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/explain_tidysdm.html">explain_tidysdm</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
 <span><span class="co">#&gt;   -&gt; model label       :  data.frame  (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; data              :  444  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  448  rows  4  cols </span></span>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
-<span><span class="co">#&gt;   -&gt; target variable   :  444  values </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  predict_function </span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidysdm , ver. 0.9.6.9004 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.01490969 , mean =  0.2861937 , max =  0.7169324  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.02638562 , mean =  0.2951438 , max =  0.7778588  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.6465921 , mean =  -0.03619367 , max =  0.7891973  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.6797394 , mean =  -0.04514377 , max =  0.7720678  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span></code></pre></div>
 <p>Now that we have our explainer, we can explore variable importance
 for the ensemble:</p>
@@ -177,55 +177,55 @@ ensemble:</p>
 <code class="sourceCode R"><span><span class="va">explainer_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/explain_tidysdm.html">explain_tidysdm</a></span><span class="op">(</span><span class="fu">tidysdm</span><span class="fu">::</span><span class="va"><a href="../reference/lacerta_ensemble.html">lacerta_ensemble</a></span>, by_workflow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
 <span><span class="co">#&gt;   -&gt; model label       :  default_glm </span></span>
-<span><span class="co">#&gt;   -&gt; data              :  444  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  448  rows  4  cols </span></span>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
-<span><span class="co">#&gt;   -&gt; target variable   :  444  values </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.2.0 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.2280177 , mean =  0.75 , max =  0.9854359  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.2554356 , mean =  0.75 , max =  0.9838188  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9096205 , mean =  5.395921e-12 , max =  0.7719823  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9314151 , mean =  9.574021e-12 , max =  0.7445644  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!  </span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
 <span><span class="co">#&gt;   -&gt; model label       :  default_rf </span></span>
-<span><span class="co">#&gt;   -&gt; data              :  444  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  448  rows  4  cols </span></span>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
-<span><span class="co">#&gt;   -&gt; target variable   :  444  values </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.2.0 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.1315421 , mean =  0.7480648 , max =  1  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.06715952 , mean =  0.7496213 , max =  1  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.6878921 , mean =  0.001935171 , max =  0.5870619  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.6303111 , mean =  0.0003787291 , max =  0.5929444  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!  </span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
 <span><span class="co">#&gt;   -&gt; model label       :  default_gbm </span></span>
-<span><span class="co">#&gt;   -&gt; data              :  444  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  448  rows  4  cols </span></span>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
-<span><span class="co">#&gt;   -&gt; target variable   :  444  values </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.2.0 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.3390188 , mean =  0.7314788 , max =  0.9632964  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.2205058 , mean =  0.7324831 , max =  0.9634812  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9268645 , mean =  0.01852121 , max =  0.6280424  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.8709313 , mean =  0.01751694 , max =  0.6855955  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!  </span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
 <span><span class="co">#&gt;   -&gt; model label       :  default_maxent </span></span>
-<span><span class="co">#&gt;   -&gt; data              :  444  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  448  rows  4  cols </span></span>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
-<span><span class="co">#&gt;   -&gt; target variable   :  444  values </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.2.0 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.1095764 , mean =  0.6256817 , max =  0.9960248  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.03884931 , mean =  0.5873206 , max =  0.9584494  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.8207859 , mean =  0.1243183 , max =  0.8904236  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.8338183 , mean =  0.1626794 , max =  0.9611507  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span></code></pre></div>
 <p>The resulting list can be then used to build lists of explanations,
 which can then be plotted.</p>
@@ -395,12 +395,12 @@ variables in the dataset. So, before tuning, we need to finalise
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (319ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (352ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 3 tuning:     all_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> No improvement for 10 iterations; returning current results.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (16.9s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (17.6s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 3 tuning:     all_svm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (19.8s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (20.5s)</span></span></span></code></pre></div>
 <p>We can have a look at the performance of our models with:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_models</span><span class="op">)</span></span></code></pre></div>
@@ -589,10 +589,10 @@ baking the recipe:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (191ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (223ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (994ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (1s)</span></span></span>
 <span><span class="co"># fit the ensemble</span></span>
 <span><span class="va">lacerta_ensemble</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simple_ensemble.html">simple_ensemble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_member.html">add_member</a></span><span class="op">(</span><span class="va">lacerta_models</span>, metric <span class="op">=</span> <span class="st">"boyce_cont"</span><span class="op">)</span></span></code></pre></div>

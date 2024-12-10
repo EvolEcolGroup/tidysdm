@@ -109,7 +109,7 @@ models:</p>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Search for functions across packages at <span style="color: #00BB00;">https://www.tidymodels.org/find/</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Use <span style="color: #00BB00;">tidymodels_prefer()</span> to resolve common conflicts.</span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="accessing-the-data-for-this-vignette-how-to-use-rgbif">Accessing the data for this vignette: how to use
@@ -162,13 +162,13 @@ we do here:</p>
 <p>First, let us visualise our presences by plotting on a map.
 <code>tidysdm</code> works with <code>sf</code> objects to represent
 locations, so we will cast our coordinates into an <code>sf</code>
-object, and set its projections to standard ‘lonlat’ (<code>crs</code> =
-4326).</p>
+object, and set its projections to standard ‘lonlat’ using the proj4
+string “+proj=longlat”.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
 <span><span class="va">lacerta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">lacerta</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">lacerta</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">4326</span></span></code></pre></div>
+<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">lacerta</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"+proj=longlat"</span></span></code></pre></div>
 <p>It is usually advisable to plot the locations directly on the raster
 that will be used to extract climatic variables, to see how the
 locations fall within the discrete space of the raster. For this
@@ -179,9 +179,9 @@ handle palaeoclimatic reconstructions, it also provides convenient
 functions to access present day reconstructions and future projections.
 <code>pastclim</code> has a handy function to get the land mask for the
 available datasets, which we can use as background for our locations. We
-will cut the raster to the Iberian peninsula, where our lizard lives.
-For this simply illustration, we will not bother to project the raster,
-but an equal area projection would be desirable…</p>
+will cut the raster to the Iberian peninsula, where our lizard
+lives.</p>
+<p>For this example:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/pastclim" class="external-link">pastclim</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/download_dataset.html" class="external-link">download_dataset</a></span><span class="op">(</span>dataset <span class="op">=</span> <span class="st">"WorldClim_2.1_10m"</span><span class="op">)</span></span>
@@ -197,7 +197,7 @@ but an equal area projection would be desirable…</p>
 <span><span class="st">    -9.8 43.3))"</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">iberia_poly</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"lonlat"</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">iberia_poly</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"+proj=longlat"</span></span>
 <span><span class="co"># crop the extent</span></span>
 <span><span class="va">land_mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/crop.html" class="external-link">crop</a></span><span class="op">(</span><span class="va">land_mask</span>, <span class="va">iberia_poly</span><span class="op">)</span></span>
 <span><span class="co"># and mask to the polygon</span></span>
@@ -231,32 +231,81 @@ breeze.</p>
 <p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-3-1.png" width="576"></p>
 </div>
 <div class="section level2">
+<h2 id="map-projection">Map projection<a class="anchor" aria-label="anchor" href="#map-projection"></a>
+</h2>
+<p>Before we start thinning the data we need to make sure that all our
+data (points and rasters) have the same geographic coordinate reference
+system (CRS) by projecting them. In some of the pipeline steps
+(e.g. thinning data, measuring areas) using an equal area projection may
+make a significant difference, especially for large-scale projects.</p>
+<p>You can use the website <code>projectionwizard.org</code> (<a href="https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9" class="external-link uri">https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9</a>)
+to find an appropriate equal area projection for any region.</p>
+<p>To define our projection within the code, we will use a proj4 string,
+which provides information on the type of projection, its parameters and
+the units of distance in which the new coordinates will be expressed (if
+you are using <code>projectionwizard.org</code> it will provide yo with
+the string as well).</p>
+<p>In this case, we will use a Albers Equal Area Conic projection
+centred on the Iberian peninsula, with km as units. The proj4 string
+is:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">iberia_proj4</span> <span class="op">&lt;-</span> <span class="st">"+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"</span></span></code></pre></div>
+<p>For rasters (maps), we use the <code>terra</code> function
+<code>project</code> to change the CRS. We pass the raster object and
+the proj4 string as arguments:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">land_mask</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">land_mask</span>, y <span class="op">=</span> <span class="va">iberia_proj4</span><span class="op">)</span></span></code></pre></div>
+<p>Now we need to project the data points to the same CRS as the raster.
+We will do so using the appropriate <code>sf</code> function:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lacerta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">lacerta</span>, <span class="va">iberia_proj4</span><span class="op">)</span></span></code></pre></div>
+<p>Plotting the data, we will see that the shape of the land mask has
+slightly changed following the new projection.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">land_mask_1985</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a0_tidysdm_overview_files/figure-html/project_iberia-1.png" width="576"></p>
+</div>
+<div class="section level2">
 <h2 id="thinning-step">Thinning step<a class="anchor" aria-label="anchor" href="#thinning-step"></a>
 </h2>
-<p>Now, we thin the observations to have one per cell in the raster (it
-would be better if we had an equal area projection…):</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>Now, we thin the observations to have one per cell in the raster
+(given our project, each cell is approximately the same size):</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234567</span><span class="op">)</span></span>
 <span><span class="va">lacerta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_by_cell.html">thin_by_cell</a></span><span class="op">(</span><span class="va">lacerta</span>, raster <span class="op">=</span> <span class="va">land_mask</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 226</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; [1] 233</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pres_data</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">land_mask</span>, <span class="va">lacerta</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pres_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        ID      land_mask_1985</span></span>
+<span><span class="co">#&gt;  Min.   :  1   land:233      </span></span>
+<span><span class="co">#&gt;  1st Qu.: 59                 </span></span>
+<span><span class="co">#&gt;  Median :117                 </span></span>
+<span><span class="co">#&gt;  Mean   :117                 </span></span>
+<span><span class="co">#&gt;  3rd Qu.:175                 </span></span>
+<span><span class="co">#&gt;  Max.   :233</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">land_mask_1985</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a0_tidysdm_overview_files/figure-html/plot_thin_by_cell-1.png" width="576"></p>
-<p>Now, we thin further to remove points that are closer than 20km.
-However, note that the standard map units for a ‘lonlat’ projection are
-meters. <code>tidysdm</code> provides a convening conversion function,
-<code><a href="../reference/km2m.html">km2m()</a></code>, to avoid having to write lots of zeroes):</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>Now, we thin further to remove points that are closer than 20km. As
+the units of our projection are m (the default for most projections), we
+use a a convenient conversion function, <code><a href="../reference/km2m.html">km2m()</a></code>, to avoid
+having to write lots of zeroes:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234567</span><span class="op">)</span></span>
 <span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_by_dist.html">thin_by_dist</a></span><span class="op">(</span><span class="va">lacerta</span>, dist_min <span class="op">=</span> <span class="fu"><a href="../reference/km2m.html">km2m</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 111</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 112</span></span></code></pre></div>
 <p>Let’s see what we have left of our points:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">land_mask_1985</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_thin</span><span class="op">)</span> <span class="op">+</span></span>
@@ -275,7 +324,7 @@ interest.</p>
 <p>We will start by downloading records from 8 genera of
 <em>Lacertidae</em>, covering the same geographic region of the Iberian
 peninsula from GBIF <a href="https://doi.org/10.15468/dl.53js5z" class="external-link uri">https://doi.org/10.15468/dl.53js5z</a>:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/rgbif" class="external-link">rgbif</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://docs.ropensci.org/rgbif/reference/occ_download_get.html" class="external-link">occ_download_get</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"0121761-240321170329656"</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span></span>
@@ -284,33 +333,53 @@ peninsula from GBIF <a href="https://doi.org/10.15468/dl.53js5z" class="external
 <span><span class="co"># keep the necessary columns</span></span>
 <span><span class="va">lacertidae_background</span> <span class="op">&lt;-</span> <span class="va">backg_distrib</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">gbifID</span>, <span class="va">decimalLatitude</span>, <span class="va">decimalLongitude</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>ID <span class="op">=</span> <span class="va">gbifID</span>, latitude <span class="op">=</span> <span class="va">decimalLatitude</span>, longitude <span class="op">=</span> <span class="va">decimalLongitude</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>ID <span class="op">=</span> <span class="va">gbifID</span>, latitude <span class="op">=</span> <span class="va">decimalLatitude</span>, longitude <span class="op">=</span> <span class="va">decimalLongitude</span><span class="op">)</span></span></code></pre></div>
+<p>In this case as well, we need to use the appropriate projection (the
+same defined before) for the background. If the projections do not
+correspond the analyses will stop giving an error message.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co"># convert to an sf object</span></span>
 <span><span class="va">lacertidae_background</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">lacertidae_background</span>, </span>
 <span>                                  coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">lacertidae_background</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">4326</span></span></code></pre></div>
+<span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">lacertidae_background</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"+proj=longlat"</span></span>
+<span><span class="va">lacertidae_background</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">lacertidae_background</span>, crs <span class="op">=</span> <span class="va">iberia_proj4</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Warning: st_crs&lt;- : replacing crs does not reproject data; use st_transform for</span></span>
+<span><span class="co">#&gt; that</span></span></code></pre>
 <p>We need to convert these observations into a raster whose values are
 the number of records (which will be later used to determine how likely
-each cell is to be used as a background point):</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lacertidae_background_raster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rasterize.html" class="external-link">rasterize</a></span><span class="op">(</span><span class="va">lacertidae_background</span>, <span class="va">land_mask</span>, </span>
+each cell is to be used as a background point). We will also mask the
+resulting background raster to match the land mask of interest.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lacertidae_background_raster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/rasterize.html" class="external-link">rasterize</a></span><span class="op">(</span><span class="va">lacertidae_background</span>,</span>
+<span>                                          <span class="va">land_mask</span>, </span>
 <span>                                          fun <span class="op">=</span> <span class="st">"count"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lacertidae_background_raster</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">lacertidae_background_raster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/mask.html" class="external-link">mask</a></span><span class="op">(</span><span class="va">lacertidae_background_raster</span>,</span>
+<span>                                     <span class="va">land_mask</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacertidae_background_raster</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">count</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_b</a></span><span class="op">(</span> na.value <span class="op">=</span> <span class="st">"transparent"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a0_tidysdm_overview_files/figure-html/background_to_raster-1.png" width="576"></p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;Guides[1] ggproto object&gt;</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; fill : "none"</span></span></code></pre></div>
 <p>We can see that the sampling is far from random, with certain
 locations having very large number of records. We can now sample the
 background, using the ‘bias’ method to represent this heterogeneity in
 sampling effort:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234567</span><span class="op">)</span></span>
 <span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_background.html">sample_background</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_thin</span>, raster <span class="op">=</span> <span class="va">lacertidae_background_raster</span>,</span>
 <span>                  n <span class="op">=</span> <span class="fl">3</span> <span class="op">*</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span>,</span>
 <span>                  method <span class="op">=</span> <span class="st">"bias"</span>,</span>
 <span>                  class_label <span class="op">=</span> <span class="st">"background"</span>,</span>
-<span>                  return_pres <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>                  return_pres <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in sample_background(data = lacerta_thin, raster = lacertidae_background_raster, : There are fewer available cells for raster 'NA' (112 presences) than the requested 336 background points. Only 9 will be returned.</span></span></code></pre></div>
 <p>Let’s see our presences and background:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">land_mask</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">land_mask_1985</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_thin</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>col <span class="op">=</span> <span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -321,7 +390,7 @@ sampling effort:</p>
 variables that are available (but you do not have to use
 <code>pastclim</code>, you could use any raster dataset you have access
 to, loading it directly with <code>terra</code>).</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/download_dataset.html" class="external-link">download_dataset</a></span><span class="op">(</span><span class="st">"WorldClim_2.1_10m"</span><span class="op">)</span></span>
 <span><span class="va">climate_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/get_vars_for_dataset.html" class="external-link">get_vars_for_dataset</a></span><span class="op">(</span><span class="st">"WorldClim_2.1_10m"</span><span class="op">)</span></span>
 <span><span class="va">climate_present</span> <span class="op">&lt;-</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/region_slice.html" class="external-link">region_slice</a></span><span class="op">(</span></span>
@@ -339,44 +408,102 @@ factors, but it is possible to use <code><a href="https://recipes.tidymodels.org
 generate dummy variables from factors. A worked example can be found in
 the <a href="https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html">article
 on additional features of tidymodels with tidysdm</a>.</p>
+<p>And now we project the climate variables in the same way as we did
+for all previous spatial data:</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">climate_present</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">climate_present</span>, y <span class="op">=</span> <span class="va">iberia_proj4</span><span class="op">)</span></span></code></pre></div>
 <p>Next, we extract climate for all presences and background points:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">climate_present</span>, <span class="va">lacerta_thin</span>, ID <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Before going forward with the analysis, we should make sure that
+there are no missing values in the climate that we extracted:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         class              geometry       bio01            bio02       </span></span>
+<span><span class="co">#&gt;  presence  :112   POINT        :121   Min.   : 7.222   Min.   : 5.920  </span></span>
+<span><span class="co">#&gt;  background:  9   epsg:NA      :  0   1st Qu.:11.556   1st Qu.: 8.822  </span></span>
+<span><span class="co">#&gt;                   +proj=aea ...:  0   Median :13.040   Median : 9.280  </span></span>
+<span><span class="co">#&gt;                                       Mean   :12.931   Mean   : 9.301  </span></span>
+<span><span class="co">#&gt;                                       3rd Qu.:14.297   3rd Qu.: 9.881  </span></span>
+<span><span class="co">#&gt;                                       Max.   :16.672   Max.   :12.124  </span></span>
+<span><span class="co">#&gt;      bio03           bio04           bio05           bio06       </span></span>
+<span><span class="co">#&gt;  Min.   :32.96   Min.   :320.6   Min.   :21.22   Min.   :-2.665  </span></span>
+<span><span class="co">#&gt;  1st Qu.:38.80   1st Qu.:424.3   1st Qu.:23.94   1st Qu.: 1.409  </span></span>
+<span><span class="co">#&gt;  Median :40.77   Median :493.5   Median :25.78   Median : 3.184  </span></span>
+<span><span class="co">#&gt;  Mean   :40.89   Mean   :491.7   Mean   :25.95   Mean   : 3.034  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:43.49   3rd Qu.:558.5   3rd Qu.:27.54   3rd Qu.: 5.030  </span></span>
+<span><span class="co">#&gt;  Max.   :47.59   Max.   :667.4   Max.   :32.72   Max.   : 8.221  </span></span>
+<span><span class="co">#&gt;      bio07           bio08            bio09           bio10      </span></span>
+<span><span class="co">#&gt;  Min.   :14.74   Min.   : 1.817   Min.   :14.56   Min.   :14.57  </span></span>
+<span><span class="co">#&gt;  1st Qu.:20.78   1st Qu.: 6.940   1st Qu.:17.96   1st Qu.:18.25  </span></span>
+<span><span class="co">#&gt;  Median :23.13   Median : 8.485   Median :18.96   Median :19.02  </span></span>
+<span><span class="co">#&gt;  Mean   :22.91   Mean   : 8.616   Mean   :19.13   Mean   :19.29  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:25.03   3rd Qu.:10.440   3rd Qu.:20.25   3rd Qu.:20.39  </span></span>
+<span><span class="co">#&gt;  Max.   :30.30   Max.   :17.639   Max.   :23.72   Max.   :23.87  </span></span>
+<span><span class="co">#&gt;      bio11             bio12            bio13            bio14      </span></span>
+<span><span class="co">#&gt;  Min.   : 0.8458   Min.   : 397.5   Min.   : 48.67   Min.   : 2.00  </span></span>
+<span><span class="co">#&gt;  1st Qu.: 5.8650   1st Qu.: 769.1   1st Qu.:106.65   1st Qu.:13.18  </span></span>
+<span><span class="co">#&gt;  Median : 7.5043   Median :1056.4   Median :143.07   Median :18.88  </span></span>
+<span><span class="co">#&gt;  Mean   : 7.3158   Mean   :1049.5   Mean   :146.48   Mean   :22.34  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: 9.2647   3rd Qu.:1347.5   3rd Qu.:186.54   3rd Qu.:30.63  </span></span>
+<span><span class="co">#&gt;  Max.   :11.7415   Max.   :1732.6   Max.   :249.79   Max.   :51.97  </span></span>
+<span><span class="co">#&gt;      bio15           bio16           bio17            bio18       </span></span>
+<span><span class="co">#&gt;  Min.   :24.92   Min.   :128.6   Min.   : 19.38   Min.   : 25.38  </span></span>
+<span><span class="co">#&gt;  1st Qu.:40.18   1st Qu.:301.1   1st Qu.: 65.13   1st Qu.: 68.60  </span></span>
+<span><span class="co">#&gt;  Median :51.05   Median :401.9   Median : 90.20   Median : 99.58  </span></span>
+<span><span class="co">#&gt;  Mean   :47.88   Mean   :412.4   Mean   : 95.30   Mean   :105.46  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:56.32   3rd Qu.:528.8   3rd Qu.:130.62   3rd Qu.:153.24  </span></span>
+<span><span class="co">#&gt;  Max.   :69.06   Max.   :695.0   Max.   :178.73   Max.   :195.92  </span></span>
+<span><span class="co">#&gt;      bio19          altitude      </span></span>
+<span><span class="co">#&gt;  Min.   :106.2   Min.   :  22.58  </span></span>
+<span><span class="co">#&gt;  1st Qu.:283.8   1st Qu.: 192.58  </span></span>
+<span><span class="co">#&gt;  Median :387.5   Median : 512.13  </span></span>
+<span><span class="co">#&gt;  Mean   :397.9   Mean   : 538.88  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:528.8   3rd Qu.: 733.15  </span></span>
+<span><span class="co">#&gt;  Max.   :695.0   Max.   :1477.87</span></span></code></pre></div>
+<p>We can see that there are no missing values in any of the extracted
+climate variables. If that was not the case, we would have to go back to
+the climate raster and homogenise the NAs across layers
+(i.e. variables). This can be achieved either by setting the same cells
+to NA in all layers (including the land mask that we used to thin the
+data), or by interpolating the layers with less information to fill the
+gaps (e.g. cloud cover in some remote sensed data). interpolate the
+missing</p>
 <p>Based on this paper (<a href="https://doi.org/10.1007/s10531-010-9865-2" class="external-link uri">https://doi.org/10.1007/s10531-010-9865-2</a>), we are
 interested in these variables: “bio06”, “bio05”, “bio13”, “bio14”,
 “bio15”. We can visualise the differences between presences and the
 background using violin plots:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/plot_pres_vs_bg.html">plot_pres_vs_bg</a></span><span class="op">(</span><span class="va">class</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-9-1.png" width="672">
+<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-15-1.png" width="672">
 We can see that all the variables of interest do seem to have a
 different distribution between presences and the background. We can
 formally quantify the mismatch between the two by computing the
 overlap:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/dist_pres_vs_bg.html">dist_pres_vs_bg</a></span><span class="op">(</span><span class="va">class</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      bio09      bio12      bio16      bio19      bio13      bio05      bio10 </span></span>
-<span><span class="co">#&gt; 0.43907819 0.41888524 0.41487381 0.40742724 0.40492411 0.38854703 0.38610145 </span></span>
-<span><span class="co">#&gt;      bio02      bio07      bio04      bio08      bio17      bio15      bio18 </span></span>
-<span><span class="co">#&gt; 0.35191109 0.35036167 0.32450555 0.31879785 0.28143659 0.27152095 0.25007068 </span></span>
-<span><span class="co">#&gt;      bio01      bio14      bio03      bio11   altitude      bio06 </span></span>
-<span><span class="co">#&gt; 0.24589097 0.24294699 0.18414624 0.11169528 0.07271380 0.06742951</span></span></code></pre></div>
+<span><span class="co">#&gt;     bio19     bio16     bio12     bio13     bio02     bio15     bio07     bio04 </span></span>
+<span><span class="co">#&gt; 0.9959022 0.9362035 0.9268597 0.9140456 0.7975679 0.7452740 0.7092859 0.6983330 </span></span>
+<span><span class="co">#&gt;     bio05     bio17     bio14     bio06     bio03     bio18     bio11     bio08 </span></span>
+<span><span class="co">#&gt; 0.6646394 0.5635174 0.5631364 0.4638880 0.4473745 0.4445754 0.4186998 0.3892218 </span></span>
+<span><span class="co">#&gt;     bio09     bio10     bio01  altitude </span></span>
+<span><span class="co">#&gt; 0.2898833 0.2812704 0.2706408 0.2580447</span></span></code></pre></div>
 <p>Again, we can see that the variables of interest seem good candidates
 with a clear signal. Let us then focus on those variables:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">suggested_vars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bio06"</span>, <span class="st">"bio05"</span>, <span class="st">"bio13"</span>, <span class="st">"bio14"</span>, <span class="st">"bio15"</span><span class="op">)</span></span></code></pre></div>
 <p>Environmental variables are often highly correlated, and collinearity
 is an issue for several types of models. We can inspect the correlation
 among variables with:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="va">climate_present</span><span class="op">[[</span><span class="va">suggested_vars</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
+<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-17-1.png" width="672"></p>
 <p>We can see that some variables have rather high correlation
 (e.g. bio05 vs bio14). We can subset to variables below a certain
 threshold correlation (e.g. 0.7) with:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">climate_present</span> <span class="op">&lt;-</span> <span class="va">climate_present</span><span class="op">[[</span><span class="va">suggested_vars</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">vars_uncor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_collinear.html">filter_collinear</a></span><span class="op">(</span><span class="va">climate_present</span>, cutoff <span class="op">=</span> <span class="fl">0.7</span>, method <span class="op">=</span> <span class="st">"cor_caret"</span><span class="op">)</span></span>
@@ -388,7 +515,7 @@ threshold correlation (e.g. 0.7) with:</p>
 Note that <code>filter_collinear</code> has other methods based on
 variable inflation that would also be worth exploring. For this example,
 we will remove bio14 and work with the remaining variables.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html" class="external-link">all_of</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">vars_uncor</span>, <span class="st">"class"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">climate_present</span> <span class="op">&lt;-</span> <span class="va">climate_present</span><span class="op">[[</span><span class="va">vars_uncor</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">climate_present</span><span class="op">)</span> <span class="co"># added to highlight which variables are retained in the end</span></span>
@@ -405,7 +532,7 @@ is the <code>outcome</code>, all other variables are
 <code>geometry</code> is automatically replaced by <code>X</code> and
 <code>Y</code> columns which are assigned a role of <code>coords</code>,
 and thus not used as predictors):</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula <span class="op">=</span> <span class="va">class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span>
 <span><span class="va">lacerta_rec</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -420,7 +547,7 @@ and thus not used as predictors):</p>
 is that the level of interest for the response (in our case, presences)
 is the reference level. We can confirm that we have the data correctly
 formatted with:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/check_sdm_presence.html">check_sdm_presence</a></span><span class="op">(</span><span class="va">class</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>We now build a <code>workflow_set</code> of different models,
@@ -437,7 +564,7 @@ customise model specifications (e.g. see the help for
 <code><a href="../reference/gam_formula.html">gam_formula()</a></code> due to the non-standard formula notation of
 GAMs (see the help of <code><a href="../reference/sdm_spec_gam.html">sdm_spec_gam()</a></code> for an example of how
 to do this).</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
 <span>  <span class="co"># create the workflow_set</span></span>
 <span>  <span class="fu">workflow_set</span><span class="op">(</span></span>
@@ -466,7 +593,7 @@ objects created with <code>blockCV</code> (which offers further features
 for spatial sampling, such as stratified sampling) into an
 <code>rsample</code> object suitable to <code>tisysdm</code> with the
 function <code>blockcv2rsample</code>.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="co">#lacerta_cv &lt;- spatial_block_cv(lacerta_thin, v = 5)</span></span>
@@ -477,7 +604,7 @@ function <code>blockcv2rsample</code>.</p>
 <p>We can now use the block CV folds to tune and assess the models (to
 keep computations fast, we will only explore 3 combination of
 hyperparameters per model; this is far too little in real life!):</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234567</span><span class="op">)</span></span>
 <span><span class="va">lacerta_models</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">lacerta_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -487,19 +614,23 @@ hyperparameters per model; this is far too little in real life!):</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 4 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (190ms)</span></span></span>
+<span><span class="co">#&gt; → <span style="color: #BBBB00; font-weight: bold;">A</span> | <span style="color: #BBBB00;">warning</span>: glm.fit: algorithm did not converge, glm.fit: fitted probabilities numerically 0 or 1 occurred</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x1</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (260ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 4 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 tuning:     default_rf (848ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 tuning:     default_rf (465ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm (4s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm (1.7s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">4 of 4 tuning:     default_maxent</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_maxent (1.2s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_maxent (831ms)</span></span></span></code></pre></div>
 <p>Note that <code>workflow_set</code> correctly detects that we have no
 tuning parameters for <em>glm</em>. We can have a look at the
 performance of our models with:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_models</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a0_tidysdm_overview_files/figure-html/autoplot_models-1.png" width="672"></p>
 <p>Now let’s create an ensemble, selecting the best set of parameters
@@ -509,9 +640,11 @@ there were not hype-parameters to tune for the <em>glm</em> and
 choose the best random forest and boosted tree. When adding members to
 an ensemble, they are automatically fitted to the full training dataset,
 and so ready to make predictions.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_ensemble</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simple_ensemble.html">simple_ensemble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_member.html">add_member</a></span><span class="op">(</span><span class="va">lacerta_models</span>, metric <span class="op">=</span> <span class="st">"boyce_cont"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: glm.fit: algorithm did not converge</span></span>
+<span><span class="co">#&gt; Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></span>
 <span><span class="va">lacerta_ensemble</span></span>
 <span><span class="co">#&gt; A simple_ensemble of models</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -529,34 +662,34 @@ and so ready to make predictions.</p>
 <span><span class="co">#&gt; Metric used to tune workflows:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> boyce_cont</span></span></code></pre></div>
 <p>And visualise it</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a0_tidysdm_overview_files/figure-html/autoplot_ens-1.png" width="672"></p>
 <p>A tabular form of the model metrics can be obtained with:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_ensemble</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">collect_metrics</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 5</span></span></span>
 <span><span class="co">#&gt;    wflow_id       .metric     mean std_err     n</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> default_glm    boyce_cont 0.573 0.115       3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> default_glm    roc_auc    0.775 0.013<span style="text-decoration: underline;">8</span>      3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> default_glm    tss_max    0.486 0.033<span style="text-decoration: underline;">7</span>      3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> default_rf     boyce_cont 0.709 0.085<span style="text-decoration: underline;">6</span>      3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> default_rf     roc_auc    0.794 0.006<span style="text-decoration: underline;">48</span>     3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> default_rf     tss_max    0.537 0.036<span style="text-decoration: underline;">3</span>      3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> default_gbm    boyce_cont 0.659 0.047<span style="text-decoration: underline;">2</span>      3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> default_gbm    roc_auc    0.789 0.007<span style="text-decoration: underline;">07</span>     3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> default_gbm    tss_max    0.524 0.015<span style="text-decoration: underline;">2</span>      3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> default_maxent boyce_cont 0.651 0.157       3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> default_maxent roc_auc    0.804 0.006<span style="text-decoration: underline;">53</span>     3</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> default_maxent tss_max    0.572 0.011<span style="text-decoration: underline;">1</span>      3</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> default_glm    boyce_cont 0.789 0.211       2</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> default_glm    roc_auc    1     0           3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> default_glm    tss_max    0.969 0.009<span style="text-decoration: underline;">42</span>     3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> default_rf     boyce_cont 0.845 0.083<span style="text-decoration: underline;">5</span>      3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> default_rf     roc_auc    0.978 0.022<span style="text-decoration: underline;">2</span>      3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> default_rf     tss_max    0.943 0.046<span style="text-decoration: underline;">9</span>      3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> default_gbm    boyce_cont 0.890 0.065<span style="text-decoration: underline;">1</span>      3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> default_gbm    roc_auc    0.986 0.013<span style="text-decoration: underline;">9</span>      3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> default_gbm    tss_max    0.931 0.045<span style="text-decoration: underline;">8</span>      3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> default_maxent boyce_cont 0.684 0.193       3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> default_maxent roc_auc    0.978 0.022<span style="text-decoration: underline;">2</span>      3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> default_maxent tss_max    0.943 0.046<span style="text-decoration: underline;">9</span>      3</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="projecting-to-the-present">Projecting to the present<a class="anchor" aria-label="anchor" href="#projecting-to-the-present"></a>
 </h2>
 <p>We can now make predictions with this ensemble (using the default
 option of taking the mean of the predictions from each model).</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prediction_present</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span>, <span class="va">climate_present</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">prediction_present</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">mean</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -565,14 +698,15 @@ option of taking the mean of the predictions from each model).</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">class</span> <span class="op">==</span> <span class="st">"presence"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a0_tidysdm_overview_files/figure-html/plot_present-1.png" width="576"></p>
 <p>We can subset the ensemble to only use the best models, based on the
-Boyce continuous index, by setting a minimum threshold of 0.7 for that
-metric. We will also take the median of the available model predictions
-(instead of the mean, which is the default). The plot does not change
-much (the models are quite consistent).</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+Boyce continuous index, by setting a minimum threshold of 0.6 for that
+metric (this is somewhat low, for a real analysis we would recommend a
+higher value of 0.7 or higher). We will also take the median of the
+available model predictions (instead of the mean, which is the default).
+The plot does not change much (the models are quite consistent).</p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">prediction_present_boyce</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span>, <span class="va">climate_present</span>,</span>
-<span>  metric_thresh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"boyce_cont"</span>, <span class="fl">0.7</span><span class="op">)</span>,</span>
+<span>  metric_thresh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"boyce_cont"</span>, <span class="fl">0.6</span><span class="op">)</span>,</span>
 <span>  fun <span class="op">=</span> <span class="st">"median"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -584,24 +718,24 @@ much (the models are quite consistent).</p>
 absence), rather than the probability of occurrence. To do so, we first
 need to calibrate the threshold used to convert probabilities into
 classes (in this case, we optimise the TSS):</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_ensemble</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calib_class_thresh.html">calib_class_thresh</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span>,</span>
 <span>  class_thresh <span class="op">=</span> <span class="st">"tss_max"</span>, </span>
-<span>  metric_thresh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"boyce_cont"</span>, <span class="fl">0.7</span><span class="op">)</span></span>
+<span>  metric_thresh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"boyce_cont"</span>, <span class="fl">0.6</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>And now we can predict for the whole continent:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prediction_present_binary</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span>,</span>
 <span>  <span class="va">climate_present</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"class"</span>,</span>
 <span>  class_thresh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tss_max"</span><span class="op">)</span>, </span>
-<span>  metric_thresh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"boyce_cont"</span>, <span class="fl">0.7</span><span class="op">)</span></span>
+<span>  metric_thresh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"boyce_cont"</span>, <span class="fl">0.6</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">prediction_present_binary</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">binary_mean</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">class</span> <span class="op">==</span> <span class="st">"presence"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_fill_discrete</a></span><span class="op">(</span>na.value <span class="op">=</span> <span class="st">"transparent"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-18-1.png" width="576"></p>
+<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-24-1.png" width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="projecting-to-the-future">Projecting to the future<a class="anchor" aria-label="anchor" href="#projecting-to-the-future"></a>
@@ -612,16 +746,16 @@ different models and Shared Socio-economic Pathways (SSP). Type
 predictions based on “HadGEM3-GC31-LL” model for SSP 245 (intermediate
 green house gas emissions) at the same resolution as the present day
 data (10 arc-minutes). We first download the data:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/download_dataset.html" class="external-link">download_dataset</a></span><span class="op">(</span><span class="st">"WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m"</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s see what times are available:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/get_time_bp_steps.html" class="external-link">get_time_ce_steps</a></span><span class="op">(</span><span class="st">"WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; [1] 2030 2050 2070 2090</span></span></code></pre>
 <p>We will predict for 2090, the further prediction in the future that
 is available.</p>
 <p>Let’s now check the available variables:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/get_vars_for_dataset.html" class="external-link">get_vars_for_dataset</a></span><span class="op">(</span><span class="st">"WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt;  [1] "bio01" "bio02" "bio03" "bio04" "bio05" "bio06" "bio07" "bio08" "bio09"</span></span>
 <span><span class="co">#&gt; [10] "bio10" "bio11" "bio12" "bio13" "bio14" "bio15" "bio16" "bio17" "bio18"</span></span>
@@ -631,15 +765,19 @@ that does not change with time), so if we needed it, we would have to
 copy it over from the present. However, it is not in our set of
 uncorrelated variables that we used earlier, so we don’t need to worry
 about it.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">climate_future</span> <span class="op">&lt;-</span> <span class="fu">pastclim</span><span class="fu">::</span><span class="fu"><a href="https://evolecolgroup.github.io/pastclim/reference/region_slice.html" class="external-link">region_slice</a></span><span class="op">(</span></span>
 <span>  time_ce <span class="op">=</span> <span class="fl">2090</span>,</span>
 <span>  bio_variables <span class="op">=</span> <span class="va">vars_uncor</span>,</span>
 <span>  data <span class="op">=</span> <span class="st">"WorldClim_2.1_HadGEM3-GC31-LL_ssp245_10m"</span>,</span>
 <span>  crop <span class="op">=</span> <span class="va">iberia_poly</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>Project the climatic raster with the same projection that we have
+been using for the analysis:</p>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">climate_future</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/project.html" class="external-link">project</a></span><span class="op">(</span><span class="va">climate_future</span>, y <span class="op">=</span> <span class="va">iberia_proj4</span><span class="op">)</span></span></code></pre></div>
 <p>And predict using the ensemble:</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prediction_future</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span>, <span class="va">climate_future</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -657,7 +795,7 @@ the SDM outcomes due to spatial extrapolation.</p>
 <p><code>tidysdm</code> offers a couple of approaches to deal with this
 problem. The simplest one is that we can clamp the environmental
 variables to stay within the limits observed in the calibration set:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">climate_future_clamped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clamp_predictors.html">clamp_predictors</a></span><span class="op">(</span><span class="va">climate_future</span>, </span>
 <span>                                           training <span class="op">=</span> <span class="va">lacerta_thin</span>,</span>
 <span>                                           .col<span class="op">=</span> <span class="va">class</span><span class="op">)</span></span>
@@ -667,7 +805,7 @@ variables to stay within the limits observed in the calibration set:</p>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">prediction_future_clamped</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">mean</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/scale_terrain.html" class="external-link">scale_fill_terrain_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-27-1.png" width="576"></p>
+<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-34-1.png" width="576"></p>
 <p>The predictions seem to have changed very little.</p>
 <p>An alternative is to allow values to exceed the ranges of the
 calibration set, but compute the Multivariate environmental similarity
@@ -675,14 +813,14 @@ surfaces (MESS) (Elith et al. 2010) to highlight areas where
 extrapolation occurs and thus visualise the prediction’s
 uncertainty.</p>
 <p>We estimate the MESS for the same future time slice used above:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_mess_future</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extrapol_mess.html">extrapol_mess</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">climate_future</span>, </span>
 <span>                                      training <span class="op">=</span> <span class="va">lacerta_thin</span>, </span>
 <span>                                      .col <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_mess_future</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_b</a></span><span class="op">(</span>na.value <span class="op">=</span> <span class="st">"transparent"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-28-1.png" width="576"></p>
+<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-35-1.png" width="576"></p>
 <p>Extrapolation occurs in areas where MESS values are negative, with
 the magnitude of the negative values indicating how extreme is in the
 interpolation. From this plot, we can see that the area of extrapolation
@@ -690,7 +828,7 @@ is where the model already predicted a suitability of zero. This
 explains why clamping did little to our predictions.</p>
 <p>We can now overlay MESS values with current prediction to visualize
 areas characterized by spatial extrapolation.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># subset mess </span></span>
 <span><span class="va">lacerta_mess_future_subset</span> <span class="op">&lt;-</span> <span class="va">lacerta_mess_future</span></span>
 <span><span class="va">lacerta_mess_future_subset</span><span class="op">[</span><span class="va">lacerta_mess_future_subset</span> <span class="op">&gt;=</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
@@ -704,7 +842,7 @@ areas characterized by spatial extrapolation.</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_b</a></span><span class="op">(</span>na.value <span class="op">=</span> <span class="st">"transparent"</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_mess_future_subset</span>, </span>
 <span>          fill<span class="op">=</span> <span class="st">"lightgray"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>, linewidth <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-29-1.png" width="576"></p>
+<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-36-1.png" width="576"></p>
 <p>Note that clamping and MESS are not only useful when making
 predictions into the future, but also into the past and present (in the
 latter case, it allows us to make sure that the
@@ -728,7 +866,7 @@ we can then bake to generate the appropriate dataset to make the
 marginal prediction. We can then plot the predictions against the values
 of the variable of interest. For example, to investigate the
 contribution of <code>bio05</code>, we would:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bio05_prof</span> <span class="op">&lt;-</span> <span class="va">lacerta_rec</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">step_profile</span><span class="op">(</span><span class="op">-</span><span class="va">bio05</span>, profile <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">bio05</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">prep</span><span class="op">(</span>training <span class="op">=</span> <span class="va">lacerta_thin</span><span class="op">)</span></span>
@@ -742,7 +880,7 @@ contribution of <code>bio05</code>, we would:</p>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">bio05_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bio05</span>, y <span class="op">=</span> <span class="va">pred</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, cex <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-30-1.png" width="576"></p>
+<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-37-1.png" width="576"></p>
 <p>It is also possible to use <a href="https://modeloriented.github.io/DALEX/" class="external-link">DALEX</a>,to explore
 <code>tidysdm</code> models; see more details in the <a href="https://evolecolgroup.github.io/tidysdm/dev/articles/a2_tidymodels_additions.html">tidymodels
 additions</a> article.</p>
@@ -757,11 +895,12 @@ creating ensembles of models over these repeats. In
 <code>tidysdm</code>, it is possible to create
 <code>repeat_ensembles</code>. We start by creating a list of
 <code>simple_ensembles</code>, by looping through the SDM pipeline. We
-will just use two fast models to speed up the process.</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+will just use two fast models to speed up the process, and use
+pseudo-absences instead of background.</p>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># empty object to store the simple ensembles that we will create</span></span>
 <span><span class="va">ensemble_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span> <span class="co"># make sure you set the seed OUTSIDE the loop</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span> <span class="co"># make sure you set the seed OUTSIDE the loop</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i_repeat</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># thin the data</span></span>
 <span>  <span class="va">lacerta_thin_rep</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/thin_by_cell.html">thin_by_cell</a></span><span class="op">(</span><span class="va">lacerta</span>, raster <span class="op">=</span> <span class="va">climate_present</span><span class="op">)</span></span>
@@ -776,7 +915,7 @@ will just use two fast models to speed up the process.</p>
 <span>  <span class="va">lacerta_thin_rep</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin_rep</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/extract.html" class="external-link">extract</a></span><span class="op">(</span><span class="va">climate_present</span>, <span class="va">lacerta_thin_rep</span>, ID <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="co"># create folds</span></span>
-<span>  <span class="va">lacerta_thin_rep_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">lacerta_thin_rep</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span>  <span class="va">lacerta_thin_rep_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">lacerta_thin_rep</span>, v <span class="op">=</span> <span class="fl">3</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span>  <span class="co"># create a recipe</span></span>
 <span>  <span class="va">lacerta_thin_rep_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin_rep</span>, formula <span class="op">=</span> <span class="va">class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span>
 <span>  <span class="co"># create a workflow_set</span></span>
@@ -800,7 +939,7 @@ will just use two fast models to speed up the process.</p>
 <span>  <span class="va">lacerta_thin_rep_models</span> <span class="op">&lt;-</span></span>
 <span>    <span class="va">lacerta_thin_rep_models</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu">workflow_map</span><span class="op">(</span><span class="st">"tune_grid"</span>,</span>
-<span>      resamples <span class="op">=</span> <span class="va">lacerta_thin_rep_cv</span>, grid <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>      resamples <span class="op">=</span> <span class="va">lacerta_thin_rep_cv</span>, grid <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>      metrics <span class="op">=</span> <span class="fu"><a href="../reference/sdm_metric_set.html">sdm_metric_set</a></span><span class="op">(</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="co"># make an simple ensemble and add it to the list</span></span>
@@ -809,21 +948,21 @@ will just use two fast models to speed up the process.</p>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (226ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (161ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (7.1s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (1.2s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (226ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (170ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (6.8s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (1.1s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (225ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (171ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (7.4s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (1.2s)</span></span></span></code></pre></div>
 <p>Now we can create a <code>repeat_ensemble</code> from the list:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_rep_ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/repeat_ensemble.html">repeat_ensemble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/add_repeat.html">add_repeat</a></span><span class="op">(</span><span class="va">ensemble_list</span><span class="op">)</span></span>
 <span><span class="va">lacerta_rep_ens</span></span>
 <span><span class="co">#&gt; A repeat_ensemble of models</span></span>
@@ -845,16 +984,21 @@ will just use two fast models to speed up the process.</p>
 <p>We can summarise the goodness of fit of models for each repeat with
 <code>collect_metrics()</code>, but there is no <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>
 function for <code>repeated_ensemble</code> objects.</p>
-<p>We can then predict in the usual way (we will take the mean and
-median of all models):</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<p>We can then predict in the usual way. We will take the mean and
+median of all models, without filtering by performance, and plot the
+results:</p>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_rep_ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_rep_ens</span>, <span class="va">climate_present</span>,</span>
 <span>  fun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"median"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_rep_ens</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">median</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/scale_terrain.html" class="external-link">scale_fill_terrain_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-34-1.png" width="576"></p>
+<p><img src="a0_tidysdm_overview_files/figure-html/unnamed-chunk-41-1.png" width="576"></p>
+<p>Note that the predictions are quite similar to the ones we obtained
+before, but the predicted suitable range is somewhat larger, probably
+because we included models that are not very good (as we did not filter
+by performance) in the ensemble.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

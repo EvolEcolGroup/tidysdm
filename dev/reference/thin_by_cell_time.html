@@ -121,7 +121,10 @@ grid of <code>raster</code>)</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Further spatial thinning can be achieved by aggregating cells in the raster
 before thinning, as achieved by setting <code>agg_fact</code> &gt; 1 (aggregation works in a
-manner equivalent to <code><a href="https://rspatial.github.io/terra/reference/aggregate.html" class="external-link">terra::aggregate()</a></code>).</p>
+manner equivalent to <code><a href="https://rspatial.github.io/terra/reference/aggregate.html" class="external-link">terra::aggregate()</a></code>).
+Note that if <code>data</code> is an <code>sf</code> object, the function will transform the coordinates
+to the same projection as the <code>raster</code> (recommended); if <code>data</code> is a data.frame, it is up
+to the user to ensure that the coordinates are in the correct units.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
