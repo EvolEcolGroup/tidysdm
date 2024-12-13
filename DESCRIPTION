@@ -69,7 +69,8 @@ Suggests:
     testthat (>= 3.0.0),
     tidyterra,
     vdiffr,
-    xgboost
+    xgboost, 
+    ggpattern
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: true
