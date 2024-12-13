@@ -797,11 +797,20 @@ lacerta_mess_future_subset[lacerta_mess_future_subset < 0] <- 1
 # convert into polygon
 lacerta_mess_future_subset <- as.polygons(lacerta_mess_future_subset)
 
+library(ggpattern)
+
 # plot as a mask 
 ggplot() + geom_spatraster(data = prediction_future) + 
-  scale_fill_viridis_b(na.value = "transparent") + 
-  geom_sf(data = lacerta_mess_future_subset, 
-          fill= "lightgray", alpha = 0.5, linewidth = 0.5)
+  scale_fill_terrain_c() + 
+  geom_sf_pattern(data = lacerta_mess_future_subset, 
+          pattern = "stripe",
+          fill = "transparent",
+          pattern_fill= "black", 
+          pattern_density = 0.02,
+          pattern_spacing = 0.05,
+          pattern_angle = 45,
+          alpha = 0.1, 
+          linewidth = 0.5)
 
 ```
 
