@@ -162,7 +162,11 @@ explain_simple_ensemble <- function(
     stop("type has to be classification for a tidysdm ensemble")
   }
   if (is.null(data)) {
+    if (is.null(model$workflow[[1]]$pre$actions$recipe$recipe$steps)){
     data <- workflowsets::extract_mold(model$workflow[[1]])$predictors
+    } else {
+      stop("your recipe contains steps; please provide a copy of the original dataset as 'data' argument")
+    }
   }
   if (is.null(y)) {
     # note that we need presences to be 1 and absences to be zero
@@ -270,7 +274,11 @@ explain_simple_ensemble_by_workflow <- function(
   explainer_list <- list()
   for (i in seq_len(nrow(model))) {
     if (is.null(data)) {
+      if (is.null(model$pre$actions$recipe$recipe$steps)){
       data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
+      } else {
+        stop("your recipe contains steps; please provide a copy of the original dataset as data argument")
+      }
     } else {
       data_train <- data
     }
