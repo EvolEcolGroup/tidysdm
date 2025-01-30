@@ -37,4 +37,7 @@ is retained.
 Further thinning can be achieved by aggregating cells in the raster
 before thinning, as achieved by setting \code{agg_fact} > 1 (aggregation works in a
 manner equivalent to \code{\link[terra:aggregate]{terra::aggregate()}}).
+Note that if \code{data} is an \code{sf} object, the function will transform the coordinates
+to the same projection as the \code{raster} (recommended); if \code{data} is a data.frame, it is up
+to the user to ensure that the coordinates are in the correct units.
 }

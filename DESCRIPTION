@@ -1,6 +1,6 @@
 Package: tidysdm
 Title: Species Distribution Models with Tidymodels
-Version: 0.9.6.9004
+Version: 0.9.6.9005
 Authors@R: c(
     person("Michela", "Leonardi", role = "aut"),
     person("Margherita", "Colucci", role = "aut"),
@@ -69,7 +69,8 @@ Suggests:
     testthat (>= 3.0.0),
     tidyterra,
     vdiffr,
-    xgboost
+    xgboost, 
+    ggpattern
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: true

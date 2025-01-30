@@ -38,3 +38,27 @@ test_that("thin_by_dist removes the correct points", {
 # plot(grid_raster,colNA="darkgray")
 # polys(terra::as.polygons(grid_raster))
 # points(vect(locations), col="red", cex=2)
+
+
+test_that("thin_by_dist respects the projection",{
+  # get the lacerta data and set crs to latlong
+  lacerta <- sf::st_as_sf(lacerta, coords = c("longitude", "latitude"))
+  sf::st_crs(lacerta) <- "+proj=longlat"
+  # and npw project it
+  iberia_proj4 <- "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+  lacerta_proj <- sf::st_transform(lacerta, iberia_proj4)
+  # thin the data with a mismatch in projections
+  set.seed(123)
+  lacerta_thin_gc <- thin_by_dist(lacerta_proj, dist_min = 20000) # great circle method
+  set.seed(123)
+  lacerta_thin_eu <- thin_by_dist(lacerta_proj, dist_min = 20000, dist_method = "euclidean") # euclidean method
+  # check that the thinning is not the same
+  expect_false(nrow(lacerta_thin_gc)==nrow(lacerta_thin_eu))
+  # check that the great circle method did not remove the crs from the data
+  expect_equal(sf::st_crs(lacerta_thin_gc), sf::st_crs(lacerta_proj))
+  # now thin the original dataset (in latlong)
+  set.seed(123)
+  lacerta_thin_gc_ll <- thin_by_dist(lacerta, dist_min = 20000)
+  # expect this to be identical to the great circle method
+  expect_equal(lacerta_thin_gc$ID, lacerta_thin_gc_ll$ID)
+})

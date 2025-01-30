@@ -8,6 +8,9 @@
 #' Further spatial thinning can be achieved by aggregating cells in the raster
 #' before thinning, as achieved by setting `agg_fact` > 1 (aggregation works in a
 #' manner equivalent to [terra::aggregate()]).
+#' Note that if `data` is an `sf` object, the function will transform the coordinates
+#' to the same projection as the `raster` (recommended); if `data` is a data.frame, it is up
+#' to the user to ensure that the coordinates are in the correct units.
 #'
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
@@ -49,14 +52,14 @@ thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
   if (inherits(raster, "SpatRasterDataset")) {
     raster <- raster[[1]]
   }
-  
+
   if(inherits(raster, "stars")) {
     d <- stars::st_dimensions(raster)
     time <- stars::st_get_dimension_values(raster, "time")
     raster <- as(raster, "SpatRaster")
     terra::time(raster, tstep = d$time$refsys) <- time
   }
-  
+
   time_steps <- terra::time(raster)
 
   if (any(is.na(time_steps))) {

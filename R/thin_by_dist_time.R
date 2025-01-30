@@ -26,6 +26,8 @@
 #' @param dist_min Minimum distance between points (in units appropriate for
 #' the projection, or meters for lonlat data).
 #' @param interval_min Minimum time interval between points, in days.
+#' @param dist_method method to compute distance, either "euclidean" or "great_circle".
+#' Defaults to "great_circle", which is more accurate but takes slightly longer.
 #' @returns An object of class [`sf::sf`] or [`data.frame`], the same as "data".
 #' @export
 #' @importFrom rlang :=
@@ -33,7 +35,7 @@
 # This code is an adaptation of spThin to work on sf objects
 
 thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
-                              time_col = "time", lubridate_fun = c) {
+                              time_col = "time", lubridate_fun = c, dist_method = c("great_circle", "euclidean")) {
   return_dataframe <-
     FALSE # flag whether we need to return a data.frame
   # cast to sf if needed
@@ -42,6 +44,14 @@ thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
     data <-
       sf::st_as_sf(data, coords = coords) %>% sf::st_set_crs(4326)
     return_dataframe <- TRUE
+  }
+
+  #use the proper method of distance calculation by changing projection if necessary
+  dist_method <- match.arg(dist_method)
+  if (dist_method == "great_circle") {
+    # store the original projection
+    original_crs <- sf::st_crs(data)
+    data <- sf::st_transform(data, 4326)
   }
 
   # create a vector of times formatted as proper dates
@@ -108,6 +118,12 @@ thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
 
   ## Subset the original dataset
   thinned_points <- data[points_to_keep, ]
+
+  # if we used great circle distances, we need to transform back
+  if (dist_method == "great_circle") {
+    thinned_points <- sf::st_transform(thinned_points, original_crs)
+  }
+
   if (return_dataframe) {
     thinned_points <- thinned_points %>%
       dplyr::bind_cols(sf::st_coordinates(thinned_points)) %>% # re-add coordinates

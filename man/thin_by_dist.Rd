@@ -4,7 +4,12 @@
 \alias{thin_by_dist}
 \title{Thin points dataset based on geographic distance}
 \usage{
-thin_by_dist(data, dist_min, coords = NULL)
+thin_by_dist(
+  data,
+  dist_min,
+  coords = NULL,
+  dist_method = c("great_circle", "euclidean")
+)
 }
 \arguments{
 \item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with coordinate variables.
@@ -18,6 +23,9 @@ the projection, or meters for lonlat data).}
 coordinates, as found in \code{data}. If left to NULL, the function will
 try to guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
 \code{c("longitude", "latitude")}, or \code{c("lon", "lat")}}
+
+\item{dist_method}{method to compute distance, either "euclidean" or "great_circle".
+Defaults to "great_circle", which is more accurate but takes slightly longer.}
 }
 \value{
 An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link{data.frame}}, the same as "data".
