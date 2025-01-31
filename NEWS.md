@@ -1,5 +1,7 @@
 # `tidysdm` development version
 
+* when using `explain_tidysdm` with a recipe that contains steps, data have to be
+  passed explicitly to the `data` argument
 * implement `make_mask_from_presence` to define the area of interest
 * add interoperability with `stars` (thanks to @btupper)
 * check time units of rasters for `sample_background_time()` and 
