@@ -2,8 +2,7 @@
 % Please edit documentation in R/pairs.R
 \name{pairs,stars-method}
 \alias{pairs,stars-method}
-\title{This is a wrapper around \code{graphics::pairs()} that accepts \code{stars} objects.
-It is adapted from a similar function in the \code{terra} package.}
+\title{Pairwise matrix of scatterplot for stars objects}
 \usage{
 \S4method{pairs}{stars}(
   x,
@@ -28,9 +27,13 @@ It is adapted from a similar function in the \code{terra} package.}
 \item{...}{additional arguments (graphical parameters)}
 }
 \description{
-This is a wrapper around \code{graphics::pairs()} that accepts \code{stars} objects.
-It is adapted from a similar function in the \code{terra} package.
+Pairs plot of attributes for \code{stars} objects. This is equivalent to \code{\link[terra:pairs]{terra::pairs()}} but works with \code{stars} objects.
 }
-\seealso{
-\href{https://github.com/rspatial/terra/blob/a72eb63cf178c637f76859476487cd8345b529bc/R/plot.R#L115}{terra implementation}
+\examples{
+r <-terra::rast(system.file("ex/elev.tif", package="terra"))
+s <- c(r, 1/r, sqrt(r))
+names(s) <- c("elevation", "inverse", "sqrt")
+terra::pairs(s)
+s_stars <- stars::st_as_stars(s, as_attributes=TRUE)
+pairs(s_stars)
 }
