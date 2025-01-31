@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.6.9005</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.6.90056</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -140,7 +140,7 @@ generate our explainer:</p>
 <span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  predict_function </span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; model_info        :  package tidysdm , ver. 0.9.6.9005 , task classification (  default  ) </span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  package tidysdm , ver. 0.9.6.90056 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.02638562 , mean =  0.2951438 , max =  0.7778588  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
@@ -399,12 +399,12 @@ variables in the dataset. So, before tuning, we need to finalise
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (304ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (297ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 3 tuning:     all_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> No improvement for 10 iterations; returning current results.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (16s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (15.6s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 3 tuning:     all_svm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (18.6s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (18.4s)</span></span></span></code></pre></div>
 <p>We can have a look at the performance of our models with:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_models</span><span class="op">)</span></span></code></pre></div>
@@ -593,10 +593,10 @@ baking the recipe:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (197ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (190ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (983ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (949ms)</span></span></span>
 <span><span class="co"># fit the ensemble</span></span>
 <span><span class="va">lacerta_ensemble</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simple_ensemble.html">simple_ensemble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_member.html">add_member</a></span><span class="op">(</span><span class="va">lacerta_models</span>, metric <span class="op">=</span> <span class="st">"boyce_cont"</span><span class="op">)</span></span></code></pre></div>
