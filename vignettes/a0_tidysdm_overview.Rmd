@@ -489,6 +489,10 @@ lacerta_rec <- recipe(lacerta_thin, formula = class ~ .)
 lacerta_rec
 ```
 
+Note that `step_` functions from `recipes` that filter data rows (e.g `step_naomit()`)
+can be problematic (see the relevant section from the man page for [`step_naomit()`](https://recipes.tidymodels.org/reference/step_naomit.html#row-filtering)). We would recommend that you filter your data before setting
+up the recipe, rather than attempting to use steps in the recipe.
+
 In classification models for `tidymodels`, the assumption is that the
 level of interest for the response (in our case, presences) is the
 reference level. We can confirm that we have the data correctly
