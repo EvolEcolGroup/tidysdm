@@ -65,8 +65,8 @@ customise the model. See the help of that function for details.</p></dd>
 
 <dt id="arg-tune">tune<a class="anchor" aria-label="anchor" href="#arg-tune"></a></dt>
 <dd><p>character defining the tuning strategy. Valid strategies are:</p><ul><li><p>"sdm" chooses hyper-parameters that are most important to tune for
-an sdm (for <em>maxent</em>, 'mtry')</p></li>
-<li><p>"all" tunes all hyperparameters (for <em>maxent</em>, 'mtry', 'trees' and 'min')</p></li>
+an sdm (for <em>maxent</em>, 'feature_classes' and 'regularization_multiplier')</p></li>
+<li><p>"all" tunes all hyperparameters (for <em>maxent</em>, 'feature_classes' and 'regularization_multiplier', the same as with tune = "sdm")</p></li>
 <li><p>"custom" passes the options from '...'</p></li>
 <li><p>"none" does not tune any hyperparameter</p></li>
 </ul></dd>
