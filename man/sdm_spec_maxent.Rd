@@ -13,8 +13,8 @@ customise the model. See the help of that function for details.}
 \item{tune}{character defining the tuning strategy. Valid strategies are:
 \itemize{
 \item "sdm" chooses hyper-parameters that are most important to tune for
-an sdm (for \emph{maxent}, 'mtry')
-\item "all" tunes all hyperparameters (for \emph{maxent}, 'mtry', 'trees' and 'min')
+an sdm (for \emph{maxent}, 'feature_classes' and 'regularization_multiplier')
+\item "all" tunes all hyperparameters (for \emph{maxent}, 'feature_classes' and 'regularization_multiplier', the same as with tune = "sdm")
 \item "custom" passes the options from '...'
 \item "none" does not tune any hyperparameter
 }}

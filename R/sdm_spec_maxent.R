@@ -8,8 +8,8 @@
 #' customise the model. See the help of that function for details.
 #' @param tune character defining the tuning strategy. Valid strategies are:
 #' * "sdm" chooses hyper-parameters that are most important to tune for
-#' an sdm (for *maxent*, 'mtry')
-#' * "all" tunes all hyperparameters (for *maxent*, 'mtry', 'trees' and 'min')
+#' an sdm (for *maxent*, 'feature_classes' and 'regularization_multiplier')
+#' * "all" tunes all hyperparameters (for *maxent*, 'feature_classes' and 'regularization_multiplier', the same as with tune = "sdm")
 #' * "custom" passes the options from '...'
 #' * "none" does not tune any hyperparameter
 #' @returns a [parsnip::model_spec] of the model.
