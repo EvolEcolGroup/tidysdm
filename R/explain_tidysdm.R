@@ -292,7 +292,7 @@ explain_simple_ensemble_by_workflow <- function(
     if (is.null(y)) {
       data_response <- (as.numeric(workflowsets::extract_mold(model$workflow[[i]])$outcomes %>% dplyr::pull()) - 2) * -1
      } else {
-      data_response <- y
+      data_response <- (as.numeric(y) - 2) * -1
     }
 
     explainer_list[[i]] <-
