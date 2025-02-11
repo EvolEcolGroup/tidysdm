@@ -6,7 +6,7 @@
 \usage{
 \method{predict}{simple_ensemble}(
   object,
-  new_data,
+  new_data = NULL,
   type = "prob",
   fun = "mean",
   metric_thresh = NULL,
@@ -18,7 +18,9 @@
 \arguments{
 \item{object}{an simple_ensemble object}
 
-\item{new_data}{a data frame in which to look for variables with which to predict.}
+\item{new_data}{a data frame in which to look for variables with which to predict.
+If \code{NULL}, the predictors from the first workflow in the ensemble are used;
+note that this only makes sense if all workflows have the same predictors.}
 
 \item{type}{the type of prediction, "prob" or "class".}
 
