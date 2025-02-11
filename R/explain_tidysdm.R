@@ -295,6 +295,7 @@ explain_simple_ensemble_by_workflow <- function(
       data_response <- (as.numeric(y) - 2) * -1
     }
 
+    browser()
     explainer_list[[i]] <-
       DALEXtra::explain_tidymodels(
         model$workflow[[i]],

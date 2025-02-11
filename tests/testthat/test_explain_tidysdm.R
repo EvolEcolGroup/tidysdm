@@ -77,3 +77,15 @@ test_that("explain_tidysdm works correctly with recipes with steps", {
   expect_no_error(explain_tidysdm(lacerta_ensemble, data=lacerta_thin, verbose=FALSE))
   
 })
+
+# test_that("explain_tidysdm works with response provided directly", {
+#   test_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble, 
+#                   verbose=FALSE)
+#   test_explainer_y <- explain_tidysdm(tidysdm::lacerta_ensemble, y=lacerta_thin$class, 
+#                                     verbose=FALSE)
+#   
+#   
+#   
+#   
+# })
+

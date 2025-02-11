@@ -31,7 +31,7 @@
 
 predict.simple_ensemble <-
   function(object,
-           new_data,
+           new_data = NULL,
            type = "prob",
            fun = "mean",
            metric_thresh = NULL,
@@ -107,6 +107,11 @@ predict.simple_ensemble <-
       }
     } else {
       stop("fun should be either 'none', or a combination of 'mean', 'median', 'weighted_mean', and 'weighted_median'")
+    }
+
+    # if there is no data, grab it from the first workflow
+    if (is.null(new_data)) {
+     new_data <- workflowsets::extract_mold(object$workflow[[1]])$predictors
     }
 
     # create list of predictions
