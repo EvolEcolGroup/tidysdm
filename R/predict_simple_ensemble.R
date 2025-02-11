@@ -4,6 +4,8 @@
 #' models (i.e. workflows) are combined according to `fun`
 #' @param object an simple_ensemble object
 #' @param new_data a data frame in which to look for variables with which to predict.
+#' If `NULL`, the predictors from the first workflow in the ensemble are used;
+#' note that this only makes sense if all workflows have the same predictors.
 #' @param type the type of prediction, "prob" or "class".
 #' @param fun string defining the aggregating function. It can take values
 #' `mean`, `median`, `weighted_mean`, `weighted_median` and `none`. It is possible
