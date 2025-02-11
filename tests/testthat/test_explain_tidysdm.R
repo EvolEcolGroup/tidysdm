@@ -34,7 +34,7 @@ test_that("we can explain tidysdm objects", {
 
 test_that("explain_tidysdm works correctly with recipes with steps", {
   # we catch the problem of data not being explicitly provided if we have steps in recipe
-  lacerta_thin <- terra::readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+  lacerta_thin <- terra::readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
                                              package = "tidysdm"))
   
   # Add a topography variable with 3 levels

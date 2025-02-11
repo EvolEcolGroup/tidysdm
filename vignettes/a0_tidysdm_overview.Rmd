@@ -406,11 +406,18 @@ lacerta_thin <- lacerta_thin %>%
   bind_cols(terra::extract(climate_present, lacerta_thin, ID = FALSE))
 ```
 
+
+```{r echo=FALSE, results='hide', eval=create_sample_data}
+terra::saveRDS(lacerta_thin, "../inst/extdata/lacerta_thin_all_vars.rds")
+```
+
 Before going forward with the analysis, we should make  sure that there
 are no missing values in the climate that we extracted:
+
 ```{r}
 summary(lacerta_thin)
 ```
+
 We can see that there are no missing values in any of the
 extracted climate variables. If that was not the case, we would have
 to go back to the climate raster and homogenise the NAs
@@ -419,7 +426,6 @@ setting the same cells to NA in all layers (including the land mask
 that we used to thin the data), or by interpolating the layers with less
 information to fill the gaps (e.g. cloud cover in some remote sensed data).
 interpolate the missing
-
 
 Based on this paper (<https://doi.org/10.1007/s10531-010-9865-2>), we
 are interested in these variables: "bio06", "bio05", "bio13", "bio14", "bio15".

@@ -89,7 +89,6 @@ predict.simple_ensemble <-
                                optim_value = rep(class_thresh, length(fun)))
       }
 
-      #browser()
       class_levels <- levels(workflows::extract_mold((object$workflow[[1]]))$outcome %>% dplyr::pull(1))
     }
 

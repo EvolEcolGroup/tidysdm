@@ -8,7 +8,7 @@
 #' set of each split (or training and testing in an initial split)
 #' @export
 #' @examples
-#' lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+#' lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
 #'   package = "tidysdm"
 #' ))
 #' lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)

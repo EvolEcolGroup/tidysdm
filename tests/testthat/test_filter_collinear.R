@@ -1,10 +1,10 @@
 test_that("filter collinear variables with cor_caret", {
-  lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+  lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
     package = "tidysdm"
   ))
   set.seed(123)
   vars_to_keep <- filter_collinear(lacerta_thin)
-  expect_true(all(c("bio02", "bio19", "altitude", "bio15", "bio08", "bio09", "bio03")
+  expect_true(all(c("bio02", "bio19", "altitude", "bio14", "bio08", "bio09", "bio03")
   %in% vars_to_keep))
   expect_true(all(is.numeric(filter_collinear(lacerta_thin, names = FALSE))))
   verbose_test <- suppressMessages(filter_collinear(lacerta_thin, verbose = TRUE))
@@ -60,7 +60,7 @@ test_that("filter collinear variables with cor_caret", {
 
 
 test_that("filter collinear variables with vif_step", {
-  lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+  lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
                                       package = "tidysdm"
   ))
   set.seed(123)
@@ -74,7 +74,7 @@ test_that("filter collinear variables with vif_step", {
 })
 
 test_that("filter collinear variables with vif_cor", {
-  lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+  lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
                                       package = "tidysdm"
   ))
   set.seed(123)
