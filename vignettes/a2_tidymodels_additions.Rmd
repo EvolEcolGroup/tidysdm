@@ -192,8 +192,8 @@ lacerta_models <-
       rf = sdm_spec_rf(),
       # svm specs with tuning
       svm = parsnip::svm_poly(
-        cost = tune(),
-        degree = tune()
+        cost = tune::tune(),
+        degree = tune::tune()
       ) %>%
         parsnip::set_engine("kernlab") %>%
         parsnip::set_mode("classification")

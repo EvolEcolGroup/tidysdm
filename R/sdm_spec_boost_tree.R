@@ -20,7 +20,7 @@
 #' @examples
 #' standard_bt_spec <- sdm_spec_boost_tree()
 #' full_bt_spec <- sdm_spec_boost_tree(tune = "all")
-#' custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune())
+#' custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune::tune())
 #' @export
 #' @family "sdm model specifications"
 
@@ -28,24 +28,24 @@ sdm_spec_boost_tree <- function(..., tune = c("sdm", "all", "custom", "none")) {
   tune <- rlang::arg_match(tune)
   if (tune == "sdm") {
     base_spec <- parsnip::boost_tree(
-      mtry = tune(), #
-      trees = tune(), #
-      tree_depth = tune(), #
-      learn_rate = tune(), #
-      loss_reduction = tune(), #
-      stop_iter = tune(), #
+      mtry = tune::tune(), #
+      trees = tune::tune(), #
+      tree_depth = tune::tune(), #
+      learn_rate = tune::tune(), #
+      loss_reduction = tune::tune(), #
+      stop_iter = tune::tune(), #
       ...
     )
   } else if (tune == "all") {
     base_spec <- parsnip::boost_tree(
-      mtry = tune(),
-      trees = tune(),
-      min_n = tune(),
-      tree_depth = tune(),
-      learn_rate = tune(),
-      loss_reduction = tune(),
-      sample_size = tune(),
-      stop_iter = tune(),
+      mtry = tune::tune(),
+      trees = tune::tune(),
+      min_n = tune::tune(),
+      tree_depth = tune::tune(),
+      learn_rate = tune::tune(),
+      loss_reduction = tune::tune(),
+      sample_size = tune::tune(),
+      stop_iter = tune::tune(),
       ...
     )
   } else if ((tune == "custom") | (tune == "none")) {

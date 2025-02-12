@@ -54,8 +54,8 @@ pred_class <- predict(maxent_fitted, new_data = bradypus[, -1], type = "class")
 
 # Now with tuning
 maxent_spec <- maxent(
-  regularization_multiplier = tune(),
-  feature_classes = tune()
+  regularization_multiplier = tune::tune(),
+  feature_classes = tune::tune()
 )
 set.seed(452)
 cv <- vfold_cv(bradypus_tb, v = 2)

@@ -42,7 +42,7 @@ recipe.sf <- function(x, ...) {
   }
 
   rec <- recipe(x, ...) %>%
-    update_role(dplyr::any_of(c("X", "Y")), new_role = "coords")
+    recipes::update_role(dplyr::any_of(c("X", "Y")), new_role = "coords")
   class(rec) <- c("spatial_recipe", class(rec))
   rec
 }
@@ -53,5 +53,5 @@ spatial_recipe <- function(x, ...) {
   if (!inherits(x, "sf")) {
     stop("x should be an `sf` object")
   }
-  recipe(x, ...)
+  recipes::recipe(x, ...)
 }

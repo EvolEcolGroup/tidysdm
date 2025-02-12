@@ -38,7 +38,7 @@
 boyce_cont <- function(data, ...) {
   UseMethod("boyce_cont")
 }
-boyce_cont <- new_prob_metric(
+boyce_cont <- yardstick::new_prob_metric(
   boyce_cont,
   direction = "maximize"
 )
@@ -52,7 +52,7 @@ boyce_cont.data.frame <- function(data,
                                   na_rm = TRUE,
                                   event_level = "first",
                                   case_weights = NULL) {
-  prob_metric_summarizer(
+  yardstick::prob_metric_summarizer(
     name = "boyce_cont",
     fn = boyce_cont_vec,
     data = data,
@@ -84,7 +84,7 @@ boyce_cont_vec <- function(truth,
                            case_weights = NULL,
                            ...) {
   abort_if_class_pred(truth)
-  
+
   estimator <- yardstick::finalize_estimator(truth, estimator, "boyce_cont")
 
   yardstick::check_prob_metric(truth, estimate, case_weights, estimator)

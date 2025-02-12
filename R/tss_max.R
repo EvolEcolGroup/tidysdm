@@ -32,7 +32,7 @@
 tss_max <- function(data, ...) {
   UseMethod("tss_max")
 }
-tss_max <- new_prob_metric(
+tss_max <- yardstick::new_prob_metric(
   tss_max,
   direction = "maximize"
 )
@@ -46,7 +46,7 @@ tss_max.data.frame <- function(data,
                                na_rm = TRUE,
                                event_level = "first",
                                case_weights = NULL) {
-  prob_metric_summarizer(
+  yardstick::prob_metric_summarizer(
     name = "tss_max",
     fn = tss_max_vec,
     data = data,
@@ -107,7 +107,7 @@ tss_max_estimator_impl <- function(truth,
                                    event_level,
                                    case_weights) {
   if (!identical(estimator, "binary")){
-      
+
     stop("tss_max is only available for binary classes; multiclass is not supported")
   }
   # separate estimates into presences and background

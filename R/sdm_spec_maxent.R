@@ -25,14 +25,14 @@ sdm_spec_maxent <- function(..., tune = c("sdm", "all", "custom", "none")) {
   tune <- rlang::arg_match(tune)
   if (tune == "sdm") {
     base_spec <- maxent(
-      feature_classes = tune(),
-      regularization_multiplier = tune(),
+      feature_classes = tune::tune(),
+      regularization_multiplier = tune::tune(),
       ...
     )
   } else if (tune == "all") {
     base_spec <- maxent(
-      feature_classes = tune(),
-      regularization_multiplier = tune(),
+      feature_classes = tune::tune(),
+      regularization_multiplier = tune::tune(),
       ...
     )
   } else if ((tune == "custom") | (tune == "none")) {
