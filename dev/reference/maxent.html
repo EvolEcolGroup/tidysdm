@@ -113,8 +113,8 @@ to use for fitting. Currently only "maxnet" is available.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Now with tuning</span></span></span>
 <span class="r-in"><span><span class="va">maxent_spec</span> <span class="op">&lt;-</span> <span class="fu">maxent</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  regularization_multiplier <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  feature_classes <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  regularization_multiplier <span class="op">=</span> <span class="fu">tune</span><span class="fu">::</span><span class="fu"><a href="https://hardhat.tidymodels.org/reference/tune.html" class="external-link">tune</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  feature_classes <span class="op">=</span> <span class="fu">tune</span><span class="fu">::</span><span class="fu"><a href="https://hardhat.tidymodels.org/reference/tune.html" class="external-link">tune</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">452</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">bradypus_tb</span>, v <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
