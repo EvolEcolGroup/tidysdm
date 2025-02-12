@@ -30,14 +30,14 @@ sdm_spec_rand_forest <- function(..., tune = c("sdm", "all", "custom", "none")) 
   tune <- rlang::arg_match(tune)
   if (tune == "sdm") {
     base_spec <- parsnip::rand_forest(
-      mtry = tune(),
+      mtry = tune::tune(),
       ...
     )
   } else if (tune == "all") {
     base_spec <- parsnip::rand_forest(
-      mtry = tune(),
-      min_n = tune(),
-      trees = tune(),
+      mtry = tune::tune(),
+      min_n = tune::tune(),
+      trees = tune::tune(),
       ...
     )
   } else if ((tune == "custom") | (tune == "none")) {

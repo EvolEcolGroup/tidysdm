@@ -38,7 +38,7 @@
 tss <- function(data, ...) {
   UseMethod("tss")
 }
-tss <- new_class_metric(
+tss <- yardstick::new_class_metric(
   tss,
   direction = "maximize"
 )

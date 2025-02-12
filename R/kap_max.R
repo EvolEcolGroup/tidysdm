@@ -39,7 +39,7 @@
 kap_max <- function(data, ...) {
   UseMethod("kap_max")
 }
-kap_max <- new_prob_metric(
+kap_max <- yardstick::new_prob_metric(
   kap_max,
   direction = "maximize"
 )
@@ -53,7 +53,7 @@ kap_max.data.frame <- function(data,
                                na_rm = TRUE,
                                event_level = "first",
                                case_weights = NULL) {
-  prob_metric_summarizer(
+  yardstick::prob_metric_summarizer(
     name = "kap_max",
     fn = kap_max_vec,
     data = data,
@@ -85,7 +85,7 @@ kap_max_vec <- function(truth,
                         case_weights = NULL,
                         ...) {
   abort_if_class_pred(truth)
-  
+
   estimator <- yardstick::finalize_estimator(truth, estimator, "kap_max")
 
   yardstick::check_prob_metric(truth, estimate, case_weights, estimator)

@@ -34,7 +34,7 @@ It uses the library \code{xgboost} to fit boosted trees; to use another library,
 \examples{
 standard_bt_spec <- sdm_spec_boost_tree()
 full_bt_spec <- sdm_spec_boost_tree(tune = "all")
-custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune())
+custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune::tune())
 }
 \seealso{
 Other "sdm model specifications": 
