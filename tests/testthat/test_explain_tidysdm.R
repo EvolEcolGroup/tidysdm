@@ -81,10 +81,19 @@ test_that("explain_tidysdm works correctly with recipes with steps", {
 test_that("explain_tidysdm works with response provided directly", {
   lacerta_thin <- terra::readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
                                              package = "tidysdm"))
+  lacerta_preds <- lacerta_thin %>% select(bio15, bio05, bio13, bio06) %>% sf::st_drop_geometry()
   test_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble,
                   verbose=FALSE)
   test_explainer_y <- explain_tidysdm(tidysdm::lacerta_ensemble, y=lacerta_thin$class,
                                     verbose=FALSE)
+  test_explainer_data <- explain_tidysdm(tidysdm::lacerta_ensemble, data=lacerta_preds,
+                                         y=lacerta_thin$class,
+                                    verbose=FALSE)
   expect_true(all.equal(test_explainer, test_explainer_y))
+  expect_true(all.equal(test_explainer, test_explainer_data))
+  # error if we pass a response that is not a factor
+  expect_error(explain_tidysdm(tidysdm::lacerta_ensemble, y=c(1,2,3),
+                               verbose=FALSE),
+               "y should be a factor with presences")
 })
 
