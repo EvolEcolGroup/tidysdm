@@ -4,6 +4,8 @@
 #' models (i.e. workflows) are combined according to `fun`
 #' @param object an simple_ensemble object
 #' @param new_data a data frame in which to look for variables with which to predict.
+#' If `NULL`, the predictors from the first workflow in the ensemble are used;
+#' note that this only makes sense if all workflows have the same predictors.
 #' @param type the type of prediction, "prob" or "class".
 #' @param fun string defining the aggregating function. It can take values
 #' `mean`, `median`, `weighted_mean`, `weighted_median` and `none`. It is possible
@@ -31,7 +33,7 @@
 
 predict.simple_ensemble <-
   function(object,
-           new_data,
+           new_data = NULL,
            type = "prob",
            fun = "mean",
            metric_thresh = NULL,
@@ -87,7 +89,6 @@ predict.simple_ensemble <-
                                optim_value = rep(class_thresh, length(fun)))
       }
 
-      #browser()
       class_levels <- levels(workflows::extract_mold((object$workflow[[1]]))$outcome %>% dplyr::pull(1))
     }
 
@@ -107,6 +108,11 @@ predict.simple_ensemble <-
       }
     } else {
       stop("fun should be either 'none', or a combination of 'mean', 'median', 'weighted_mean', and 'weighted_median'")
+    }
+
+    # if there is no data, grab it from the first workflow
+    if (is.null(new_data)) {
+     new_data <- workflowsets::extract_mold(object$workflow[[1]])$predictors
     }
 
     # create list of predictions

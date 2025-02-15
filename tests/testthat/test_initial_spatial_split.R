@@ -1,6 +1,6 @@
 library(sf)
 test_that("spatial_initial_split", {
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
                                     package = "tidysdm"
 ))
 set.seed(1005)

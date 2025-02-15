@@ -75,4 +75,6 @@ test_that("simple_ensemble prediction errors", {
     predict(test_ens, new_data = two_class_dat, type = "class", fun = "none"),
     "classes can be generated only if"
   )
+  # expect no error if new_data is null
+  expect_no_error(predict(test_ens, new_data = NULL))
 })

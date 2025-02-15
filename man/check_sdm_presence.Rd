@@ -7,7 +7,8 @@
 check_sdm_presence(.data, .col, presence_level = "presence")
 }
 \arguments{
-\item{.data}{a \code{data.frame} or \code{tibble}, or a derived object such as an \code{sf} data.frame}
+\item{.data}{a \code{data.frame} or \code{tibble}, or a derived object such as an \code{sf} data.frame,
+or a factor (e.g. the column with the response variable)}
 
 \item{.col}{the column containing the presences}
 

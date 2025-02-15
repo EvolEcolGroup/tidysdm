@@ -28,7 +28,6 @@
 
 recipe.sf <- function(x, ...) {
   # we should check that all coordinates are points
-  #  browser()
   if (all(c("X", "Y") %in% names(x))) {
     if (all(sf::st_drop_geometry(x[, c("X", "Y")]) == sf::st_coordinates(x))) {
       x <- x %>% sf::st_drop_geometry()

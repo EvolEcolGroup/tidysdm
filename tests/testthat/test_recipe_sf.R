@@ -1,6 +1,6 @@
 library(sf)
 test_that("sdm_recipe_sf", {
-  lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+  lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
     package = "tidysdm"
   ))
   lacerta_rec <- recipe(lacerta_thin, formula = class ~ .)
@@ -46,7 +46,7 @@ test_that("sdm_recipe_sf", {
 })
 
 test_that("sdm_recipe_sf works with a geometry named differently", {
-  lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+  lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
     package = "tidysdm"
   ))
   sf::st_geometry(lacerta_thin) <- "geom"
@@ -69,6 +69,7 @@ test_that("sdm_recipe_sf works with a geometry named differently", {
     option_add(control = control_ensemble_grid())
   set.seed(100)
   lacerta_cv <- spatial_block_cv(data = lacerta_thin, v = 3, n = 5)
+  set.seed(1234567)
   lacerta_models <-
     lacerta_models %>%
     workflow_map("tune_grid",

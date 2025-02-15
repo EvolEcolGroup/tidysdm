@@ -30,7 +30,7 @@ Most algorithms do not allow NAs. We can generate a problematic dataset by
 loading the *Lacerta* dataset, and manually add an NA:
 ```{r}
 library(tidysdm)
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 lacerta_thin$bio05[37] <- NA
@@ -104,7 +104,7 @@ variables of interest, and the error is less than clear:
 
 Let's load the data and create a recipe with `step_select`:
 ```{r}
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 suggested_vars <- c("bio05", "bio06", "bio13", "bio14", "bio15")
@@ -166,7 +166,7 @@ simplify this process, assuming that the user just wants to fit a standard smoot
 to every continuous predictor.
 
 ```{r}
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 
@@ -230,7 +230,7 @@ investigate fitting it to the specific `rsplit`.
 We generate a problematic dataset by subsampling the lacerta dataset:
 
 ```{r}
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 set.seed(123)

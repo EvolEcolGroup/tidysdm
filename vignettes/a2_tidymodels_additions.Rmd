@@ -109,7 +109,7 @@ analogous to the one that we generated in the [`tidysdm` overview](https://evole
 ```{r}
 library(tidysdm)
 library(sf)
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 ```
@@ -134,14 +134,17 @@ check_splits_balance(lacerta_initial, class)
 We can now extract the training set from our `lacerta_initial` split, and sample
 folds to set up cross validation (note that we set the `cellsize` and `offset`
 based on the full dataset, `lacerta_thin`; this allows us to use the same grid 
-we used for the `initial_split`).
+we used for the `initial_split`). In this example, we also have add a very small number
+to the offset to avoid an error in the `spatial_block_cv` function arising from
+some points falling on the boundary of the grid cells). This is often not necessary,
+so only introduce this if you encounter an error.
 ```{r training_cv, fig.width=6, fig.height=4}
 set.seed(1005)
 lacerta_training <- training(lacerta_initial)
 lacerta_cv <- spatial_block_cv(lacerta_training,
   v = 5,
   cellsize = grid_cellsize(lacerta_thin),
-  offset = grid_offset(lacerta_thin)
+  offset = grid_offset(lacerta_thin)+0.00001
 )
 autoplot(lacerta_cv)
 ```
@@ -348,7 +351,7 @@ Let's create a factor variable with 3 levels based on altitude.
 ```{r}
 library(tidysdm)
 # load the dataset
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 # create a topography variable with 3 levels based on altitude
