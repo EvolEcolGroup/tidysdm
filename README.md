@@ -65,6 +65,8 @@ website, the version number is in red and in the format x.x.x.9xxx,
 indicating it is a development version). If you want to contribute, make
 sure to read our [contributing guide](https://evolecolgroup.github.io/tidysdm/CONTRIBUTING.html).
 
+--------------------------------------------------------------------------------
+
 ## Getting help
 
 If some of your models are failing, first look at our [Article on how to diagnose failing
@@ -91,29 +93,6 @@ already opened that deals with your bug, file a new issue **providing** a [repro
 example](https://reprex.tidyverse.org/)
 for the developers to investigate the problem. A small **reproducible example** is
 crucial in allowing us to understand the problem and fix it, so please do your best to
-come up with the shortest btg of code needed to show the bug.
+come up with the shortest bit of code needed to show the bug.
 
 
-
-
-
-What should you do if you get an error when trying to fit a model? `tidysdm`
-is a relatively new package, so it might well be that, when you get an
-error, you might have encountered a bug. However, it is also possible that you
-have misspecified your model (and so the error comes from `tidymodels`, because
-your model is not valid). We have prepared an [Article on how to diagnose failing
-models](https://evolecolgroup.github.io/tidysdm/dev/articles/a3_troubleshooting.html).
-It is not a fully comprehensive list of everything that could go wrong, but it will
-hopefully give you ideas on how to dig deeper in what is wrong. You should also
-check the [issues on
-GitHub](https://github.com/EvolEcolGroup/tidysdm/issues) to see whether
-the problem has already been reported. 
-
-If you are convinced
-that the problem is a bug in `tidysdm`, feel free to create an
-new issue. Please make sure you have updated to the latest version of
-`tidysdm`, as well as updating all other packages on your
-system, and provide [a reproducible
-example](https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example)
-for the developers to investigate the problem. If you think you can help
-with fixing that bug, read our [contributing guide](https://evolecolgroup.github.io/tidysdm/CONTRIBUTING.html).
