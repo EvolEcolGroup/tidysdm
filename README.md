@@ -65,7 +65,37 @@ website, the version number is in red and in the format x.x.x.9xxx,
 indicating it is a development version). If you want to contribute, make
 sure to read our [contributing guide](https://evolecolgroup.github.io/tidysdm/CONTRIBUTING.html).
 
-## When something does not work
+## Getting help
+
+If some of your models are failing, first look at our [Article on how to diagnose failing
+models](https://evolecolgroup.github.io/tidysdm/dev/articles/a3_troubleshooting.html).
+It is not a fully comprehensive list of everything that could go wrong, but it will
+hopefully give you ideas on how to dig deeper in what is wrong.
+
+If after reading the article you are still unsure what is going wrong, there are 
+two places to get help with `tidysdm`:
+
+1) If you are unsure how to do something, go to [StackOverflow](https://stackoverflow.com/) and,
+after checking that a similar question has not been asked yet, tag your question 
+with `tidymodels` and `r` (there is no `tidysdm` tag yet, as there aren't enough questions),
+and make sure `tidysdm` is in the title. This will ensure that the developers
+see your question and can help you. If you have not received an answer after a couple of days,
+feel free to drop us an email in case we missed your post.
+
+2) If you think you have found a bug, or have a feature request, open an issue on our
+[GitHub repository]((https://github.com/EvolEcolGroup/tidysdm/issues). Before doing so, please 
+make sure that you have installed the latest **development** version of
+`tidysdm` (as the bug might have already been fixed), as well as updating 
+all other packages on your system. If the problem persists, and there is no issue
+already opened that deals with your bug, file a new issue **providing** a [reproducible
+example](https://reprex.tidyverse.org/)
+for the developers to investigate the problem. A small **reproducible example** is
+crucial in allowing us to understand the problem and fix it, so please do your best to
+come up with the shortest btg of code needed to show the bug.
+
+
+
+
 
 What should you do if you get an error when trying to fit a model? `tidysdm`
 is a relatively new package, so it might well be that, when you get an
