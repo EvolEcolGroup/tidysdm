@@ -95,20 +95,20 @@ vignette.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: tidymodels</span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ────────────────────────────────────── tidymodels 1.2.0 ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">broom       </span> 1.0.7     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">recipes     </span> 1.1.0</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dials       </span> 1.3.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rsample     </span> 1.2.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">broom       </span> 1.0.7     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">recipes     </span> 1.1.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dials       </span> 1.4.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rsample     </span> 1.2.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr       </span> 1.1.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble      </span> 3.2.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2     </span> 3.5.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr       </span> 1.3.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">infer       </span> 1.0.7     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tune        </span> 1.2.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">modeldata   </span> 1.4.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflows   </span> 1.1.4</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">parsnip     </span> 1.2.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflowsets</span> 1.1.0</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">parsnip     </span> 1.3.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflowsets</span> 1.1.0</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr       </span> 1.0.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">yardstick   </span> 1.3.2</span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ───────────────────────────────────────── tidymodels_conflicts() ──</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">purrr</span>::<span style="color: #00BB00;">discard()</span> masks <span style="color: #0000BB;">scales</span>::discard()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Use <span style="color: #00BB00;">tidymodels_prefer()</span> to resolve common conflicts.</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Use suppressPackageStartupMessages() to eliminate package startup messages</span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span>
 <span><span class="va">lacerta_ensemble</span></span>
 <span><span class="co">#&gt; A simple_ensemble of models</span></span>
@@ -187,7 +187,7 @@ ensemble:</p>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.2554356 , mean =  0.75 , max =  0.9838188  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9314151 , mean =  9.574021e-12 , max =  0.7445644  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9838188 , mean =  -0.5 , max =  0.6967523  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span>
 <span><span class="co">#&gt; Warning: Unknown or uninitialised column: `pre`.</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
@@ -201,7 +201,7 @@ ensemble:</p>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.06715952 , mean =  0.7496213 , max =  1  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.6303111 , mean =  0.0003787291 , max =  0.5929444  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -1 , mean =  -0.4996213 , max =  0.9328405  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span>
 <span><span class="co">#&gt; Warning: Unknown or uninitialised column: `pre`.</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
@@ -215,7 +215,7 @@ ensemble:</p>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.2205058 , mean =  0.7324831 , max =  0.9634812  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.8709313 , mean =  0.01751694 , max =  0.6855955  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9634812 , mean =  -0.4824831 , max =  0.7794942  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span>
 <span><span class="co">#&gt; Warning: Unknown or uninitialised column: `pre`.</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
@@ -229,7 +229,7 @@ ensemble:</p>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.03884931 , mean =  0.5873206 , max =  0.9584494  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.8338183 , mean =  0.1626794 , max =  0.9611507  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9584494 , mean =  -0.3373206 , max =  0.9233736  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span></code></pre></div>
 <p>The resulting list can be then used to build lists of explanations,
 which can then be plotted.</p>
@@ -255,7 +255,7 @@ overview</a> article:</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span>
-<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_sf.RDS"</span>,</span>
+<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_thin_all_vars.rds"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"tidysdm"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We then use <code>spatial_initial_split</code> to do the split, using
@@ -271,22 +271,26 @@ a <code>spatial_block_cv</code> scheme to partition the data:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_splits_balance.html">check_splits_balance</a></span><span class="op">(</span><span class="va">lacerta_initial</span>, <span class="va">class</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
-<span><span class="co">#&gt;   presence_test pseudoabs_test presence_train pseudoabs_train</span></span>
-<span><span class="co">#&gt;           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>            88            267             25              72</span></span></code></pre></div>
+<span><span class="co">#&gt;   presence_test background_test presence_train background_train</span></span>
+<span><span class="co">#&gt;           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>            86             263             26               73</span></span></code></pre></div>
 <p>We can now extract the training set from our
 <code>lacerta_initial</code> split, and sample folds to set up cross
 validation (note that we set the <code>cellsize</code> and
 <code>offset</code> based on the full dataset,
 <code>lacerta_thin</code>; this allows us to use the same grid we used
-for the <code>initial_split</code>).</p>
+for the <code>initial_split</code>). In this example, we also have add a
+very small number to the offset to avoid an error in the
+<code>spatial_block_cv</code> function arising from some points falling
+on the boundary of the grid cells). This is often not necessary, so only
+introduce this if you encounter an error.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1005</span><span class="op">)</span></span>
 <span><span class="va">lacerta_training</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">lacerta_initial</span><span class="op">)</span></span>
 <span><span class="va">lacerta_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">lacerta_training</span>,</span>
 <span>  v <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  cellsize <span class="op">=</span> <span class="fu"><a href="../reference/grid_cellsize.html">grid_cellsize</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span>,</span>
-<span>  offset <span class="op">=</span> <span class="fu"><a href="../reference/grid_offset.html">grid_offset</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span></span>
+<span>  offset <span class="op">=</span> <span class="fu"><a href="../reference/grid_offset.html">grid_offset</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span><span class="op">+</span><span class="fl">0.00001</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a2_tidymodels_additions_files/figure-html/training_cv-1.png" width="576"></p>
@@ -294,13 +298,14 @@ for the <code>initial_split</code>).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_splits_balance.html">check_splits_balance</a></span><span class="op">(</span><span class="va">lacerta_cv</span>, <span class="va">class</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 4</span></span></span>
-<span><span class="co">#&gt;   presence_assessment pseudoabs_assessment presence_analysis pseudoabs_analysis</span></span>
-<span><span class="co">#&gt;                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                  74                  197                14                 70</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                  59                  225                29                 42</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>                  73                  220                15                 47</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>                  76                  209                12                 58</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>                  70                  218                18                 49</span></span></code></pre></div>
+<span><span class="co">#&gt;   presence_assessment background_assessment presence_analysis</span></span>
+<span><span class="co">#&gt;                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                  69                   228                17</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                  67                   222                19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>                  62                   191                24</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>                  71                   216                15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>                  75                   197                11</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: background_analysis &lt;int&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="different-recipes-for-certain-models">Different recipes for certain models<a class="anchor" aria-label="anchor" href="#different-recipes-for-certain-models"></a>
@@ -399,12 +404,11 @@ variables in the dataset. So, before tuning, we need to finalise
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (350ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (322ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 3 tuning:     all_rf</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> No improvement for 10 iterations; returning current results.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (16.8s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (20.2s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 3 tuning:     all_svm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (19.7s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (25s)</span></span></span></code></pre></div>
 <p>We can have a look at the performance of our models with:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_models</span><span class="op">)</span></span></code></pre></div>
@@ -451,9 +455,9 @@ function (with empty <code>()</code>) that is then used on the data.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 3</span></span></span>
 <span><span class="co">#&gt;   .metric    .estimator .estimate</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> boyce_cont binary         0.853</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> roc_auc    binary         0.986</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> tss_max    binary         0.92</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> boyce_cont binary         0.739</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> roc_auc    binary         0.813</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> tss_max    binary         0.536</span></span></code></pre></div>
 <p>We can now make predictions with this stacked ensemble. We start by
 extracting the climate for the variables of interest</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -497,7 +501,7 @@ function.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="co"># load the dataset</span></span>
-<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_sf.RDS"</span>,</span>
+<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_thin_all_vars.rds"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"tidysdm"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># create a topography variable with 3 levels based on altitude</span></span>
@@ -507,7 +511,7 @@ function.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">$</span><span class="va">topography</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    plains     hills mountains </span></span>
-<span><span class="co">#&gt;        82       233       137</span></span></code></pre></div>
+<span><span class="co">#&gt;       135       231        82</span></span></code></pre></div>
 <p>We then create the recipe by adding a step to create dummy variables
 for the <code>topography</code> variable.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
@@ -553,17 +557,17 @@ baking the recipe:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_bake</span> <span class="op">&lt;-</span> <span class="fu">bake</span><span class="op">(</span><span class="va">lacerta_prep</span>, new_data <span class="op">=</span> <span class="va">lacerta_thin</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">lacerta_bake</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 452</span></span>
+<span><span class="co">#&gt; Rows: 448</span></span>
 <span><span class="co">#&gt; Columns: 9</span></span>
-<span><span class="co">#&gt; $ bio05                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 30.50350, 25.28050, 23.67800, 29.68875, 26.34075,…</span></span>
-<span><span class="co">#&gt; $ bio06                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.477000, 3.631750, 0.789500, 6.048750, 1.869000,…</span></span>
-<span><span class="co">#&gt; $ bio12                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 596, 1490, 1395, 729, 1324, 1409, 1260, 1390, 116…</span></span>
-<span><span class="co">#&gt; $ bio15                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 50.59533, 50.07437, 47.24211, 58.88199, 51.62960,…</span></span>
-<span><span class="co">#&gt; $ X                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -5.394226, -8.374844, -7.886102, -8.231414, -7.17…</span></span>
-<span><span class="co">#&gt; $ Y                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.48495, 41.97207, 41.89992, 39.49710, 41.78401,…</span></span>
+<span><span class="co">#&gt; $ bio05                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 24.82805, 25.65241, 24.00614, 28.44062, 28.42171,…</span></span>
+<span><span class="co">#&gt; $ bio06                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3.117023, 2.856565, 1.542353, 6.945411, 4.656421,…</span></span>
+<span><span class="co">#&gt; $ bio12                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1395.0464, 1242.8585, 1380.4235, 563.5615, 965.35…</span></span>
+<span><span class="co">#&gt; $ bio15                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 51.12716, 54.19739, 48.76986, 69.05999, 56.29424,…</span></span>
+<span><span class="co">#&gt; $ X                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -347236.6, -289470.9, -328023.1, -399483.3, -3711…</span></span>
+<span><span class="co">#&gt; $ Y                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 226017.27, 194852.58, 236820.42, -254616.60, 2813…</span></span>
 <span><span class="co">#&gt; $ class                <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> presence, presence, presence, presence, presence,…</span></span>
-<span><span class="co">#&gt; $ topography_hills     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0…</span></span>
-<span><span class="co">#&gt; $ topography_mountains <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ topography_hills     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1…</span></span>
+<span><span class="co">#&gt; $ topography_mountains <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0…</span></span></code></pre></div>
 <p>We can now run the sdm as usual:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># define the models</span></span>
@@ -593,10 +597,10 @@ baking the recipe:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (223ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (202ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (1.1s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (1.3s)</span></span></span>
 <span><span class="co"># fit the ensemble</span></span>
 <span><span class="va">lacerta_ensemble</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simple_ensemble.html">simple_ensemble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_member.html">add_member</a></span><span class="op">(</span><span class="va">lacerta_models</span>, metric <span class="op">=</span> <span class="st">"boyce_cont"</span><span class="op">)</span></span></code></pre></div>
@@ -611,15 +615,15 @@ the model fit from one of the models in the ensemble:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt;          (Intercept)                 bio05                 bio06  </span></span>
-<span><span class="co">#&gt;            -6.920024              0.635493             -0.334427  </span></span>
+<span><span class="co">#&gt;            -2.244761              0.284021             -0.084121  </span></span>
 <span><span class="co">#&gt;                bio12                 bio15      topography_hills  </span></span>
-<span><span class="co">#&gt;            -0.002505             -0.113106             -1.851098  </span></span>
+<span><span class="co">#&gt;            -0.001189             -0.049376             -0.668832  </span></span>
 <span><span class="co">#&gt; topography_mountains  </span></span>
-<span><span class="co">#&gt;            -2.531259  </span></span>
+<span><span class="co">#&gt;            -1.181825  </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Degrees of Freedom: 451 Total (i.e. Null);  445 Residual</span></span>
-<span><span class="co">#&gt; Null Deviance:       508.4 </span></span>
-<span><span class="co">#&gt; Residual Deviance: 189.5     AIC: 203.5</span></span></code></pre></div>
+<span><span class="co">#&gt; Degrees of Freedom: 447 Total (i.e. Null);  441 Residual</span></span>
+<span><span class="co">#&gt; Null Deviance:       503.9 </span></span>
+<span><span class="co">#&gt; Residual Deviance: 401.1     AIC: 415.1</span></span></code></pre></div>
 <p>We can see that we have coefficients for <em>topography_hills</em>
 and <em>topography_mountains</em>.</p>
 <p>Let us now predict the presence of the lizard in the Iberian
@@ -643,6 +647,9 @@ models (i.e. in the recipe with <code>step_dummy()</code>):</p>
 <span><span class="co">#&gt; The following object is masked from 'package:tidyr':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     extract</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:dials':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     buffer</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:scales':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     rescale</span></span>
