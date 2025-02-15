@@ -95,20 +95,20 @@ models:</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: tidymodels</span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ────────────────────────────────────── tidymodels 1.2.0 ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">broom       </span> 1.0.7     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">recipes     </span> 1.1.0</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dials       </span> 1.3.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rsample     </span> 1.2.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">broom       </span> 1.0.7     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">recipes     </span> 1.1.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dials       </span> 1.4.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rsample     </span> 1.2.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr       </span> 1.1.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble      </span> 3.2.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2     </span> 3.5.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr       </span> 1.3.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">infer       </span> 1.0.7     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tune        </span> 1.2.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">modeldata   </span> 1.4.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflows   </span> 1.1.4</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">parsnip     </span> 1.2.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflowsets</span> 1.1.0</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr       </span> 1.0.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">yardstick   </span> 1.3.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">parsnip     </span> 1.3.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflowsets</span> 1.1.0</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr       </span> 1.0.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">yardstick   </span> 1.3.2</span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ───────────────────────────────────────── tidymodels_conflicts() ──</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">purrr</span>::<span style="color: #00BB00;">discard()</span> masks <span style="color: #0000BB;">scales</span>::discard()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Search for functions across packages at <span style="color: #00BB00;">https://www.tidymodels.org/find/</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Use suppressPackageStartupMessages() to eliminate package startup messages</span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="accessing-the-data-for-this-vignette-how-to-use-rgbif">Accessing the data for this vignette: how to use
@@ -165,7 +165,7 @@ object, and set its projections to standard ‘lonlat’ (<code>crs</code> =
 4326).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
+<span><span class="co">#&gt; Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span>
 <span><span class="va">lacerta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="va">lacerta</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"longitude"</span>, <span class="st">"latitude"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">lacerta</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">4326</span></span></code></pre></div>
 <p>It is usually advisable to plot the locations directly on the raster
@@ -202,12 +202,15 @@ but an equal area projection would be desirable…</p>
 <span><span class="co"># and mask to the polygon</span></span>
 <span><span class="va">land_mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/mask.html" class="external-link">mask</a></span><span class="op">(</span><span class="va">land_mask</span>, <span class="va">iberia_poly</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#&gt; Loading required package: terra</span></span>
-<span><span class="co">#&gt; terra 1.7.83</span></span>
+<span><span class="co">#&gt; terra 1.8.21</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'terra'</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:tidyr':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     extract</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:dials':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     buffer</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:scales':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     rescale</span></span>
@@ -482,15 +485,15 @@ hyperparameters per model; this is far too little in real life!):</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 4 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (207ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (195ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 4 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 tuning:     default_rf (872ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 tuning:     default_rf (845ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm (4s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm (3.9s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">4 of 4 tuning:     default_maxent</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_maxent (1.3s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_maxent (1.2s)</span></span></span></code></pre></div>
 <p>Note that <code>workflow_set</code> correctly detects that we have no
 tuning parameters for <em>glm</em>. We can have a look at the
 performance of our models with:</p>
@@ -804,19 +807,19 @@ will just use two fast models to speed up the process.</p>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (236ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (228ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (7.3s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (6.8s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (238ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (228ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (7s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (7.1s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (232ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (233ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (7.4s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (7.2s)</span></span></span></code></pre></div>
 <p>Now we can create a <code>repeat_ensemble</code> from the list:</p>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_rep_ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/repeat_ensemble.html">repeat_ensemble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/add_repeat.html">add_repeat</a></span><span class="op">(</span><span class="va">ensemble_list</span><span class="op">)</span></span>
