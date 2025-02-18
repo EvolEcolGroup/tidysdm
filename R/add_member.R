@@ -38,7 +38,7 @@ add_member.tune_results <- function(x,
   if (is.null(attr(x, "best_metric"))) {
     attr(x, "best_metric") <- tidydsm_choose_metric(metric, member)
   }
-  
+
   # if metric is NULL
   if (is.null(metric)) {
     # use the metric from the simple ensemble
@@ -49,7 +49,7 @@ add_member.tune_results <- function(x,
            "as the one previously used in x")
     }
   }
-  
+
   # use name of object as id if we don't have one
   if (is.null(id)) {
     id <- deparse(substitute(member))
@@ -59,7 +59,7 @@ add_member.tune_results <- function(x,
     stop("x already has a member with the same name, ",
          "provide an alternative name")
   }
-  
+
   # get the best config, metric, etc.
   best_config <- tune::select_best(member, metric = metric)$.config
   best_metrics <- tune::collect_metrics(member) %>%
@@ -77,9 +77,9 @@ add_member.tune_results <- function(x,
   # subset best metrics to just the metrics used in the ensemble
   best_metrics <- best_metrics %>%
     dplyr::filter(.data$.metric %in% attr(x, "metrics"))
-  
+
   best_fit <- tune::fit_best(member, metric = metric)
-  
+
   x %>% dplyr::bind_rows(tibble::tibble(
     wflow_id = id,
     workflow = list(best_fit),

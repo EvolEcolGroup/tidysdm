@@ -42,7 +42,8 @@ calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
         )
       ))) {
       message(
-        "this ensemble is already calibrated for this combination of `class_thresh` and `metric_thresh`"
+        "this ensemble is already calibrated for this combination of ",
+        "`class_thresh` and `metric_thresh`"
       )
       return(object)
     }

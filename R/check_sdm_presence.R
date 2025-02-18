@@ -1,10 +1,10 @@
 #' Check that the column with presences is correctly formatted
 #'
-#' In `tidysdm`, the string defining presences should be the first level of
-#' the response factor. This function checks that the column is correctly formatted.
+#' In `tidysdm`, the string defining presences should be the first level of the
+#' response factor. This function checks that the column is correctly formatted.
 #'
-#' @param .data a `data.frame` or `tibble`, or a derived object such as an `sf` data.frame,
-#' or a factor (e.g. the column with the response variable)
+#' @param .data a `data.frame` or `tibble`, or a derived object such as an `sf`
+#'   data.frame, or a factor (e.g. the column with the response variable)
 #' @param .col the column containing the presences
 #' @param presence_level the string used to define the presence level of `.col`
 #' @returns TRUE if correctly formatted

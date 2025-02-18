@@ -176,7 +176,6 @@ contBoyce <- function(
     autoWindow = TRUE,
     method = "spearman",
     dropZeros = TRUE,
-    # graph = FALSE,
     na.rm = FALSE,
     ...) {
   # if all NAs
