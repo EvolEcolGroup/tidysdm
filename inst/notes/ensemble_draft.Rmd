@@ -29,7 +29,9 @@ leopards_ensemble <- finalize_worflow_set(leopards_models, metric = "roc_auc")
 
 leopards_ensemble <- fit(leopards_ensemble, data = leopards_training)
 
-leopards_testing_preds <- predict(leopards_ensemble, new_data = leopards_testing, type = "prob")
+leopards_testing_preds <- predict(leopards_ensemble, 
+                                  new_data = leopards_testing, 
+                                  type = "prob")
 
 # we want to add a last_fit option for ensemble objects
 ```
