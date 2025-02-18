@@ -58,9 +58,9 @@ predict.simple_ensemble <-
         message("as no 'threshold' was defined, a default of 0.5 will be used")
         class_thresh <- 0.5
       }
-      
+
       # if the class_threshold is not numeric, then we need to ensure the model has been calibrated for the right metric
-      if (!is.numeric(class_thresh)){
+      if (!is.numeric(class_thresh)) {
         # check that we have an entry for this calibration
         ref_calib_tb <- attr(object, "class_thresholds")
         # give up immediately if ref_calib_tb is null
@@ -70,23 +70,25 @@ predict.simple_ensemble <-
             "use 'calib_class_thresh()' first"
           )
         } else if (!any(unlist(lapply(ref_calib_tb %>% dplyr::pull("metric_thresh"), identical, metric_thresh)) &
-                        unlist(lapply(ref_calib_tb %>% dplyr::pull("class_thresh"), identical, class_thresh)))) {
+          unlist(lapply(ref_calib_tb %>% dplyr::pull("class_thresh"), identical, class_thresh)))) {
           stop(
             "this model needs to be first calibrated before classes can be produced\n",
             "use 'calib_class_thresh()' first"
           )
         }
-        
-        
+
+
         # subset the calibration thresholds
         ref_calib_tb <- ref_calib_tb[
           (unlist(lapply(ref_calib_tb %>% dplyr::pull("metric_thresh"), identical, metric_thresh)) &
-             unlist(lapply(ref_calib_tb %>% dplyr::pull("class_thresh"), identical, class_thresh))) &
+            unlist(lapply(ref_calib_tb %>% dplyr::pull("class_thresh"), identical, class_thresh))) &
             ref_calib_tb$fun %in% fun,
-        ]       
-      } else { #if class_thresh is numeric, fake a calib table
-        ref_calib_tb <- tibble::tibble(fun = fun,
-                               optim_value = rep(class_thresh, length(fun)))
+        ]
+      } else { # if class_thresh is numeric, fake a calib table
+        ref_calib_tb <- tibble::tibble(
+          fun = fun,
+          optim_value = rep(class_thresh, length(fun))
+        )
       }
 
       class_levels <- levels(workflows::extract_mold((object$workflow[[1]]))$outcome %>% dplyr::pull(1))
@@ -112,7 +114,7 @@ predict.simple_ensemble <-
 
     # if there is no data, grab it from the first workflow
     if (is.null(new_data)) {
-     new_data <- workflowsets::extract_mold(object$workflow[[1]])$predictors
+      new_data <- workflowsets::extract_mold(object$workflow[[1]])$predictors
     }
 
     # create list of predictions

@@ -60,7 +60,7 @@ test_that("thin_by_dist_time removes the correct points", {
 # points(vect(locations), col="red", cex=2)
 
 
-test_that("thin_by_dist_time respects the projection",{
+test_that("thin_by_dist_time respects the projection", {
   # get the lacerta data and set crs to latlong
   horses <- sf::st_as_sf(horses, coords = c("longitude", "latitude"))
   sf::st_crs(horses) <- 4326
@@ -70,33 +70,32 @@ test_that("thin_by_dist_time respects the projection",{
   # thin the data with a mismatch in projections
   set.seed(123)
   horses_thin_gc <- thin_by_dist_time(horses_proj,
-                              dist_min = km2m(100),
-                              interval_min = y2d(2000),
-                              time_col = "time_bp",
-                              lubridate_fun = pastclim::ybp2date
+    dist_min = km2m(100),
+    interval_min = y2d(2000),
+    time_col = "time_bp",
+    lubridate_fun = pastclim::ybp2date
   ) # great circle method
   set.seed(123)
   horses_thin_eu <- thin_by_dist_time(horses_proj,
-                              dist_min = km2m(100),
-                              interval_min = y2d(2000),
-                              time_col = "time_bp",
-                              lubridate_fun = pastclim::ybp2date,
-                              dist_method = "euclidean"
+    dist_min = km2m(100),
+    interval_min = y2d(2000),
+    time_col = "time_bp",
+    lubridate_fun = pastclim::ybp2date,
+    dist_method = "euclidean"
   ) # euclidean method
   # check that the thinning is not the same
-  expect_false(nrow(horses_thin_gc)==nrow(horses_thin_eu))
+  expect_false(nrow(horses_thin_gc) == nrow(horses_thin_eu))
 
   # check that the great circle method did not remove the crs from the data
   expect_equal(sf::st_crs(horses_thin_gc), sf::st_crs(horses_proj))
   # now thin the original dataset (in latlong)
   set.seed(123)
   horses_thin_gc_ll <- thin_by_dist_time(horses,
-                              dist_min = km2m(100),
-                              interval_min = y2d(2000),
-                              time_col = "time_bp",
-                              lubridate_fun = pastclim::ybp2date
+    dist_min = km2m(100),
+    interval_min = y2d(2000),
+    time_col = "time_bp",
+    lubridate_fun = pastclim::ybp2date
   )
   # expect this to be identical to the great circle method
   expect_equal(horses_thin_gc$time_bp, horses_thin_gc_ll$time_bp)
 })
-

@@ -32,4 +32,3 @@ collect_metrics.repeat_ensemble <- function(x, ...) {
   metric_table$rep_id <- x$rep_id[as.numeric(metric_table$rep_id)]
   return(metric_table)
 }
-

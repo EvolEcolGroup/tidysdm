@@ -4,7 +4,7 @@ test_that("thin_by_cell respects projections", {
   sf::st_crs(lacerta) <- "+proj=longlat"
   # get the raster (with crs latlong)
   land_mask <- terra::readRDS(system.file("extdata/lacerta_land_mask.rds",
-                                          package = "tidysdm"
+    package = "tidysdm"
   ))
   # and npw project it
   iberia_proj4 <- "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
@@ -24,5 +24,4 @@ test_that("thin_by_cell respects projections", {
   set.seed(123)
   lacerta_thin_df <- thin_by_cell(lacerta_df, land_mask)
   expect_false(nrow(lacerta_thin_df) == nrow(lacerta_thin))
-
 })

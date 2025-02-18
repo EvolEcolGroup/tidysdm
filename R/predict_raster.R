@@ -19,11 +19,11 @@ predict_raster <- function(object, raster, ...) {
 #' @rdname predict_raster
 #' @export
 predict_raster.default <- function(object, raster, ...) {
-  if(inherits(raster, "stars")) {
-    is_stars = TRUE
-    raster = as(raster, "SpatRaster")
+  if (inherits(raster, "stars")) {
+    is_stars <- TRUE
+    raster <- as(raster, "SpatRaster")
   } else {
-    is_stars = FALSE
+    is_stars <- FALSE
   }
   # create a dataframe
   raster_df <- terra::as.data.frame(raster, cell = TRUE, na.rm = TRUE)
@@ -36,11 +36,13 @@ predict_raster.default <- function(object, raster, ...) {
   # and now fill in the values, adding a layer for each aggregating function we used
   pred_raster[raster_df$cell] <- pred_df %>% dplyr::pull(1)
   if (is.factor(pred_df %>% dplyr::pull(1))) {
-    #levels(pred_raster) <- data.frame(id = 1:2, class = levels(pred_df %>% dplyr::pull(1)))
+    # levels(pred_raster) <- data.frame(id = 1:2, class = levels(pred_df %>% dplyr::pull(1)))
     # make predict_raster work with multilevel predictions
     # edit by @piabenaud
-    levels(pred_raster) <- data.frame(id = 1:length(dplyr::pull(unique(pred_df))),
-                                      class = levels(pred_df %>% dplyr::pull(1)))
+    levels(pred_raster) <- data.frame(
+      id = 1:length(dplyr::pull(unique(pred_df))),
+      class = levels(pred_df %>% dplyr::pull(1))
+    )
   }
 
 
@@ -55,7 +57,7 @@ predict_raster.default <- function(object, raster, ...) {
   if (is.factor(pred_df %>% dplyr::pull(1))) {
     names(pred_raster) <- paste0("binary_", names(pred_raster))
   }
-  if (is_stars){
+  if (is_stars) {
     pred_raster <- stars::st_as_stars(pred_raster, as_attributes = TRUE)
   }
   pred_raster

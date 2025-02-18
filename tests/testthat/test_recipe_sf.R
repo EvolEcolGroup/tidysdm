@@ -73,8 +73,8 @@ test_that("sdm_recipe_sf works with a geometry named differently", {
   lacerta_models <-
     lacerta_models %>%
     workflow_map("tune_grid",
-                 resamples = lacerta_cv, grid = 3,
-                 metrics = sdm_metric_set(), verbose = FALSE
+      resamples = lacerta_cv, grid = 3,
+      metrics = sdm_metric_set(), verbose = FALSE
     )
   res <- collect_notes(.Last.tune.result) %>% dplyr::distinct(type, note)
   # expect no errors

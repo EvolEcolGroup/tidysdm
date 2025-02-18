@@ -97,11 +97,12 @@ test_that("thin_by_cell_time works with stars", {
   stars::st_dimensions(S) <- d
   set.seed(123)
   expect_no_error(thin_by_cell_time(locations,
-                                 raster = S, 
-                                 time_col = "time_bp",
-                                 lubridate_fun = pastclim::ybp2date))
+    raster = S,
+    time_col = "time_bp",
+    lubridate_fun = pastclim::ybp2date
+  ))
 })
-  
+
 # sample code to plot the small world to inspect what is going on
 # plot(grid_raster,colNA="darkgray")
 # polys(terra::as.polygons(grid_raster))

@@ -8,7 +8,7 @@
 #' the results. If none is given, the first metric in the metric set is used
 #' (after filtering by the `metric` option).
 #' @param metric A character vector for which metrics (apart from `rank_metric`)
-#' to be included in the visualization. If NULL (the default), all available 
+#' to be included in the visualization. If NULL (the default), all available
 #' metrics will be plotted
 #' @param std_errs The number of standard errors to plot (if the standard error
 #' exists).
@@ -96,7 +96,8 @@ autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
   if (num_metrics > 1) {
     p <-
       p +
-      ggplot2::facet_wrap(~ .data$.metric, scales = "free_y", as.table = FALSE) +
+      ggplot2::facet_wrap(~ .data$.metric, scales = "free_y", 
+                          as.table = FALSE) +
       ggplot2::labs(x = "Workflow Rank", y = "Metric")
   } else {
     p <- p + ggplot2::labs(x = "Workflow Rank", y = unique(res$.metric))

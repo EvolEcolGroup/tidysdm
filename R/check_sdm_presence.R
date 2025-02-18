@@ -22,7 +22,7 @@ check_sdm_presence <- function(
     rlang::as_string()
   browser
   # extract the column if .data is a dataframe
-  if (inherits(.data, "data.frame")){
+  if (inherits(.data, "data.frame")) {
     x <- .data %>% dplyr::pull(.col)
   } else {
     x <- .data

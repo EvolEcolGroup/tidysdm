@@ -5,7 +5,7 @@ prep.spatial_recipe <- function(x, training = NULL, fresh = FALSE, verbose = FAL
   if (!is.null(training)) {
     # sometimes we have a tibble with a geometry column but not cast into an sf object
     # (this is the case when running a workflow)
-    if (inherits(training,"sf")){
+    if (inherits(training, "sf")) {
       geom_col <- attributes(training)$sf_column
     } else {
       geom_col <- names(training)[unlist(lapply(training, inherits, "sfc"))]
@@ -21,11 +21,13 @@ prep.spatial_recipe <- function(x, training = NULL, fresh = FALSE, verbose = FAL
       training <- training %>% dplyr::mutate(X = NA_real_, Y = NA_real_)
     }
   }
-  NextMethod(generic="prep",
+  NextMethod(
+    generic = "prep",
     x = x, training = sf::st_drop_geometry(training),
     fresh = fresh, verbose = FALSE,
     retain = retain, log_changes = log_changes,
-    strings_as_factors = strings_as_factors, ...)
+    strings_as_factors = strings_as_factors, ...
+  )
 }
 
 #' @export
@@ -34,7 +36,7 @@ bake.spatial_recipe <- function(object, new_data, ..., composition = "tibble") {
   if (!is.null(new_data)) {
     # sometimes we have a tibble with a geometry column but not cast into an sf object
     # (this is the case when running a workflow)
-    if (inherits(new_data,"sf")){
+    if (inherits(new_data, "sf")) {
       geom_col <- attributes(new_data)$sf_column
     } else {
       geom_col <- names(new_data)[unlist(lapply(new_data, inherits, "sfc"))]
@@ -51,7 +53,9 @@ bake.spatial_recipe <- function(object, new_data, ..., composition = "tibble") {
       new_data <- new_data %>% dplyr::mutate(X = NA_real_, Y = NA_real_)
     }
   }
-  NextMethod(generic="bake", object = object,
-                  new_data = sf::st_drop_geometry(new_data), ...,
-                  composition = composition)
+  NextMethod(
+    generic = "bake", object = object,
+    new_data = sf::st_drop_geometry(new_data), ...,
+    composition = composition
+  )
 }

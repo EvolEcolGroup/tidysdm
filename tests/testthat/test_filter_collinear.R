@@ -29,7 +29,7 @@ test_that("filter collinear variables with cor_caret", {
   expect_true(all(c("bio01") %in%
     filter_collinear(lacerta_thin, to_keep = c("bio01"))))
   # one dimensional dataset
-  lacerta_1var <- lacerta_thin[,1]
+  lacerta_1var <- lacerta_thin[, 1]
   expect_error(filter_collinear(lacerta_1var), "at least 2 numeric variables are needed")
   # error for defautl object
   expect_error(
@@ -44,45 +44,48 @@ test_that("filter collinear variables with cor_caret", {
 
   # test method on SpatRaster
   climate_present <- terra::readRDS(system.file("extdata/lacerta_climate_present_10m.rds",
-                                      package = "tidysdm"
+    package = "tidysdm"
   ))
   cor_spatraster_ken <- filter_collinear(climate_present, cor_type = "kendall")
   cor_spatraster_ken_sub <- filter_collinear(climate_present, max_cells = 200, cor_type = "kendall")
   expect_true(!identical(cor_spatraster_ken, cor_spatraster_ken_sub))
-  
+
   # test method on stars
-  climate_present_stars = stars::st_as_stars(climate_present, as_attributes = TRUE) 
+  climate_present_stars <- stars::st_as_stars(climate_present, as_attributes = TRUE)
   cor_spatraster_ken <- filter_collinear(climate_present_stars, cor_type = "kendall")
   cor_spatraster_ken_sub <- filter_collinear(climate_present_stars, max_cells = 200, cor_type = "kendall")
   expect_true(!identical(cor_spatraster_ken, cor_spatraster_ken_sub))
-  
 })
 
 
 test_that("filter collinear variables with vif_step", {
   lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
-                                      package = "tidysdm"
+    package = "tidysdm"
   ))
   set.seed(123)
-  vars_to_keep <- filter_collinear(lacerta_thin, method="vif_step")
+  vars_to_keep <- filter_collinear(lacerta_thin, method = "vif_step")
   # we should remove two variables
   expect_true(all(!c("bio01", "bio18") %in% vars_to_keep))
   # now keep them in
   expect_true(all(c("bio01", "bio18") %in%
-                    filter_collinear(lacerta_thin, method="vif_step",
-                                     to_keep = c("bio01", "bio18"))))
+    filter_collinear(lacerta_thin,
+      method = "vif_step",
+      to_keep = c("bio01", "bio18")
+    )))
 })
 
 test_that("filter collinear variables with vif_cor", {
   lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
-                                      package = "tidysdm"
+    package = "tidysdm"
   ))
   set.seed(123)
-  vars_to_keep <- filter_collinear(lacerta_thin, method="vif_cor")
+  vars_to_keep <- filter_collinear(lacerta_thin, method = "vif_cor")
   # we should remove two variables
   expect_true(all(!c("bio01", "bio18") %in% vars_to_keep))
   # now keep them in
   expect_true(all(c("bio01", "bio18") %in%
-                    filter_collinear(lacerta_thin, method="vif_cor",
-                                     to_keep = c("bio01", "bio18"))))
+    filter_collinear(lacerta_thin,
+      method = "vif_cor",
+      to_keep = c("bio01", "bio18")
+    )))
 })

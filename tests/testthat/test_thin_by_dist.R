@@ -40,7 +40,7 @@ test_that("thin_by_dist removes the correct points", {
 # points(vect(locations), col="red", cex=2)
 
 
-test_that("thin_by_dist respects the projection",{
+test_that("thin_by_dist respects the projection", {
   # get the lacerta data and set crs to latlong
   lacerta <- sf::st_as_sf(lacerta, coords = c("longitude", "latitude"))
   sf::st_crs(lacerta) <- "+proj=longlat"
@@ -53,7 +53,7 @@ test_that("thin_by_dist respects the projection",{
   set.seed(123)
   lacerta_thin_eu <- thin_by_dist(lacerta_proj, dist_min = 20000, dist_method = "euclidean") # euclidean method
   # check that the thinning is not the same
-  expect_false(nrow(lacerta_thin_gc)==nrow(lacerta_thin_eu))
+  expect_false(nrow(lacerta_thin_gc) == nrow(lacerta_thin_eu))
   # check that the great circle method did not remove the crs from the data
   expect_equal(sf::st_crs(lacerta_thin_gc), sf::st_crs(lacerta_proj))
   # now thin the original dataset (in latlong)

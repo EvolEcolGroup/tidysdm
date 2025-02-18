@@ -46,7 +46,7 @@ thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
     return_dataframe <- TRUE
   }
 
-  #use the proper method of distance calculation by changing projection if necessary
+  # use the proper method of distance calculation by changing projection if necessary
   dist_method <- match.arg(dist_method)
   if (dist_method == "great_circle") {
     # store the original projection

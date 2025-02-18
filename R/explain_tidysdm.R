@@ -4,7 +4,7 @@
 #' methods. This function creates a DALEX explainer (see [DALEX::explain()]), which can then be queried
 #' by multiple functions from the DALEX package to create explanations of the model.
 #'
-#' By default, the response variable is extracted form the ensemble object. Note that, if 
+#' By default, the response variable is extracted form the ensemble object. Note that, if
 #' the response variable is passed directly,
 #' `y` should be a factor with presence as a reference level. To check that `y` is formatted correctly,
 #' use [check_sdm_presence()].
@@ -167,8 +167,8 @@ explain_simple_ensemble <- function(
     stop("type has to be classification for a tidysdm ensemble")
   }
   if (is.null(data)) {
-    if (is.null(model$workflow[[1]]$pre$actions$recipe$recipe$steps)){
-    data <- workflowsets::extract_mold(model$workflow[[1]])$predictors
+    if (is.null(model$workflow[[1]]$pre$actions$recipe$recipe$steps)) {
+      data <- workflowsets::extract_mold(model$workflow[[1]])$predictors
     } else {
       stop("your recipe contains steps; please provide a copy of the original dataset as 'data' argument")
     }
@@ -275,14 +275,15 @@ explain_simple_ensemble_by_workflow <- function(
   if (!requireNamespace("DALEXtra", quietly = TRUE)) {
     stop(
       "to use this function, first install package 'DALEXtra' with\n",
-      "install.packages('DALEXtra')")
+      "install.packages('DALEXtra')"
+    )
   }
 
   explainer_list <- list()
   for (i in seq_len(nrow(model))) {
     if (is.null(data)) {
-      if (is.null(model$pre$actions$recipe$recipe$steps)){
-      data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
+      if (is.null(model$pre$actions$recipe$recipe$steps)) {
+        data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
       } else {
         stop("your recipe contains steps; please provide a copy of the original dataset as data argument")
       }
@@ -291,7 +292,7 @@ explain_simple_ensemble_by_workflow <- function(
     }
     if (is.null(y)) {
       data_response <- (as.numeric(workflowsets::extract_mold(model$workflow[[i]])$outcomes %>% dplyr::pull()) - 2) * -1
-     } else {
+    } else {
       data_response <- (as.numeric(y) - 2) * -1
     }
 

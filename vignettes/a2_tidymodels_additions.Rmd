@@ -17,12 +17,12 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 # set options to limit threads used by imported libraries
-options(cores=2)
-options(mc.cores=2)
+options(cores = 2)
+options(mc.cores = 2)
 # xgboost uses data.table
 data.table::setDTthreads(2)
 
-download_data = FALSE
+download_data <- FALSE
 # note that data were created in the overview vignette
 ```
 
@@ -144,7 +144,7 @@ lacerta_training <- training(lacerta_initial)
 lacerta_cv <- spatial_block_cv(lacerta_training,
   v = 5,
   cellsize = grid_cellsize(lacerta_thin),
-  offset = grid_offset(lacerta_thin)+0.00001
+  offset = grid_offset(lacerta_thin) + 0.00001
 )
 autoplot(lacerta_cv)
 ```
@@ -356,8 +356,9 @@ lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
 ))
 # create a topography variable with 3 levels based on altitude
 lacerta_thin$topography <- cut(lacerta_thin$altitude,
-                breaks = c(-Inf, 200, 800, Inf),
-                labels = c("plains", "hills", "mountains"))
+  breaks = c(-Inf, 200, 800, Inf),
+  labels = c("plains", "hills", "mountains")
+)
 table(lacerta_thin$topography)
 ```
 
@@ -432,12 +433,13 @@ for `predict_raster()` to work, the name and levels for a categorical variable n
 when training the models (i.e. in the recipe with `step_dummy()`):
 ```{r}
 climate_present <- terra::readRDS(system.file("extdata/lacerta_climate_present_10m.rds",
-                                              package = "tidysdm"))
+  package = "tidysdm"
+))
 # first we add a topography variable to the climate data
 climate_present$topography <- climate_present$altitude
-climate_present$topography <- terra::classify(climate_present$topography, rcl = c(-Inf, 200, 800, Inf), include.lowest=TRUE, brackets=TRUE)
+climate_present$topography <- terra::classify(climate_present$topography, rcl = c(-Inf, 200, 800, Inf), include.lowest = TRUE, brackets = TRUE)
 library(terra)
-levels(climate_present$topography)  <- data.frame(ID = c(0,1,2), topography = c("plains", "hills", "mountains"))
+levels(climate_present$topography) <- data.frame(ID = c(0, 1, 2), topography = c("plains", "hills", "mountains"))
 # now we can predict
 predict_factor <- predict_raster(lacerta_ensemble, climate_present)
 plot(predict_factor)

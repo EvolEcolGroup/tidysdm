@@ -2,7 +2,7 @@
 #'
 #' This function samples background points from a raster given a set of presences.
 #' The locations returned as the center points of the sampled cells, which can
-#' overlap with the presences (in contrast to pseudo-absences, see 
+#' overlap with the presences (in contrast to pseudo-absences, see
 #' [sample_pseudoabs]). The following methods are implemented:
 #' * 'random': background randomly sampled from the region covered by the
 #' raster (i.e. not NAs).
@@ -12,7 +12,7 @@
 #' are in multiple buffers are not oversampled. This is also referred to as "thickening".
 #' * 'bias': background points are sampled according to a surface representing
 #' the biased sampling effort.
-#' 
+#'
 #' Note that the units of distance depend on the projection of the raster.
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
 #' These can be defined in `coords`, unless they have standard names
@@ -20,7 +20,7 @@
 #' @param raster the [terra::SpatRaster] or `stars` from which cells will be sampled (the first layer
 #' will be used to determine which cells are NAs, and thus can not be sampled). If
 #' sampling is "bias", then the sampling probability will be proportional to the values on
-#' the first layer (i.e. band) of the raster. 
+#' the first layer (i.e. band) of the raster.
 #' @param n number of background points to sample.
 #' @param coords a vector of length two giving the names of the "x" and "y"
 #' coordinates, as found in `data`. If left to NULL, the function will
@@ -39,9 +39,9 @@
 
 
 sample_background <- function(data, raster, n, coords = NULL,
-                             method = "random", class_label = "background",
-                             return_pres = TRUE) {
-  if(inherits(raster, "stars")) raster <- as(raster, "SpatRaster")
+                              method = "random", class_label = "background",
+                              return_pres = TRUE) {
+  if (inherits(raster, "stars")) raster <- as(raster, "SpatRaster")
   return_sf <- FALSE # flag whether we need to return an sf object
   if (inherits(data, "sf")) {
     bind_col <- TRUE
@@ -62,8 +62,8 @@ sample_background <- function(data, raster, n, coords = NULL,
   }
   coords <- check_coords_names(data, coords)
   dist_min <- dist_max <- NULL
- if (method[1] == "dist_max") {
-    if (length(method)!=2){
+  if (method[1] == "dist_max") {
+    if (length(method) != 2) {
       stop("method 'dist_max' should have one threshold, e.g. c('dist_max',50)")
     }
     dist_max <- as.numeric(method[2])
@@ -86,16 +86,16 @@ sample_background <- function(data, raster, n, coords = NULL,
     sampling_raster <- terra::mask(sampling_raster, max_buffer, touches = FALSE)
   }
 
-  
+
   # now sample points
   # cell ids excluding NAs
   cell_id <- terra::cells(sampling_raster)
   # if bias extract the bias values to use as weights for sampling
-  if (method[1]=="bias"){
+  if (method[1] == "bias") {
     bias <- terra::extract(raster, cell_id)
-    bias <- bias[,1]/sum(bias[,1])
+    bias <- bias[, 1] / sum(bias[, 1])
   } else {
-    bias = NULL
+    bias <- NULL
   }
   if (length(cell_id) > n) {
     cell_id <- sample(x = cell_id, size = n, prob = bias, replace = FALSE)

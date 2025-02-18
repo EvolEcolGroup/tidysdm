@@ -18,7 +18,6 @@
 
 
 spatial_initial_split <- function(data, prop, strategy, ...) {
-
   # check that strategy is a spatialsample function
   if (!exists(deparse(substitute(strategy)),
     where = "package:spatialsample",

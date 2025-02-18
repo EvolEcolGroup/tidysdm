@@ -2,7 +2,7 @@
 #'
 #' This function returns a [parsnip::model_spec] for a General Additive Model to
 #' be used as a classifier of presences and absences in Species Distribution Model.
-#' 
+#'
 #' Note that, when using GAMs in a `workflow_set()`, it is necessary to
 #' update the model with [gam_formula()] (see [`parsnip::model_formula`] for a
 #' discussion of formulas with special terms in `tidymodels`):

@@ -2,7 +2,7 @@
 #'
 #' This function samples pseudo-absence points from a raster given a set of presences.
 #' The locations returned as the center points of the sampled cells, which can
-#' not overlap with the presences (in contrast to background points, see 
+#' not overlap with the presences (in contrast to background points, see
 #' [sample_background_time]). The following methods are implemented:
 #' * 'random': pseudo-absences randomly sampled from the region covered by the
 #' raster (i.e. not NAs).
@@ -16,7 +16,7 @@
 #' * 'dist_disc': pseudo-absences randomly sampled from the unioned discs around presences
 #' with the two values of 'dist_disc' defining the minimum and maximum distance from
 #' presences.
-#' 
+#'
 #' #' @details Note that the time axis of the raster should be in `POSIXct` or `Date` format,
 #' or use `tstep="years"'. See [terra::time()] for details on how to set the time axis.
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
@@ -55,14 +55,13 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
                                   lubridate_fun = c,
                                   method = "random", class_label = "pseudoabs",
                                   return_pres = TRUE, time_buffer = 0) {
-  
-  if(inherits(raster, "stars")) {
+  if (inherits(raster, "stars")) {
     d <- stars::st_dimensions(raster)
     time <- stars::st_get_dimension_values(raster, "time")
     raster <- as(raster, "SpatRaster")
     terra::time(raster, tstep = d$time$refsys) <- time
   }
-  
+
   # create a vector of times formatted as proper dates
   time_lub <- data %>%
     sf::st_drop_geometry() %>%
@@ -72,28 +71,30 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
     stop("time is not a date (or cannot be coerced to one)")
   }
   # create max and min date of influence for a presence with time_buffer
-  time_lub_min <- time_lub-lubridate::days(time_buffer)
-  time_lub_max <- time_lub+lubridate::days(time_buffer)
+  time_lub_min <- time_lub - lubridate::days(time_buffer)
+  time_lub_max <- time_lub + lubridate::days(time_buffer)
 
   # if it is a SpatRasterDataset, use the first dataset
   if (inherits(raster, "SpatRasterDataset")) {
     raster <- raster[[1]]
   }
-  
+
   # get the time steps
   time_steps <- terra::time(raster)
   if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)
   }
-  if (inherits(time_steps,"Date")){
+  if (inherits(time_steps, "Date")) {
     time_steps <- as.POSIXct(time_steps)
   }
   # check that time_steps is POSIXct
   if (!inherits(time_steps, "POSIXct")) {
-    stop("the units of the time axis of the raster are not defined;\n",
-         "when using terra::time() use either POSIXct or Dates, or set tstep to 'years'")
+    stop(
+      "the units of the time axis of the raster are not defined;\n",
+      "when using terra::time() use either POSIXct or Dates, or set tstep to 'years'"
+    )
   }
-  
+
   out_of_range_warning(time_lub, time_steps)
 
   # convert time_lub dates into indices for the SpatRasterDatset
@@ -109,16 +110,19 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
     sapply(time_lub_max, function(a, b) {
       which.min(abs(a - b))
     }, time_steps)
-  
-  
+
+
   pseudoabsences <- NULL
 
   for (i_index in unique(time_indices)) {
     # count the presences in this time step
-    n_pres_this_time <- data %>% dplyr::filter(time_indices == i_index) %>% nrow()
+    n_pres_this_time <- data %>%
+      dplyr::filter(time_indices == i_index) %>%
+      nrow()
     # create a dataset with presences for this time step plus presences within the time buffer
     data_sub <- data %>% dplyr::filter(
-      i_index >= time_indices_min & i_index <=time_indices_max)
+      i_index >= time_indices_min & i_index <= time_indices_max
+    )
 
     # slice the region series based on the index;
     raster_sub <- terra::subset(raster, i_index)
@@ -136,15 +140,18 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
     data_sub <- data_sub %>% dplyr::mutate(time_step = time_steps[i_index])
     pseudoabsences <- pseudoabsences %>% dplyr::bind_rows(data_sub)
   }
-  if (return_pres){
-    if (inherits(data,"sf")){
-      presences <- sf::st_set_geometry(data.frame(geometry = data$geometry), 
-                                       data$geometry)
+  if (return_pres) {
+    if (inherits(data, "sf")) {
+      presences <- sf::st_set_geometry(
+        data.frame(geometry = data$geometry),
+        data$geometry
+      )
     } else {
-      presences <- data[,names(pseudoabsences[1:2])]
+      presences <- data[, names(pseudoabsences[1:2])]
     }
-    presences <- presences %>% dplyr::mutate(class="presence",time_step=time_lub) 
-    pseudoabsences <- pseudoabsences %>% dplyr::bind_rows(presences) %>%
+    presences <- presences %>% dplyr::mutate(class = "presence", time_step = time_lub)
+    pseudoabsences <- pseudoabsences %>%
+      dplyr::bind_rows(presences) %>%
       dplyr::mutate(class = stats::relevel(factor(class), ref = "presence"))
   }
   return(pseudoabsences)

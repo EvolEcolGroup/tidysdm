@@ -31,7 +31,9 @@
 #' @export
 
 autoplot.spatial_initial_split <- function(object, ..., alpha = 0.6) {
-  p <- utils::getS3method("autoplot", "spatial_rsplit")(object, alpha = alpha, ...)
+  p <- utils::getS3method("autoplot", "spatial_rsplit")(object,
+                                                        alpha = alpha,
+                                                        ...)
   p$data$.class. <- p$data$.class. %>%
     dplyr::case_match("Assessment" ~ "Testing", "Analysis" ~ "Training")
   p

@@ -53,7 +53,7 @@ thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
     raster <- raster[[1]]
   }
 
-  if(inherits(raster, "stars")) {
+  if (inherits(raster, "stars")) {
     d <- stars::st_dimensions(raster)
     time <- stars::st_get_dimension_values(raster, "time")
     raster <- as(raster, "SpatRaster")

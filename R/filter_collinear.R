@@ -44,28 +44,28 @@
 #' @export
 
 filter_collinear <- function(x,
-                            cutoff = NULL,
-                            verbose = FALSE,
-                            names = TRUE,
-                            to_keep = NULL,
-                            method = "cor_caret",
-                            cor_type = "pearson",
-                            max_cells = Inf,
-                            ...) {
+                             cutoff = NULL,
+                             verbose = FALSE,
+                             names = TRUE,
+                             to_keep = NULL,
+                             method = "cor_caret",
+                             cor_type = "pearson",
+                             max_cells = Inf,
+                             ...) {
   UseMethod("filter_collinear", object = x)
 }
 
 #' @rdname filter_collinear
 #' @export
 filter_collinear.default <- function(x,
-                                    cutoff = NULL,
-                                    verbose = FALSE,
-                                    names = TRUE,
-                                    to_keep = NULL,
-                                    method = "cor_caret",
-                                    cor_type = "pearson",
-                                    max_cells = Inf,
-                                    ...) {
+                                     cutoff = NULL,
+                                     verbose = FALSE,
+                                     names = TRUE,
+                                     to_keep = NULL,
+                                     method = "cor_caret",
+                                     cor_type = "pearson",
+                                     max_cells = Inf,
+                                     ...) {
   stop("no method available for this object type")
 }
 
@@ -76,40 +76,41 @@ filter_collinear.default <- function(x,
 #' page of [terra::spatSample()] for details.
 #' @export
 filter_collinear.stars <-
-    function(x,
-             cutoff = NULL,
-             verbose = FALSE,
-             names = TRUE,
-             to_keep = NULL,
-             method = "cor_caret",
-             cor_type = "pearson",
-             max_cells = Inf,
-             exhaustive = FALSE,
-             ...) {
-      
-      N = prod(dim(x))
-      maxcells = pmin(N, max_cells)
-      ix = sample(N, maxcells, replace = FALSE)
-      x_matrix = sapply(names(x),
-                 function(name, x = NULL, index = NULL){
-                   x[[name]][index]
-                 }, x = x, index = ix, simplify = FALSE) %>%
-        as.data.frame() %>%
-        stats::na.omit() %>%
-        as.matrix()
+  function(x,
+           cutoff = NULL,
+           verbose = FALSE,
+           names = TRUE,
+           to_keep = NULL,
+           method = "cor_caret",
+           cor_type = "pearson",
+           max_cells = Inf,
+           exhaustive = FALSE,
+           ...) {
+    N <- prod(dim(x))
+    maxcells <- pmin(N, max_cells)
+    ix <- sample(N, maxcells, replace = FALSE)
+    x_matrix <- sapply(names(x),
+      function(name, x = NULL, index = NULL) {
+        x[[name]][index]
+      },
+      x = x, index = ix, simplify = FALSE
+    ) %>%
+      as.data.frame() %>%
+      stats::na.omit() %>%
+      as.matrix()
 
-      # now dispatch to the matrix method
-      filter_collinear(
-        x_matrix,
-        cutoff = cutoff,
-        verbose = verbose,
-        names = names,
-        to_keep = to_keep,
-        method = method,
-        cor_type = cor_type,
-        max_cells = max_cells
-      )
-    }
+    # now dispatch to the matrix method
+    filter_collinear(
+      x_matrix,
+      cutoff = cutoff,
+      verbose = verbose,
+      names = names,
+      to_keep = to_keep,
+      method = method,
+      cor_type = cor_type,
+      max_cells = max_cells
+    )
+  }
 
 
 #' @rdname filter_collinear
@@ -129,27 +130,28 @@ filter_collinear.SpatRaster <-
            max_cells = Inf,
            exhaustive = FALSE,
            ...) {
-      # if raster is bigger than max_cells, then sample
-      if (max_cells < terra::ncell(x)) {
-        x_matrix <- terra::spatSample(x, size = max_cells,
-                                  method = "random", na.rm = TRUE, as.df = FALSE,
-                                  exhaustive = exhaustive)
-      } else {
-        x_matrix <- stats::na.omit(terra::as.matrix(x))
-
-      }
-      # now dispatch to the matrix method
-      filter_collinear(
-        x_matrix,
-        cutoff = cutoff,
-        verbose = verbose,
-        names = names,
-        to_keep = to_keep,
-        method = method,
-        cor_type = cor_type,
-        max_cells = max_cells
+    # if raster is bigger than max_cells, then sample
+    if (max_cells < terra::ncell(x)) {
+      x_matrix <- terra::spatSample(x,
+        size = max_cells,
+        method = "random", na.rm = TRUE, as.df = FALSE,
+        exhaustive = exhaustive
       )
+    } else {
+      x_matrix <- stats::na.omit(terra::as.matrix(x))
     }
+    # now dispatch to the matrix method
+    filter_collinear(
+      x_matrix,
+      cutoff = cutoff,
+      verbose = verbose,
+      names = names,
+      to_keep = to_keep,
+      method = method,
+      cor_type = cor_type,
+      max_cells = max_cells
+    )
+  }
 
 
 
@@ -168,25 +170,26 @@ filter_collinear.data.frame <-
     x <- x %>%
       # do we need this?!? check vif cor and vif step
       dplyr::select(dplyr::where(is.numeric)) %>%
-      sf::st_drop_geometry() %>% stats::na.omit()
-   # sample rows if we have too many
-   if (max_cells < nrow(x)){
-     ##sample rows
-     x <- x %>% dplyr::slice_sample(n=max_cells)
-   }
-   x <- as.matrix(x)
-   # now dispatch to the matrix method
-   filter_collinear(
-     x,
-     cutoff = cutoff,
-     verbose = verbose,
-     names = names,
-     to_keep = to_keep,
-     method = method,
-     cor_type = cor_type,
-     max_cells = max_cells
-   )
-}
+      sf::st_drop_geometry() %>%
+      stats::na.omit()
+    # sample rows if we have too many
+    if (max_cells < nrow(x)) {
+      ## sample rows
+      x <- x %>% dplyr::slice_sample(n = max_cells)
+    }
+    x <- as.matrix(x)
+    # now dispatch to the matrix method
+    filter_collinear(
+      x,
+      cutoff = cutoff,
+      verbose = verbose,
+      names = names,
+      to_keep = to_keep,
+      method = method,
+      cor_type = cor_type,
+      max_cells = max_cells
+    )
+  }
 
 
 #' @rdname filter_collinear
@@ -200,20 +203,20 @@ filter_collinear.matrix <- function(x,
                                     cor_type = "pearson",
                                     max_cells = Inf,
                                     ...) {
-  if (ncol(x) <2) {
+  if (ncol(x) < 2) {
     stop("at least 2 numeric variables are needed")
   }
 
   # check that to_keep is valid
-  if (!is.null(to_keep)){
+  if (!is.null(to_keep)) {
     if (!any(to_keep %in% colnames(x))) {
       stop("to_keep includes variables that are not present in x")
     }
   }
 
   # sample rows if needed
-  if (max_cells < nrow(x)){
-    x <- x [sample(1:nrow(x),max_cells),]
+  if (max_cells < nrow(x)) {
+    x <- x[sample(1:nrow(x), max_cells), ]
   }
 
   # now dispatch to the correct method
@@ -241,7 +244,7 @@ filter_collinear.matrix <- function(x,
       cor_type = cor_type
     )
   } else {
-    stop (
+    stop(
       "the selected method is not valid: only options 'cor_caret', 'vif_step' and 'vif_cor' are accepted."
     )
   }
@@ -256,5 +259,3 @@ filter_collinear.matrix <- function(x,
   }
   return(vars_kept)
 }
-
-

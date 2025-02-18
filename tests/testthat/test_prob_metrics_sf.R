@@ -46,7 +46,5 @@ test_that("prob_metrics for sf objects", {
   expect_identical(
     roc_aunu(multi_class_example, obs, VF:L),
     roc_aunu(multi_class_example_sf, obs, VF:L)
-  ) 
-  
-  
+  )
 })
