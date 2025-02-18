@@ -61,17 +61,19 @@ clamp_predictors.SpatRaster <- function(x, training, .col, use_na = FALSE) {
   training <- stats::na.omit(training)
   # subset to the variables in training
   extremes <- apply(training, 2, range, na.rm = TRUE)
-  x <- terra::clamp(x, lower = extremes[1, ], 
-                    upper = extremes[2, ], 
-                    values = !use_na)
+  x <- terra::clamp(x,
+    lower = extremes[1, ],
+    upper = extremes[2, ],
+    values = !use_na
+  )
   return(x)
 }
 
 #' @rdname clamp_predictors
 #' @export
-clamp_predictors.SpatRasterDataset <- function(x, 
-                                               training, 
-                                               .col, 
+clamp_predictors.SpatRasterDataset <- function(x,
+                                               training,
+                                               .col,
                                                use_na = FALSE) {
   # remove the class column if it is present
   .col <- rlang::enquo(.col) %>%
@@ -101,10 +103,11 @@ clamp_predictors.SpatRasterDataset <- function(x,
   names(x) <- dataset_names
   # end of hack
   for (i_name in names(x)) {
-    x[[i_name]] <- terra::clamp(x[[i_name]], 
-                                lower = extremes[1, i_name], 
-                                upper = extremes[2, i_name], 
-                                values = !use_na)
+    x[[i_name]] <- terra::clamp(x[[i_name]],
+      lower = extremes[1, i_name],
+      upper = extremes[2, i_name],
+      values = !use_na
+    )
   }
   x <- terra::sds(x)
   return(x)

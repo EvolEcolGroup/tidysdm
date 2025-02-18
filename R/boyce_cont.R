@@ -58,7 +58,7 @@
 #' boyce_cont(two_class_example, truth, Class1)
 #'
 #' @export
-#' 
+#'
 boyce_cont <- function(data, ...) {
   UseMethod("boyce_cont")
 }
@@ -157,8 +157,10 @@ boyce_cont_estimator_impl <- function(truth,
     presWeight <- rep(1, length(pres))
     contrastWeight <- rep(1, length(contrast))
   }
-  contBoyce(pres = pres, contrast = contrast, 
-            presWeight = presWeight, contrastWeight = contrastWeight)
+  contBoyce(
+    pres = pres, contrast = contrast,
+    presWeight = presWeight, contrastWeight = contrastWeight
+  )
 }
 
 
@@ -178,13 +180,13 @@ contBoyce <- function(
     na.rm = FALSE,
     ...) {
   # if all NAs
-  if (all(is.na(pres)) || all(is.na(contrast)) || 
-      all(is.na(presWeight)) || all(is.na(contrastWeight))) {
+  if (all(is.na(pres)) || all(is.na(contrast)) ||
+    all(is.na(presWeight)) || all(is.na(contrastWeight))) {
     return(NA)
   }
 
   # catch errors
-  if (binWidth > 1 || binWidth <= 0){
+  if (binWidth > 1 || binWidth <= 0) {
     stop('Argument "binWidth" must be between 0 and 1.')
   }
 

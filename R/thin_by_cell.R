@@ -47,9 +47,11 @@ thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE, agg_fact =
         data <- data %>%
           dplyr::rename("X_original" = "X", "Y_original" = "Y") %>%
           dplyr::bind_cols(sf::st_coordinates(data))
-        warning("sf object contained 'X' and 'Y' coordinates that did not match the sf point geometry.\n",
-                "These have been moved to columns 'X_original' and 'Y_original' and new X and Y columns\n",
-                "have been added that match the sf point geometry.")
+        warning(
+          "sf object contained 'X' and 'Y' coordinates that did not match the sf point geometry.\n",
+          "These have been moved to columns 'X_original' and 'Y_original' and new X and Y columns\n",
+          "have been added that match the sf point geometry."
+        )
       }
     } else {
       data <- data %>% dplyr::bind_cols(sf::st_coordinates(data))
@@ -71,8 +73,9 @@ thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE, agg_fact =
   data_thin <- data[cells_to_keep, ]
   if (!is.null(agg_fact)) {
     raster_agg <- terra::aggregate(terra::rast(raster[[1]]), fact = agg_fact)
-    data_thin <- thin_by_cell(data_thin, raster_agg, 
-                              coords = coords, drop_na = FALSE)
+    data_thin <- thin_by_cell(data_thin, raster_agg,
+      coords = coords, drop_na = FALSE
+    )
   }
   # remove X and Y that were added to the sf object
   if (return_sf) {

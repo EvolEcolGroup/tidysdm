@@ -13,7 +13,7 @@
 #' ))
 #' lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
 #' check_splits_balance(lacerta_cv, class)
-#' 
+#'
 check_splits_balance <- function(
     splits,
     .col) {

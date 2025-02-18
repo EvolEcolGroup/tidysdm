@@ -16,8 +16,9 @@
 #' @examples
 #' \donttest{
 #' library(blockCV)
-#' points <- read.csv(system.file("extdata/", "species.csv", 
-#'   package = "blockCV"))
+#' points <- read.csv(system.file("extdata/", "species.csv",
+#'   package = "blockCV"
+#' ))
 #' pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845)
 #' sb1 <- cv_spatial(
 #'   x = pa_data,

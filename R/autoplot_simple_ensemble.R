@@ -71,7 +71,7 @@ autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
     dplyr::filter(.data$.metric == rank_metric) %>%
     dplyr::arrange(mean)
 
-  res$rank <- (1:nrow(res_rank_metric))[match(
+  res$rank <- seq_len(nrow(res_rank_metric))[match(
     res$wflow_id,
     res_rank_metric$wflow_id
   )]
@@ -96,8 +96,10 @@ autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
   if (num_metrics > 1) {
     p <-
       p +
-      ggplot2::facet_wrap(~ .data$.metric, scales = "free_y", 
-                          as.table = FALSE) +
+      ggplot2::facet_wrap(~ .data$.metric,
+        scales = "free_y",
+        as.table = FALSE
+      ) +
       ggplot2::labs(x = "Workflow Rank", y = "Metric")
   } else {
     p <- p + ggplot2::labs(x = "Workflow Rank", y = unique(res$.metric))

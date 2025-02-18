@@ -34,20 +34,20 @@ calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
         metric_thresh
       )
     ) &
-    unlist(
-      lapply(
-        ref_calib_tb %>% dplyr::pull("class_thresh"),
-        identical,
-        class_thresh
-      )
-    ))) {
+      unlist(
+        lapply(
+          ref_calib_tb %>% dplyr::pull("class_thresh"),
+          identical,
+          class_thresh
+        )
+      ))) {
       message(
         "this ensemble is already calibrated for this combination of `class_thresh` and `metric_thresh`"
       )
       return(object)
     }
   }
-  
+
   fun_names <- c("mean", "median", "weighted_mean", "weighted_median")
   # generate predictions from the training data
   training_preds <- stats::predict(
@@ -61,7 +61,7 @@ calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
   # extract the truth from the training data
   training_outcomes <-
     workflows::extract_mold((object$workflow[[1]]))$outcome %>% dplyr::pull(1)
-  
+
   # get the thresholds for each model
   calib_tb <- tibble::tibble(
     class_thresh = list(),
@@ -70,9 +70,10 @@ calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
     optim_value = numeric()
   )
   for (i_col in seq.int(ncol(training_preds))) {
-    optim_value <- optim_thresh(training_outcomes, 
-                                training_preds[, i_col], 
-                                metric = class_thresh)
+    optim_value <- optim_thresh(training_outcomes,
+      training_preds[, i_col],
+      metric = class_thresh
+    )
     calib_tb <- calib_tb %>%
       dplyr::bind_rows(
         tibble::tibble(
@@ -83,7 +84,7 @@ calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
         )
       )
   }
-  
+
   # now store the new thresholds
   if (is.null(attr(object, "class_thresholds"))) {
     attr(object, "class_thresholds") <- calib_tb
