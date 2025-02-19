@@ -103,7 +103,7 @@ filter_caret_algorithm <-
     max_abs_cor_order <-
       order(apply(tmp, 2, average_corr), decreasing = TRUE)
     x <- x[max_abs_cor_order, max_abs_cor_order]
-    newOrder <- original_order[max_abs_cor_order]
+    new_order <- original_order[max_abs_cor_order]
     rm(tmp)
 
     col_to_delete <- rep(FALSE, var_num)
@@ -129,9 +129,9 @@ filter_caret_algorithm <-
             if (verbose) {
               message(
                 "Compare row",
-                newOrder[i],
+                new_order[i],
                 " and column ",
-                newOrder[j],
+                new_order[j],
                 "with corr ",
                 round(x[i, j], 3),
                 "\n"
@@ -145,14 +145,14 @@ filter_caret_algorithm <-
               x2[i, ] <- NA
               x2[, i] <- NA
               if (verbose) {
-                message(" so flagging column", newOrder[i], "\n")
+                message(" so flagging column", new_order[i], "\n")
               }
             } else {
               col_to_delete[j] <- TRUE
               x2[j, ] <- NA
               x2[, j] <- NA
               if (verbose) {
-                message(" so flagging column", newOrder[j], "\n")
+                message(" so flagging column", new_order[j], "\n")
               }
             }
           }
@@ -161,7 +161,7 @@ filter_caret_algorithm <-
     }
 
     # return variable names
-    passed_filter <- var_names[newOrder][!col_to_delete]
+    passed_filter <- var_names[new_order][!col_to_delete]
     attr(passed_filter, "to_remove") <-
       var_names[!var_names %in% passed_filter]
 

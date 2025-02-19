@@ -77,7 +77,6 @@ extrapol_mess.SpatRaster <- function(x, training, .col, filename = "", ...) {
 
   out <- terra::rast(x)
   nl <- terra::nlyr(x)
-  nms <- paste0(names(x), "_mess")
   terra::readStart(x)
   on.exit(terra::readStop(x))
   if (nl == 1) {

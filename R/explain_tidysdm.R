@@ -171,18 +171,22 @@ explain_simple_ensemble <- function(
     if (is.null(model$workflow[[1]]$pre$actions$recipe$recipe$steps)) {
       data <- workflowsets::extract_mold(model$workflow[[1]])$predictors
     } else {
-      stop("your recipe contains steps; please provide a copy of the original dataset as 'data' argument")
+      stop("your recipe contains steps; please provide a copy of the ",
+           "original dataset as 'data' argument")
     }
   }
   if (is.null(y)) {
     # note that, for DALEX, we need presences to be 1 and absences to be zero
-    # that's the opposite of what we usually have in tidymodels, where presence is the reference
-    y <- (as.numeric(workflowsets::extract_mold(model$workflow[[1]])$outcomes %>% dplyr::pull()) - 2) * -1
+    # that's the opposite of what we usually have in tidymodels, where presence
+    # is the reference
+    y <-
+      (as.numeric(workflowsets::extract_mold(model$workflow[[1]])$outcomes %>%
+                       dplyr::pull()) - 2) * -1
   } else {
-    # ideally we would use check_sdm_presence to make sure that the
-    # response variable is properly formatted (and not just a factor)
-    # the error message suggests as much. However, this would require passing
-    # info on column and presence level, which leads to a proliferation of parameters
+    # ideally we would use check_sdm_presence to make sure that the response
+    # variable is properly formatted (and not just a factor) the error message
+    # suggests as much. However, this would require passing info on column and
+    # presence level, which leads to a proliferation of parameters
     if (!is.factor(y)) {
       stop("y should be a factor with presences as reference levels")
     } else {
@@ -293,7 +297,9 @@ explain_simple_ensemble_by_workflow <- function(
       data_train <- data
     }
     if (is.null(y)) {
-      data_response <- (as.numeric(workflowsets::extract_mold(model$workflow[[i]])$outcomes %>% dplyr::pull()) - 2) * -1
+      data_response <-
+        (as.numeric(workflowsets::extract_mold(model$workflow[[i]])$outcomes %>%
+                      dplyr::pull()) - 2) * -1
     } else {
       data_response <- (as.numeric(y) - 2) * -1
     }

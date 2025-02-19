@@ -1,24 +1,26 @@
 #' Find threshold that optimises a given metric
 #'
 #' This function returns the threshold to turn probabilities into binary classes
-#' whilst optimising a given metric. Currently available for [`tss_max`], [`kap_max`] and
-#' `sensitivity` (for which a target sensitivity is required).
+#' whilst optimising a given metric. Currently available for [`tss_max`],
+#' [`kap_max`] and `sensitivity` (for which a target sensitivity is required).
 #' @param truth The column identifier for the true class results (that is a
-#' factor). This should be an unquoted column name although this argument is
-#' passed by expression and supports quasiquotation (you can unquote column
-#' names). For _vec() functions, a factor vector.
+#'   factor). This should be an unquoted column name although this argument is
+#'   passed by expression and supports quasiquotation (you can unquote column
+#'   names). For _vec() functions, a factor vector.
 #' @param estimate the predicted probability for the event
 #' @param metric character of metric to be optimised. Currently only "tss_max",
-#' "kap_max", and "sensitivity" with a given target
-#' (e.g. c("sensitivity",0.8))
+#'   "kap_max", and "sensitivity" with a given target (e.g.
+#'   c("sensitivity",0.8))
 #' @param event_level A single string. Either "first" or "second" to specify
-#' which level of truth to consider as the "event". This argument is only
-#' applicable when estimator = "binary". The default uses an internal helper
-#' that generally defaults to "first"
+#'   which level of truth to consider as the "event". This argument is only
+#'   applicable when estimator = "binary". The default uses an internal helper
+#'   that generally defaults to "first"
 #' @returns the probability threshold for the event
 #' @examples
-#' optim_thresh(two_class_example$truth, two_class_example$Class1, metric = c("tss_max"))
-#' optim_thresh(two_class_example$truth, two_class_example$Class1, metric = c("sens", 0.9))
+#' optim_thresh(two_class_example$truth, two_class_example$Class1,
+#'              metric = c("tss_max"))
+#' optim_thresh(two_class_example$truth, two_class_example$Class1,
+#'              metric = c("sens", 0.9))
 #' @export
 
 optim_thresh <- function(truth, estimate, metric, event_level = "first") {

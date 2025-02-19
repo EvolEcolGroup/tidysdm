@@ -72,10 +72,10 @@ filter_collinear.default <- function(x,
 }
 
 #' @rdname filter_collinear
-#' @param exhaustive boolean. Used only for [`terra::SpatRaster`] when downsampling
-#' to `max_cells`, if we require the `exhaustive` approach in [terra::spatSample()].
-#' This is only needed for rasters that are very sparse and not too large, see the help
-#' page of [terra::spatSample()] for details.
+#' @param exhaustive boolean. Used only for [`terra::SpatRaster`] when
+#'   downsampling to `max_cells`, if we require the `exhaustive` approach in
+#'   [terra::spatSample()]. This is only needed for rasters that are very sparse
+#'   and not too large, see the help page of [terra::spatSample()] for details.
 #' @export
 filter_collinear.stars <-
   function(x,
@@ -116,10 +116,10 @@ filter_collinear.stars <-
 
 
 #' @rdname filter_collinear
-#' @param exhaustive boolean. Used only for [`terra::SpatRaster`] when downsampling
-#' to `max_cells`, if we require the `exhaustive` approach in [terra::spatSample()].
-#' This is only needed for rasters that are very sparse and not too large, see the help
-#' page of [terra::spatSample()] for details.
+#' @param exhaustive boolean. Used only for [`terra::SpatRaster`] when
+#'   downsampling to `max_cells`, if we require the `exhaustive` approach in
+#'   [terra::spatSample()]. This is only needed for rasters that are very sparse
+#'   and not too large, see the help page of [terra::spatSample()] for details.
 #' @export
 filter_collinear.SpatRaster <-
   function(x,
@@ -247,7 +247,8 @@ filter_collinear.matrix <- function(x,
     )
   } else {
     stop(
-      "the selected method is not valid: only options 'cor_caret', 'vif_step' and 'vif_cor' are accepted."
+      "the selected method is not valid: only options 'cor_caret', 'vif_step'",
+      " and 'vif_cor' are accepted."
     )
   }
   # format the output of the function

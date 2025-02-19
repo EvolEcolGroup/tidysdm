@@ -20,27 +20,42 @@ tss(data, ...)
 }
 \arguments{
 \item{data}{Either a data.frame containing the columns specified by the truth
-and estimate arguments, or a table/matrix where the true class
-results should be in the columns of the table.}
+and estimate arguments, or a table/matrix where the true class results
+should be in the columns of the table.}
 
 \item{...}{Not currently used.}
 
-\item{truth}{The column identifier for the true class results (that is a factor). This should be an unquoted column name although this argument is passed by expression and supports quasiquotation (you can unquote column names). For _vec() functions, a factor vector.}
+\item{truth}{The column identifier for the true class results (that is a
+factor). This should be an unquoted column name although this argument is
+passed by expression and supports quasiquotation (you can unquote column
+names). For _vec() functions, a factor vector.}
 
-\item{estimate}{The column identifier for the predicted class results (that is also factor). As with truth this can be specified different ways but the primary method is to use an unquoted variable name. For _vec() functions, a factor vector.}
+\item{estimate}{The column identifier for the predicted class results (that
+is also factor). As with truth this can be specified different ways but the
+primary method is to use an unquoted variable name. For _vec() functions, a
+factor vector.}
 
-\item{estimator}{One of: "binary", "macro", "macro_weighted", or "micro" to specify the type of averaging to be done. "binary" is only relevant for the two class case. The other three are general methods for calculating multiclass metrics. The default will automatically choose "binary" or "macro" based on estimate.}
+\item{estimator}{One of: "binary", "macro", "macro_weighted", or "micro" to
+specify the type of averaging to be done. "binary" is only relevant for the
+two class case. The other three are general methods for calculating
+multiclass metrics. The default will automatically choose "binary" or
+"macro" based on estimate.}
 
-\item{na_rm}{A logical value indicating whether NA values should be stripped before the computation proceeds.}
+\item{na_rm}{A logical value indicating whether NA values should be stripped
+before the computation proceeds.}
 
-\item{case_weights}{The optional column identifier for case weights. This should be an unquoted column name that evaluates to a numeric column in data. For _vec() functions, a numeric vector.}
+\item{case_weights}{The optional column identifier for case weights. This
+should be an unquoted column name that evaluates to a numeric column in
+data. For _vec() functions, a numeric vector.}
 
-\item{event_level}{A single string. Either "first" or "second" to specify which level of truth to consider as the "event". This argument is only applicable when estimator = "binary". The default is "first".}
+\item{event_level}{A single string. Either "first" or "second" to specify
+which level of truth to consider as the "event". This argument is only
+applicable when estimator = "binary". The default is "first".}
 }
 \value{
-A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
-For grouped data frames, the number of rows returned will be the same as the
-number of groups.
+A tibble with columns .metric, .estimator, and .estimate and 1 row
+of values. For grouped data frames, the number of rows returned will be the
+same as the number of groups.
 }
 \description{
 The True Skills Statistic, which is defined as
@@ -48,11 +63,12 @@ The True Skills Statistic, which is defined as
 \details{
 \emph{sensitivity}+\emph{specificity} +1
 
-This function is a wrapper around \code{\link[yardstick:j_index]{yardstick::j_index()}}, another name for the
-same quantity. Note that this function takes the classes as predicted by the
-model without any calibration (i.e. making a split at 0.5 probability). This
-is usually not the metric used for Species Distribution Models, where the
-threshold is recalibrated to maximise TSS; for that purpose, use \code{\link[=tss_max]{tss_max()}}.
+This function is a wrapper around \code{\link[yardstick:j_index]{yardstick::j_index()}}, another name for
+the same quantity. Note that this function takes the classes as predicted by
+the model without any calibration (i.e. making a split at 0.5 probability).
+This is usually not the metric used for Species Distribution Models, where
+the threshold is recalibrated to maximise TSS; for that purpose, use
+\code{\link[=tss_max]{tss_max()}}.
 }
 \examples{
 # Two class

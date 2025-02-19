@@ -12,7 +12,8 @@ conf_matrix_df(presences, absences)
 \item{absences}{probabilities for absences}
 }
 \value{
-A data.frame of thresholds with columns \emph{thres}, \emph{tp}, \emph{fp}, \emph{fn}, and \emph{tn}
+A data.frame of thresholds with columns \emph{thres}, \emph{tp}, \emph{fp}, \emph{fn},
+and \emph{tn}
 }
 \description{
 Create the confusion matrix for multiple thresholds, using to optimise tss

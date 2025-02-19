@@ -15,8 +15,8 @@ names). For _vec() functions, a factor vector.}
 \item{estimate}{the predicted probability for the event}
 
 \item{metric}{character of metric to be optimised. Currently only "tss_max",
-"kap_max", and "sensitivity" with a given target
-(e.g. c("sensitivity",0.8))}
+"kap_max", and "sensitivity" with a given target (e.g.
+c("sensitivity",0.8))}
 
 \item{event_level}{A single string. Either "first" or "second" to specify
 which level of truth to consider as the "event". This argument is only
@@ -28,10 +28,12 @@ the probability threshold for the event
 }
 \description{
 This function returns the threshold to turn probabilities into binary classes
-whilst optimising a given metric. Currently available for \code{\link{tss_max}}, \code{\link{kap_max}} and
-\code{sensitivity} (for which a target sensitivity is required).
+whilst optimising a given metric. Currently available for \code{\link{tss_max}},
+\code{\link{kap_max}} and \code{sensitivity} (for which a target sensitivity is required).
 }
 \examples{
-optim_thresh(two_class_example$truth, two_class_example$Class1, metric = c("tss_max"))
-optim_thresh(two_class_example$truth, two_class_example$Class1, metric = c("sens", 0.9))
+optim_thresh(two_class_example$truth, two_class_example$Class1,
+             metric = c("tss_max"))
+optim_thresh(two_class_example$truth, two_class_example$Class1,
+             metric = c("sens", 0.9))
 }

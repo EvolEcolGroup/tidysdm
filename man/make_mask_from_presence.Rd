@@ -9,31 +9,38 @@ make_mask_from_presence(data, method = "buffer", buffer = 0, return_sf = FALSE)
 \arguments{
 \item{data}{An \code{\link[sf:sf]{sf::sf}} data frame of presences..}
 
-\item{method}{the method to use to create the mask. Either 'buffer' or 'convex_hull'}
+\item{method}{the method to use to create the mask. Either 'buffer' or
+'convex_hull'}
 
-\item{buffer}{the buffer to add around each presence (in the units of the crs of the data;
-for lat/lon, the buffer will be in meters),
-or around the convex hull (if method is 'convex_hull')}
+\item{buffer}{the buffer to add around each presence (in the units of the crs
+of the data; for lat/lon, the buffer will be in meters), or around the
+convex hull (if method is 'convex_hull')}
 
-\item{return_sf}{whether to return the mask as an \code{sf} object (if TRUE) or as a \code{terra::SpatVector} object (if FALSE, default)}
+\item{return_sf}{whether to return the mask as an \code{sf} object (if TRUE) or as
+a \code{terra::SpatVector} object (if FALSE, default)}
 }
 \value{
-a \code{terra::SpatVector} or an \code{sf} object (depending on the value of \code{return_sf}) with the mask
+a \code{terra::SpatVector} or an \code{sf} object (depending on the value of
+\code{return_sf}) with the mask
 }
 \description{
-This functions uses the presence column to create a mask to apply to the raster to
-define the area of interest. Two methods are available: one that uses a
-buffer around each presence, and one that create a convex hull around all
-presences (with the possibility of further adding a buffer around the hull).
+This functions uses the presence column to create a mask to apply to the
+raster to define the area of interest. Two methods are available: one that
+uses a buffer around each presence, and one that create a convex hull around
+all presences (with the possibility of further adding a buffer around the
+hull).
 }
 \details{
-To use \code{\link[terra:mask]{terra::mask()}} on a raster, use \code{return_sf = FALSE} to get a \code{terra::SpatVector} object
-that can be used for masking.
+To use \code{\link[terra:mask]{terra::mask()}} on a raster, use \code{return_sf = FALSE} to get a
+\code{terra::SpatVector} object that can be used for masking.
 }
 \examples{
-lacerta_sf <- lacerta \%>\% sf::st_as_sf(coords = c("longitude", "latitude")) \%>\% sf::st_set_crs(4326)
+lacerta_sf <- lacerta \%>\%
+  sf::st_as_sf(coords = c("longitude", "latitude")) \%>\%
+  sf::st_set_crs(4326)
 land_mask <- terra::readRDS(system.file("extdata/lacerta_land_mask.rds",
-package = "tidysdm"))
+  package = "tidysdm"
+))
 mask_buffer <- make_mask_from_presence(lacerta_sf, method = "buffer", buffer = 60000)
 terra::plot(terra::mask(land_mask, mask_buffer))
 mask_ch <- make_mask_from_presence(lacerta_sf, method = "convex_hull")

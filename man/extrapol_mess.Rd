@@ -22,11 +22,13 @@ extrapol_mess(x, training, .col, ...)
 \method{extrapol_mess}{SpatRasterDataset}(x, training, .col, ...)
 }
 \arguments{
-\item{x}{\code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{stars}, \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} or \code{\link{data.frame}}}
+\item{x}{\code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{stars}, \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} or
+\code{\link{data.frame}}}
 
-\item{training}{matrix or data.frame or sf object containing the reference values; each column
-should correspond to one layer of the \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object, with the exception
-of the presences column defined in \code{.col} (optional).}
+\item{training}{matrix or data.frame or sf object containing the reference
+values; each column should correspond to one layer of the
+\code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object, with the exception of the presences column
+defined in \code{.col} (optional).}
 
 \item{.col}{the column containing the presences (optional). If specified,
 it is excluded when computing the MESS scores.}
@@ -36,21 +38,20 @@ it is excluded when computing the MESS scores.}
 \item{filename}{character. Output filename (optional)}
 }
 \value{
-a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} (data.frame) with
-the MESS values.
+a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} (data.frame) with the MESS values.
 }
 \description{
 Compute multivariate environmental similarity surfaces (MESS), as described
 by Elith et al., 2010.
 }
 \details{
-This function is a modified version of \code{mess} in
-package \code{predicts}, with a method added to work on \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}}.
-Note that the method for \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} assumes that each variables
-is stored as a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} with time information within \code{x}. Time
-is also assumed to be in \code{years}. If these conditions are not met, it is possible
-to manually extract a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} for each time step, and use
-\code{extrapol_mess} on those \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}s
+This function is a modified version of \code{mess} in package \code{predicts}, with a
+method added to work on \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}}. Note that the method
+for \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} assumes that each variables is stored as a
+\code{\link[terra:SpatRaster-class]{terra::SpatRaster}} with time information within \code{x}. Time is also assumed
+to be in \code{years}. If these conditions are not met, it is possible to manually
+extract a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} for each time step, and use \code{extrapol_mess}
+on those \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}s
 }
 \references{
 Elith J., M. Kearney M., and S. Phillips, 2010. The art of

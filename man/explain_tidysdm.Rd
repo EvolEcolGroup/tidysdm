@@ -103,21 +103,22 @@ This will happen also if \code{verbose} is TRUE. Set both \code{verbose} and \co
 
 \item{type}{type of a model, either \code{classification} or \code{regression}. If not specified then \code{type} will be extracted from \code{model_info}.}
 
-\item{by_workflow}{boolean determining whether a list of explainer, one per model,
-should be returned instead of a single explainer for the ensemble}
+\item{by_workflow}{boolean determining whether a list of explainer, one per
+model, should be returned instead of a single explainer for the ensemble}
 }
 \value{
 explainer object \code{\link[DALEX:explain]{DALEX::explain}} ready to work with DALEX
 }
 \description{
 DALEX is designed to explore and explain the behaviour of Machine Learning
-methods. This function creates a DALEX explainer (see \code{\link[DALEX:explain]{DALEX::explain()}}), which can then be queried
-by multiple functions from the DALEX package to create explanations of the model.
+methods. This function creates a DALEX explainer (see \code{\link[DALEX:explain]{DALEX::explain()}}),
+which can then be queried by multiple functions from the DALEX package to
+create explanations of the model.
 }
 \details{
-By default, the response variable is extracted form the ensemble object. Note that, if
-the response variable is passed directly,
-\code{y} should be a factor with presence as a reference level. To check that \code{y} is formatted correctly,
+By default, the response variable is extracted form the ensemble object. Note
+that, if the response variable is passed directly, \code{y} should be a factor
+with presence as a reference level. To check that \code{y} is formatted correctly,
 use \code{\link[=check_sdm_presence]{check_sdm_presence()}}.
 }
 \examples{

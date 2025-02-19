@@ -60,7 +60,8 @@ filter_high_cor.SpatRaster <-
            names = TRUE,
            to_keep = NULL) {
     warning("this function is deprecated, use `filter_collinear` instead")
-    filter_collinear(x, method = "cor_caret", cutoff = cutoff, verbose = verbose, names = names, to_keep = to_keep)
+    filter_collinear(x, method = "cor_caret", cutoff = cutoff,
+                     verbose = verbose, names = names, to_keep = to_keep)
   }
 
 
@@ -73,7 +74,8 @@ filter_high_cor.data.frame <-
            names = TRUE,
            to_keep = NULL) {
     warning("this function is deprecated, use `filter_collinear` instead")
-    filter_collinear(x, method = "cor_caret", cutoff = cutoff, verbose = verbose, names = names, to_keep = to_keep)
+    filter_collinear(x, method = "cor_caret", cutoff = cutoff,
+                     verbose = verbose, names = names, to_keep = to_keep)
   }
 
 #' @rdname filter_high_cor
@@ -84,5 +86,6 @@ filter_high_cor.matrix <-
            verbose = FALSE,
            names = TRUE,
            to_keep = NULL) {
-    stop("this method is no longer available. Use `filter_collinear` on the SpatRaster or data.frame")
+    stop("this method is no longer available. Use `filter_collinear` on",
+         " the SpatRaster or data.frame")
   }
