@@ -16,12 +16,12 @@
 #' @param cutoff A numeric value for the pair-wise absolute correlation cutoff
 #' @param verbose A boolean for printing the details
 #' @param to_keep A vector of variable names that we want to force in the set
-#' (note that the function will return an error if the correlation among any of
-#' those variables is higher than the cutoff).
-#' @returns A vector of names of columns that are below the correlation threshold
-#' (when \code{names = TRUE}), otherwise a vector of indices. Note that the indices
-#' are only for numeric variables (i.e. if factors are present, the indices do
-#' not take them into account).
+#'   (note that the function will return an error if the correlation among any
+#'   of those variables is higher than the cutoff).
+#' @returns A vector of names of columns that are below the correlation
+#'   threshold (when \code{names = TRUE}), otherwise a vector of indices. Note
+#'   that the indices are only for numeric variables (i.e. if factors are
+#'   present, the indices do not take them into account).
 #'
 #' @keywords internal
 #' @noRd
@@ -43,21 +43,26 @@ filter_cor_caret <- function(x,
     if (!any(to_keep %in% var_names)) {
       stop("to_keep should only include numeric variables in x")
     }
-    # check that the variables to keep are not too highly correlated to start with
+    # check that the variables to keep are not too highly correlated to start
+    # with
     if (length(to_keep) > 1) {
       x_keep <- x[to_keep, to_keep]
       # diag(x_keep)<-NA
       if (any(x_keep > cutoff, na.rm = TRUE)) {
-        stop("some variables in `to_keep` have a correlation higher than the `cutoff`")
+        stop("some variables in `to_keep` have a correlation higher ",
+             "than the `cutoff`")
       }
       max_cor_vs_keep <-
         apply(abs(x[, to_keep]), 1, max, na.rm = TRUE)
     } else {
-      # if only 1 var to keep, we just need to take the abs value of correlations
+      # if only 1 var to keep, we just need to take the abs value of
+      # correlations
       max_cor_vs_keep <- abs(x[, to_keep])
     }
     # remove variables that are too highly correlated with variables to keep
-    x <- x[!var_names %in% names(which(max_cor_vs_keep > cutoff)), !var_names %in% names(which(max_cor_vs_keep > cutoff))]
+    x <- x[!var_names %in%
+             names(which(max_cor_vs_keep > cutoff)),
+           !var_names %in% names(which(max_cor_vs_keep > cutoff))]
     x <-
       x[!dimnames(x)[[1]] %in% to_keep, !dimnames(x)[[1]] %in% to_keep]
   }
@@ -117,7 +122,7 @@ filter_caret_algorithm <-
         next
       }
       for (j in (i + 1):var_num) {
-        if (!col_to_delete[i] & !col_to_delete[j]) {
+        if (!col_to_delete[i] && !col_to_delete[j]) {
           if (x[i, j] > cutoff) {
             mn1 <- mean(x2[i, ], na.rm = TRUE)
             mn2 <- mean(x2[-j, ], na.rm = TRUE)

@@ -1,16 +1,17 @@
 #' Create explainer from your tidysdm ensembles.
 #'
 #' DALEX is designed to explore and explain the behaviour of Machine Learning
-#' methods. This function creates a DALEX explainer (see [DALEX::explain()]), which can then be queried
-#' by multiple functions from the DALEX package to create explanations of the model.
+#' methods. This function creates a DALEX explainer (see [DALEX::explain()]),
+#' which can then be queried by multiple functions from the DALEX package to
+#' create explanations of the model.
 #'
-#' By default, the response variable is extracted form the ensemble object. Note that, if
-#' the response variable is passed directly,
-#' `y` should be a factor with presence as a reference level. To check that `y` is formatted correctly,
+#' By default, the response variable is extracted form the ensemble object. Note
+#' that, if the response variable is passed directly, `y` should be a factor
+#' with presence as a reference level. To check that `y` is formatted correctly,
 #' use [check_sdm_presence()].
 #' @inheritParams DALEX::explain
-#' @param by_workflow boolean determining whether a list of explainer, one per model,
-#' should be returned instead of a single explainer for the ensemble
+#' @param by_workflow boolean determining whether a list of explainer, one per
+#'   model, should be returned instead of a single explainer for the ensemble
 #' @return explainer object [`DALEX::explain`] ready to work with DALEX
 #' @export
 #' @examples
@@ -285,7 +286,8 @@ explain_simple_ensemble_by_workflow <- function(
       if (is.null(model$pre$actions$recipe$recipe$steps)) {
         data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
       } else {
-        stop("your recipe contains steps; please provide a copy of the original dataset as data argument")
+        stop("your recipe contains steps; please provide a copy of the ",
+             "original dataset as data argument")
       }
     } else {
       data_train <- data
@@ -296,7 +298,6 @@ explain_simple_ensemble_by_workflow <- function(
       data_response <- (as.numeric(y) - 2) * -1
     }
 
-    # browser()
     explainer_list[[i]] <-
       DALEXtra::explain_tidymodels(
         model$workflow[[i]],

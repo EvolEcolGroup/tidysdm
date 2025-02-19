@@ -1,6 +1,7 @@
 #' @keywords internal
 #' @noRd
-filter_vif_step <- function(x, cutoff = 10, verbose = FALSE, to_keep = NULL, size, cor_type = "pearson") {
+filter_vif_step <- function(x, cutoff = 10, verbose = FALSE, to_keep = NULL,
+                            size, cor_type = "pearson") {
   if (is.null(cutoff)) {
     cutoff <- 10
   }
@@ -37,7 +38,8 @@ filter_vif_step <- function(x, cutoff = 10, verbose = FALSE, to_keep = NULL, siz
 
 #' @keywords internal
 #' @noRd
-filter_vif_cor <- function(x, cutoff = 10, verbose = FALSE, to_keep = NULL, size, cor_type = "pearson") {
+filter_vif_cor <- function(x, cutoff = 10, verbose = FALSE,
+                           to_keep = NULL, size, cor_type = "pearson") {
   if (is.null(cutoff)) {
     cutoff <- 0.7
   }
@@ -54,7 +56,8 @@ filter_vif_cor <- function(x, cutoff = 10, verbose = FALSE, to_keep = NULL, size
   # order it by correlation coefficient
   x_cor <- x_cor %>%
     dplyr::arrange(dplyr::desc(.data$cor)) %>%
-    dplyr::filter(!(row %in% to_keep & col %in% to_keep)) # remove comparisons among variables to keep
+    # remove comparisons among variables to keep
+    dplyr::filter(!(row %in% to_keep & col %in% to_keep))
 
   vars_to_remove <- c()
   # work down the highest correlations above cutoff
@@ -109,8 +112,10 @@ vif_fast <- function(data_mat, cols = NULL) {
   var_names <- colnames(data_mat)
   data_mat <- cbind(data_mat, 1) ## convert to a design matrix with an intercept
   vif_one_col <- function(i_col, data_mat) {
-    this_resid <- stats::.lm.fit(data_mat[, -i_col], y = data_mat[, i_col])$residuals
-    return(1 / (sum(this_resid^2) / sum((data_mat[, i_col] - mean(data_mat[, i_col]))^2)))
+    this_resid <- stats::.lm.fit(data_mat[, -i_col], 
+                                 y = data_mat[, i_col])$residuals
+    return(1 / (sum(this_resid^2) / sum((data_mat[, i_col] - 
+                                           mean(data_mat[, i_col]))^2)))
   }
   vif_vector <- sapply(cols, FUN = vif_one_col, data_mat = data_mat)
   names(vif_vector) <- var_names[cols]

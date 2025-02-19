@@ -7,11 +7,10 @@
 #' @return A tibble.
 #' @details
 #'
-#' When applied to a ensemble, the metrics that are returned
-#' do not contain the actual tuning parameter columns and values (unlike when
-#' these collect functions are run on other objects). The reason is that ensembles
-#' contain different types of models or models with different tuning
-#' parameters.
+#' When applied to a ensemble, the metrics that are returned do not contain the
+#' actual tuning parameter columns and values (unlike when these collect
+#' functions are run on other objects). The reason is that ensembles contain
+#' different types of models or models with different tuning parameters.
 #'
 #' @seealso [tune::collect_metrics()]
 #'

@@ -1,46 +1,48 @@
 #' Filter to retain only variables that have low collinearity
 #'
-#' This method finds a subset of variables that have low collinearity. It provides
-#' three methods: `cor_caret`, a stepwise approach to remove variables with a pairwise correlation
-#' above a given cutoff, choosing the variable with the greatest mean correlation (based on the algorithm in `caret::findCorrelation`);
-#' `vif_step`, a stepwise approach to remove variables with an variance inflation factor
-#' above a given cutoff (based on the algorithm in `usdm::vifstep`), and `vif_cor`, a stepwise
-#' approach that, at each step, find the pair of variables with the highest correlation above the cutoff and removes the
-#' one with the largest vif.
-#' such that all have a correlation
-#' below a certain cutoff. There are methods for [`terra::SpatRaster`],
-#' [`data.frame`] and [`matrix`]. For [`terra::SpatRaster`] and `data.frame`, only numeric variables will be
+#' This method finds a subset of variables that have low collinearity. It
+#' provides three methods: `cor_caret`, a stepwise approach to remove variables
+#' with a pairwise correlation above a given cutoff, choosing the variable with
+#' the greatest mean correlation (based on the algorithm in
+#' `caret::findCorrelation`); `vif_step`, a stepwise approach to remove
+#' variables with an variance inflation factor above a given cutoff (based on
+#' the algorithm in `usdm::vifstep`), and `vif_cor`, a stepwise approach that,
+#' at each step, find the pair of variables with the highest correlation above
+#' the cutoff and removes the one with the largest vif. such that all have a
+#' correlation below a certain cutoff. There are methods for
+#' [`terra::SpatRaster`], [`data.frame`] and [`matrix`]. For
+#' [`terra::SpatRaster`] and `data.frame`, only numeric variables will be
 #' considered.
-
 #'
-#' @param x A [`terra::SpatRaster`] or `stars` object, a data.frame (with only numeric
-#' variables)
-#' @param cutoff A numeric value used as a threshold to remove variables.
-#' For, "cor_caret" and "vif_cor",
-#' it is the pair-wise absolute correlation cutoff, which defaults to 0.7. For
-#' "vif_step", it is the variable inflation factor, which defaults to 10
-#' @param verbose A boolean whether additional information should be provided
-#' on the screen
-#' @param names a logical; should the column names be returned `TRUE` or
-#' the column index `FALSE`)?
+#' @param x A [`terra::SpatRaster`] or `stars` object, a data.frame (with only
+#'   numeric variables)
+#' @param cutoff A numeric value used as a threshold to remove variables. For,
+#'   "cor_caret" and "vif_cor", it is the pair-wise absolute correlation cutoff,
+#'   which defaults to 0.7. For "vif_step", it is the variable inflation factor,
+#'   which defaults to 10
+#' @param verbose A boolean whether additional information should be provided on
+#'   the screen
+#' @param names a logical; should the column names be returned `TRUE` or the
+#'   column index `FALSE`)?
 #' @param to_keep A vector of variable names that we want to force in the set
-#' (note that the function will return an error if the correlation among any of
-#' those variables is higher than the cutoff).
+#'   (note that the function will return an error if the correlation among any
+#'   of those variables is higher than the cutoff).
 #' @param method character. One of "cor_caret", "vif_cor" or "vif_step".
-#' @param cor_type character. For methods that use correlation, which type
-#' of correlation: "pearson", "kendall", or "spearman". Defaults to "pearson"
-#' @param max_cells positive integer. The maximum number of cells to be used. If this is smaller than ncell(x), a regular sample of x is used
+#' @param cor_type character. For methods that use correlation, which type of
+#'   correlation: "pearson", "kendall", or "spearman". Defaults to "pearson"
+#' @param max_cells positive integer. The maximum number of cells to be used. If
+#'   this is smaller than ncell(x), a regular sample of x is used
 #' @param ... additional arguments specific to a given object type
-#' @returns A vector of names of columns that are below the correlation threshold
-#' (when \code{names = TRUE}), otherwise a vector of indices. Note that the indices
-#' are only for numeric variables (i.e. if factors are present, the indices do
-#' not take them into account).
-#' @author for `cor_caret`: Original R code by Dong Li, modified by Max Kuhn
-#' and Andrea Manica; for `vif_step` and `vif_cor`, original algorithm by Babak
-#' Naimi, rewritten by Andrea Manica for `tidysdm`
+#' @returns A vector of names of columns that are below the correlation
+#'   threshold (when \code{names = TRUE}), otherwise a vector of indices. Note
+#'   that the indices are only for numeric variables (i.e. if factors are
+#'   present, the indices do not take them into account).
+#' @author for `cor_caret`: Original R code by Dong Li, modified by Max Kuhn and
+#'   Andrea Manica; for `vif_step` and `vif_cor`, original algorithm by Babak
+#'   Naimi, rewritten by Andrea Manica for `tidysdm`
 #' @references Naimi, B., Hamm, N.A.S., Groen, T.A., Skidmore, A.K., and
-#' Toxopeus, A.G. 2014. Where is positional uncertainty a problem for species
-#' distribution modelling?, Ecography 37 (2): 191-203.
+#'   Toxopeus, A.G. 2014. Where is positional uncertainty a problem for species
+#'   distribution modelling?, Ecography 37 (2): 191-203.
 #' @export
 
 filter_collinear <- function(x,
