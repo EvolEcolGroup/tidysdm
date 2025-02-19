@@ -90,7 +90,7 @@ clamp_predictors.SpatRasterDataset <- function(x,
   # check that all variables are present in the raster
   if (!all(names(training) %in% names(x))) {
     stop("`x` is missing the following variables (which are ",
-         "present in `training`): ",
+      "present in `training`): ",
       paste(names(training)[!names(training) %in% terra::varnames(x)]),
       sep = ","
     )

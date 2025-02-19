@@ -1,27 +1,28 @@
 #' Split violin geometry for ggplots
 #'
 #' This geometry displays the density distribution of two groups side by side,
-#' as two halves of a violin. Note that an empty`x` aesthetic has to be provided even
-#' if you want to plot a single variable (see example below).
+#' as two halves of a violin. Note that an empty`x` aesthetic has to be provided
+#' even if you want to plot a single variable (see example below).
 #'
-#' The implementation is based on https://stackoverflow.com/questions/35717353/split-violin-plot-with-ggplot2.
-#' Credit goes to @jan-jlx for providing a complete implementation on StackOverflow, and to
-#' Trang Q. Nguyen for adding the nudge parameter.
+#' The implementation is based on
+#' https://stackoverflow.com/questions/35717353/split-violin-plot-with-ggplot2.
+#' Credit goes to @jan-jlx for providing a complete implementation on
+#' StackOverflow, and to Trang Q. Nguyen for adding the nudge parameter.
 #'
 #' @inheritParams ggplot2::geom_violin
-#' @param stat Use to override the default connection between [ggplot2::geom_violin()]
-#' and [ggplot2::stat_ydensity()].
+#' @param stat Use to override the default connection between
+#'   [ggplot2::geom_violin()] and [ggplot2::stat_ydensity()].
 #' @param nudge Add space between the half-violin and the middle of the space
-#' allotted to a given factor on the x-axis.
+#'   allotted to a given factor on the x-axis.
 #' @returns a [`ggplot2::layer`] object
 #' @examples
 #' data("bradypus", package = "maxnet")
-#' bradypus_tb <- tibble::as_tibble(bradypus) %>% dplyr::mutate(presence = relevel(
-#'   factor(
-#'     dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
-#'   ),
-#'   ref = "presence"
-#' ))
+#' bradypus_tb <- tibble::as_tibble(bradypus) %>%
+#'                 dplyr::mutate(presence = relevel( factor(
+#'                                 dplyr::case_match(presence, 1 ~ "presence",
+#'                                                   0 ~ "absence")),
+#'                               ref = "presence"
+#'                 ))
 #'
 #' ggplot(bradypus_tb, aes(
 #'   x = "",
@@ -92,7 +93,8 @@ GeomSplitViolin <- ggplot2::ggproto(
       newdata[nrow(newdata), ],
       newdata[1, ]
     )
-    newdata[c(1, nrow(newdata) - 1, nrow(newdata)), "x"] <- round(newdata[1, "x"])
+    newdata[c(1, nrow(newdata) - 1, nrow(newdata)),
+            "x"] <- round(newdata[1, "x"])
 
     # now nudge them apart
     newdata$x <- ifelse(newdata$group %% 2 == 1,
