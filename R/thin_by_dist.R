@@ -3,31 +3,35 @@
 #' This function thins a dataset so that only observations that have a distance
 #' from each other greater than "dist_min" are retained.
 #'
-#' Distances are measured in the appropriate units for the projection used. In case
-#' of raw latitude and longitude (e.g. as provided in a data.frame), the crs is set
-#' to WGS84, and units are set to meters.
+#' Distances are measured in the appropriate units for the projection used. In
+#' case of raw latitude and longitude (e.g. as provided in a data.frame), the
+#' crs is set to WGS84, and units are set to meters.
 #'
-#' This function is a modified version of the algorithm in `spThin`, adapted
-#' to work on `sf` objects.
+#' This function is a modified version of the algorithm in `spThin`, adapted to
+#' work on `sf` objects.
 #'
-#' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
-#' These can be defined in `coords`, unless they have standard names
-#' (see details below).
+#' @param data An [`sf::sf`] data frame, or a data frame with coordinate
+#'   variables. These can be defined in `coords`, unless they have standard
+#'   names (see details below).
 #' @param coords A vector of length two giving the names of the "x" and "y"
-#' coordinates, as found in `data`. If left to NULL, the function will
-#' try to guess the columns based on standard names `c("x", "y")`, `c("X","Y")`,
-#'  `c("longitude", "latitude")`, or `c("lon", "lat")`
-#' @param dist_min Minimum distance between points (in units appropriate for
-#' the projection, or meters for lonlat data).
-#' @param dist_method method to compute distance, either "euclidean" or "great_circle".
-#' Defaults to "great_circle", which is more accurate but takes slightly longer.
+#'   coordinates, as found in `data`. If left to NULL, the function will try to
+#'   guess the columns based on standard names `c("x", "y")`, `c("X","Y")`,
+#'   `c("longitude", "latitude")`, or `c("lon", "lat")`
+#' @param dist_min Minimum distance between points (in units appropriate for the
+#'   projection, or meters for lonlat data).
+#' @param dist_method method to compute distance, either "euclidean" or
+#'   "great_circle". Defaults to "great_circle", which is more accurate but
+#'   takes slightly longer.
 #' @returns An object of class [`sf::sf`] or [`data.frame`], the same as "data".
 #' @export
 #' @importFrom rlang :=
 
 # This code is an adaptation of spThin to work on sf objects
 
-thin_by_dist <- function(data, dist_min, coords = NULL, dist_method = c("great_circle", "euclidean")) {
+thin_by_dist <- function(data,
+                         dist_min,
+                         coords = NULL,
+                         dist_method = c("great_circle", "euclidean")) {
   return_dataframe <-
     FALSE # flag whether we need to return a data.frame
   if (!inherits(data, "sf")) {
@@ -37,7 +41,8 @@ thin_by_dist <- function(data, dist_min, coords = NULL, dist_method = c("great_c
     return_dataframe <- TRUE
   }
 
-  # use the proper method of distance calculation by changing projection if necessary
+  # use the proper method of distance calculation by changing projection if
+  # necessary
   dist_method <- match.arg(dist_method)
   if (dist_method == "great_circle") {
     # store the original projection
@@ -102,7 +107,8 @@ thin_by_dist <- function(data, dist_min, coords = NULL, dist_method = c("great_c
 
   if (return_dataframe) {
     thinned_points <- thinned_points %>%
-      dplyr::bind_cols(sf::st_coordinates(thinned_points)) %>% # re-add coordinates
+      # re-add coordinates as columns
+      dplyr::bind_cols(sf::st_coordinates(thinned_points)) %>%
       as.data.frame() %>% # turn it into a data.frame
       dplyr::select(-"geometry") %>% # remove the geometry column
       dplyr::rename("{coords[1]}" := "X", "{coords[2]}" := "Y")

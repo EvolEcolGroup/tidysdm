@@ -1,4 +1,6 @@
-linters: linters_with_defaults() # see vignette("lintr")
+linters: linters_with_defaults(
+    return_linter = NULL
+  )
 exclusions: list(
     "data-raw"
   )
