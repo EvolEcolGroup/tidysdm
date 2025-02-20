@@ -44,7 +44,8 @@ over the background data }
 \item{featuremaxs}{ maximum of each feature, to be used for clamping }
 \item{varmin}{ minimum of each predictor, to be used for clamping }
 \item{varmax}{ maximum of each predictor, to be used for clamping }
-\item{samplemeans}{ mean of each predictor over samples (majority for factors) }
+\item{samplemeans}{ mean of each predictor over samples (majority for
+factors) }
 \item{levels}{ levels of each predictor that is a factor }
 }
 }

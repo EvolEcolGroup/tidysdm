@@ -138,7 +138,8 @@ kap_max_estimator_impl <- function(truth,
                                    event_level,
                                    case_weights) {
   if (!identical(estimator, "binary")) {
-    stop("kap_max is only available for binary classes; multiclass is not supported")
+    stop("kap_max is only available for binary classes; multiclass ",
+         "is not supported")
   }
   # separate estimates into presences and background
   if (identical(event_level, "first")) {
