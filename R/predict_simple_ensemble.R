@@ -1,30 +1,31 @@
 #' Predict for a simple ensemble set
 #'
-#' Predict for a new dataset by using a simple ensemble. Predictions from individual
-#' models (i.e. workflows) are combined according to `fun`
+#' Predict for a new dataset by using a simple ensemble. Predictions from
+#' individual models (i.e. workflows) are combined according to `fun`
 #' @param object an simple_ensemble object
-#' @param new_data a data frame in which to look for variables with which to predict.
-#' If `NULL`, the predictors from the first workflow in the ensemble are used;
-#' note that this only makes sense if all workflows have the same predictors.
+#' @param new_data a data frame in which to look for variables with which to
+#'   predict. If `NULL`, the predictors from the first workflow in the ensemble
+#'   are used; note that this only makes sense if all workflows have the same
+#'   predictors.
 #' @param type the type of prediction, "prob" or "class".
 #' @param fun string defining the aggregating function. It can take values
-#' `mean`, `median`, `weighted_mean`, `weighted_median` and `none`. It is possible
-#' to combine multiple functions, except for "none". If it
-#' is set to "none", only the individual member predictions are returned (this
-#' automatically sets `member` to TRUE)
+#'   `mean`, `median`, `weighted_mean`, `weighted_median` and `none`. It is
+#'   possible to combine multiple functions, except for "none". If it is set to
+#'   "none", only the individual member predictions are returned (this
+#'   automatically sets `member` to TRUE)
 #' @param metric_thresh a vector of length 2 giving a metric and its threshold,
-#' which will be used to prune
-#' which models in the ensemble will be used for the prediction. The 'metrics'
-#' need to have been computed when the workflow was tuned. Examples are
-#' c("accuracy",0.8) or c("boyce_cont",0.7)
+#'   which will be used to prune which models in the ensemble will be used for
+#'   the prediction. The 'metrics' need to have been computed when the workflow
+#'   was tuned. Examples are c("accuracy",0.8) or c("boyce_cont",0.7)
 #' @param class_thresh probability threshold used to convert probabilities into
-#' classes. It can be a number (between 0 and 1), or a character metric (currently
-#' "tss_max" or "sensitivity"). For sensitivity, an additional target value is passed
-#' along as a second element of a vector, e.g. c("sensitivity",0.8).
-#' @param members boolean defining whether individual predictions for each member
-#' should be added to the ensemble prediction. The columns for individual members
-#' have the name of the workflow a a prefix, separated by "." from the usual
-#' column names of the predictions.
+#'   classes. It can be a number (between 0 and 1), or a character metric
+#'   (currently "tss_max" or "sensitivity"). For sensitivity, an additional
+#'   target value is passed along as a second element of a vector, e.g.
+#'   c("sensitivity",0.8).
+#' @param members boolean defining whether individual predictions for each
+#'   member should be added to the ensemble prediction. The columns for
+#'   individual members have the name of the workflow a a prefix, separated by
+#'   "." from the usual column names of the predictions.
 #' @param ... not used in this method.
 #' @returns a tibble of predictions
 #' @method predict simple_ensemble
@@ -59,7 +60,8 @@ predict.simple_ensemble <-
         class_thresh <- 0.5
       }
 
-      # if the class_threshold is not numeric, then we need to ensure the model has been calibrated for the right metric
+      # if the class_threshold is not numeric, then we need to ensure the model
+      # has been calibrated for the right metric
       if (!is.numeric(class_thresh)) {
         # check that we have an entry for this calibration
         ref_calib_tb <- attr(object, "class_thresholds")
@@ -130,7 +132,8 @@ predict.simple_ensemble <-
     # remove every other column (so that we the probability for presences)
     pred_list <- pred_list[, seq(1, ncol(pred_list), by = 2)]
 
-    # filter models if we have a metric_thresh (and create weights based on this metric)
+    # filter models if we have a metric_thresh (and create weights based on this
+    # metric)
     if (!is.null(metric_thresh)) {
       if (!metric_thresh[1] %in% attr(object, "metrics")) {
         stop("'metric_thresh' is not among the metrics estimated for this ensemble")
@@ -146,7 +149,8 @@ predict.simple_ensemble <-
         stop("the current metric_threshold excludes all models")
       }
     } else {
-      # we create weights based on the best_metric used to choose models in workflows
+      # we create weights based on the best_metric used to choose models in
+      # workflows
       metric_ens <-
         dplyr::bind_rows(object$metrics) %>%
         dplyr::filter(.data$.metric == attr(object, "best_metric")) %>%

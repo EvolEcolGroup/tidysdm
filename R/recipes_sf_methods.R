@@ -1,10 +1,14 @@
 #' @export
-prep.spatial_recipe <- function(x, training = NULL, fresh = FALSE, verbose = FALSE,
-                                retain = TRUE, log_changes = FALSE, strings_as_factors = TRUE,
+prep.spatial_recipe <- function(x, training = NULL,
+                                fresh = FALSE,
+                                verbose = FALSE,
+                                retain = TRUE,
+                                log_changes = FALSE,
+                                strings_as_factors = TRUE,
                                 ...) {
   if (!is.null(training)) {
-    # sometimes we have a tibble with a geometry column but not cast into an sf object
-    # (this is the case when running a workflow)
+    # sometimes we have a tibble with a geometry column but not cast into an sf
+    # object (this is the case when running a workflow)
     if (inherits(training, "sf")) {
       geom_col <- attributes(training)$sf_column
     } else {
@@ -34,8 +38,8 @@ prep.spatial_recipe <- function(x, training = NULL, fresh = FALSE, verbose = FAL
 bake.spatial_recipe <- function(object, new_data, ..., composition = "tibble") {
   ## convert_geometry_column
   if (!is.null(new_data)) {
-    # sometimes we have a tibble with a geometry column but not cast into an sf object
-    # (this is the case when running a workflow)
+    # sometimes we have a tibble with a geometry column but not cast into an sf
+    # object (this is the case when running a workflow)
     if (inherits(new_data, "sf")) {
       geom_col <- attributes(new_data)$sf_column
     } else {

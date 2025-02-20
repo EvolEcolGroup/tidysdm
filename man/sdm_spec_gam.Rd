@@ -10,21 +10,22 @@ sdm_spec_gam(..., tune = "none")
 \item{...}{parameters to be passed to \code{\link[parsnip:gen_additive_mod]{parsnip::gen_additive_mod()}} to
 customise the model. See the help of that function for details.}
 
-\item{tune}{character defining the tuning strategy. As there are no hyperparameters
-to tune in a \emph{gam}, the only valid option is "none". This parameter is present
-for consistency with other \verb{sdm_spec_*} functions, but it does nothing in this
-case.}
+\item{tune}{character defining the tuning strategy. As there are no
+hyperparameters to tune in a \emph{gam}, the only valid option is "none". This
+parameter is present for consistency with other \verb{sdm_spec_*} functions, but
+it does nothing in this case.}
 }
 \value{
 a \link[parsnip:model_spec]{parsnip::model_spec} of the model.
 }
 \description{
 This function returns a \link[parsnip:model_spec]{parsnip::model_spec} for a General Additive Model to
-be used as a classifier of presences and absences in Species Distribution Model.
+be used as a classifier of presences and absences in Species Distribution
+Model.
 }
 \details{
-Note that, when using GAMs in a \code{workflow_set()}, it is necessary to
-update the model with \code{\link[=gam_formula]{gam_formula()}} (see \code{\link[parsnip:model_formula]{parsnip::model_formula}} for a
+Note that, when using GAMs in a \code{workflow_set()}, it is necessary to update
+the model with \code{\link[=gam_formula]{gam_formula()}} (see \code{\link[parsnip:model_formula]{parsnip::model_formula}} for a
 discussion of formulas with special terms in \code{tidymodels}):
 \preformatted{
 workflow_set(

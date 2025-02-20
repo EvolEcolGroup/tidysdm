@@ -1,5 +1,6 @@
 test_that("check_sdm_presence gives correct errors", {
-  expect_true(two_class_dat %>% check_sdm_presence(Class, presence_level = "Class1"))
+  expect_true(two_class_dat %>% check_sdm_presence(Class,
+                                                   presence_level = "Class1"))
   expect_error(
     two_class_dat %>% check_sdm_presence(Class, presence_level = "Class2"),
     "level Class2 is not the first"

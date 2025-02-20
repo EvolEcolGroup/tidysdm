@@ -1,12 +1,15 @@
 test_that("clamping_predictor works on SpatRasters", {
   # get current climate and subset to 3 variables
-  climate_present <- terra::readRDS(system.file("extdata/lacerta_climate_present_10m.rds",
+  climate_present <- terra::readRDS(
+    system.file("extdata/lacerta_climate_present_10m.rds",
     package = "tidysdm"
   ))
   climate_present <- climate_present[[c("bio05", "bio13", "bio06", "bio15")]]
-  lacerta_env <- bind_cols(terra::extract(climate_present, lacerta[, c(3, 2)], ID = FALSE))
+  lacerta_env <- bind_cols(terra::extract(climate_present,
+                                          lacerta[, c(3, 2)], ID = FALSE))
   # now get future climate
-  climate_future <- terra::readRDS(system.file("extdata/lacerta_climate_future_10m.rds",
+  climate_future <- terra::readRDS(
+    system.file("extdata/lacerta_climate_future_10m.rds",
     package = "tidysdm"
   ))
   climate_future <- climate_future[[names(climate_present)]]
@@ -16,7 +19,8 @@ test_that("clamping_predictor works on SpatRasters", {
   future_minmax <- terra::minmax(climate_future, compute = TRUE)
   clamped_minmax <- terra::minmax(clamped_raster, compute = TRUE)
   training_minmax <- apply(lacerta_env, 2, range, na.rm = TRUE)
-  # expect that the original raster had more extreme values than the clamped version
+  # expect that the original raster had more extreme values than the clamped
+  # version
   expect_true(all(future_minmax[1, ] <= clamped_minmax[1, ]))
   expect_true(all(future_minmax[2, ] >= clamped_minmax[2, ]))
   # and that it had some more extreme values than the training
@@ -56,13 +60,16 @@ test_that("clamping_predictor works on stars", {
   }
 
   # get current climate and subset to 3 variables
-  climate_present <- terra::readRDS(system.file("extdata/lacerta_climate_present_10m.rds",
+  climate_present <- terra::readRDS(
+    system.file("extdata/lacerta_climate_present_10m.rds",
     package = "tidysdm"
   ))
   climate_present <- climate_present[[c("bio05", "bio13", "bio06", "bio15")]]
-  lacerta_env <- bind_cols(terra::extract(climate_present, lacerta[, c(3, 2)], ID = FALSE))
+  lacerta_env <- bind_cols(terra::extract(climate_present, 
+                                          lacerta[, c(3, 2)], ID = FALSE))
   # now get future climate
-  climate_future <- terra::readRDS(system.file("extdata/lacerta_climate_future_10m.rds",
+  climate_future <- terra::readRDS(
+    system.file("extdata/lacerta_climate_future_10m.rds",
     package = "tidysdm"
   ))
   climate_future <- climate_future[[names(climate_present)]] %>%
@@ -73,7 +80,8 @@ test_that("clamping_predictor works on stars", {
   future_minmax <- min_max(climate_future)
   clamped_minmax <- min_max(clamped_raster)
   training_minmax <- apply(lacerta_env, 2, range, na.rm = TRUE)
-  # expect that the original raster had more extreme values than the clamped version
+  # expect that the original raster had more extreme values than the clamped
+  # version
   expect_true(all(future_minmax[1, ] <= clamped_minmax[1, ]))
   expect_true(all(future_minmax[2, ] >= clamped_minmax[2, ]))
   # and that it had some more extreme values than the training
@@ -83,7 +91,8 @@ test_that("clamping_predictor works on stars", {
   expect_true(all(training_minmax[1, ] <= clamped_minmax[1, ]))
   expect_true(all(training_minmax[2, ] >= clamped_minmax[2, ]))
   # get error for missing variable
-  climate_sub <- climate_present[[1:2]] %>% stars::st_as_stars(as_attributes = TRUE)
+  climate_sub <- climate_present[[1:2]] %>%
+    stars::st_as_stars(as_attributes = TRUE)
   expect_error(
     clamp_predictors(climate_sub, training = lacerta_env),
     "`x` is missing the following"

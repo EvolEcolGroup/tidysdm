@@ -273,7 +273,7 @@ lacerta_stack <-
   add_candidates(lacerta_models) %>%
   # determine how to combine their predictions
   blend_predictions() %>%
-  # fit the candidates with non-zero weights (i.e.non-zero stacking coefficients)
+  # fit candidates with non-zero weights (i.e. non-zero stacking coefficients)
   fit_members()
 
 autoplot(lacerta_stack, type = "weights")

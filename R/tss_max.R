@@ -47,7 +47,7 @@
 #'   of values. For grouped data frames, the number of rows returned will be the
 #'   same as the number of groups.
 #' @family class probability metrics
-#' 
+#'
 #' @examples
 #' tss_max(two_class_example, truth, Class1)
 #'
@@ -130,7 +130,8 @@ tss_max_estimator_impl <- function(truth,
                                    event_level,
                                    case_weights) {
   if (!identical(estimator, "binary")) {
-    stop("tss_max is only available for binary classes; multiclass is not supported")
+    stop("tss_max is only available for binary classes; multiclass is ",
+         "not supported")
   }
   # separate estimates into presences and background
   if (identical(event_level, "first")) {

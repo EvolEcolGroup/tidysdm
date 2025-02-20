@@ -21,15 +21,15 @@ to use for fitting. Currently only "maxnet" is available.}
 \item{feature_classes}{character, continuous feature classes desired, either
 "default" or any subset of "lqpht" (for example, "lh")}
 
-\item{regularization_multiplier}{numeric, a constant to adjust regularization}
+\item{regularization_multiplier}{numeric, a constant to adjust
+regularization}
 }
 \value{
 a \code{\link[parsnip:model_spec]{parsnip::model_spec}} for a \code{maxent} model
 }
 \description{
-\code{maxent} defines the MaxEnt model as used in Species
-Distribution Models.
-A good guide to how options of a MaxEnt model work can be found in
+\code{maxent} defines the MaxEnt model as used in Species Distribution Models. A
+good guide to how options of a MaxEnt model work can be found in
 https://onlinelibrary.wiley.com/doi/full/10.1111/j.1600-0587.2013.07872.x
 }
 \examples{
@@ -49,8 +49,10 @@ bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
 maxent_spec <- maxent(feature_classes = "lq")
 maxent_fitted <- maxent_spec \%>\%
   fit(presence ~ ., data = bradypus_tb)
-pred_prob <- predict(maxent_fitted, new_data = bradypus[, -1], type = "prob")
-pred_class <- predict(maxent_fitted, new_data = bradypus[, -1], type = "class")
+pred_prob <- predict(maxent_fitted, new_data = bradypus[, -1],
+                     type = "prob")
+pred_class <- predict(maxent_fitted, new_data = bradypus[, -1],
+                      type = "class")
 
 # Now with tuning
 maxent_spec <- maxent(

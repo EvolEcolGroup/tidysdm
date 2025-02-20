@@ -2,39 +2,41 @@
 #'
 #' This function thins a dataset so that only one observation per cell per time
 #' slice is retained. We use a raster with layers as time slices to define the
-#' data cube on which thinning is enforced (see details below on how time should be
-#' formatted).
+#' data cube on which thinning is enforced (see details below on how time should
+#' be formatted).
 #'
 #' Further spatial thinning can be achieved by aggregating cells in the raster
-#' before thinning, as achieved by setting `agg_fact` > 1 (aggregation works in a
-#' manner equivalent to [terra::aggregate()]).
-#' Note that if `data` is an `sf` object, the function will transform the coordinates
-#' to the same projection as the `raster` (recommended); if `data` is a data.frame, it is up
-#' to the user to ensure that the coordinates are in the correct units.
+#' before thinning, as achieved by setting `agg_fact` > 1 (aggregation works in
+#' a manner equivalent to [terra::aggregate()]). Note that if `data` is an `sf`
+#' object, the function will transform the coordinates to the same projection as
+#' the `raster` (recommended); if `data` is a data.frame, it is up to the user
+#' to ensure that the coordinates are in the correct units.
 #'
-#' @param data An [`sf::sf`] data frame, or a data frame with coordinate variables.
-#' These can be defined in `coords`, unless they have standard names
-#' (see details below).
-#' @param raster A [`terra::SpatRaster`] or `stars` object that defined the grid with layers
-#' corresponding to the time slices (times should be set as either POSIXlt or
-#'  "years", see [terra::time()] for details), or a [`terra::SpatRasterDataset`]
-#'   where the first dataset will be
-#'  used (again, times for that dataset should be set as either POSIXlt or
-#'  "years")
-#' `terra::time()`
+#' @param data An [`sf::sf`] data frame, or a data frame with coordinate
+#'   variables. These can be defined in `coords`, unless they have standard
+#'   names (see details below).
+#' @param raster A [`terra::SpatRaster`] or `stars` object that defined the grid
+#'   with layers corresponding to the time slices (times should be set as either
+#'   POSIXlt or "years", see [terra::time()] for details), or a
+#'   [`terra::SpatRasterDataset`] where the first dataset will be used (again,
+#'   times for that dataset should be set as either POSIXlt or "years")
+#'   `terra::time()`
 #' @param coords a vector of length two giving the names of the "x" and "y"
-#' coordinates, as found in `data`. If left to NULL, the function will
-#' try to guess the columns based on standard names `c("x", "y")`, `c("X","Y")`,
-#'  `c("longitude", "latitude")`, or `c("lon", "lat")`
-#' @param time_col The name of the column with time; if time is not a lubridate object,
-#' use `lubridate_fun` to provide a function that can be used to convert appropriately
-#' @param lubridate_fun function to convert the time column into a lubridate object
-#' @param drop_na boolean on whether locations that are NA in the raster should be dropped.
-#' @param agg_fact positive integer. Aggregation factor expressed as number of cells
-#' in each direction (horizontally and vertically). Or two integers (horizontal
-#' and vertical aggregation factor) or three integers (when also aggregating over layers).
-#' Defaults to NULL, which implies no aggregation (i.e. thinning is done on the
-#' grid of `raster`)
+#'   coordinates, as found in `data`. If left to NULL, the function will try to
+#'   guess the columns based on standard names `c("x", "y")`, `c("X","Y")`,
+#'   `c("longitude", "latitude")`, or `c("lon", "lat")`
+#' @param time_col The name of the column with time; if time is not a lubridate
+#'   object, use `lubridate_fun` to provide a function that can be used to
+#'   convert appropriately
+#' @param lubridate_fun function to convert the time column into a lubridate
+#'   object
+#' @param drop_na boolean on whether locations that are NA in the raster should
+#'   be dropped.
+#' @param agg_fact positive integer. Aggregation factor expressed as number of
+#'   cells in each direction (horizontally and vertically). Or two integers
+#'   (horizontal and vertical aggregation factor) or three integers (when also
+#'   aggregating over layers). Defaults to NULL, which implies no aggregation
+#'   (i.e. thinning is done on the grid of `raster`)
 #' @returns An object of class [`sf::sf`] or [`data.frame`], the same as "data".
 #' @export
 

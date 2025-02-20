@@ -27,18 +27,22 @@
 #' land_mask <- terra::readRDS(system.file("extdata/lacerta_land_mask.rds",
 #'   package = "tidysdm"
 #' ))
-#' mask_buffer <- make_mask_from_presence(lacerta_sf, method = "buffer", buffer = 60000)
+#' mask_buffer <- make_mask_from_presence(lacerta_sf, method = "buffer", 
+#'                                                    buffer = 60000)
 #' terra::plot(terra::mask(land_mask, mask_buffer))
 #' mask_ch <- make_mask_from_presence(lacerta_sf, method = "convex_hull")
 #' terra::plot(terra::mask(land_mask, mask_ch))
-make_mask_from_presence <- function(data, method = "buffer", buffer = 0, return_sf = FALSE) {
+make_mask_from_presence <- function(data,
+                                    method = "buffer",
+                                    buffer = 0,
+                                    return_sf = FALSE) {
   # Check method
   if (!method %in% c("buffer", "convex_hull")) {
     stop('method must be either "buffer" or "convex_hull"')
   }
 
   # Check buffer
-  if (!is.numeric(buffer) | length(buffer) != 1) {
+  if (!is.numeric(buffer) || length(buffer) != 1) {
     stop("buffer must be a single numeric value")
   }
 

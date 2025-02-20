@@ -7,8 +7,9 @@
 plot_pres_vs_bg(.data, .col)
 }
 \arguments{
-\item{.data}{a \code{\link{data.frame}} (or derived object, such as \code{\link[tibble:tibble]{tibble::tibble}}, or
-\code{\link[sf:sf]{sf::st_sf}}) with values for the bioclimate variables for presences and background}
+\item{.data}{a \code{\link{data.frame}} (or derived object, such as \code{\link[tibble:tibble]{tibble::tibble}},
+or \code{\link[sf:sf]{sf::st_sf}}) with values for the bioclimate variables for presences
+and background}
 
 \item{.col}{the column containing the presences; it assumes presences to be
 the first level of this factor}

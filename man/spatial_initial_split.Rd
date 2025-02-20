@@ -16,13 +16,14 @@ spatial_initial_split(data, prop, strategy, ...)
 \item{...}{parameters to be passed to the \code{strategy}}
 }
 \value{
-An \code{rsplit} object that can be used with the \link[rsample:initial_split]{rsample::training} and \link[rsample:initial_split]{rsample::testing}
-functions to extract the data in each split.
+An \code{rsplit} object that can be used with the \link[rsample:initial_split]{rsample::training} and
+\link[rsample:initial_split]{rsample::testing} functions to extract the data in each split.
 }
 \description{
-\code{spatial_initial_split} creates a single binary split of the data into a training
-set and testing set. All strategies from the package \code{spatialsample} are available;
-a random split from that strategy will be used to generate the initial split.
+\code{spatial_initial_split} creates a single binary split of the data into a
+training set and testing set. All strategies from the package \code{spatialsample}
+are available; a random split from that strategy will be used to generate the
+initial split.
 }
 \examples{
 set.seed(123)

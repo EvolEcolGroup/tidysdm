@@ -1,19 +1,19 @@
 #' Model specification for a Boosted Trees model for SDM
 #'
-#' This function returns a [parsnip::model_spec] for a Boosted Trees model to
-#' be used as a classifier of presences and absences in Species Distribution Model.
-#' It uses the library `xgboost` to fit boosted trees; to use another library, simply build the
-#' [parsnip::model_spec] directly.
+#' This function returns a [parsnip::model_spec] for a Boosted Trees model to be
+#' used as a classifier of presences and absences in Species Distribution Model.
+#' It uses the library `xgboost` to fit boosted trees; to use another library,
+#' simply build the [parsnip::model_spec] directly.
 #'
-#' @param ... parameters to be passed to [parsnip::boost_tree()] to
-#' customise the model. See the help of that function for details.
+#' @param ... parameters to be passed to [parsnip::boost_tree()] to customise
+#'   the model. See the help of that function for details.
 #' @param tune character defining the tuning strategy. Valid strategies are:
 #' * "sdm" chooses hyperparameters that are most important to tune for
-#' an sdm (for *boost_tree*: 'mtry', 'trees', 'tree_depth', 'learn_rate',
-#' 'loss_reduction', and 'stop_iter')
+#'   an sdm (for *boost_tree*: 'mtry', 'trees', 'tree_depth', 'learn_rate',
+#'   'loss_reduction', and 'stop_iter')
 #' * "all" tunes all hyperparameters (for *boost_tree*: 'mtry', 'trees',
-#' 'tree_depth', 'learn_rate',
-#' 'loss_reduction', 'stop_iter','min_n' and 'sample_size')
+#'   'tree_depth', 'learn_rate', 'loss_reduction', 'stop_iter','min_n' and
+#'   'sample_size')
 #' * "custom" passes the options from '...'
 #' * "none" does not tune any hyperparameter
 #' @returns a [parsnip::model_spec] of the model.

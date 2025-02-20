@@ -25,7 +25,8 @@ gam_formula <- function(object, k = 10) {
   if (length(predictors_numeric) > 1) {
     rhs <- paste0("s(", predictors, ", k = ", k, ")", collapse = " + ")
   } else {
-    stop("there are no numeric predictors; a gam does not really make much sense...")
+    stop("there are no numeric predictors; a gam does not really ",
+         "make much sense...")
   }
   predictors_factor <- predictors[!predictors %in% predictors_numeric]
   if (length(predictors_factor)) {
@@ -38,7 +39,8 @@ gam_formula <- function(object, k = 10) {
 #'
 #' This is the counterpart of [rsample::form_pred].
 #'
-#' Note: this might not behave well with functions such as log(y). But neither does form_pred
+#' Note: this might not behave well with functions such as log(y). But neither
+#' does form_pred
 #'
 #' modified from
 #' https://stackoverflow.com/questions/13217322/how-to-reliably-get-dependent-variable-name-from-formula-object

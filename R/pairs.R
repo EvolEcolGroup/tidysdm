@@ -1,6 +1,7 @@
 #' Pairwise matrix of scatterplot for stars objects
 #'
-#' Pairs plot of attributes for `stars` objects. This is equivalent to [terra::pairs()] but works with `stars` objects.
+#' Pairs plot of attributes for `stars` objects. This is equivalent to
+#' [terra::pairs()] but works with `stars` objects.
 #' @inheritParams terra::pairs
 #' @rdname pairs-stars
 #' @export
@@ -13,7 +14,8 @@
 #' pairs(s_stars)
 setMethod(
   "pairs", signature(x = "stars"),
-  function(x, hist = TRUE, cor = TRUE, use = "pairwise.complete.obs", maxcells = 100000, ...) {
+  function(x, hist = TRUE, cor = TRUE, use = "pairwise.complete.obs", 
+           maxcells = 100000, ...) {
     if (length(x) < 2) {
       stop("x must have at least two layers")
     }
@@ -24,10 +26,10 @@ setMethod(
       graphics::par(usr = c(usr[1:2], 0, 1.5))
       h <- hist(x, plot = FALSE)
       breaks <- h$breaks
-      nB <- length(breaks)
+      n_breaks <- length(breaks)
       y <- h$counts
       y <- y / max(y)
-      graphics::rect(breaks[-nB], 0, breaks[-1], y, col = "green")
+      graphics::rect(breaks[-n_breaks], 0, breaks[-1], y, col = "green")
     }
 
     panelcor <- function(x, y, ...) {
@@ -61,14 +63,13 @@ setMethod(
     ) |>
       as.data.frame()
 
-    # d <- spatSample(x, maxcells, method="regular", as.raster=FALSE, warn=FALSE)
-
     dots <- list(...)
     cex <- dots$cex
     main <- dots$main
     if (is.null(cex)) cex <- 0.5
     if (is.null(main)) main <- ""
 
-    graphics::pairs(d, main = main, cex = cex, upper.panel = up, diag.panel = dp)
+    graphics::pairs(d, main = main, cex = cex,
+                    upper.panel = up, diag.panel = dp)
   }
 )

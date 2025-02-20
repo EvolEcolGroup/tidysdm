@@ -7,14 +7,15 @@
 sdm_spec_maxent(..., tune = c("sdm", "all", "custom", "none"))
 }
 \arguments{
-\item{...}{parameters to be passed to \code{\link[=maxent]{maxent()}} to
-customise the model. See the help of that function for details.}
+\item{...}{parameters to be passed to \code{\link[=maxent]{maxent()}} to customise the model. See
+the help of that function for details.}
 
 \item{tune}{character defining the tuning strategy. Valid strategies are:
 \itemize{
 \item "sdm" chooses hyper-parameters that are most important to tune for
 an sdm (for \emph{maxent}, 'feature_classes' and 'regularization_multiplier')
-\item "all" tunes all hyperparameters (for \emph{maxent}, 'feature_classes' and 'regularization_multiplier', the same as with tune = "sdm")
+\item "all" tunes all hyperparameters (for \emph{maxent}, 'feature_classes' and
+'regularization_multiplier', the same as with tune = "sdm")
 \item "custom" passes the options from '...'
 \item "none" does not tune any hyperparameter
 }}
@@ -23,9 +24,8 @@ an sdm (for \emph{maxent}, 'feature_classes' and 'regularization_multiplier')
 a \link[parsnip:model_spec]{parsnip::model_spec} of the model.
 }
 \description{
-This function returns a \link[parsnip:model_spec]{parsnip::model_spec} for a MaxEnt model to
-be used in Species Distribution
-Models.
+This function returns a \link[parsnip:model_spec]{parsnip::model_spec} for a MaxEnt model to be used
+in Species Distribution Models.
 }
 \examples{
 test_maxent_spec <- sdm_spec_maxent(tune = "sdm")

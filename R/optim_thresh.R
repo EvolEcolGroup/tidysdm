@@ -59,8 +59,8 @@ optim_thresh <- function(truth, estimate, metric, event_level = "first") {
 
 #' Find threshold that gives a target sensitivity
 #'
-#' This is an internal function returns the threshold to turn probabilities into binary classes
-#' for a given target sensitivity
+#' This is an internal function returns the threshold to turn probabilities into
+#' binary classes for a given target sensitivity
 #' @param presences Probabilities for presences.
 #' @param absences Provabilities for absences
 #' @param sens_target the target sensitivity
@@ -74,8 +74,8 @@ optim_thresh_sens <- function(presences, absences, sens_target) {
 
 #' Find threshold that maximises TSS
 #'
-#' This is an internal function returns the threshold to turn probabilities into binary classes
-#' to maximise TSS
+#' This is an internal function returns the threshold to turn probabilities into
+#' binary classes to maximise TSS
 #' @param presences Probabilities for presences.
 #' @param absences Provabilities for absences
 #' @returns the probability threshold for the event
@@ -91,8 +91,8 @@ optim_thresh_tss_max <- function(presences, absences) {
 
 #' Find threshold that maximises Kappa
 #'
-#' This is an internal function returns the threshold to turn probabilities into binary classes
-#' to maximise kappa
+#' This is an internal function returns the threshold to turn probabilities into
+#' binary classes to maximise kappa
 #' @param presences Probabilities for presences.
 #' @param absences Provabilities for absences
 #' @returns the probability threshold for the event
@@ -102,9 +102,9 @@ optim_thresh_kap_max <- function(presences, absences) {
   n <- rowSums(conf_matrix_df[, 2:5])
   obs_accuracy <- (conf_matrix_df$tp + conf_matrix_df$tn) / n
   exp_accuracy <- (((conf_matrix_df$tn + conf_matrix_df$fp) *
-    (conf_matrix_df$tn + conf_matrix_df$fn) / n) +
-    ((conf_matrix_df$tp + conf_matrix_df$fn) *
-      (conf_matrix_df$tp + conf_matrix_df$fp) / n)) / n
+                      (conf_matrix_df$tn + conf_matrix_df$fn) / n) +
+                     ((conf_matrix_df$tp + conf_matrix_df$fn) *
+                        (conf_matrix_df$tp + conf_matrix_df$fp) / n)) / n
   kap <- (obs_accuracy - exp_accuracy) / (1 - exp_accuracy)
   return(conf_matrix_df$thresh[which.max(kap)])
 }
