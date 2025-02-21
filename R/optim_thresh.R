@@ -103,10 +103,16 @@ optim_thresh_kap_max <- function(presences, absences) {
   conf_matrix_df <- conf_matrix_df(presences, absences)
   n <- rowSums(conf_matrix_df[, 2:5])
   obs_accuracy <- (conf_matrix_df$tp + conf_matrix_df$tn) / n
-  exp_accuracy <- (((conf_matrix_df$tn + conf_matrix_df$fp) *
-    (conf_matrix_df$tn + conf_matrix_df$fn) / n) +
-    ((conf_matrix_df$tp + conf_matrix_df$fn) *
-      (conf_matrix_df$tp + conf_matrix_df$fp) / n)) / n
+  exp_accuracy <- (
+    (
+      (conf_matrix_df$tn + conf_matrix_df$fp) *
+        (conf_matrix_df$tn + conf_matrix_df$fn) / n
+    ) +
+      (
+        (conf_matrix_df$tp + conf_matrix_df$fn) *
+          (conf_matrix_df$tp + conf_matrix_df$fp) / n
+      )
+  ) / n
   kap <- (obs_accuracy - exp_accuracy) / (1 - exp_accuracy)
   return(conf_matrix_df$thresh[which.max(kap)])
 }
