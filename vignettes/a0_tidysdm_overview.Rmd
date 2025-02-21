@@ -195,7 +195,8 @@ To define our projection within the code, we will use a proj4 string, which prov
 In this case, we will use a Albers Equal Area Conic projection centred on the Iberian peninsula, with km as units. The proj4 string is:
 
 ```{r}
-iberia_proj4 <- "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+iberia_proj4 <-
+  "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
 ```
 
 For rasters (maps), we use the `terra` function `project` to change the CRS. We pass the raster object and the proj4 string as arguments:
@@ -377,14 +378,19 @@ climate_present <- pastclim::region_slice(
 ```
 
 ```{r echo=FALSE, results='hide', eval=create_sample_data}
-terra::saveRDS(climate_present, "../inst/extdata/lacerta_climate_present_10m.rds")
+terra::saveRDS(
+  climate_present,
+  "../inst/extdata/lacerta_climate_present_10m.rds"
+)
 ```
 
 
 ```{r echo=FALSE, results='hide', eval=!download_data}
-climate_present <- terra::readRDS(system.file("extdata/lacerta_climate_present_10m.rds",
-  package = "tidysdm"
-))
+climate_present <- terra::readRDS(
+  system.file("extdata/lacerta_climate_present_10m.rds",
+    package = "tidysdm"
+  )
+)
 climate_vars <- names(climate_present)
 ```
 
@@ -468,7 +474,10 @@ correlation (e.g. 0.7) with:
 ```{r choose_var_cor_keep}
 climate_present <- climate_present[[suggested_vars]]
 
-vars_uncor <- filter_collinear(climate_present, cutoff = 0.7, method = "cor_caret")
+vars_uncor <- filter_collinear(climate_present,
+  cutoff = 0.7,
+  method = "cor_caret"
+)
 vars_uncor
 ```
 
@@ -480,7 +489,7 @@ variables.
 ```{r}
 lacerta_thin <- lacerta_thin %>% select(all_of(c(vars_uncor, "class")))
 climate_present <- climate_present[[vars_uncor]]
-names(climate_present) # added to highlight which variables are retained in the end
+names(climate_present) # variables retained in the end
 ```
 
 # Fit the model by cross-validation
@@ -724,13 +733,18 @@ climate_future <- pastclim::region_slice(
 ```
 
 ```{r echo=FALSE, results='hide', eval=create_sample_data}
-terra::saveRDS(climate_future, "../inst/extdata/lacerta_climate_future_10m.rds")
+terra::saveRDS(
+  climate_future,
+  "../inst/extdata/lacerta_climate_future_10m.rds"
+)
 ```
 
 ```{r echo=FALSE, results='asis', eval=!download_data}
-climate_future <- terra::readRDS(system.file("extdata/lacerta_climate_future_10m.rds",
-  package = "tidysdm"
-))
+climate_future <- terra::readRDS(
+  system.file("extdata/lacerta_climate_future_10m.rds",
+    package = "tidysdm"
+  )
+)
 ```
 
 Project the climatic raster with the same projection that we have been using for the

@@ -116,7 +116,7 @@ vif_fast <- function(data_mat, cols = NULL) {
       y = data_mat[, i_col]
     )$residuals
     return(1 / (sum(this_resid^2) /
-      sum((data_mat[, i_col] - mean(data_mat[, i_col]))^2))) #nolint
+      sum((data_mat[, i_col] - mean(data_mat[, i_col]))^2))) # nolint
   }
   vif_vector <- sapply(cols, FUN = vif_one_col, data_mat = data_mat)
   names(vif_vector) <- var_names[cols]
