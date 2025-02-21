@@ -6,9 +6,6 @@ vignette: >
   %\VignetteIndexEntry{tidysdm overview}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  markdown: 
-    wrap: 72
 ---
 
 ```{r, include = FALSE}
@@ -559,10 +556,8 @@ function `blockcv2rsample`.
 
 ```{r training_cv, fig.width=6, fig.height=4}
 library(tidysdm)
-set.seed(100)
-# lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
-
-lacerta_cv <- spatial_block_cv(data = lacerta_thin, v = 3, n = 5)
+set.seed(105)
+lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
 autoplot(lacerta_cv)
 ```
 
@@ -589,8 +584,8 @@ autoplot(lacerta_models)
 ```
 
 Now let's create an ensemble, selecting the best set of parameters for
-each model (this is really only relevant for the random forest, as there
-were not hype-parameters to tune for the *glm* and *gam*). We will use
+each model (this is really only relevant for the ML algorithms, as there
+were not hype-parameters to tune for the *glm*). We will use
 the Boyce continuous index as our metric to choose the best random
 forest and boosted tree. When adding members to an ensemble, they are
 automatically fitted to the full training dataset, and so ready to make
@@ -633,7 +628,7 @@ ggplot() +
 ```
 
 We can subset the ensemble to only use the best models, based on the
-Boyce continuous index, by setting a minimum threshold of 0.6 for that
+Boyce continuous index, by setting a minimum threshold of 0.5 for that
 metric (this is somewhat low, for a real analysis we would recommend a higher value
 of 0.7 or higher). We will also take the median of the available model predictions
 (instead of the mean, which is the default). The plot does not change
@@ -641,7 +636,7 @@ much (the models are quite consistent).
 
 ```{r plot_present_best, fig.width=6, fig.height=4}
 prediction_present_boyce <- predict_raster(lacerta_ensemble, climate_present,
-  metric_thresh = c("boyce_cont", 0.6),
+  metric_thresh = c("boyce_cont", 0.5),
   fun = "median"
 )
 ggplot() +
@@ -659,7 +654,7 @@ classes (in this case, we optimise the TSS):
 ```{r}
 lacerta_ensemble <- calib_class_thresh(lacerta_ensemble,
   class_thresh = "tss_max",
-  metric_thresh = c("boyce_cont", 0.6)
+  metric_thresh = c("boyce_cont", 0.5)
 )
 ```
 
@@ -670,7 +665,7 @@ prediction_present_binary <- predict_raster(lacerta_ensemble,
   climate_present,
   type = "class",
   class_thresh = c("tss_max"),
-  metric_thresh = c("boyce_cont", 0.6)
+  metric_thresh = c("boyce_cont", 0.5)
 )
 ggplot() +
   geom_spatraster(data = prediction_present_binary, aes(fill = binary_mean)) +
@@ -906,7 +901,7 @@ for (i_repeat in 1:3) {
   lacerta_thin_rep <- lacerta_thin_rep %>%
     bind_cols(terra::extract(climate_present, lacerta_thin_rep, ID = FALSE))
   # create folds
-  lacerta_thin_rep_cv <- spatial_block_cv(lacerta_thin_rep, v = 3, n = 5)
+  lacerta_thin_rep_cv <- spatial_block_cv(lacerta_thin_rep, v = 5)
   # create a recipe
   lacerta_thin_rep_rec <- recipe(lacerta_thin_rep, formula = class ~ .)
   # create a workflow_set
