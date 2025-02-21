@@ -108,7 +108,7 @@ vignette.</p>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Search for functions across packages at <span style="color: #00BB00;">https://www.tidymodels.org/find/</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Use <span style="color: #00BB00;">tidymodels_prefer()</span> to resolve common conflicts.</span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span>
 <span><span class="va">lacerta_ensemble</span></span>
 <span><span class="co">#&gt; A simple_ensemble of models</span></span>
@@ -142,9 +142,9 @@ generate our explainer:</p>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidysdm , ver. 0.9.6.90057 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.02638562 , mean =  0.2951438 , max =  0.7778588  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.06923795 , mean =  0.3120366 , max =  0.7425985  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.6797394 , mean =  -0.04514377 , max =  0.7720678  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.6522011 , mean =  -0.06203659 , max =  0.7578909  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span></code></pre></div>
 <p>Now that we have our explainer, we can explore variable importance
 for the ensemble:</p>
@@ -213,9 +213,9 @@ ensemble:</p>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.2.0 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.2205058 , mean =  0.7324831 , max =  0.9634812  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.346187 , mean =  0.625061 , max =  0.7453015  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9634812 , mean =  -0.4824831 , max =  0.7794942  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.7453015 , mean =  -0.375061 , max =  0.653813  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span>
 <span><span class="co">#&gt; Warning: Unknown or uninitialised column: `pre`.</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
@@ -227,9 +227,9 @@ ensemble:</p>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.2.0 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.03884931 , mean =  0.5873206 , max =  0.9584494  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.1413389 , mean =  0.6271714 , max =  0.9952112  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9584494 , mean =  -0.3373206 , max =  0.9233736  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9952112 , mean =  -0.3771714 , max =  0.8586611  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span></code></pre></div>
 <p>The resulting list can be then used to build lists of explanations,
 which can then be plotted.</p>
@@ -290,7 +290,7 @@ introduce this if you encounter an error.</p>
 <span><span class="va">lacerta_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">lacerta_training</span>,</span>
 <span>  v <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  cellsize <span class="op">=</span> <span class="fu"><a href="../reference/grid_cellsize.html">grid_cellsize</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span>,</span>
-<span>  offset <span class="op">=</span> <span class="fu"><a href="../reference/grid_offset.html">grid_offset</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span><span class="op">+</span><span class="fl">0.00001</span></span>
+<span>  offset <span class="op">=</span> <span class="fu"><a href="../reference/grid_offset.html">grid_offset</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.00001</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a2_tidymodels_additions_files/figure-html/training_cv-1.png" width="576"></p>
@@ -404,11 +404,11 @@ variables in the dataset. So, before tuning, we need to finalise
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (337ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (318ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 3 tuning:     all_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (20.3s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 3 tuning:     all_svm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (24.8s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (25.3s)</span></span></span></code></pre></div>
 <p>We can have a look at the performance of our models with:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_models</span><span class="op">)</span></span></code></pre></div>
@@ -432,7 +432,7 @@ same algorithm with different hyper-parameters.</p>
 <span>  <span class="fu"><a href="https://stacks.tidymodels.org/reference/add_candidates.html" class="external-link">add_candidates</a></span><span class="op">(</span><span class="va">lacerta_models</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># determine how to combine their predictions</span></span>
 <span>  <span class="fu"><a href="https://stacks.tidymodels.org/reference/blend_predictions.html" class="external-link">blend_predictions</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="co"># fit the candidates with non-zero weights (i.e.non-zero stacking coefficients)</span></span>
+<span>  <span class="co"># fit candidates with non-zero weights (i.e. non-zero stacking coefficients)</span></span>
 <span>  <span class="fu"><a href="https://stacks.tidymodels.org/reference/fit_members.html" class="external-link">fit_members</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_stack</span>, type <span class="op">=</span> <span class="st">"weights"</span><span class="op">)</span></span></code></pre></div>
@@ -506,8 +506,9 @@ function.</p>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># create a topography variable with 3 levels based on altitude</span></span>
 <span><span class="va">lacerta_thin</span><span class="op">$</span><span class="va">topography</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">$</span><span class="va">altitude</span>,</span>
-<span>                breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">200</span>, <span class="fl">800</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
-<span>                labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plains"</span>, <span class="st">"hills"</span>, <span class="st">"mountains"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">200</span>, <span class="fl">800</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plains"</span>, <span class="st">"hills"</span>, <span class="st">"mountains"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">$</span><span class="va">topography</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    plains     hills mountains </span></span>
@@ -516,7 +517,10 @@ function.</p>
 for the <code>topography</code> variable.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># subset to variable of interest</span></span>
-<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">class</span>, <span class="va">bio05</span>, <span class="va">bio06</span>, <span class="va">bio12</span>, <span class="va">bio15</span>, <span class="va">topography</span><span class="op">)</span></span>
+<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>  <span class="va">class</span>, <span class="va">bio05</span>, <span class="va">bio06</span>, <span class="va">bio12</span>,</span>
+<span>  <span class="va">bio15</span>, <span class="va">topography</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lacerta_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula <span class="op">=</span> <span class="va">class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">step_dummy</span><span class="op">(</span><span class="va">topography</span><span class="op">)</span></span>
@@ -597,7 +601,7 @@ baking the recipe:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (205ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (217ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (1.3s)</span></span></span>
@@ -632,11 +636,18 @@ Peninsula using the ensemble. Note that, for
 categorical variable need to match with those used when training the
 models (i.e. in the recipe with <code>step_dummy()</code>):</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">climate_present</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_present_10m.rds"</span>,</span>
-<span>                                              package <span class="op">=</span> <span class="st">"tidysdm"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">climate_present</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_present_10m.rds"</span>,</span>
+<span>    package <span class="op">=</span> <span class="st">"tidysdm"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co"># first we add a topography variable to the climate data</span></span>
 <span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span> <span class="op">&lt;-</span> <span class="va">climate_present</span><span class="op">$</span><span class="va">altitude</span></span>
-<span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/classify.html" class="external-link">classify</a></span><span class="op">(</span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span>, rcl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">200</span>, <span class="fl">800</span>, <span class="cn">Inf</span><span class="op">)</span>, include.lowest<span class="op">=</span><span class="cn">TRUE</span>, brackets<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/classify.html" class="external-link">classify</a></span><span class="op">(</span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span>,</span>
+<span>  rcl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">200</span>, <span class="fl">800</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>  include.lowest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  brackets <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; terra 1.8.21</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -653,7 +664,8 @@ models (i.e. in the recipe with <code>step_dummy()</code>):</p>
 <span><span class="co">#&gt; The following object is masked from 'package:scales':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     rescale</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span><span class="op">)</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>, topography <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plains"</span>, <span class="st">"hills"</span>, <span class="st">"mountains"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span><span class="op">)</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, topography <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plains"</span>, <span class="st">"hills"</span>, <span class="st">"mountains"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># now we can predict</span></span>
 <span><span class="va">predict_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span>, <span class="va">climate_present</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">predict_factor</span><span class="op">)</span></span></code></pre></div>
