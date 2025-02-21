@@ -65,17 +65,16 @@ make_maxent <- function() {
         tibble::tibble(class = class_vect)
       },
       func = c(pkg = "tidysdm", fun = "maxnet_predict"),
-      args =
+      args = list(
+        # We don't want the first two arguments evaluated right now
+        # since they don't exist yet. `type` is a simple object that
+        # doesn't need to have its evaluation deferred.
+        object = quote(object$fit),
+        newdata = quote(new_data),
+        type = "class"
+      )
       # These lists should be of the form:
       # {predict.maxnet argument name} = {values provided from parsnip objects}
-        list(
-          # We don't want the first two arguments evaluated right now
-          # since they don't exist yet. `type` is a simple object that
-          # doesn't need to have its evaluation deferred.
-          object = quote(object$fit),
-          newdata = quote(new_data),
-          type = "class"
-        )
     )
 
   parsnip::set_pred(

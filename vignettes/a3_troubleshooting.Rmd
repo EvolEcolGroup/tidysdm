@@ -14,8 +14,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 # set options to limit threads used by imported libraries
-options(cores=2)
-options(mc.cores=2)
+options(cores = 2)
+options(mc.cores = 2)
 # xgboost uses data.table
 data.table::setDTthreads(2)
 ```
@@ -235,7 +235,7 @@ lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
 ))
 set.seed(123)
 lacerta_thin <- lacerta_thin[sample(
-  1:nrow(lacerta_thin),
+  seq_len(nrow(lacerta_thin)),
   nrow(lacerta_thin) / 5
 ), ]
 

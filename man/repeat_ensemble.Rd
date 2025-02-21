@@ -14,8 +14,8 @@ object. Members are added with \code{add_best_candidates()}}
 an empty \code{repeat_ensemble}
 }
 \description{
-An ensemble based multiple sets of pseudoabsences/background. This object
-is a collection (list) of \code{\link{simple_ensemble}} objects for which predictions will
+An ensemble based multiple sets of pseudoabsences/background. This object is
+a collection (list) of \code{\link{simple_ensemble}} objects for which predictions will
 be combined in a simple way (e.g. by taking either the mean or median). Each
 \code{\link{simple_ensemble}} contains the best version of a each given model type
 following turning; all simple ensembles will need to have the same metric

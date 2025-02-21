@@ -19,16 +19,18 @@ clamp_predictors(x, training, .col, use_na)
 \method{clamp_predictors}{SpatRasterDataset}(x, training, .col, use_na = FALSE)
 }
 \arguments{
-\item{x}{a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{stars} or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} to clamp.}
+\item{x}{a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{stars} or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} to
+clamp.}
 
-\item{training}{the training dataset (a \code{\link{data.frame}} or a \code{\link[sf:sf]{sf::sf}} object.}
+\item{training}{the training dataset (a \code{\link{data.frame}} or a \code{\link[sf:sf]{sf::sf}}
+object.}
 
-\item{.col}{the column containing the presences (optional). If specified,
-it is excluded from the clamping.}
+\item{.col}{the column containing the presences (optional). If specified, it
+is excluded from the clamping.}
 
-\item{use_na}{a boolean determining whether values outside the range
-of the training dataset are removed (set to NA). If FALSE (the default),
-values outside the training range are replaced with the extremes of the training
+\item{use_na}{a boolean determining whether values outside the range of the
+training dataset are removed (set to NA). If FALSE (the default), values
+outside the training range are replaced with the extremes of the training
 range.}
 
 \item{...}{additional arguments specific to a given object type}
@@ -39,7 +41,7 @@ the ranges in \code{training}
 }
 \description{
 This function clamps the environmental variables in a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}
-or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} so that their minimum and maximum values
-do not exceed the range in the training dataset.
+or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} so that their minimum and maximum values do
+not exceed the range in the training dataset.
 }
 \keyword{extrapolation}

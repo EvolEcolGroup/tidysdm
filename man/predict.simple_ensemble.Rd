@@ -18,33 +18,34 @@
 \arguments{
 \item{object}{an simple_ensemble object}
 
-\item{new_data}{a data frame in which to look for variables with which to predict.
-If \code{NULL}, the predictors from the first workflow in the ensemble are used;
-note that this only makes sense if all workflows have the same predictors.}
+\item{new_data}{a data frame in which to look for variables with which to
+predict. If \code{NULL}, the predictors from the first workflow in the ensemble
+are used; note that this only makes sense if all workflows have the same
+predictors.}
 
 \item{type}{the type of prediction, "prob" or "class".}
 
 \item{fun}{string defining the aggregating function. It can take values
-\code{mean}, \code{median}, \code{weighted_mean}, \code{weighted_median} and \code{none}. It is possible
-to combine multiple functions, except for "none". If it
-is set to "none", only the individual member predictions are returned (this
+\code{mean}, \code{median}, \code{weighted_mean}, \code{weighted_median} and \code{none}. It is
+possible to combine multiple functions, except for "none". If it is set to
+"none", only the individual member predictions are returned (this
 automatically sets \code{member} to TRUE)}
 
 \item{metric_thresh}{a vector of length 2 giving a metric and its threshold,
-which will be used to prune
-which models in the ensemble will be used for the prediction. The 'metrics'
-need to have been computed when the workflow was tuned. Examples are
-c("accuracy",0.8) or c("boyce_cont",0.7)}
+which will be used to prune which models in the ensemble will be used for
+the prediction. The 'metrics' need to have been computed when the workflow
+was tuned. Examples are c("accuracy",0.8) or c("boyce_cont",0.7)}
 
 \item{class_thresh}{probability threshold used to convert probabilities into
-classes. It can be a number (between 0 and 1), or a character metric (currently
-"tss_max" or "sensitivity"). For sensitivity, an additional target value is passed
-along as a second element of a vector, e.g. c("sensitivity",0.8).}
+classes. It can be a number (between 0 and 1), or a character metric
+(currently "tss_max" or "sensitivity"). For sensitivity, an additional
+target value is passed along as a second element of a vector, e.g.
+c("sensitivity",0.8).}
 
-\item{members}{boolean defining whether individual predictions for each member
-should be added to the ensemble prediction. The columns for individual members
-have the name of the workflow a a prefix, separated by "." from the usual
-column names of the predictions.}
+\item{members}{boolean defining whether individual predictions for each
+member should be added to the ensemble prediction. The columns for
+individual members have the name of the workflow a a prefix, separated by
+"." from the usual column names of the predictions.}
 
 \item{...}{not used in this method.}
 }
@@ -52,7 +53,7 @@ column names of the predictions.}
 a tibble of predictions
 }
 \description{
-Predict for a new dataset by using a simple ensemble. Predictions from individual
-models (i.e. workflows) are combined according to \code{fun}
+Predict for a new dataset by using a simple ensemble. Predictions from
+individual models (i.e. workflows) are combined according to \code{fun}
 }
 \keyword{predict}

@@ -15,7 +15,7 @@ optim_thresh_tss_max(presences, absences)
 the probability threshold for the event
 }
 \description{
-This is an internal function returns the threshold to turn probabilities into binary classes
-to maximise TSS
+This is an internal function returns the threshold to turn probabilities into
+binary classes to maximise TSS
 }
 \keyword{internal}

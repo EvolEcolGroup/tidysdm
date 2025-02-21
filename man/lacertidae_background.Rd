@@ -16,8 +16,7 @@ An \code{tibble} with 1,297 rows and 3 variables:
 lacertidae_background
 }
 \description{
-Coordinates for presences of lacertidae, used as background for the \code{\link{lacerta}}
-dataset.. The variables are as
-follows:
+Coordinates for presences of lacertidae, used as background for the
+\code{\link{lacerta}} dataset.. The variables are as follows:
 }
 \keyword{datasets}

@@ -12,20 +12,21 @@ thin_by_dist(
 )
 }
 \arguments{
-\item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with coordinate variables.
-These can be defined in \code{coords}, unless they have standard names
-(see details below).}
+\item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with coordinate
+variables. These can be defined in \code{coords}, unless they have standard
+names (see details below).}
 
-\item{dist_min}{Minimum distance between points (in units appropriate for
-the projection, or meters for lonlat data).}
+\item{dist_min}{Minimum distance between points (in units appropriate for the
+projection, or meters for lonlat data).}
 
 \item{coords}{A vector of length two giving the names of the "x" and "y"
-coordinates, as found in \code{data}. If left to NULL, the function will
-try to guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
+coordinates, as found in \code{data}. If left to NULL, the function will try to
+guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
 \code{c("longitude", "latitude")}, or \code{c("lon", "lat")}}
 
-\item{dist_method}{method to compute distance, either "euclidean" or "great_circle".
-Defaults to "great_circle", which is more accurate but takes slightly longer.}
+\item{dist_method}{method to compute distance, either "euclidean" or
+"great_circle". Defaults to "great_circle", which is more accurate but
+takes slightly longer.}
 }
 \value{
 An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link{data.frame}}, the same as "data".
@@ -35,10 +36,10 @@ This function thins a dataset so that only observations that have a distance
 from each other greater than "dist_min" are retained.
 }
 \details{
-Distances are measured in the appropriate units for the projection used. In case
-of raw latitude and longitude (e.g. as provided in a data.frame), the crs is set
-to WGS84, and units are set to meters.
+Distances are measured in the appropriate units for the projection used. In
+case of raw latitude and longitude (e.g. as provided in a data.frame), the
+crs is set to WGS84, and units are set to meters.
 
-This function is a modified version of the algorithm in \code{spThin}, adapted
-to work on \code{sf} objects.
+This function is a modified version of the algorithm in \code{spThin}, adapted to
+work on \code{sf} objects.
 }

@@ -1,15 +1,15 @@
 #' Model specification for a MaxEnt for SDM
 #'
-#' This function returns a [parsnip::model_spec] for a MaxEnt model to
-#' be used in Species Distribution
-#' Models.
+#' This function returns a [parsnip::model_spec] for a MaxEnt model to be used
+#' in Species Distribution Models.
 #'
-#' @param ... parameters to be passed to [maxent()] to
-#' customise the model. See the help of that function for details.
+#' @param ... parameters to be passed to [maxent()] to customise the model. See
+#'   the help of that function for details.
 #' @param tune character defining the tuning strategy. Valid strategies are:
 #' * "sdm" chooses hyper-parameters that are most important to tune for
-#' an sdm (for *maxent*, 'feature_classes' and 'regularization_multiplier')
-#' * "all" tunes all hyperparameters (for *maxent*, 'feature_classes' and 'regularization_multiplier', the same as with tune = "sdm")
+#'   an sdm (for *maxent*, 'feature_classes' and 'regularization_multiplier')
+#' * "all" tunes all hyperparameters (for *maxent*, 'feature_classes' and
+#'  'regularization_multiplier', the same as with tune = "sdm")
 #' * "custom" passes the options from '...'
 #' * "none" does not tune any hyperparameter
 #' @returns a [parsnip::model_spec] of the model.
@@ -35,7 +35,7 @@ sdm_spec_maxent <- function(..., tune = c("sdm", "all", "custom", "none")) {
       regularization_multiplier = tune::tune(),
       ...
     )
-  } else if ((tune == "custom") | (tune == "none")) {
+  } else if ((tune == "custom") || (tune == "none")) {
     base_spec <- maxent(...)
   }
   base_spec

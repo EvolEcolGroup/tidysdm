@@ -27,13 +27,14 @@
 \item{...}{additional arguments (graphical parameters)}
 }
 \description{
-Pairs plot of attributes for \code{stars} objects. This is equivalent to \code{\link[terra:pairs]{terra::pairs()}} but works with \code{stars} objects.
+Pairs plot of attributes for \code{stars} objects. This is equivalent to
+\code{\link[terra:pairs]{terra::pairs()}} but works with \code{stars} objects.
 }
 \examples{
-r <-terra::rast(system.file("ex/elev.tif", package="terra"))
-s <- c(r, 1/r, sqrt(r))
+r <- terra::rast(system.file("ex/elev.tif", package = "terra"))
+s <- c(r, 1 / r, sqrt(r))
 names(s) <- c("elevation", "inverse", "sqrt")
 terra::pairs(s)
-s_stars <- stars::st_as_stars(s, as_attributes=TRUE)
+s_stars <- stars::st_as_stars(s, as_attributes = TRUE)
 pairs(s_stars)
 }

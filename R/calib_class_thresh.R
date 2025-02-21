@@ -1,17 +1,18 @@
 #' Calibrate class thresholds
 #'
-#' Predict for a new dataset by using a simple ensemble. Predictions from individual
-#' models are combined according to `fun`
+#' Predict for a new dataset by using a simple ensemble. Predictions from
+#' individual models are combined according to `fun`
 #' @param object an simple_ensemble object
 #' @param metric_thresh a vector of length 2 giving a metric and its threshold,
-#' which will be used to prune
-#' which models in the ensemble will be used for the prediction. The 'metrics'
-#' need to have been computed when the workflow was tuned. The metric's threshold needs to match the value 
-#' used during prediction. Examples are c("accuracy",0.8) or c("boyce_cont",0.7).
+#'   which will be used to prune which models in the ensemble will be used for
+#'   the prediction. The 'metrics' need to have been computed when the workflow
+#'   was tuned. The metric's threshold needs to match the value used during
+#'   prediction. Examples are c("accuracy",0.8) or c("boyce_cont",0.7).
 #' @param class_thresh probability threshold used to convert probabilities into
-#' classes. It can be a number (between 0 and 1), or a character metric (currently
-#' "tss_max", "kap_max" or "sensitivity"). For sensitivity, an additional target value is passed
-#' along as a second element of a vector, e.g. c("sensitivity",0.8).
+#'   classes. It can be a number (between 0 and 1), or a character metric
+#'   (currently "tss_max", "kap_max" or "sensitivity"). For sensitivity, an
+#'   additional target value is passed along as a second element of a vector,
+#'   e.g. c("sensitivity",0.8).
 #' @returns a [simple_ensemble] object
 #' @examples
 #' test_ens <- simple_ensemble() %>%
@@ -26,19 +27,37 @@ calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
   # check that there is no entry for this calibration
   if (!is.null(attr(object, "class_thresholds"))) {
     ref_calib_tb <- attr(object, "class_thresholds")
-    if (any(unlist(lapply(ref_calib_tb %>% dplyr::pull("metric_thresh"), identical, metric_thresh)) &
-      unlist(lapply(ref_calib_tb %>% dplyr::pull("class_thresh"), identical, class_thresh)))) {
-      message("this ensemble is already calibrated for this combination of `class_thresh` and `metric_thresh`")
+    if (any(unlist(
+      lapply(
+        ref_calib_tb %>% dplyr::pull("metric_thresh"),
+        identical,
+        metric_thresh
+      )
+    ) &
+      unlist(
+        lapply(
+          ref_calib_tb %>% dplyr::pull("class_thresh"),
+          identical,
+          class_thresh
+        )
+      ))) {
+      message(
+        "this ensemble is already calibrated for this combination of ",
+        "`class_thresh` and `metric_thresh`"
+      )
       return(object)
     }
   }
 
   fun_names <- c("mean", "median", "weighted_mean", "weighted_median")
   # generate predictions from the training data
-  training_preds <- stats::predict(object,
+  training_preds <- stats::predict(
+    object,
     new_data = workflows::extract_mold(object$workflow[[1]])$predictors,
-    type = "prob", fun = fun_names,
-    class_thresh = class_thresh, metric_thresh = metric_thresh
+    type = "prob",
+    fun = fun_names,
+    class_thresh = class_thresh,
+    metric_thresh = metric_thresh
   )
   # extract the truth from the training data
   training_outcomes <-
@@ -57,12 +76,14 @@ calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
       metric = class_thresh
     )
     calib_tb <- calib_tb %>%
-      dplyr::bind_rows(tibble::tibble(
-        class_thresh = list(class_thresh),
-        metric_thresh = list(metric_thresh),
-        fun = fun_names[i_col],
-        optim_value = optim_value
-      ))
+      dplyr::bind_rows(
+        tibble::tibble(
+          class_thresh = list(class_thresh),
+          metric_thresh = list(metric_thresh),
+          fun = fun_names[i_col],
+          optim_value = optim_value
+        )
+      )
   }
 
   # now store the new thresholds

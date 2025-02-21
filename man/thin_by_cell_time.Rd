@@ -15,35 +15,37 @@ thin_by_cell_time(
 )
 }
 \arguments{
-\item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with coordinate variables.
-These can be defined in \code{coords}, unless they have standard names
-(see details below).}
+\item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with coordinate
+variables. These can be defined in \code{coords}, unless they have standard
+names (see details below).}
 
-\item{raster}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{stars} object that defined the grid with layers
-corresponding to the time slices (times should be set as either POSIXlt or
-"years", see \code{\link[terra:time]{terra::time()}} for details), or a \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}}
-where the first dataset will be
-used (again, times for that dataset should be set as either POSIXlt or
-"years")
+\item{raster}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{stars} object that defined the grid
+with layers corresponding to the time slices (times should be set as either
+POSIXlt or "years", see \code{\link[terra:time]{terra::time()}} for details), or a
+\code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} where the first dataset will be used (again,
+times for that dataset should be set as either POSIXlt or "years")
 \code{terra::time()}}
 
 \item{coords}{a vector of length two giving the names of the "x" and "y"
-coordinates, as found in \code{data}. If left to NULL, the function will
-try to guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
+coordinates, as found in \code{data}. If left to NULL, the function will try to
+guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
 \code{c("longitude", "latitude")}, or \code{c("lon", "lat")}}
 
-\item{time_col}{The name of the column with time; if time is not a lubridate object,
-use \code{lubridate_fun} to provide a function that can be used to convert appropriately}
+\item{time_col}{The name of the column with time; if time is not a lubridate
+object, use \code{lubridate_fun} to provide a function that can be used to
+convert appropriately}
 
-\item{lubridate_fun}{function to convert the time column into a lubridate object}
+\item{lubridate_fun}{function to convert the time column into a lubridate
+object}
 
-\item{drop_na}{boolean on whether locations that are NA in the raster should be dropped.}
+\item{drop_na}{boolean on whether locations that are NA in the raster should
+be dropped.}
 
-\item{agg_fact}{positive integer. Aggregation factor expressed as number of cells
-in each direction (horizontally and vertically). Or two integers (horizontal
-and vertical aggregation factor) or three integers (when also aggregating over layers).
-Defaults to NULL, which implies no aggregation (i.e. thinning is done on the
-grid of \code{raster})}
+\item{agg_fact}{positive integer. Aggregation factor expressed as number of
+cells in each direction (horizontally and vertically). Or two integers
+(horizontal and vertical aggregation factor) or three integers (when also
+aggregating over layers). Defaults to NULL, which implies no aggregation
+(i.e. thinning is done on the grid of \code{raster})}
 }
 \value{
 An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link{data.frame}}, the same as "data".
@@ -51,14 +53,14 @@ An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link{data.frame}}, the 
 \description{
 This function thins a dataset so that only one observation per cell per time
 slice is retained. We use a raster with layers as time slices to define the
-data cube on which thinning is enforced (see details below on how time should be
-formatted).
+data cube on which thinning is enforced (see details below on how time should
+be formatted).
 }
 \details{
 Further spatial thinning can be achieved by aggregating cells in the raster
-before thinning, as achieved by setting \code{agg_fact} > 1 (aggregation works in a
-manner equivalent to \code{\link[terra:aggregate]{terra::aggregate()}}).
-Note that if \code{data} is an \code{sf} object, the function will transform the coordinates
-to the same projection as the \code{raster} (recommended); if \code{data} is a data.frame, it is up
-to the user to ensure that the coordinates are in the correct units.
+before thinning, as achieved by setting \code{agg_fact} > 1 (aggregation works in
+a manner equivalent to \code{\link[terra:aggregate]{terra::aggregate()}}). Note that if \code{data} is an \code{sf}
+object, the function will transform the coordinates to the same projection as
+the \code{raster} (recommended); if \code{data} is a data.frame, it is up to the user
+to ensure that the coordinates are in the correct units.
 }

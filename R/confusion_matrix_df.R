@@ -4,7 +4,8 @@
 #'
 #' @param presences Probabilities for presences
 #' @param absences probabilities for absences
-#' @returns A data.frame of thresholds with columns *thres*, *tp*, *fp*, *fn*, and *tn*
+#' @returns A data.frame of thresholds with columns *thres*, *tp*, *fp*, *fn*,
+#'   and *tn*
 #' @keywords internal
 
 

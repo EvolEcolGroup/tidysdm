@@ -26,7 +26,8 @@
 #' @export
 #' @family "sdm model specifications"
 
-sdm_spec_rand_forest <- function(..., tune = c("sdm", "all", "custom", "none")) {
+sdm_spec_rand_forest <- function(...,
+                                 tune = c("sdm", "all", "custom", "none")) {
   tune <- rlang::arg_match(tune)
   if (tune == "sdm") {
     base_spec <- parsnip::rand_forest(
@@ -40,7 +41,7 @@ sdm_spec_rand_forest <- function(..., tune = c("sdm", "all", "custom", "none")) 
       trees = tune::tune(),
       ...
     )
-  } else if ((tune == "custom") | (tune == "none")) {
+  } else if ((tune == "custom") || (tune == "none")) {
     base_spec <- parsnip::rand_forest(...)
   }
   base_spec %>%

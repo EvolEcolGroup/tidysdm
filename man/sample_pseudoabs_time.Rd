@@ -18,41 +18,46 @@ sample_pseudoabs_time(
 )
 }
 \arguments{
-\item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with coordinate variables.
-These can be defined in \code{coords}, unless they have standard names
-(see details below).}
+\item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with coordinate
+variables. These can be defined in \code{coords}, unless they have standard
+names (see details below).}
 
-\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster}, \code{stars} or \link[terra:SpatRaster-class]{terra::SpatRasterDataset} from which cells will be sampled.
-If a \link[terra:SpatRaster-class]{terra::SpatRasterDataset}, the first dataset will be used to define which cells are valid,
-and which are NAs.}
+\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster}, \code{stars} or \link[terra:SpatRaster-class]{terra::SpatRasterDataset}
+from which cells will be sampled. If a \link[terra:SpatRaster-class]{terra::SpatRasterDataset}, the
+first dataset will be used to define which cells are valid, and which are
+NAs.}
 
-\item{n_per_presence}{number of pseudoabsence points to sample for
-each presence}
+\item{n_per_presence}{number of pseudoabsence points to sample for each
+presence}
 
 \item{coords}{a vector of length two giving the names of the "x" and "y"
-coordinates, as found in \code{data}. If left to NULL, the function will
-try to guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
+coordinates, as found in \code{data}. If left to NULL, the function will try to
+guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
 \code{c("longitude", "latitude")}, or \code{c("lon", "lat")}}
 
-\item{time_col}{The name of the column with time; if time is not a lubridate object,
-use \code{lubridate_fun} to provide a function that can be used to convert appropriately}
+\item{time_col}{The name of the column with time; if time is not a lubridate
+object, use \code{lubridate_fun} to provide a function that can be used to
+convert appropriately}
 
-\item{lubridate_fun}{function to convert the time column into a lubridate object}
+\item{lubridate_fun}{function to convert the time column into a lubridate
+object}
 
 \item{method}{sampling method. One of 'random', 'dist_min', 'dist_max', or
 'dist_disc'.}
 
-\item{class_label}{the label given to the sampled points. Defaults to \code{pseudoabs}}
+\item{class_label}{the label given to the sampled points. Defaults to
+\code{pseudoabs}}
 
-\item{return_pres}{return presences together with pseudoabsences
-in a single tibble}
+\item{return_pres}{return presences together with pseudoabsences in a single
+tibble}
 
-\item{time_buffer}{the buffer on the time axis around presences that defines their effect when
-sampling pseudoabsences. If set to zero, presences have an effect only on the time step to which
-they are assigned in \code{raster}; if a positive value, it defines the number of days before
-and after the date provided in the \code{time} column for which the presence should be considered
-(e.g. 20 days means that a presence is considered in all time steps equivalent to plus and minus
-twenty days from its date).}
+\item{time_buffer}{the buffer on the time axis around presences that defines
+their effect when sampling pseudoabsences. If set to zero, presences have
+an effect only on the time step to which they are assigned in \code{raster}; if
+a positive value, it defines the number of days before and after the date
+provided in the \code{time} column for which the presence should be considered
+(e.g. 20 days means that a presence is considered in all time steps
+equivalent to plus and minus twenty days from its date).}
 }
 \value{
 An object of class \link[tibble:tibble]{tibble::tibble}. If presences are returned, the
@@ -60,26 +65,30 @@ presence level is set as the reference (to match the expectations in the
 \code{yardstick} package that considers the first level to be the event)
 }
 \description{
-This function samples pseudo-absence points from a raster given a set of presences.
-The locations returned as the center points of the sampled cells, which can
-not overlap with the presences (in contrast to background points, see
-\link{sample_background_time}). The following methods are implemented:
+This function samples pseudo-absence points from a raster given a set of
+presences. The locations returned as the center points of the sampled cells,
+which can not overlap with the presences (in contrast to background points,
+see \link{sample_background_time}). The following methods are implemented:
 \itemize{
 \item 'random': pseudo-absences randomly sampled from the region covered by the
 raster (i.e. not NAs).
-\item 'dist_min': pseudo-absences randomly sampled from the region excluding a buffer
+\item 'dist_min': pseudo-absences randomly sampled from the region excluding
+a buffer
 of 'dist_min' from presences (distances in 'm' for lonlat rasters, and in map
 units for projected rasters).
 \item 'dist_max': pseudo-absences randomly sampled from the unioned buffers
 of 'dist_max' from presences (distances in 'm' for lonlat rasters, and in map
-units for projected rasters). Using the union of buffers means that areas that
-are in multiple buffers are not oversampled. This is also referred to as "thickening".
-\item 'dist_disc': pseudo-absences randomly sampled from the unioned discs around presences
-with the two values of 'dist_disc' defining the minimum and maximum distance from
-presences.
+units for projected rasters). Using the union of buffers means that areas
+that are in multiple buffers are not oversampled. This is also referred to as
+"thickening".
+\item 'dist_disc': pseudo-absences randomly sampled from the unioned discs
+around presences
+with the two values of 'dist_disc' defining the minimum and maximum distance
+from presences.
 }
 }
 \details{
-#' @details Note that the time axis of the raster should be in \code{POSIXct} or \code{Date} format,
-or use `tstep="years"'. See \code{\link[terra:time]{terra::time()}} for details on how to set the time axis.
+#' @details Note that the time axis of the raster should be in \code{POSIXct} or
+\code{Date} format, or use `tstep="years"'. See \code{\link[terra:time]{terra::time()}} for details on how
+to set the time axis.
 }

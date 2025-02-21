@@ -1,15 +1,16 @@
-#' Distance between the distribution of climate values for presences vs background
+#' Distance between the distribution of climate values for presences vs
+#' background
 #'
 #' For each environmental variable, this function computes the density functions
 #' of presences and absences and returns (1-overlap), which is a measure of the
-#' distance between the two distributions. Variables with a high distance are good
-#' candidates for SDMs, as species occurrences are confined to a subset
-#' of the available background.
+#' distance between the two distributions. Variables with a high distance are
+#' good candidates for SDMs, as species occurrences are confined to a subset of
+#' the available background.
 #'
-#' @param .data a `data.frame` (or derived object, such as `tibble`, or
-#' `sf`) with values for the bioclimate variables for presences and background
+#' @param .data a `data.frame` (or derived object, such as `tibble`, or `sf`)
+#'   with values for the bioclimate variables for presences and background
 #' @param .col the column containing the presences; it assumes presences to be
-#' the first level of this factor
+#'   the first level of this factor
 #' @returns a name vector of distances
 #' @examples
 #' # This should be updated to use a dataset from tidysdm
