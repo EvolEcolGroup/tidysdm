@@ -138,7 +138,8 @@ boyce_cont_estimator_impl <- function(truth,
                                       event_level,
                                       case_weights) {
   if (!identical(estimator, "binary")) {
-    stop("boyce_cont is only available for binary classes; multiclass is not supported")
+    stop("boyce_cont is only available for binary classes; multiclass ",
+         "is not supported")
   }
   # separate estimates into presences and background
   if (identical(event_level, "first")) {
@@ -180,7 +181,7 @@ contBoyce <- function(
     ...) {
   # if all NAs
   if (all(is.na(pres)) || all(is.na(contrast)) ||
-    all(is.na(presWeight)) || all(is.na(contrastWeight))) {
+        all(is.na(presWeight)) || all(is.na(contrastWeight))) {
     return(NA)
   }
 
@@ -233,9 +234,11 @@ contBoyce <- function(
   # mean bin prediction
   meanPred <- rowMeans(cbind(lows, highs))
 
-  # add small number to each bin that has 0 background frequency but does have a presence frequency > 0
+  # add small number to each bin that has 0 background frequency but does have a
+  # presence frequency > 0
   if (any(freqPres > 0 & freqContrast == 0)) {
-    smallValue <- min(0.5 * c(presWeight[presWeight > 0], contrastWeight[contrastWeight > 0]))
+    smallValue <- min(0.5 * c(presWeight[presWeight > 0],
+                              contrastWeight[contrastWeight > 0]))
     freqContrast[freqPres > 0 & freqContrast == 0] <- smallValue
   }
 
@@ -259,15 +262,20 @@ contBoyce <- function(
   E <- freqContrast / sum(contrastWeight, na.rm = TRUE)
   PE <- P / E
 
+  # nolint start
   # # plot (transfer the code to a boyce_curve function in the future)
   # if (graph) {
   #   graphics::par(mfrow=c(1, 2))
   #   lims <- c(0, max(P, E, na.rm=TRUE))
-  #   plot(E, P, col='white', xlab='Expected', ylab='Predicted', main='P/E\nNumbered from lowest to highest class', xlim=lims, ylim=lims)
+  #   plot(E, P, col='white', xlab='Expected', ylab='Predicted',
+  #      main='P/E\nNumbered from lowest to highest class',
+  #      xlim=lims, ylim=lims)
   #   graphics::text(E, P, labels=1:numBins, col=1:20)
-  #   plot(meanPred, PE, type='l', xlab='Mean Prediction in Bin', ylab='P/E Ratio', main='CBI\nNumbered from lowest to highest class')
+  #   plot(meanPred, PE, type='l', xlab='Mean Prediction in Bin',
+  #      ylab='P/E Ratio', main='CBI\nNumbered from lowest to highest class')
   #   graphics::text(meanPred, PE, labels=1:numBins, col='blue')
   # }
+  # nolint end
 
   # remove NAs
   na_in_either <- (is.na(meanPred) | is.na(PE))

@@ -43,9 +43,9 @@ geom_split_violin <- function(mapping = NULL,
                               draw_quantiles = NULL,
                               trim = TRUE,
                               scale = "area",
-                              na.rm = FALSE,
-                              show.legend = NA,
-                              inherit.aes = TRUE) {
+                              na.rm = FALSE, #nolint
+                              show.legend = NA, #nolint
+                              inherit.aes = TRUE) { #nolint
   ggplot2::layer(
     data = data,
     mapping = mapping,
@@ -67,7 +67,7 @@ geom_split_violin <- function(mapping = NULL,
 }
 
 #' @keywords internal
-GeomSplitViolin <- ggplot2::ggproto(
+GeomSplitViolin <- ggplot2::ggproto( #nolint
   "GeomSplitViolin",
   ggplot2::GeomViolin,
   draw_group = function(self,

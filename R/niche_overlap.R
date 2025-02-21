@@ -40,7 +40,7 @@ niche_overlap <- function(x, y, method = c("Schoener", "Hellinger")) {
 
   # Hellinger's Distance
   if ("Hellinger" %in% method) {
-    hell <- sqrt(unlist(terra::global((sqrt(x) - sqrt(y))^2, sum, 
+    hell <- sqrt(unlist(terra::global((sqrt(x) - sqrt(y))^2, sum,
                                       na.rm = TRUE)))
     # scaling in
     # https://onlinelibrary.wiley.com/doi/10.1111/j.1558-5646.2008.00482.x is

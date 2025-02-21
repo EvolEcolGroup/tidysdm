@@ -2,6 +2,9 @@ linters: linters_with_defaults(
     return_linter = NULL
   )
 exclusions: list(
-    "data-raw"
+    "data-raw",
+    "R/boyce_cont.R" = list( # it includes legacy code from unmantained pkg
+      object_name_linter = Inf
+    )
   )
 encoding: "UTF-8"

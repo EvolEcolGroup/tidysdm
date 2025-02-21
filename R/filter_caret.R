@@ -38,7 +38,7 @@ filter_cor_caret <- function(x,
   # create a correlation matrix
   x <- stats::cor(x, method = cor_type)
   diag(x) <- NA
-  #  x <- abs(x)
+  #  x <- abs(x) # nolint
   if (!is.null(to_keep)) {
     if (!any(to_keep %in% var_names)) {
       stop("to_keep should only include numeric variables in x")
@@ -47,7 +47,7 @@ filter_cor_caret <- function(x,
     # with
     if (length(to_keep) > 1) {
       x_keep <- x[to_keep, to_keep]
-      # diag(x_keep)<-NA
+      # diag(x_keep)<-NA #nolint
       if (any(x_keep > cutoff, na.rm = TRUE)) {
         stop("some variables in `to_keep` have a correlation higher ",
              "than the `cutoff`")

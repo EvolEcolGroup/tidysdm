@@ -14,7 +14,7 @@
 #' pairs(s_stars)
 setMethod(
   "pairs", signature(x = "stars"),
-  function(x, hist = TRUE, cor = TRUE, use = "pairwise.complete.obs", 
+  function(x, hist = TRUE, cor = TRUE, use = "pairwise.complete.obs",
            maxcells = 100000, ...) {
     if (length(x) < 2) {
       stop("x must have at least two layers")
@@ -52,9 +52,9 @@ setMethod(
       up <- NULL
     }
 
-    N <- prod(dim(x))
-    maxcells <- pmin(N, maxcells)
-    ix <- sample(N, maxcells, replace = FALSE)
+    n <- prod(dim(x))
+    maxcells <- pmin(n, maxcells)
+    ix <- sample(n, maxcells, replace = FALSE)
     d <- sapply(names(x),
       function(name, x = NULL, index = NULL) {
         x[[name]][index]

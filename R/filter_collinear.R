@@ -88,9 +88,9 @@ filter_collinear.stars <-
            max_cells = Inf,
            exhaustive = FALSE,
            ...) {
-    N <- prod(dim(x))
-    maxcells <- pmin(N, max_cells)
-    ix <- sample(N, maxcells, replace = FALSE)
+    n <- prod(dim(x))
+    maxcells <- pmin(n, max_cells)
+    ix <- sample(n, maxcells, replace = FALSE)
     x_matrix <- sapply(names(x),
       function(name, x = NULL, index = NULL) {
         x[[name]][index]
@@ -218,7 +218,7 @@ filter_collinear.matrix <- function(x,
 
   # sample rows if needed
   if (max_cells < nrow(x)) {
-    x <- x[sample(1:nrow(x), max_cells), ]
+    x <- x[sample(seq_len(nrow(x)), max_cells), ]
   }
 
   # now dispatch to the correct method
@@ -258,7 +258,8 @@ filter_collinear.matrix <- function(x,
   if (!names) {
     # return their indices
     vars_kept <- match(vars_kept, var_names)
-    attr(vars_kept, "to_remove") <- match(var_names[!var_names %in% vars_kept], var_names)
+    attr(vars_kept, "to_remove") <- match(var_names[!var_names %in% vars_kept],
+                                          var_names)
   }
   return(vars_kept)
 }

@@ -40,8 +40,11 @@ predict_raster.default <- function(object, raster, ...) {
   # used
   pred_raster[raster_df$cell] <- pred_df %>% dplyr::pull(1)
   if (is.factor(pred_df %>% dplyr::pull(1))) {
+    # nolint start
+    # old code, kept for reference
     # levels(pred_raster) <-
     #          data.frame(id = 1:2, class = levels(pred_df %>% dplyr::pull(1)))
+    # nolint end
     # make predict_raster work with multilevel predictions
     # edit by @piabenaud
     levels(pred_raster) <- data.frame(

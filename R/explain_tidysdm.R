@@ -78,7 +78,7 @@ explain_tidysdm.simple_ensemble <- function(
     type = "classification",
     by_workflow = FALSE) {
   if (by_workflow) {
-    explain_simple_ensemble_by_workflow(
+    explain_simple_ens_by_wkflow(
       model = model,
       data = data,
       y = y,
@@ -181,7 +181,7 @@ explain_simple_ensemble <- function(
     # is the reference
     y <-
       (as.numeric(workflowsets::extract_mold(model$workflow[[1]])$outcomes %>%
-                       dplyr::pull()) - 2) * -1
+                    dplyr::pull()) - 2) * -1
   } else {
     # ideally we would use check_sdm_presence to make sure that the response
     # variable is properly formatted (and not just a factor) the error message
@@ -259,7 +259,7 @@ model_info.repeat_ensemble <- function(model, is_multiclass = FALSE, ...) {
 }
 
 
-explain_simple_ensemble_by_workflow <- function(
+explain_simple_ens_by_wkflow <- function(
     model,
     data = NULL,
     y = NULL,

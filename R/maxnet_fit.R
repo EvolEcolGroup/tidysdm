@@ -31,7 +31,7 @@
 #'  \item{featuremaxs}{ maximum of each feature, to be used for clamping }
 #'  \item{varmin}{ minimum of each predictor, to be used for clamping }
 #'  \item{varmax}{ maximum of each predictor, to be used for clamping }
-#'  \item{samplemeans}{ mean of each predictor over samples (majority for 
+#'  \item{samplemeans}{ mean of each predictor over samples (majority for
 #'  factors) }
 #'  \item{levels}{ levels of each predictor that is a factor }
 #' }
@@ -58,8 +58,10 @@ maxnet_fit <- function(formula, data, regmult = 1.0, classes = "default",
   # extract the response and turn it into a numeric vector
   response <- data[, form_resp(stats::terms(formula, data = data))] %>%
     dplyr::pull(1)
-  resp_levels <- levels(response)
-  response <- dplyr::case_match(response, resp_levels[1] ~ 1, resp_levels[2] ~ 0)
+  resp_levels <- levels(response) #nolint (false positive claiming this variable is not used)
+  response <- dplyr::case_match(response,
+                                resp_levels[1] ~ 1,
+                                resp_levels[2] ~ 0)
   # extract the responses
   predictors <- data[, rsample::form_pred(stats::terms(formula, data = data))]
 

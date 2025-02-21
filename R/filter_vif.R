@@ -11,7 +11,7 @@ filter_vif_step <- function(x, cutoff = 10, verbose = FALSE, to_keep = NULL,
   vars_to_remove <- c()
   # remove the variable with the largest vif, one at a time
   while (TRUE) {
-    i_cols <- (1:ncol(x))[!colnames(x) %in% to_keep]
+    i_cols <- (seq_len(ncol(x)))[!colnames(x) %in% to_keep]
     vif_vector <- vif_fast(x, cols = i_cols)
     if (max(vif_vector) >= cutoff) {
       target_var <- names(vif_vector)[which.max(vif_vector)]
