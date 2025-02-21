@@ -93,8 +93,10 @@ extrapol_mess.SpatRaster <- function(x, training, .col, filename = "", ...) {
     b <- terra::writeStart(out, filename, ...)
     for (i in 1:b$n) {
       vv <- terra::readValues(x, b$row[i], b$nrows[i], mat = TRUE)
-      vv <- sapply(seq_len(ncol(training)), 
-                   function(i) .messi(vv[, i], training[, i]))
+      vv <- sapply(
+        seq_len(ncol(training)),
+        function(i) .messi(vv[, i], training[, i])
+      )
       suppressWarnings(m <- apply(vv, 1, min, na.rm = TRUE))
       m[!is.finite(m)] <- NA
       terra::writeValues(out, m, b$row[i], b$nrows[i])

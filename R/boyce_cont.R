@@ -183,9 +183,9 @@ contBoyce <- function(
     ...) {
   # if all NAs
   if (all(is.na(pres)) ||
-      all(is.na(contrast)) ||
-      all(is.na(presWeight)) ||
-      all(is.na(contrastWeight))
+    all(is.na(contrast)) ||
+    all(is.na(presWeight)) ||
+    all(is.na(contrastWeight))
   ) {
     return(NA)
   }

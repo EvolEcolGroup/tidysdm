@@ -118,8 +118,10 @@ predict.simple_ensemble <-
         )
       }
 
-      class_levels <- levels(workflows::extract_mold((object$workflow[[1]]))$outcome %>% # nolint
-        dplyr::pull(1))
+      class_levels <- levels(
+        workflows::extract_mold((object$workflow[[1]]))$outcome %>%
+          dplyr::pull(1)
+      )
     }
 
     # set up the aggregating function
@@ -183,8 +185,9 @@ predict.simple_ensemble <-
       # subset the data.frame
       pred_list <-
         pred_list[, metric_ens$mean > as.numeric(metric_thresh[2])]
-      metric_ens <- metric_ens$mean[metric_ens$mean >
-        as.numeric(metric_thresh[2])]
+      metric_ens <- metric_ens$mean[
+        metric_ens$mean > as.numeric(metric_thresh[2])
+      ]
       if (length(pred_list) == 0) {
         stop("the current metric_threshold excludes all models")
       }

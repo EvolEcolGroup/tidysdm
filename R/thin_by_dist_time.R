@@ -72,8 +72,10 @@ thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
   }
   time_in_days <- as.numeric(time_lub - lubridate::origin)
   # compute an interval matrix (analogous to the dist_mat, but for time)
-  interval_mat <- as.matrix(stats::dist(time_in_days, diag = TRUE,
-                                        upper = TRUE)) < interval_min
+  interval_mat <- as.matrix(stats::dist(time_in_days,
+    diag = TRUE,
+    upper = TRUE
+  )) < interval_min
 
   # compute distances with sf, using the appropriate units for the projection
   dist_mat <- sf::st_distance(data)
