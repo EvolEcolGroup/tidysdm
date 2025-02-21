@@ -28,7 +28,8 @@
 #' @returns An object of class [`sf::sf`] or [`data.frame`], the same as "data".
 #' @export
 
-thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE, agg_fact = NULL) {
+thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE,
+                         agg_fact = NULL) {
   if (inherits(raster, "SpatRasterDataset")) {
     stop(
       "This function works on a SpatRaster for a given time point.\n",
@@ -42,14 +43,18 @@ thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE, agg_fact =
   if (inherits(data, "sf")) {
     data <- data %>% sf::st_transform(terra::crs(raster))
     if (all(c("X", "Y") %in% names(data))) {
-      if (!all(data[, c("X", "Y")] %>% sf::st_drop_geometry() %>% as.matrix() == sf::st_coordinates(data)) |
+      if (!all(data[, c("X", "Y")] %>%
+        sf::st_drop_geometry() %>%
+        as.matrix() == sf::st_coordinates(data)) ||
         any(is.na(data[, c("X", "Y")]))) {
         data <- data %>%
           dplyr::rename("X_original" = "X", "Y_original" = "Y") %>%
           dplyr::bind_cols(sf::st_coordinates(data))
         warning(
-          "sf object contained 'X' and 'Y' coordinates that did not match the sf point geometry.\n",
-          "These have been moved to columns 'X_original' and 'Y_original' and new X and Y columns\n",
+          "sf object contained 'X' and 'Y' coordinates that did not match ",
+          "the sf point geometry.\n",
+          "These have been moved to columns 'X_original' and 'Y_original' ",
+          "and new X and Y columns\n",
           "have been added that match the sf point geometry."
         )
       }

@@ -69,7 +69,9 @@ setMethod(
     if (is.null(cex)) cex <- 0.5
     if (is.null(main)) main <- ""
 
-    graphics::pairs(d, main = main, cex = cex,
-                    upper.panel = up, diag.panel = dp)
+    graphics::pairs(d,
+      main = main, cex = cex,
+      upper.panel = up, diag.panel = dp
+    )
   }
 )

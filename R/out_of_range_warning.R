@@ -9,13 +9,33 @@
 
 out_of_range_warning <- function(times, time_steps) {
   time_steps_ordered <- sort(time_steps)
+  # create a range minimum maximum, which is the min and max values plus half
+  # of the step to the next value within the range
   range_minmax <- c(
-    utils::head(time_steps_ordered, n = 1)[1] -
-      (abs(utils::head(time_steps_ordered, n = 2)[1] -
-             utils::head(time_steps_ordered, n = 2)[2]) / 2),
-    utils::tail(time_steps_ordered, n = 1)[1] +
-      (abs(utils::tail(time_steps_ordered, n = 2)[1] -
-             utils::tail(time_steps_ordered, n = 2)[2]) / 2)
+    utils::head(
+      time_steps_ordered,
+      n = 1
+    )[1] -
+      (abs(utils::head(
+        time_steps_ordered,
+        n = 2
+      )[1] -
+        utils::head(
+          time_steps_ordered,
+          n = 2
+        )[2]) / 2),
+    utils::tail(
+      time_steps_ordered,
+      n = 1
+    )[1] +
+      (abs(utils::tail(
+        time_steps_ordered,
+        n = 2
+      )[1] -
+        utils::tail(
+          time_steps_ordered,
+          n = 2
+        )[2]) / 2)
   )
   if (any(times < range_minmax[1]) || any(times > range_minmax[2])) {
     warning(

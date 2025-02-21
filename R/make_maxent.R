@@ -75,7 +75,6 @@ make_maxent <- function() {
       )
       # These lists should be of the form:
       # {predict.maxnet argument name} = {values provided from parsnip objects}
-
     )
 
   parsnip::set_pred(

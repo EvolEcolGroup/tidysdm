@@ -23,6 +23,8 @@ grid_cellsize <- function(
   if (is_longlat(data)) {
     grid_box <- expand_grid(grid_box)
   }
-  c(diff(sf::st_bbox(grid_box)[c(1, 3)]),
-    diff(sf::st_bbox(grid_box)[c(2, 4)])) / n
+  c(
+    diff(sf::st_bbox(grid_box)[c(1, 3)]),
+    diff(sf::st_bbox(grid_box)[c(2, 4)])
+  ) / n
 }

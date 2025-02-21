@@ -30,10 +30,14 @@
 #' maxent_spec <- maxent(feature_classes = "lq")
 #' maxent_fitted <- maxent_spec %>%
 #'   fit(presence ~ ., data = bradypus_tb)
-#' pred_prob <- predict(maxent_fitted, new_data = bradypus[, -1],
-#'                      type = "prob")
-#' pred_class <- predict(maxent_fitted, new_data = bradypus[, -1],
-#'                       type = "class")
+#' pred_prob <- predict(maxent_fitted,
+#'   new_data = bradypus[, -1],
+#'   type = "prob"
+#' )
+#' pred_class <- predict(maxent_fitted,
+#'   new_data = bradypus[, -1],
+#'   type = "class"
+#' )
 #'
 #' # Now with tuning
 #' maxent_spec <- maxent(

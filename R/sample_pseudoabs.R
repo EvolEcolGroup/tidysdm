@@ -53,11 +53,13 @@ sample_pseudoabs <- function(data, raster, n, coords = NULL,
       if (any(is.na(data[, c("X", "Y")]))) {
         stop("sf object contains NA values in the X and Y coordinates")
       } else if (all(sf::st_drop_geometry(data[, c("X", "Y")]) ==
-                     sf::st_coordinates(data))) {
+        sf::st_coordinates(data))) {
         bind_col <- FALSE
       } else {
-        stop("sf object contains X and Y coordinates that do not match the ",
-             "sf point geometry")
+        stop(
+          "sf object contains X and Y coordinates that do not match the ",
+          "sf point geometry"
+        )
       }
     }
     if (bind_col) {
@@ -70,26 +72,34 @@ sample_pseudoabs <- function(data, raster, n, coords = NULL,
   dist_min <- dist_max <- NULL
   if (method[1] == "dist_disc") {
     if (length(method) != 3) {
-      stop("method 'dist_disc' should have two thresholds, ",
-           "e.g. c('dist_disc',10,20)")
+      stop(
+        "method 'dist_disc' should have two thresholds, ",
+        "e.g. c('dist_disc',10,20)"
+      )
     }
     dist_min <- as.numeric(method[2])
     dist_max <- as.numeric(method[3])
   } else if (method[1] == "dist_min") {
     if (length(method) != 2) {
-      stop("method 'dist_min' should have one threshold, ",
-           "e.g. c('dist_min',10)")
+      stop(
+        "method 'dist_min' should have one threshold, ",
+        "e.g. c('dist_min',10)"
+      )
     }
     dist_min <- as.numeric(method[2])
   } else if (method[1] == "dist_max") {
     if (length(method) != 2) {
-      stop("method 'dist_max' should have one threshold, ",
-           "e.g. c('dist_max',50)")
+      stop(
+        "method 'dist_max' should have one threshold, ",
+        "e.g. c('dist_max',50)"
+      )
     }
     dist_max <- as.numeric(method[2])
   } else if (!method[1] %in% "random") {
-    stop("method has to be one of 'random', 'dist_min', ",
-         "'dist_max', or 'dist_disc'")
+    stop(
+      "method has to be one of 'random', 'dist_min', ",
+      "'dist_max', or 'dist_disc'"
+    )
   }
   xy_pres <- as.matrix(as.data.frame(data)[, coords])
   # get a one layer raster
@@ -97,7 +107,8 @@ sample_pseudoabs <- function(data, raster, n, coords = NULL,
   names(sampling_raster) <- "class"
   # turn presences into additional NAs
   sampling_raster[stats::na.omit(
-    terra::cellFromXY(sampling_raster, xy_pres))] <- NA
+    terra::cellFromXY(sampling_raster, xy_pres)
+  )] <- NA
 
   # remove buffer < dist_min (or first parameter for disc)
   if (!is.null(dist_min)) {
@@ -108,9 +119,10 @@ sample_pseudoabs <- function(data, raster, n, coords = NULL,
       dist_min
     )
     sampling_raster <- terra::mask(sampling_raster,
-                                   min_buffer,
-                                   inverse = TRUE,
-                                   touches = FALSE)
+      min_buffer,
+      inverse = TRUE,
+      touches = FALSE
+    )
   }
   # remove buffer >dist_max (or second parameter for disc)
   if (!is.null(dist_max)) {

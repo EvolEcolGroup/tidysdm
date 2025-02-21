@@ -49,8 +49,10 @@ filter_cor_caret <- function(x,
       x_keep <- x[to_keep, to_keep]
       # diag(x_keep)<-NA #nolint
       if (any(x_keep > cutoff, na.rm = TRUE)) {
-        stop("some variables in `to_keep` have a correlation higher ",
-             "than the `cutoff`")
+        stop(
+          "some variables in `to_keep` have a correlation higher ",
+          "than the `cutoff`"
+        )
       }
       max_cor_vs_keep <-
         apply(abs(x[, to_keep]), 1, max, na.rm = TRUE)
@@ -60,9 +62,11 @@ filter_cor_caret <- function(x,
       max_cor_vs_keep <- abs(x[, to_keep])
     }
     # remove variables that are too highly correlated with variables to keep
-    x <- x[!var_names %in%
-             names(which(max_cor_vs_keep > cutoff)),
-           !var_names %in% names(which(max_cor_vs_keep > cutoff))]
+    x <- x[
+      !var_names %in%
+        names(which(max_cor_vs_keep > cutoff)),
+      !var_names %in% names(which(max_cor_vs_keep > cutoff))
+    ]
     x <-
       x[!dimnames(x)[[1]] %in% to_keep, !dimnames(x)[[1]] %in% to_keep]
   }

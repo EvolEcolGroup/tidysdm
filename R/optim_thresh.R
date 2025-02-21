@@ -18,9 +18,11 @@
 #' @returns the probability threshold for the event
 #' @examples
 #' optim_thresh(two_class_example$truth, two_class_example$Class1,
-#'              metric = c("tss_max"))
+#'   metric = c("tss_max")
+#' )
 #' optim_thresh(two_class_example$truth, two_class_example$Class1,
-#'              metric = c("sens", 0.9))
+#'   metric = c("sens", 0.9)
+#' )
 #' @export
 
 optim_thresh <- function(truth, estimate, metric, event_level = "first") {
@@ -102,9 +104,9 @@ optim_thresh_kap_max <- function(presences, absences) {
   n <- rowSums(conf_matrix_df[, 2:5])
   obs_accuracy <- (conf_matrix_df$tp + conf_matrix_df$tn) / n
   exp_accuracy <- (((conf_matrix_df$tn + conf_matrix_df$fp) *
-                      (conf_matrix_df$tn + conf_matrix_df$fn) / n) +
-                     ((conf_matrix_df$tp + conf_matrix_df$fn) *
-                        (conf_matrix_df$tp + conf_matrix_df$fp) / n)) / n
+    (conf_matrix_df$tn + conf_matrix_df$fn) / n) +
+    ((conf_matrix_df$tp + conf_matrix_df$fn) *
+      (conf_matrix_df$tp + conf_matrix_df$fp) / n)) / n
   kap <- (obs_accuracy - exp_accuracy) / (1 - exp_accuracy)
   return(conf_matrix_df$thresh[which.max(kap)])
 }

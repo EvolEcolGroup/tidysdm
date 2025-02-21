@@ -138,8 +138,10 @@ kap_max_estimator_impl <- function(truth,
                                    event_level,
                                    case_weights) {
   if (!identical(estimator, "binary")) {
-    stop("kap_max is only available for binary classes; multiclass ",
-         "is not supported")
+    stop(
+      "kap_max is only available for binary classes; multiclass ",
+      "is not supported"
+    )
   }
   # separate estimates into presences and background
   if (identical(event_level, "first")) {
@@ -161,9 +163,9 @@ kap_max_estimator_impl <- function(truth,
   n <- rowSums(conf_matrix_df[, 2:5])
   obs_accuracy <- (conf_matrix_df$tp + conf_matrix_df$tn) / n
   exp_accuracy <- (((conf_matrix_df$tn + conf_matrix_df$fp) *
-                      (conf_matrix_df$tn + conf_matrix_df$fn) / n) +
-                     ((conf_matrix_df$tp + conf_matrix_df$fn) *
-                        (conf_matrix_df$tp + conf_matrix_df$fp) / n)) / n
+    (conf_matrix_df$tn + conf_matrix_df$fn) / n) +
+    ((conf_matrix_df$tp + conf_matrix_df$fn) *
+      (conf_matrix_df$tp + conf_matrix_df$fp) / n)) / n
   kap <- (obs_accuracy - exp_accuracy) / (1 - exp_accuracy)
   max(kap) ## return the maximum kap
 }

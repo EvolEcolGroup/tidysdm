@@ -34,14 +34,21 @@ niche_overlap <- function(x, y, method = c("Schoener", "Hellinger")) {
   res_list <- list()
   # Schoeners D
   if ("Schoener" %in% method) {
-    res_list$D <- unname(1 - 0.5 * unlist(terra::global(abs(x - y),
-                                                        sum, na.rm = TRUE)))
+    res_list$D <- unname(
+      1 - 0.5 * unlist(terra::global(abs(x - y),
+        sum,
+        na.rm = TRUE
+      ))
+    )
   }
 
   # Hellinger's Distance
   if ("Hellinger" %in% method) {
-    hell <- sqrt(unlist(terra::global((sqrt(x) - sqrt(y))^2, sum,
-                                      na.rm = TRUE)))
+    hell <- sqrt(unlist(
+      terra::global((sqrt(x) - sqrt(y))^2, sum,
+        na.rm = TRUE
+      )
+    ))
     # scaling in
     # https://onlinelibrary.wiley.com/doi/10.1111/j.1558-5646.2008.00482.x is
     # incorrect, as it uses 2 rather than sqrt(2) as the max value of H scaling

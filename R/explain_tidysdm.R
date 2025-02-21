@@ -171,8 +171,10 @@ explain_simple_ensemble <- function(
     if (is.null(model$workflow[[1]]$pre$actions$recipe$recipe$steps)) {
       data <- workflowsets::extract_mold(model$workflow[[1]])$predictors
     } else {
-      stop("your recipe contains steps; please provide a copy of the ",
-           "original dataset as 'data' argument")
+      stop(
+        "your recipe contains steps; please provide a copy of the ",
+        "original dataset as 'data' argument"
+      )
     }
   }
   if (is.null(y)) {
@@ -180,8 +182,12 @@ explain_simple_ensemble <- function(
     # that's the opposite of what we usually have in tidymodels, where presence
     # is the reference
     y <-
-      (as.numeric(workflowsets::extract_mold(model$workflow[[1]])$outcomes %>%
-                    dplyr::pull()) - 2) * -1
+      (as.numeric(
+        workflowsets::extract_mold(
+          model$workflow[[1]]
+        )$outcomes %>%
+          dplyr::pull()
+      ) - 2) * -1
   } else {
     # ideally we would use check_sdm_presence to make sure that the response
     # variable is properly formatted (and not just a factor) the error message
@@ -290,16 +296,20 @@ explain_simple_ens_by_wkflow <- function(
       if (is.null(model$pre$actions$recipe$recipe$steps)) {
         data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
       } else {
-        stop("your recipe contains steps; please provide a copy of the ",
-             "original dataset as data argument")
+        stop(
+          "your recipe contains steps; please provide a copy of the ",
+          "original dataset as data argument"
+        )
       }
     } else {
       data_train <- data
     }
     if (is.null(y)) {
       data_response <-
-        (as.numeric(workflowsets::extract_mold(model$workflow[[i]])$outcomes %>%
-                      dplyr::pull()) - 2) * -1
+        (as.numeric(
+          workflowsets::extract_mold(model$workflow[[i]])$outcomes %>%
+            dplyr::pull()
+        ) - 2) * -1
     } else {
       data_response <- (as.numeric(y) - 2) * -1
     }

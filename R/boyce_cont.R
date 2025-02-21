@@ -138,8 +138,10 @@ boyce_cont_estimator_impl <- function(truth,
                                       event_level,
                                       case_weights) {
   if (!identical(estimator, "binary")) {
-    stop("boyce_cont is only available for binary classes; multiclass ",
-         "is not supported")
+    stop(
+      "boyce_cont is only available for binary classes; multiclass ",
+      "is not supported"
+    )
   }
   # separate estimates into presences and background
   if (identical(event_level, "first")) {
@@ -180,8 +182,11 @@ contBoyce <- function(
     na.rm = FALSE,
     ...) {
   # if all NAs
-  if (all(is.na(pres)) || all(is.na(contrast)) ||
-        all(is.na(presWeight)) || all(is.na(contrastWeight))) {
+  if (all(is.na(pres)) ||
+      all(is.na(contrast)) ||
+      all(is.na(presWeight)) ||
+      all(is.na(contrastWeight))
+  ) {
     return(NA)
   }
 
@@ -237,8 +242,10 @@ contBoyce <- function(
   # add small number to each bin that has 0 background frequency but does have a
   # presence frequency > 0
   if (any(freqPres > 0 & freqContrast == 0)) {
-    smallValue <- min(0.5 * c(presWeight[presWeight > 0],
-                              contrastWeight[contrastWeight > 0]))
+    smallValue <- min(0.5 * c(
+      presWeight[presWeight > 0],
+      contrastWeight[contrastWeight > 0]
+    ))
     freqContrast[freqPres > 0 & freqContrast == 0] <- smallValue
   }
 

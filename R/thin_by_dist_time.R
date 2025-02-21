@@ -40,7 +40,8 @@
 # This code is an adaptation of spThin to work on sf objects
 
 thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
-                              time_col = "time", lubridate_fun = c, dist_method = c("great_circle", "euclidean")) {
+                              time_col = "time", lubridate_fun = c,
+                              dist_method = c("great_circle", "euclidean")) {
   return_dataframe <-
     FALSE # flag whether we need to return a data.frame
   # cast to sf if needed
@@ -51,7 +52,8 @@ thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
     return_dataframe <- TRUE
   }
 
-  # use the proper method of distance calculation by changing projection if necessary
+  # use the proper method of distance calculation by changing projection if
+  # necessary
   dist_method <- match.arg(dist_method)
   if (dist_method == "great_circle") {
     # store the original projection
@@ -70,7 +72,8 @@ thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
   }
   time_in_days <- as.numeric(time_lub - lubridate::origin)
   # compute an interval matrix (analogous to the dist_mat, but for time)
-  interval_mat <- as.matrix(stats::dist(time_in_days, diag = TRUE, upper = TRUE)) < interval_min
+  interval_mat <- as.matrix(stats::dist(time_in_days, diag = TRUE,
+                                        upper = TRUE)) < interval_min
 
   # compute distances with sf, using the appropriate units for the projection
   dist_mat <- sf::st_distance(data)
@@ -131,7 +134,7 @@ thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
 
   if (return_dataframe) {
     thinned_points <- thinned_points %>%
-      dplyr::bind_cols(sf::st_coordinates(thinned_points)) %>% # re-add coordinates
+      dplyr::bind_cols(sf::st_coordinates(thinned_points)) %>% # re-add coords
       as.data.frame() %>% # turn it into a data.frame
       dplyr::select(-"geometry") %>% # remove the geometry column
       dplyr::rename("{coords[1]}" := "X", "{coords[2]}" := "Y")

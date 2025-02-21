@@ -48,8 +48,10 @@ predict.simple_ensemble <-
 
     if (type == "class") {
       if (fun[1] == "none") {
-        stop("classes can be generated only if an aggregating ",
-             "function is given")
+        stop(
+          "classes can be generated only if an aggregating ",
+          "function is given"
+        )
       }
       if (members) {
         message("classes are only provided for aggregated ensemble predictions")
@@ -73,14 +75,18 @@ predict.simple_ensemble <-
             "be produced\n",
             "use 'calib_class_thresh()' first"
           )
-        } else if (!any(unlist(lapply(ref_calib_tb %>%
-                                        dplyr::pull("metric_thresh"),
-                                      identical,
-                                      metric_thresh)) &
-                          unlist(lapply(ref_calib_tb %>%
-                                          dplyr::pull("class_thresh"),
-                                        identical,
-                                        class_thresh)))) {
+        } else if (!any(unlist(lapply(
+          ref_calib_tb %>%
+            dplyr::pull("metric_thresh"),
+          identical,
+          metric_thresh
+        )) &
+          unlist(lapply(
+            ref_calib_tb %>%
+              dplyr::pull("class_thresh"),
+            identical,
+            class_thresh
+          )))) {
           stop(
             "this model needs to be first calibrated before classes can ",
             "be produced\n",
@@ -91,14 +97,18 @@ predict.simple_ensemble <-
 
         # subset the calibration thresholds
         ref_calib_tb <- ref_calib_tb[
-          (unlist(lapply(ref_calib_tb %>%
-                           dplyr::pull("metric_thresh"),
-                         identical,
-                         metric_thresh)) &
-             unlist(lapply(ref_calib_tb %>%
-                             dplyr::pull("class_thresh"),
-                           identical,
-                           class_thresh))) &
+          (unlist(lapply(
+            ref_calib_tb %>%
+              dplyr::pull("metric_thresh"),
+            identical,
+            metric_thresh
+          )) &
+            unlist(lapply(
+              ref_calib_tb %>%
+                dplyr::pull("class_thresh"),
+              identical,
+              class_thresh
+            ))) &
             ref_calib_tb$fun %in% fun,
         ]
       } else { # if class_thresh is numeric, fake a calib table
@@ -108,8 +118,8 @@ predict.simple_ensemble <-
         )
       }
 
-      class_levels <- levels(workflows::extract_mold((object$workflow[[1]]))$outcome %>% #nolint
-                               dplyr::pull(1))
+      class_levels <- levels(workflows::extract_mold((object$workflow[[1]]))$outcome %>% # nolint
+        dplyr::pull(1))
     }
 
     # set up the aggregating function
@@ -118,10 +128,14 @@ predict.simple_ensemble <-
     if (inherits(fun, "character")) {
       # check that we have valid values
       if (!(((length(fun) == 1 && fun[1] == "none")) ||
-              all(fun %in% c("mean", "median", "weighted_mean",
-                             "weighted_median")))) {
-        stop("fun should be either 'none', or a combination of 'mean', ",
-             "'median', 'weighted_mean', and 'weighted_median'")
+        all(fun %in% c(
+          "mean", "median", "weighted_mean",
+          "weighted_median"
+        )))) {
+        stop(
+          "fun should be either 'none', or a combination of 'mean', ",
+          "'median', 'weighted_mean', and 'weighted_median'"
+        )
       }
       if (fun[1] == "none") {
         have_fun <- FALSE
@@ -129,8 +143,10 @@ predict.simple_ensemble <-
           TRUE # without an aggregating function, we want the member predictions
       }
     } else {
-      stop("fun should be either 'none', or a combination of 'mean', ",
-           "'median', 'weighted_mean', and 'weighted_median'")
+      stop(
+        "fun should be either 'none', or a combination of 'mean', ",
+        "'median', 'weighted_mean', and 'weighted_median'"
+      )
     }
 
     # if there is no data, grab it from the first workflow
@@ -155,8 +171,10 @@ predict.simple_ensemble <-
     # metric)
     if (!is.null(metric_thresh)) {
       if (!metric_thresh[1] %in% attr(object, "metrics")) {
-        stop("'metric_thresh' is not among the metrics estimated ",
-             "for this ensemble")
+        stop(
+          "'metric_thresh' is not among the metrics estimated ",
+          "for this ensemble"
+        )
       }
       # values for this metric
       metric_ens <-
@@ -166,7 +184,7 @@ predict.simple_ensemble <-
       pred_list <-
         pred_list[, metric_ens$mean > as.numeric(metric_thresh[2])]
       metric_ens <- metric_ens$mean[metric_ens$mean >
-                                      as.numeric(metric_thresh[2])]
+        as.numeric(metric_thresh[2])]
       if (length(pred_list) == 0) {
         stop("the current metric_threshold excludes all models")
       }
@@ -180,11 +198,11 @@ predict.simple_ensemble <-
     }
 
     # define the weighted functions
-    weighted_mean <- function(x, w = metric_ens) { #nolint
+    weighted_mean <- function(x, w = metric_ens) { # nolint
       stats::weighted.mean(x, weights = w)
     }
 
-    weighted_median <- function(x, w = metric_ens) { #nolint
+    weighted_median <- function(x, w = metric_ens) { # nolint
       w <- w[order(x)]
       x <- x[order(x)]
       prob <- cumsum(w) / sum(w)

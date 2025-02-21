@@ -18,11 +18,15 @@
 #' @examples
 #' data("bradypus", package = "maxnet")
 #' bradypus_tb <- tibble::as_tibble(bradypus) %>%
-#'                 dplyr::mutate(presence = relevel( factor(
-#'                                 dplyr::case_match(presence, 1 ~ "presence",
-#'                                                   0 ~ "absence")),
-#'                               ref = "presence"
-#'                 ))
+#'   dplyr::mutate(presence = relevel(
+#'     factor(
+#'       dplyr::case_match(
+#'         presence, 1 ~ "presence",
+#'         0 ~ "absence"
+#'       )
+#'     ),
+#'     ref = "presence"
+#'   ))
 #'
 #' ggplot(bradypus_tb, aes(
 #'   x = "",
@@ -43,9 +47,9 @@ geom_split_violin <- function(mapping = NULL,
                               draw_quantiles = NULL,
                               trim = TRUE,
                               scale = "area",
-                              na.rm = FALSE, #nolint
-                              show.legend = NA, #nolint
-                              inherit.aes = TRUE) { #nolint
+                              na.rm = FALSE, # nolint
+                              show.legend = NA, # nolint
+                              inherit.aes = TRUE) { # nolint
   ggplot2::layer(
     data = data,
     mapping = mapping,
@@ -67,7 +71,7 @@ geom_split_violin <- function(mapping = NULL,
 }
 
 #' @keywords internal
-GeomSplitViolin <- ggplot2::ggproto( #nolint
+GeomSplitViolin <- ggplot2::ggproto( # nolint
   "GeomSplitViolin",
   ggplot2::GeomViolin,
   draw_group = function(self,
@@ -93,8 +97,10 @@ GeomSplitViolin <- ggplot2::ggproto( #nolint
       newdata[nrow(newdata), ],
       newdata[1, ]
     )
-    newdata[c(1, nrow(newdata) - 1, nrow(newdata)),
-            "x"] <- round(newdata[1, "x"])
+    newdata[
+      c(1, nrow(newdata) - 1, nrow(newdata)),
+      "x"
+    ] <- round(newdata[1, "x"])
 
     # now nudge them apart
     newdata$x <- ifelse(newdata$group %% 2 == 1,

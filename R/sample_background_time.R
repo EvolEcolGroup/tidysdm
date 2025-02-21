@@ -89,8 +89,10 @@ sample_background_time <- function(data, raster,
   if (inherits(raster, "stars")) raster <- as(raster, "SpatRaster")
 
   if (length(n_per_time_step) != terra::nlyr(raster)) {
-    stop("length of 'n_per_time_step' should be the same as the number",
-         "of layers in 'raster'")
+    stop(
+      "length of 'n_per_time_step' should be the same as the number",
+      "of layers in 'raster'"
+    )
   }
 
   # get the time steps
@@ -181,8 +183,10 @@ sample_background_time <- function(data, raster,
     } else {
       presences <- data[, names(background[1:2])]
     }
-    presences <- presences %>% dplyr::mutate(class = "presence",
-                                             time_step = time_lub)
+    presences <- presences %>% dplyr::mutate(
+      class = "presence",
+      time_step = time_lub
+    )
     background <- background %>%
       dplyr::bind_rows(presences) %>%
       dplyr::mutate(class = stats::relevel(factor(class), ref = "presence"))

@@ -24,36 +24,48 @@ check_splits_balance <- function(splits, .col) {
       stop(".col should be a column in the data used to generate the splits")
     }
     training_list <- lapply(splits$splits, function(x) {
-      table(rsample::training(x) %>%
-              sf::st_drop_geometry() %>%
-              dplyr::pull(.col))
+      table(
+        rsample::training(x) %>%
+          sf::st_drop_geometry() %>%
+          dplyr::pull(.col)
+      )
     })
     training_df <- do.call("rbind", training_list)
     testing_list <- lapply(splits$splits, function(x) {
-      table(rsample::testing(x) %>%
-              sf::st_drop_geometry() %>%
-              dplyr::pull(.col))
+      table(
+        rsample::testing(x) %>%
+          sf::st_drop_geometry() %>%
+          dplyr::pull(.col)
+      )
     })
     testing_df <- do.call("rbind", testing_list)
     dimnames(testing_df)[[2]] <- paste0(dimnames(testing_df)[[2]], "_analysis")
-    dimnames(training_df)[[2]] <- paste0(dimnames(training_df)[[2]],
-                                         "_assessment")
+    dimnames(training_df)[[2]] <- paste0(
+      dimnames(training_df)[[2]],
+      "_assessment"
+    )
 
     balance_df <- dplyr::bind_cols(training_df, testing_df)
   } else if (inherits(splits, "rsplit")) {
     if (!(.col %in% names(splits$data))) {
       stop(".col should be a column in the data used to generate the splits")
     }
-    training_df <- table(rsample::training(splits) %>%
-                           sf::st_drop_geometry() %>%
-                           dplyr::pull(.col))
-    testing_df <- table(rsample::testing(splits) %>%
-                          sf::st_drop_geometry() %>%
-                          dplyr::pull(.col))
+    training_df <- table(
+      rsample::training(splits) %>%
+        sf::st_drop_geometry() %>%
+        dplyr::pull(.col)
+    )
+    testing_df <- table(
+      rsample::testing(splits) %>%
+        sf::st_drop_geometry() %>%
+        dplyr::pull(.col)
+    )
     # coerce to a df with only one row
     balance_df <- as.data.frame(matrix(c(training_df, testing_df), nrow = 1))
-    names(balance_df) <- c(paste0(names(testing_df), "_test"),
-                           paste0(names(training_df), "_train"))
+    names(balance_df) <- c(
+      paste0(names(testing_df), "_test"),
+      paste0(names(training_df), "_train")
+    )
     balance_df <- tibble::as_tibble(balance_df)
   } else {
     stop("splits should be either a spatial_rset or a spatial_rsplit")

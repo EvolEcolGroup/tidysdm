@@ -45,8 +45,10 @@ add_member.tune_results <- function(x,
     metric <- attr(x, "best_metric")
   } else {
     if (metric != attr(x, "best_metric")) {
-      stop("the requested metric is not the same ",
-           "as the one previously used in x")
+      stop(
+        "the requested metric is not the same ",
+        "as the one previously used in x"
+      )
     }
   }
 
@@ -56,8 +58,10 @@ add_member.tune_results <- function(x,
   }
   # check that id is unique
   if (id %in% x$wflow_id) {
-    stop("x already has a member with the same name, ",
-         "provide an alternative name")
+    stop(
+      "x already has a member with the same name, ",
+      "provide an alternative name"
+    )
   }
 
   # get the best config, metric, etc.
@@ -97,9 +101,11 @@ add_member.workflow_set <- function(x, member, metric = NULL, ...) {
     # if the result is an empty list, throw an error
     # (how did we get to such a situation?)
     if (length(this_res) == 0) {
-      stop("no result found for workflow ",
-           i_wflow,
-           "; did you forget to fit the workflow?")
+      stop(
+        "no result found for workflow ",
+        i_wflow,
+        "; did you forget to fit the workflow?"
+      )
     }
     x <- x %>% add_member(this_res, metric = metric, id = i_wflow)
   }
@@ -112,10 +118,12 @@ tidydsm_choose_metric <- function(metric, x) {
     metric_vals <- tune::.get_tune_metric_names(x)
     metric <- metric_vals[1]
     if (length(metric_vals) > 1) {
-      msg <- paste0("No value of `metric` was given; metric '",
-                    metric,
-                    "' ",
-                    "will be used.")
+      msg <- paste0(
+        "No value of `metric` was given; metric '",
+        metric,
+        "' ",
+        "will be used."
+      )
       rlang::warn(msg)
     }
   }

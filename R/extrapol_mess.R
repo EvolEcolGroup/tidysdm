@@ -93,7 +93,8 @@ extrapol_mess.SpatRaster <- function(x, training, .col, filename = "", ...) {
     b <- terra::writeStart(out, filename, ...)
     for (i in 1:b$n) {
       vv <- terra::readValues(x, b$row[i], b$nrows[i], mat = TRUE)
-      vv <- sapply(1:ncol(training), function(i) .messi(vv[, i], training[, i]))
+      vv <- sapply(seq_len(ncol(training)), 
+                   function(i) .messi(vv[, i], training[, i]))
       suppressWarnings(m <- apply(vv, 1, min, na.rm = TRUE))
       m[!is.finite(m)] <- NA
       terra::writeValues(out, m, b$row[i], b$nrows[i])
@@ -133,7 +134,7 @@ extrapol_mess.data.frame <- function(x, training, .col, ...) {
   if (ncol(x) == 1) {
     data.frame(mess = .messi(x, training))
   } else {
-    x <- sapply(1:ncol(x), function(i) .messi(x[, i], training[, i]))
+    x <- sapply(seq_len(ncol(x)), function(i) .messi(x[, i], training[, i]))
     rmess <- apply(x, 1, min, na.rm = TRUE)
     data.frame(mess = rmess)
   }
@@ -159,12 +160,16 @@ extrapol_mess.SpatRasterDataset <- function(x, training, .col, ...) {
 
   # get times from the first layer
   if (!terra::timeInfo(x[[1]])$time) {
-    stop("The rasters in `SpatRasterDataset`x`` have no time info; define ",
-         "times with terra::time")
+    stop(
+      "The rasters in `SpatRasterDataset`x`` have no time info; define ",
+      "times with terra::time"
+    )
   }
   if (terra::timeInfo(x[[1]])$step != "years") {
-    stop("The time step of `x` is not `years`; you will need to extract one ",
-         "time step at a time manually and compute the MESS on each SpatRaster")
+    stop(
+      "The time step of `x` is not `years`; you will need to extract one ",
+      "time step at a time manually and compute the MESS on each SpatRaster"
+    )
   }
   raster_times <- terra::time(x[[1]])
 
@@ -174,7 +179,8 @@ extrapol_mess.SpatRasterDataset <- function(x, training, .col, ...) {
   for (i_time in seq_len(length(raster_times))) {
     # get a slice
     this_slice <- pastclim::slice_region_series(x,
-                                                time_ce = raster_times[i_time])
+      time_ce = raster_times[i_time]
+    )
     # apply mess to the slice
     this_mess <- extrapol_mess(this_slice, training = training)
     if (is.null(mess_rast)) {

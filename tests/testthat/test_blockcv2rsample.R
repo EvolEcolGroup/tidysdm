@@ -2,7 +2,8 @@ suppressPackageStartupMessages(library(blockCV))
 test_that("blockcv2rsample conversion", {
   # we use examples from the blockcv library for spatial blocks
   points <- read.csv(system.file("extdata/", "species.csv",
-                                 package = "blockCV"))
+    package = "blockCV"
+  ))
   pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845)
   sb1 <- cv_spatial(
     x = pa_data,

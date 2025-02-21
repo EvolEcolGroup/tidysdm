@@ -8,7 +8,7 @@ urlchecker::url_check()
 # enhanced local checks
 devtools::check(remote = TRUE, manual = TRUE)
 # if unicode characters present and crashing latex
-# grep --color='auto' -P -n "[^\x00-\x7F]" -r * 
+# grep --color='auto' -P -n "[^\x00-\x7F]" -r *
 
 
 source("./data-raw/helper_functions/check_returns_in_documentation.R")
@@ -47,4 +47,3 @@ devtools::release()
 # https://hub.docker.com/r/rhub/debian-gcc-release
 # and then run with:
 # docker run -ti rhub/fedora-clang-devel bash
-

@@ -258,8 +258,10 @@ filter_collinear.matrix <- function(x,
   if (!names) {
     # return their indices
     vars_kept <- match(vars_kept, var_names)
-    attr(vars_kept, "to_remove") <- match(var_names[!var_names %in% vars_kept],
-                                          var_names)
+    attr(vars_kept, "to_remove") <- match(
+      var_names[!var_names %in% vars_kept],
+      var_names
+    )
   }
   return(vars_kept)
 }

@@ -113,9 +113,11 @@ vif_fast <- function(data_mat, cols = NULL) {
   data_mat <- cbind(data_mat, 1) ## convert to a design matrix with an intercept
   vif_one_col <- function(i_col, data_mat) {
     this_resid <- stats::.lm.fit(data_mat[, -i_col],
-                                 y = data_mat[, i_col])$residuals
-    return(1 / (sum(this_resid^2) / sum((data_mat[, i_col] -
-                                           mean(data_mat[, i_col]))^2)))
+      y = data_mat[, i_col]
+    )$residuals
+    return(1 /
+             (sum(this_resid^2) /
+                sum((data_mat[, i_col] - mean(data_mat[, i_col]))^2)))
   }
   vif_vector <- sapply(cols, FUN = vif_one_col, data_mat = data_mat)
   names(vif_vector) <- var_names[cols]

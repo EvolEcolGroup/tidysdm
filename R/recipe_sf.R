@@ -30,8 +30,10 @@ recipe.sf <- function(x, ...) {
     if (all(sf::st_drop_geometry(x[, c("X", "Y")]) == sf::st_coordinates(x))) {
       x <- x %>% sf::st_drop_geometry()
     } else {
-      stop("sf object `x` contains `X` and `Y` coordinates that do not ",
-           "match the sf point geometry")
+      stop(
+        "sf object `x` contains `X` and `Y` coordinates that do not ",
+        "match the sf point geometry"
+      )
     }
   } else {
     x <- x %>%

@@ -38,8 +38,10 @@ plot_pres_vs_bg <- function(
   num_vars <- names(.data)[!names(.data) %in% .col]
   plot_list <- list()
   for (i_var in num_vars) {
-    p <- ggplot2::ggplot(data = .data, ggplot2::aes(x = "", y = .data[[i_var]],
-                                                    fill = .data[[.col]])) +
+    p <- ggplot2::ggplot(data = .data, ggplot2::aes(
+      x = "", y = .data[[i_var]],
+      fill = .data[[.col]]
+    )) +
       geom_split_violin(nudge = 0.01) +
       ggplot2::labs(x = "")
     plot_list[[i_var]] <- p

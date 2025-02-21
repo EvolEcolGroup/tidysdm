@@ -52,11 +52,13 @@ sample_background <- function(data, raster, n, coords = NULL,
       if (any(is.na(data[, c("X", "Y")]))) {
         stop("sf object contains NA values in the X and Y coordinates")
       } else if (all(sf::st_drop_geometry(data[, c("X", "Y")]) ==
-                     sf::st_coordinates(data))) {
+        sf::st_coordinates(data))) {
         bind_col <- FALSE
       } else {
-        stop("sf object contains X and Y coordinates that do not match ",
-             "the sf point geometry")
+        stop(
+          "sf object contains X and Y coordinates that do not match ",
+          "the sf point geometry"
+        )
       }
     }
     if (bind_col) {
