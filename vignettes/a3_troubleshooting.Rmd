@@ -235,7 +235,7 @@ lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
 ))
 set.seed(123)
 lacerta_thin <- lacerta_thin[sample(
-  1:nrow(lacerta_thin),
+  seq_len(nrow(lacerta_thin)),
   nrow(lacerta_thin) / 5
 ), ]
 

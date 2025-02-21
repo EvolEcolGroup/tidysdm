@@ -37,8 +37,12 @@ test_that("sdm_recipe_sf", {
   expect_true(recipes::fully_trained(lacerta_rec_prep))
 
   ## now bake
-  expect_true(all(c("X", "Y") %in%
-    names(bake(lacerta_rec_prep, new_data = lacerta_thin))))
+  expect_true(
+    all(
+      c("X", "Y") %in%
+        names(bake(lacerta_rec_prep, new_data = lacerta_thin))
+    )
+  )
   baked_no_xy <- bake(lacerta_rec_prep,
     new_data = lacerta_thin %>% sf::st_drop_geometry()
   )

@@ -51,8 +51,10 @@ sample_background <- function(data, raster, n, coords = NULL,
     if (all(c("X", "Y") %in% names(data))) {
       if (any(is.na(data[, c("X", "Y")]))) {
         stop("sf object contains NA values in the X and Y coordinates")
-      } else if (all(sf::st_drop_geometry(data[, c("X", "Y")]) ==
-        sf::st_coordinates(data))) {
+      } else if (all(
+        sf::st_drop_geometry(data[, c("X", "Y")]) ==
+          sf::st_coordinates(data)
+      )) {
         bind_col <- FALSE
       } else {
         stop(
@@ -68,7 +70,7 @@ sample_background <- function(data, raster, n, coords = NULL,
     return_sf <- TRUE
   }
   coords <- check_coords_names(data, coords)
-  dist_min <- dist_max <- NULL
+  dist_max <- NULL
   if (method[1] == "dist_max") {
     if (length(method) != 2) {
       stop("method 'dist_max' should have one threshold, e.g. c('dist_max',50)")

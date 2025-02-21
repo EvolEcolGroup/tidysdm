@@ -48,7 +48,7 @@ predict_raster.default <- function(object, raster, ...) {
     # make predict_raster work with multilevel predictions
     # edit by @piabenaud
     levels(pred_raster) <- data.frame(
-      id = 1:length(dplyr::pull(unique(pred_df))),
+      id = seq_along(dplyr::pull(unique(pred_df))),
       class = levels(pred_df %>% dplyr::pull(1))
     )
   }

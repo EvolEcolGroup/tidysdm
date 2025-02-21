@@ -42,10 +42,12 @@ gam_formula <- function(object, k = 10) {
 #' This is the counterpart of [rsample::form_pred].
 #'
 #' Note: this might not behave well with functions such as log(y). But neither
-#' does form_pred
+#' does [rsample::form_pred].
 #'
 #' modified from
+# nolint start
 #' https://stackoverflow.com/questions/13217322/how-to-reliably-get-dependent-variable-name-from-formula-object
+# nolint end
 #' @param x a formula
 #' @returns character the name of the response
 #' @keywords internal

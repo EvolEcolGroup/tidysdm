@@ -27,7 +27,7 @@ locations <- data.frame(
 # nolint start
 # points in poygons function
 # (from https://stackoverflow.com/questions/72384038/point-in-polygon-using-terra-package-in-r)
-# notlint end
+# nolint end
 pts_in_polys <- function(pts, polys) {
   e <- terra::extract(polys, pts)
   e[!is.na(e[, 2]), 1]
@@ -52,19 +52,57 @@ test_that("sample_pseudoabs_time samples in the right places", {
   # we have the right number of pseudoabsences per time
   expect_true(all(table(locations$time) * n_pt == table(pa_random$time_step)))
   # none are within the buffer at a given time step
-  min_buffer <- terra::buffer(terra::vect(locations %>%
-    dplyr::filter(time == 2), crs = "lonlat"), buf_dist)
-  expect_true(length(pts_in_polys(terra::vect(pa_random %>%
-    dplyr::filter(time_step == as.Date("1952-01-01"))), min_buffer)) == 0)
+  min_buffer <- terra::buffer(
+    terra::vect(
+      locations %>%
+        dplyr::filter(time == 2),
+      crs = "lonlat"
+    ), buf_dist
+  )
+  expect_true(
+    length(
+      pts_in_polys(
+        terra::vect(pa_random %>% dplyr::filter(
+          time_step == as.Date("1952-01-01")
+        )), min_buffer
+      )
+    ) == 0
+  )
   # but they ignore presences from other time steps
-  min_buffer <- terra::buffer(terra::vect(locations %>%
-    dplyr::filter(time == 3), crs = "lonlat"), buf_dist)
-  expect_false(length(pts_in_polys(terra::vect(pa_random %>%
-    dplyr::filter(time_step == as.Date("1952-01-01"))), min_buffer)) == 0)
-  min_buffer <- terra::buffer(terra::vect(locations %>%
-    dplyr::filter(time == 4), crs = "lonlat"), buf_dist)
-  expect_false(length(pts_in_polys(terra::vect(pa_random %>%
-    dplyr::filter(time_step == as.Date("1952-01-01"))), min_buffer)) == 0)
+  min_buffer <- terra::buffer(
+    terra::vect(
+      locations %>%
+        dplyr::filter(time == 3),
+      crs = "lonlat"
+    ), buf_dist
+  )
+  expect_false(
+    length(
+      pts_in_polys(
+        terra::vect(pa_random %>%
+          dplyr::filter(
+            time_step == as.Date("1952-01-01")
+          )), min_buffer
+      )
+    ) == 0
+  )
+  min_buffer <- terra::buffer(
+    terra::vect(
+      locations %>%
+        dplyr::filter(time == 4),
+      crs = "lonlat"
+    ), buf_dist
+  )
+  expect_false(
+    length(
+      pts_in_polys(
+        terra::vect(pa_random %>%
+          dplyr::filter(
+            time_step == as.Date("1952-01-01")
+          )), min_buffer
+      )
+    ) == 0
+  )
 
   # now set the time buffer so that we allow presences to impact absences in
   # other time steps
@@ -78,20 +116,59 @@ test_that("sample_pseudoabs_time samples in the right places", {
   # we have the right number of pseudoabsences per time
   expect_true(all(table(locations$time) * n_pt == table(pa_random$time_step)))
   # none are within the buffer at a given time step
-  min_buffer <- terra::buffer(terra::vect(locations %>%
-    dplyr::filter(time == 2), crs = "lonlat"), buf_dist)
-  expect_true(length(pts_in_polys(terra::vect(pa_random %>%
-    dplyr::filter(time_step == as.Date("1952-01-01"))), min_buffer)) == 0)
+  min_buffer <- terra::buffer(
+    terra::vect(
+      locations %>%
+        dplyr::filter(time == 2),
+      crs = "lonlat"
+    ), buf_dist
+  )
+  expect_true(
+    length(
+      pts_in_polys(
+        terra::vect(pa_random %>%
+          dplyr::filter(
+            time_step == as.Date("1952-01-01")
+          )), min_buffer
+      )
+    ) == 0
+  )
   # none are within the buffer of a location in the time buffer
-  min_buffer <- terra::buffer(terra::vect(locations %>%
-    dplyr::filter(time == 3), crs = "lonlat"), buf_dist)
-  expect_true(length(pts_in_polys(terra::vect(pa_random %>%
-    dplyr::filter(time_step == as.Date("1952-01-01"))), min_buffer)) == 0)
+  min_buffer <- terra::buffer(
+    terra::vect(
+      locations %>%
+        dplyr::filter(time == 3),
+      crs = "lonlat"
+    ), buf_dist
+  )
+  expect_true(
+    length(
+      pts_in_polys(
+        terra::vect(pa_random %>%
+          dplyr::filter(
+            time_step == as.Date("1952-01-01")
+          )), min_buffer
+      )
+    ) == 0
+  )
   # but they ignore presences from time steps outside the buffer
-  min_buffer <- terra::buffer(terra::vect(locations %>%
-    dplyr::filter(time == 4), crs = "lonlat"), buf_dist)
-  expect_false(length(pts_in_polys(terra::vect(pa_random %>%
-    dplyr::filter(time_step == as.Date("1952-01-01"))), min_buffer)) == 0)
+  min_buffer <- terra::buffer(
+    terra::vect(
+      locations %>%
+        dplyr::filter(time == 4),
+      crs = "lonlat"
+    ), buf_dist
+  )
+  expect_false(
+    length(
+      pts_in_polys(
+        terra::vect(pa_random %>%
+          dplyr::filter(
+            time_step == as.Date("1952-01-01")
+          )), min_buffer
+      )
+    ) == 0
+  )
 
 
   # now check that we return the right number of presences
@@ -151,7 +228,8 @@ test_that("sample_pseudoabs_time treats time correctly", {
   time(grid_raster) <- as.Date(time(grid_raster))
   expect_true(inherits(time(grid_raster), "Date"))
   set.seed(123)
-  pa_random <- sample_pseudoabs_time(locations,
+  pa_random <- sample_pseudoabs_time(
+    locations,
     n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
     method = c("dist_min", buf_dist),
     return_pres = FALSE
@@ -163,9 +241,11 @@ test_that("sample_pseudoabs_time treats time correctly", {
   pastclim::time_bp(grid_raster) <- 0:4
   time(grid_raster) <- time(grid_raster)
   expect_true(timeInfo(grid_raster)$step == "raw")
-  expect_error(sample_pseudoabs_time(locations,
-    n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
-    method = c("dist_min", buf_dist),
-    return_pres = FALSE
-  ), "the units of the time axis of the raster are not defined")
+  expect_error(
+    sample_pseudoabs_time(locations,
+      n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+      method = c("dist_min", buf_dist),
+      return_pres = FALSE
+    ), "the units of the time axis of the raster are not defined"
+  )
 })

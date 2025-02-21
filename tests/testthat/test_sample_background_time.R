@@ -58,15 +58,37 @@ test_that("sample_background_time samples in the right places", {
   expect_true(all(n_pt[3:5] == table(bg_dist_max$time_step)))
   # all are within the buffer at a given time step (note that time==2 is the
   # THIRD time step, as we start with zero)
-  max_buffer <- terra::buffer(terra::vect(locations %>%
-    dplyr::filter(time == 2), crs = "lonlat"), buf_dist)
-  expect_true(length(pts_in_polys(terra::vect(bg_dist_max %>%
-    dplyr::filter(time_step == as.Date("1952-01-01"))), max_buffer)) == n_pt[3])
+  max_buffer <- terra::buffer(
+    terra::vect(
+      locations %>%
+        dplyr::filter(time == 2),
+      crs = "lonlat"
+    ), buf_dist
+  )
+  expect_true(
+    length(pts_in_polys(
+      terra::vect(
+        bg_dist_max %>%
+          dplyr::filter(time_step == as.Date("1952-01-01"))
+      ), max_buffer
+    )) == n_pt[3]
+  )
   # but not in the buffer of the presence for the next time step
-  max_buffer <- terra::buffer(terra::vect(locations %>%
-    dplyr::filter(time == 3), crs = "lonlat"), buf_dist)
-  expect_true(length(pts_in_polys(terra::vect(bg_dist_max %>%
-    dplyr::filter(time_step == as.Date("1952-01-01"))), max_buffer)) == 0)
+  max_buffer <- terra::buffer(
+    terra::vect(
+      locations %>%
+        dplyr::filter(time == 3),
+      crs = "lonlat"
+    ), buf_dist
+  )
+  expect_true(
+    length(pts_in_polys(
+      terra::vect(
+        bg_dist_max %>%
+          dplyr::filter(time_step == as.Date("1952-01-01"))
+      ), max_buffer
+    )) == 0
+  )
 
   # now set the time buffer so that we allow presences to impact background in
   # other time steps
@@ -80,10 +102,23 @@ test_that("sample_background_time samples in the right places", {
   # we have the right number of background points per time
   expect_true(all(n_pt[3:5] == table(bg_dist_max$time_step)))
   # now we have points in the buffer of the presence for the next time step
-  max_buffer <- terra::buffer(terra::vect(locations %>%
-    dplyr::filter(time == 3), crs = "lonlat"), buf_dist)
-  expect_true(length(pts_in_polys(terra::vect(bg_dist_max %>%
-    dplyr::filter(time_step == as.Date("1952-01-01"))), max_buffer)) > 0)
+  max_buffer <- terra::buffer(
+    terra::vect(
+      locations %>%
+        dplyr::filter(time == 3),
+      crs = "lonlat"
+    ), buf_dist
+  )
+  expect_true(
+    length(
+      pts_in_polys(
+        terra::vect(bg_dist_max %>%
+          dplyr::filter(
+            time_step == as.Date("1952-01-01")
+          )), max_buffer
+      )
+    ) > 0
+  )
 
   # now check that the bias method works
   set.seed(123)
@@ -98,20 +133,24 @@ test_that("sample_background_time samples in the right places", {
   expect_true(sum(bg_bias$lat %in% c(-0.75, -1.75)) > 14)
 
   # and now a couple of error messages
-  expect_error(sample_background_time(locations,
-    n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
-    method = c("bias"),
-    return_pres = FALSE,
-    time_buffer = y2d(1)
-  ), "'time_buffer' should only be set with method 'dist_max'")
+  expect_error(
+    sample_background_time(locations,
+      n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+      method = c("bias"),
+      return_pres = FALSE,
+      time_buffer = y2d(1)
+    ), "'time_buffer' should only be set with method 'dist_max'"
+  )
 
   n_pt <- c(1, 0, 5, 6, 5)
-  expect_error(sample_background_time(locations,
-    n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
-    method = c("dist_max", buf_dist),
-    return_pres = FALSE,
-    time_buffer = y2d(1)
-  ), "for time 1950-01-01 there no presences when 1 background")
+  expect_error(
+    sample_background_time(locations,
+      n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+      method = c("dist_max", buf_dist),
+      return_pres = FALSE,
+      time_buffer = y2d(1)
+    ), "for time 1950-01-01 there no presences when 1 background"
+  )
 })
 
 # nolint start
@@ -157,9 +196,11 @@ test_that("sample_background_time treats time correctly", {
   pastclim::time_bp(grid_raster) <- 0:4
   time(grid_raster) <- time(grid_raster)
   expect_true(timeInfo(grid_raster)$step == "raw")
-  expect_error(sample_background_time(locations,
-    n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
-    method = c("dist_max", buf_dist),
-    return_pres = FALSE
-  ), "the units of the time axis of the raster are not defined")
+  expect_error(
+    sample_background_time(locations,
+      n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+      method = c("dist_max", buf_dist),
+      return_pres = FALSE
+    ), "the units of the time axis of the raster are not defined"
+  )
 })

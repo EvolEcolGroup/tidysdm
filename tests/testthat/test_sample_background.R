@@ -34,8 +34,12 @@ test_that("sample_background samples in the right places", {
   # we should now check that some points are outside the buffers
   expect_true(length(pts_in_polys(terra::vect(bg_random), max_buffer)) < 25)
   # some points conside with the presences
-  expect_true(any(terra::extract(grid_raster, bg_random[, 1:2])$ID %in%
-    terra::extract(grid_raster, locations[, 1:2])$ID))
+  expect_true(
+    any(
+      terra::extract(grid_raster, bg_random[, 1:2])$ID %in%
+        terra::extract(grid_raster, locations[, 1:2])$ID
+    )
+  )
   # there should be no presences
   expect_true(unique(bg_random$class) == "background")
 
@@ -114,7 +118,7 @@ test_that("handling of data frames and sf objects", {
     sample_background(locations_sf,
       raster = grid_raster, n = 100
     ),
-    "There are fewer available cells for raster 'NA' (3 presences) than the requested 100 background points. Only 55 will be returned.",
+    "There are fewer available cells for raster 'NA' (3 presences) than the requested 100 background points. Only 55 will be returned.", # nolint
     fixed = TRUE
   )
   locations_sf <- locations_sf %>% dplyr::bind_cols(sf::st_coordinates(.))
@@ -129,7 +133,7 @@ test_that("handling of data frames and sf objects", {
       coords = c("X", "Y"),
       raster = grid_raster, n = 25
     ),
-    "sf object contains X and Y coordinates that do not match the sf point geometry"
+    "sf object contains X and Y coordinates that do not match the sf point geometry" # nolint
   )
   locations_sf$X <- rep(NA, 3)
   locations_sf$Y <- rep(NA, 3)

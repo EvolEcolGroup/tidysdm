@@ -128,11 +128,15 @@ StackOverflow, and to Trang Q. Nguyen for adding the nudge parameter.
 \examples{
 data("bradypus", package = "maxnet")
 bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
-                dplyr::mutate(presence = relevel( factor(
-                                dplyr::case_match(presence, 1 ~ "presence",
-                                                  0 ~ "absence")),
-                              ref = "presence"
-                ))
+  dplyr::mutate(presence = relevel(
+    factor(
+      dplyr::case_match(
+        presence, 1 ~ "presence",
+        0 ~ "absence"
+      )
+    ),
+    ref = "presence"
+  ))
 
 ggplot(bradypus_tb, aes(
   x = "",

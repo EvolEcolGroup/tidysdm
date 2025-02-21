@@ -114,10 +114,10 @@ sample_background_time <- function(data, raster,
   out_of_range_warning(time_lub, time_steps)
 
   # convert time_lub dates into indices for the SpatRaster
-  time_indices <-
-    sapply(time_lub, function(a, b) {
-      which.min(abs(a - b))
-    }, time_steps)
+  # time_indices <-
+  #   sapply(time_lub, function(a, b) {
+  #     which.min(abs(a - b))
+  #   }, time_steps)
   time_indices_min <-
     sapply(time_lub_min, function(a, b) {
       which.min(abs(a - b))

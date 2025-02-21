@@ -19,7 +19,7 @@ max_buffer <- terra::buffer(terra::vect(locations, crs = "lonlat"), 90000)
 
 
 # points in poygons function
-# (from https://stackoverflow.com/questions/72384038/point-in-polygon-using-terra-package-in-r)
+# (from https://stackoverflow.com/questions/72384038/point-in-polygon-using-terra-package-in-r) # nolint
 pts_in_polys <- function(pts, polys) {
   e <- terra::extract(polys, pts)
   e[!is.na(e[, 2]), 1]
@@ -55,7 +55,12 @@ test_that("sample_pseudoabs samples in the right places", {
     return_pres = FALSE
   )
   # all are within the max buffer
-  expect_true(length(pts_in_polys(terra::vect(pa_max), max_buffer)) == nrow(pa_max))
+  expect_true(
+    length(
+      pts_in_polys(terra::vect(pa_max), max_buffer)
+    ) ==
+      nrow(pa_max)
+  )
 
   # and now use a disc
   set.seed(123)
@@ -65,7 +70,12 @@ test_that("sample_pseudoabs samples in the right places", {
     return_pres = FALSE
   )
   # all are within the max buffer
-  expect_true(length(pts_in_polys(terra::vect(pa_disc), max_buffer)) == nrow(pa_disc))
+  expect_true(
+    length(
+      pts_in_polys(terra::vect(pa_disc), max_buffer)
+    ) ==
+      nrow(pa_disc)
+  )
   # none should be within the minimum buffer
   expect_true(length(pts_in_polys(terra::vect(pa_disc), min_buffer)) == 0)
 
@@ -74,7 +84,8 @@ test_that("sample_pseudoabs samples in the right places", {
 
   # now confirm that it all works if we use an sf object
   set.seed(123)
-  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>% sf::st_set_crs(4326)
+  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>%
+    sf::st_set_crs(4326)
   pa_random_sf <- sample_pseudoabs(locations_sf,
     n = 25, raster = grid_raster,
     return_pres = FALSE
@@ -85,23 +96,38 @@ test_that("sample_pseudoabs samples in the right places", {
 
   # test error messages
   expect_error(
-    sample_pseudoabs(locations_sf, n = 25, raster = grid_raster, method = "blah"),
+    sample_pseudoabs(locations_sf,
+      n = 25, raster = grid_raster,
+      method = "blah"
+    ),
     "method has to be"
   )
   expect_error(
-    sample_pseudoabs(locations_sf, n = 25, raster = grid_raster, method = c("blah", 25)),
+    sample_pseudoabs(locations_sf,
+      n = 25, raster = grid_raster,
+      method = c("blah", 25)
+    ),
     "method has to be"
   )
   expect_error(
-    sample_pseudoabs(locations_sf, n = 25, raster = grid_raster, method = c("dist_min")),
+    sample_pseudoabs(locations_sf,
+      n = 25, raster = grid_raster,
+      method = c("dist_min")
+    ),
     "method 'dist_min' should have one threshold"
   )
   expect_error(
-    sample_pseudoabs(locations_sf, n = 25, raster = grid_raster, method = c("dist_max", 10, 20)),
+    sample_pseudoabs(locations_sf,
+      n = 25, raster = grid_raster,
+      method = c("dist_max", 10, 20)
+    ),
     "method 'dist_max' should have one threshold"
   )
   expect_error(
-    sample_pseudoabs(locations_sf, n = 25, raster = grid_raster, method = c("dist_disc", 10)),
+    sample_pseudoabs(locations_sf,
+      n = 25, raster = grid_raster,
+      method = c("dist_disc", 10)
+    ),
     "method 'dist_disc' should have two thresholds"
   )
 })
@@ -117,28 +143,42 @@ test_that("sample_pseudoabs samples in the right places", {
 })
 
 test_that("handling of data frames and sf objects", {
-  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>% sf::st_set_crs(4326)
+  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>%
+    sf::st_set_crs(4326)
   expect_error(
     sample_pseudoabs(locations_sf, coords = c("x", "y"), raster = grid_raster),
     "There are no recognised coordinate columns"
   )
-  expect_warning(sample_pseudoabs(locations_sf, raster = grid_raster, n = 100), "There are fewer available cells for raster 'NA' (3 presences) than the requested 100 pseudoabsences. Only 52 will be returned.", fixed = TRUE)
+  expect_warning(sample_pseudoabs(locations_sf, raster = grid_raster, n = 100),
+    "There are fewer available cells for raster 'NA' (3 presences) than the requested 100 pseudoabsences. Only 52 will be returned.", # nolint
+    fixed = TRUE
+  )
   locations_sf <- locations_sf %>% dplyr::bind_cols(sf::st_coordinates(.))
-  expect_no_error(sample_pseudoabs(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25))
+  expect_no_error(sample_pseudoabs(locations_sf,
+    coords = c("X", "Y"),
+    raster = grid_raster, n = 25
+  ))
   locations_sf$X <- rep(0, 3)
   locations_sf$Y <- rep(0, 3)
   expect_error(
-    sample_pseudoabs(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25),
-    "sf object contains X and Y coordinates that do not match the sf point geometry"
+    sample_pseudoabs(locations_sf,
+      coords = c("X", "Y"), raster = grid_raster,
+      n = 25
+    ),
+    "sf object contains X and Y coordinates that do not match the sf point geometry" # nolint
   )
   locations_sf$X <- rep(NA, 3)
   locations_sf$Y <- rep(NA, 3)
   expect_error(
-    sample_pseudoabs(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25),
+    sample_pseudoabs(locations_sf,
+      coords = c("X", "Y"), raster = grid_raster,
+      n = 25
+    ),
     "sf object contains NA values in the X and Y coordinates"
   )
 })
 
+# nolint start
 # sample code to plot points in and buffers
 # plot(grid_raster,colNA="darkgray")
 # polys(terra::as.polygons(grid_raster))
@@ -146,3 +186,4 @@ test_that("handling of data frames and sf objects", {
 # points(vect(pa_disc), col="blue", cex=2)
 # polys(min_buffer)
 # polys(max_buffer)
+# nolint end

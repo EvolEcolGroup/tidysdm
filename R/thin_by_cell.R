@@ -43,9 +43,11 @@ thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE,
   if (inherits(data, "sf")) {
     data <- data %>% sf::st_transform(terra::crs(raster))
     if (all(c("X", "Y") %in% names(data))) {
-      if (!all(data[, c("X", "Y")] %>%
-        sf::st_drop_geometry() %>%
-        as.matrix() == sf::st_coordinates(data)) ||
+      if (!all(
+        data[, c("X", "Y")] %>%
+          sf::st_drop_geometry() %>%
+          as.matrix() == sf::st_coordinates(data)
+      ) ||
         any(is.na(data[, c("X", "Y")]))) {
         data <- data %>%
           dplyr::rename("X_original" = "X", "Y_original" = "Y") %>%
@@ -66,7 +68,7 @@ thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE,
   coords <- check_coords_names(data, coords)
   # randomise the row order, so that when we get the first instance in a cell,
   # there should be no pattern
-  data <- data[sample(1:nrow(data)), ]
+  data <- data[sample(seq_len(nrow(data))), ]
   cell_ids <- terra::cellFromXY(
     raster,
     as.matrix(as.data.frame(data)[, coords])

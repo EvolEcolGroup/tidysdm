@@ -162,10 +162,13 @@ kap_max_estimator_impl <- function(truth,
   conf_matrix_df <- conf_matrix_df(presences, absences)
   n <- rowSums(conf_matrix_df[, 2:5])
   obs_accuracy <- (conf_matrix_df$tp + conf_matrix_df$tn) / n
+  # nolint start
+  # (the brackets are too messy for styler to get it right)
   exp_accuracy <- (((conf_matrix_df$tn + conf_matrix_df$fp) *
     (conf_matrix_df$tn + conf_matrix_df$fn) / n) +
     ((conf_matrix_df$tp + conf_matrix_df$fn) *
       (conf_matrix_df$tp + conf_matrix_df$fp) / n)) / n
+  # nolint end
   kap <- (obs_accuracy - exp_accuracy) / (1 - exp_accuracy)
   max(kap) ## return the maximum kap
 }

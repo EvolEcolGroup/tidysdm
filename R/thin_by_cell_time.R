@@ -45,7 +45,7 @@ thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
                               agg_fact = NULL) {
   # randomise the row order, so that when we get the first instance in a cell,
   # there should be no pattern
-  data <- data[sample(1:nrow(data)), ]
+  data <- data[sample(seq_len(nrow(data))), ]
   # create a vector of times formatted as proper dates
   time_lub <- lubridate_fun(data %>% dplyr::pull(dplyr::all_of(time_col)))
   if (!inherits(time_lub, "POSIXct")) {
