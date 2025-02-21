@@ -22,7 +22,8 @@ options(mc.cores = 2)
 # xgboost uses data.table
 data.table::setDTthreads(2)
 
-# set the two variables below to FALSE for a normal vignette using the data included in the package
+# set the two variables below to FALSE for a normal vignette using the data
+# included in the package
 download_data <- FALSE
 create_sample_data <- FALSE
 if (create_sample_data) {
@@ -155,13 +156,19 @@ land_mask <- mask(land_mask, iberia_poly)
 terra::saveRDS(land_mask, "../inst/extdata/lacerta_land_mask.rds")
 ```
 
+
 ```{r land_mask_load, echo=FALSE, eval=!download_data}
 # results='hide'
 library(pastclim)
 set_data_path(on_CRAN = TRUE)
 # Iberia peninsula extension
-iberia_poly <- terra::vect("POLYGON((-9.8 43.3,-7.8 44.1,-2.0 43.7,3.6 42.5,3.8 41.5,1.3 40.8,0.3 39.5,0.9 38.6,-0.4 37.5,-1.6 36.7,-2.3 36.3,-4.1 36.4,-4.5 36.4,-5.0 36.1,-5.6 36.0,-6.3 36.0,-7.1 36.9,-9.5 36.6,-9.4 38.0,-10.6 38.9,-9.5 40.8,-9.8 43.3))")
-
+iberia_poly <-
+  terra::vect(
+    "POLYGON((-9.8 43.3,-7.8 44.1,-2.0 43.7,3.6 42.5,3.8 41.5,1.3 40.8,0.3 39.5,
+     0.9 38.6,-0.4 37.5,-1.6 36.7,-2.3 36.3,-4.1 36.4,-4.5 36.4,-5.0 36.1,
+    -5.6 36.0,-6.3 36.0,-7.1 36.9,-9.5 36.6,-9.4 38.0,-10.6 38.9,-9.5 40.8,
+    -9.8 43.3))"
+  )
 crs(iberia_poly) <- "+proj=longlat"
 land_mask <- terra::readRDS(system.file("extdata/lacerta_land_mask.rds",
   package = "tidysdm"
@@ -184,7 +191,8 @@ ggplot() +
 
 Before we start thinning the data we need to make sure that all our data (points and rasters) have the same geographic coordinate reference system (CRS) by projecting them. In some of the pipeline steps (e.g. thinning data, measuring areas) using an equal area projection may make a significant difference, especially for large-scale projects.
 
-You can use the website `projectionwizard.org` (https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9) to find an appropriate equal area projection for any region. 
+You can use the website `projectionwizard.org` (https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9) 
+to find an appropriate equal area projection for any region. 
 
 To define our projection within the code, we will use a proj4 string, which provides information on the type of projection, its parameters and the units of distance in which the new coordinates will be expressed (if you are using `projectionwizard.org` it will provide yo  with the string as well). 
 

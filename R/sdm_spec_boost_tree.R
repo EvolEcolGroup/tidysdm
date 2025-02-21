@@ -48,7 +48,7 @@ sdm_spec_boost_tree <- function(..., tune = c("sdm", "all", "custom", "none")) {
       stop_iter = tune::tune(),
       ...
     )
-  } else if ((tune == "custom") | (tune == "none")) {
+  } else if ((tune == "custom") || (tune == "none")) {
     base_spec <- parsnip::boost_tree(...)
   }
   base_spec %>%

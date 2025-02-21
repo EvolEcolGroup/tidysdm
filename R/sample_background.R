@@ -107,11 +107,13 @@ sample_background <- function(data, raster, n, coords = NULL,
   if (length(cell_id) > n) {
     cell_id <- sample(x = cell_id, size = n, prob = bias, replace = FALSE)
   } else {
-    warning("There are fewer available cells for raster '",
-            terra::time(sampling_raster), "' (", nrow(xy_pres),
-            " presences) than the requested ", n,
-            " background points. Only ", length(cell_id),
-            " will be returned.\n")
+    warning(
+      "There are fewer available cells for raster '",
+      terra::time(sampling_raster), "' (", nrow(xy_pres),
+      " presences) than the requested ", n,
+      " background points. Only ", length(cell_id),
+      " will be returned.\n"
+    )
   }
   background <- as.data.frame(terra::xyFromCell(sampling_raster, cell_id))
   # fix the coordinate names to be the same we started with

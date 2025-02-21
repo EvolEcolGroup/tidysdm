@@ -54,10 +54,12 @@ test_that("thin_by_dist_time removes the correct points", {
   expect_true(all(thin_100k_t$id == thin_100k_t_sf$id))
 })
 
+# nolint start
 # sample code to plot the small world to inspect what is going on
 # plot(grid_raster,colNA="darkgray")
 # polys(terra::as.polygons(grid_raster))
 # points(vect(locations), col="red", cex=2)
+# nolint end
 
 
 test_that("thin_by_dist_time respects the projection", {
@@ -65,7 +67,7 @@ test_that("thin_by_dist_time respects the projection", {
   horses <- sf::st_as_sf(horses, coords = c("longitude", "latitude"))
   sf::st_crs(horses) <- 4326
   # and npw project it
-  iberia_proj4 <- "+proj=merc +lon_0=0 +lat_ts=10 +k=0.5 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs"
+  iberia_proj4 <- "+proj=merc +lon_0=0 +lat_ts=10 +k=0.5 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs" # nolint
   horses_proj <- sf::st_transform(horses, iberia_proj4)
   # thin the data with a mismatch in projections
   set.seed(123)

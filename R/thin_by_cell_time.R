@@ -66,8 +66,10 @@ thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
   time_steps <- terra::time(raster)
 
   if (any(is.na(time_steps))) {
-    stop("`raster` does not have a time dimension; use `terra::time()` ",
-         "to set it")
+    stop(
+      "`raster` does not have a time dimension; use `terra::time()` ",
+      "to set it"
+    )
   }
   if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)

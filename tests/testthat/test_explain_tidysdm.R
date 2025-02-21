@@ -1,14 +1,19 @@
 test_that("we can explain tidysdm objects", {
   # simple ensemble
-  expect_true(inherits(explain_tidysdm(tidysdm::lacerta_ensemble,
-    verbose = FALSE
-  ), "explainer"))
+  expect_true(
+    inherits(
+      explain_tidysdm(tidysdm::lacerta_ensemble,
+        verbose = FALSE
+      ), "explainer"
+    )
+  )
   # repeated ensemble
   lacerta_rep <- repeat_ensemble() %>%
     add_repeat(list(tidysdm::lacerta_ensemble, tidysdm::lacerta_ensemble))
-  expect_true(inherits(explain_tidysdm(lacerta_rep,
-    verbose = FALSE
-  ), "explainer"))
+  expect_true(inherits(
+    explain_tidysdm(lacerta_rep, verbose = FALSE),
+    "explainer"
+  ))
   expect_identical(
     DALEX::model_info(lacerta_rep),
     DALEX::model_info(tidysdm::lacerta_ensemble)
@@ -35,10 +40,13 @@ test_that("we can explain tidysdm objects", {
 
 
 test_that("explain_tidysdm works correctly with recipes with steps", {
-  # we catch the problem of data not being explicitly provided if we have steps in recipe
-  lacerta_thin <- terra::readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
-    package = "tidysdm"
-  ))
+  # we catch the problem of data not being explicitly provided if we have steps
+  # in recipe
+  lacerta_thin <- terra::readRDS(
+    system.file("extdata/lacerta_thin_all_vars.rds",
+      package = "tidysdm"
+    )
+  )
 
   # Add a topography variable with 3 levels
   lacerta_thin$topography <- cut(lacerta_thin$altitude,
@@ -47,7 +55,10 @@ test_that("explain_tidysdm works correctly with recipes with steps", {
   )
 
   # Subset variables
-  lacerta_thin <- lacerta_thin %>% select(class, bio05, bio06, bio12, bio15, topography)
+  lacerta_thin <- lacerta_thin %>% select(
+    class, bio05, bio06,
+    bio12, bio15, topography
+  )
 
   # Create recipe
   lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
@@ -78,13 +89,17 @@ test_that("explain_tidysdm works correctly with recipes with steps", {
     add_member(lacerta_models, metric = "boyce_cont")
   expect_error(explain_tidysdm(lacerta_ensemble), "your recipe contains steps")
   # whilst this works
-  expect_no_error(explain_tidysdm(lacerta_ensemble, data = lacerta_thin, verbose = FALSE))
+  expect_no_error(
+    explain_tidysdm(lacerta_ensemble, data = lacerta_thin, verbose = FALSE)
+  )
 })
 
 test_that("explain_tidysdm works with response provided directly", {
-  lacerta_thin <- terra::readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
-    package = "tidysdm"
-  ))
+  lacerta_thin <- terra::readRDS(
+    system.file("extdata/lacerta_thin_all_vars.rds",
+      package = "tidysdm"
+    )
+  )
   lacerta_preds <- lacerta_thin %>%
     select(bio15, bio05, bio13, bio06) %>%
     sf::st_drop_geometry()

@@ -16,14 +16,13 @@ locations <- data.frame(
 )
 
 # convert it to an sf object
-locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>% sf::st_set_crs(4326)
+locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>%
+  sf::st_set_crs(4326)
 
-# min_buffer <- terra::buffer(terra::vect(locations, crs = "lonlat"), 60000)
-# max_buffer <- terra::buffer(terra::vect(locations, crs = "lonlat"), 90000)
-
-
+# nolint start
 # points in poygons function
 # (from https://stackoverflow.com/questions/72384038/point-in-polygon-using-terra-package-in-r)
+# nolint end
 pts_in_polys <- function(pts, polys) {
   e <- terra::extract(polys, pts)
   e[!is.na(e[, 2]), 1]
@@ -32,7 +31,10 @@ pts_in_polys <- function(pts, polys) {
 test_that("make_mask_from_presence works correctly", {
   set.seed(123)
   # create a buffer
-  mask_buffer <- make_mask_from_presence(locations_sf, method = "buffer", buffer = 60000, return_sf = TRUE)
+  mask_buffer <- make_mask_from_presence(locations_sf,
+    method = "buffer",
+    buffer = 60000, return_sf = TRUE
+  )
   # expect points close to the presences to be included in the mask buffer
   buffer_locations <- data.frame(
     lon = c(0.5, 1, 2),
@@ -43,8 +45,12 @@ test_that("make_mask_from_presence works correctly", {
     sf::st_set_crs(4326)
   expect_true(nrow(sf::st_filter(buffer_locations, mask_buffer)) == 3)
   # create a minimum convex polygon
-  mask_ch <- make_mask_from_presence(locations_sf, method = "convex_hull", return_sf = TRUE)
-  # expect points close to the presences not to be included in the mask convex hull if they are off to the sides
+  mask_ch <- make_mask_from_presence(locations_sf,
+    method = "convex_hull",
+    return_sf = TRUE
+  )
+  # expect points close to the presences not to be included in the mask convex
+  # hull if they are off to the sides
   expect_true(nrow(sf::st_filter(buffer_locations, mask_ch)) == 0)
   ch_locations <- data.frame(
     lon = c(1, 1.5, 1),
@@ -57,12 +63,16 @@ test_that("make_mask_from_presence works correctly", {
   # only one of these locations is within the buffer
   expect_true(nrow(sf::st_filter(ch_locations, mask_buffer)) == 1)
   # create a convex hull with a buffer
-  mask_ch_buffer <- make_mask_from_presence(locations_sf, method = "convex_hull", buffer = 60000, return_sf = TRUE)
+  mask_ch_buffer <- make_mask_from_presence(locations_sf,
+    method = "convex_hull",
+    buffer = 60000, return_sf = TRUE
+  )
   # all locations should be within this bigger ch
   expect_true(nrow(sf::st_filter(ch_locations, mask_ch_buffer)) == 3)
   expect_true(nrow(sf::st_filter(buffer_locations, mask_ch_buffer)) == 3)
 })
 
+# nolint start
 # sample code to plot points in and buffers
 # plot(grid_raster,colNA="darkgray")
 # polys(terra::as.polygons(grid_raster))
@@ -74,3 +84,4 @@ test_that("make_mask_from_presence works correctly", {
 # polys(vect(mask_ch_buffer), col="green", cex=2)
 # polys(min_buffer)
 # polys(max_buffer)
+# nolint end
