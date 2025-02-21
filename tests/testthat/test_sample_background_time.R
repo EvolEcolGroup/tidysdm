@@ -11,7 +11,10 @@ grid_raster[c(6, 8), ] <- 100 * grid_raster[c(6, 8), ]
 grid_raster[c(1:5, 15, 16, 23, 24)] <- NA
 
 # create a raster with multiple layers for each time step
-grid_raster <- c(grid_raster, grid_raster, grid_raster, grid_raster, grid_raster)
+grid_raster <- c(
+  grid_raster, grid_raster, grid_raster, grid_raster,
+  grid_raster
+)
 names(grid_raster) <- paste0("var1.", 0:4)
 pastclim::time_bp(grid_raster) <- 0:4
 
@@ -23,8 +26,10 @@ locations <- data.frame(
   time = c(2, 2, 3, 4)
 )
 
+# nolint start
 # points in poygons function
 # (from https://stackoverflow.com/questions/72384038/point-in-polygon-using-terra-package-in-r)
+# nolint end
 pts_in_polys <- function(pts, polys) {
   e <- terra::extract(polys, pts)
   e[!is.na(e[, 2]), 1]
@@ -51,7 +56,8 @@ test_that("sample_background_time samples in the right places", {
   )
   # we have the right number of pseudoabsences per time
   expect_true(all(n_pt[3:5] == table(bg_dist_max$time_step)))
-  # all are within the buffer at a given time step (note that time==2 is the THIRD time step, as we start with zero)
+  # all are within the buffer at a given time step (note that time==2 is the
+  # THIRD time step, as we start with zero)
   max_buffer <- terra::buffer(terra::vect(locations %>%
     dplyr::filter(time == 2), crs = "lonlat"), buf_dist)
   expect_true(length(pts_in_polys(terra::vect(bg_dist_max %>%
@@ -62,7 +68,8 @@ test_that("sample_background_time samples in the right places", {
   expect_true(length(pts_in_polys(terra::vect(bg_dist_max %>%
     dplyr::filter(time_step == as.Date("1952-01-01"))), max_buffer)) == 0)
 
-  # now set the time buffer so that we allow presences to impact background in other time steps
+  # now set the time buffer so that we allow presences to impact background in
+  # other time steps
   set.seed(123)
   bg_dist_max <- sample_background_time(locations,
     n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
@@ -107,6 +114,7 @@ test_that("sample_background_time samples in the right places", {
   ), "for time 1950-01-01 there no presences when 1 background")
 })
 
+# nolint start
 # sample code to plot points
 # i <- 3
 # plot(grid_raster[[i]],colNA="darkgray")
@@ -115,6 +123,7 @@ test_that("sample_background_time samples in the right places", {
 # points(terra::vect(pa_random %>%
 #               dplyr::filter(time_step==as.Date("1952-01-01"))), col="blue")
 # polys(max_buffer)
+# nolint end
 
 
 

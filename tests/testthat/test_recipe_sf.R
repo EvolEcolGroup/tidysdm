@@ -19,7 +19,8 @@ test_that("sdm_recipe_sf", {
     recipe(lacerta_xy, formula = class ~ .),
     "sf object"
   )
-  lacerta_xy <- lacerta_thin %>% dplyr::bind_cols(sf::st_coordinates(lacerta_thin))
+  lacerta_xy <- lacerta_thin %>%
+    dplyr::bind_cols(sf::st_coordinates(lacerta_thin))
   lacerta_xy_rec <- recipe(lacerta_xy, formula = class ~ .)
   expect_true(identical(lacerta_xy_rec, lacerta_rec))
   lacerta_xy$X[3] <- 190
@@ -36,7 +37,8 @@ test_that("sdm_recipe_sf", {
   expect_true(recipes::fully_trained(lacerta_rec_prep))
 
   ## now bake
-  expect_true(all(c("X", "Y") %in% names(bake(lacerta_rec_prep, new_data = lacerta_thin))))
+  expect_true(all(c("X", "Y") %in%
+    names(bake(lacerta_rec_prep, new_data = lacerta_thin))))
   baked_no_xy <- bake(lacerta_rec_prep,
     new_data = lacerta_thin %>% sf::st_drop_geometry()
   )

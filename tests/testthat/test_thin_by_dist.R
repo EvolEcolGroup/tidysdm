@@ -1,8 +1,10 @@
+# nolint start
 # set up a small world
 # small grid
 # grid_raster <- terra::rast(matrix(1:16, ncol=4,byrow=TRUE),
 #                    extent=terra::ext(c(-2,2,-2,2)),
 #                    crs="epsg:4326")
+# nolint end
 
 # locations (first is off to the side, then two close to each other, and
 # then two points in unique but closeby cells)

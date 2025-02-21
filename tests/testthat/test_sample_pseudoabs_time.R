@@ -9,7 +9,10 @@ grid_raster <- terra::rast(matrix(1:64, ncol = 8, byrow = TRUE),
 grid_raster[c(1:5, 15, 16, 23, 24)] <- NA
 
 # create a raster with multiple layers for each time step
-grid_raster <- c(grid_raster, grid_raster, grid_raster, grid_raster, grid_raster)
+grid_raster <- c(
+  grid_raster, grid_raster, grid_raster,
+  grid_raster, grid_raster
+)
 names(grid_raster) <- paste0("var1.", 0:4)
 pastclim::time_bp(grid_raster) <- 0:4
 
@@ -21,8 +24,10 @@ locations <- data.frame(
   time = c(2, 2, 3, 4)
 )
 
+# nolint start
 # points in poygons function
 # (from https://stackoverflow.com/questions/72384038/point-in-polygon-using-terra-package-in-r)
+# notlint end
 pts_in_polys <- function(pts, polys) {
   e <- terra::extract(polys, pts)
   e[!is.na(e[, 2]), 1]
@@ -61,7 +66,8 @@ test_that("sample_pseudoabs_time samples in the right places", {
   expect_false(length(pts_in_polys(terra::vect(pa_random %>%
     dplyr::filter(time_step == as.Date("1952-01-01"))), min_buffer)) == 0)
 
-  # now set the time buffer so that we allow presences to impact absences in other time steps
+  # now set the time buffer so that we allow presences to impact absences in
+  # other time steps
   set.seed(123)
   pa_random <- sample_pseudoabs_time(locations,
     n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
@@ -116,6 +122,7 @@ test_that("sample_pseudoabs_time works with stars", {
   ))
 })
 
+# nolint start
 # sample code to plot points
 # i <- 2
 # plot(grid_raster[[i]],colNA="darkgray")
@@ -124,7 +131,7 @@ test_that("sample_pseudoabs_time works with stars", {
 # points(terra::vect(pa_random %>%
 #               dplyr::filter(time_step==as.Date("1952-01-01"))), col="blue")
 # polys(min_buffer)
-
+# nolint end
 
 test_that("sample_pseudoabs_time treats time correctly", {
   # change time of raster to POSIX

@@ -8,12 +8,16 @@ test_that("spatial_initial_split", {
     prop = 1 / 5, spatial_block_cv
   )
   expect_true(inherits(lacerta_initial, "spatial_initial_split"))
-  # expect the proportion of training to full dataset to be ~4/5 (within 5% of it
-  # due to the grouping into spatial blocks)
-  expect_true((length(lacerta_initial$in_id) / nrow(lacerta_thin) - 4 / 5) < 0.05)
+  # expect the proportion of training to full dataset to be ~4/5 (within 5% of
+  # it due to the grouping into spatial blocks)
+  expect_true(
+    (length(lacerta_initial$in_id) / nrow(lacerta_thin) - 4 / 5) < 0.05
+  )
 
+  # nolint start
   # lacerta_initial_autoplot <- autoplot(lacerta_initial)
   # vdiffr::expect_doppelganger("Autoplot of initial spatial split", lacerta_initial_autoplot)
+  # nolint end
 
   # check error if we give incorrect strategy
   expect_error(

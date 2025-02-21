@@ -14,12 +14,12 @@ locations <- data.frame(
   lat = c(1.3, -1.8, -0.9),
   id = 1:3
 )
-# min_buffer <- terra::buffer(terra::vect(locations, crs = "lonlat"), 60000)
 max_buffer <- terra::buffer(terra::vect(locations, crs = "lonlat"), 90000)
 
-
+# nolint start
 # points in poygons function
 # (from https://stackoverflow.com/questions/72384038/point-in-polygon-using-terra-package-in-r)
+# nolint end
 pts_in_polys <- function(pts, polys) {
   e <- terra::extract(polys, pts)
   e[!is.na(e[, 2]), 1]
@@ -48,7 +48,9 @@ test_that("sample_background samples in the right places", {
     return_pres = FALSE
   )
   # all are within the max buffer
-  expect_true(length(pts_in_polys(terra::vect(bg_max), max_buffer)) == nrow(bg_max))
+  expect_true(
+    length(pts_in_polys(terra::vect(bg_max), max_buffer)) == nrow(bg_max)
+  )
 
   # and now use the values as bias
   # first make 2 rows of the raster 100 times more probably than the top
@@ -67,7 +69,8 @@ test_that("sample_background samples in the right places", {
 
   # now confirm that it all works if we use an sf object
   set.seed(123)
-  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>% sf::st_set_crs(4326)
+  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>%
+    sf::st_set_crs(4326)
   bg_random_sf <- sample_background(locations_sf,
     n = 25, raster = grid_raster,
     return_pres = FALSE
@@ -78,38 +81,63 @@ test_that("sample_background samples in the right places", {
 
   # test error messages
   expect_error(
-    sample_background(locations_sf, n = 25, raster = grid_raster, method = "blah"),
+    sample_background(locations_sf,
+      n = 25, raster = grid_raster,
+      method = "blah"
+    ),
     "method has to be"
   )
   expect_error(
-    sample_background(locations_sf, n = 25, raster = grid_raster, method = c("blah", 25)),
+    sample_background(locations_sf,
+      n = 25, raster = grid_raster,
+      method = c("blah", 25)
+    ),
     "method has to be"
   )
   expect_error(
-    sample_background(locations_sf, n = 25, raster = grid_raster, method = c("dist_max", 10, 20)),
+    sample_background(locations_sf,
+      n = 25, raster = grid_raster,
+      method = c("dist_max", 10, 20)
+    ),
     "method 'dist_max' should have one threshold"
   )
 })
 
 test_that("handling of data frames and sf objects", {
-  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>% sf::st_set_crs(4326)
+  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>%
+    sf::st_set_crs(4326)
   expect_error(
     sample_background(locations_sf, coords = c("x", "y"), raster = grid_raster),
     "There are no recognised coordinate columns"
   )
-  expect_warning(sample_background(locations_sf, raster = grid_raster, n = 100), "There are fewer available cells for raster 'NA' (3 presences) than the requested 100 background points. Only 55 will be returned.", fixed = TRUE)
+  expect_warning(
+    sample_background(locations_sf,
+      raster = grid_raster, n = 100
+    ),
+    "There are fewer available cells for raster 'NA' (3 presences) than the requested 100 background points. Only 55 will be returned.",
+    fixed = TRUE
+  )
   locations_sf <- locations_sf %>% dplyr::bind_cols(sf::st_coordinates(.))
-  expect_no_error(sample_background(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25))
+  expect_no_error(sample_background(locations_sf,
+    coords = c("X", "Y"),
+    raster = grid_raster, n = 25
+  ))
   locations_sf$X <- rep(0, 3)
   locations_sf$Y <- rep(0, 3)
   expect_error(
-    sample_background(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25),
+    sample_background(locations_sf,
+      coords = c("X", "Y"),
+      raster = grid_raster, n = 25
+    ),
     "sf object contains X and Y coordinates that do not match the sf point geometry"
   )
   locations_sf$X <- rep(NA, 3)
   locations_sf$Y <- rep(NA, 3)
   expect_error(
-    sample_background(locations_sf, coords = c("X", "Y"), raster = grid_raster, n = 25),
+    sample_background(locations_sf,
+      coords = c("X", "Y"),
+      raster = grid_raster, n = 25
+    ),
     "sf object contains NA values in the X and Y coordinates"
   )
 })
@@ -124,6 +152,7 @@ test_that("sample_background works with stars", {
   ))
 })
 
+# nolint start
 # sample code to plot points in and buffers
 # plot(grid_raster,colNA="darkgray")
 # polys(terra::as.polygons(grid_raster))
@@ -131,3 +160,4 @@ test_that("sample_background works with stars", {
 # points(vect(bg_bias), col="blue", cex=2)
 # polys(min_buffer)
 # polys(max_buffer)
+# nolint end

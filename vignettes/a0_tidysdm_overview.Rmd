@@ -158,7 +158,6 @@ terra::saveRDS(land_mask, "../inst/extdata/lacerta_land_mask.rds")
 
 
 ```{r land_mask_load, echo=FALSE, eval=!download_data}
-# results='hide'
 library(pastclim)
 set_data_path(on_CRAN = TRUE)
 # Iberia peninsula extension

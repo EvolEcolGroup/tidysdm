@@ -1,9 +1,11 @@
+# nolint start
 # set up a small world
 # small grid
 # library(terra)
 # grid_raster <- terra::rast(matrix(1:16, ncol=4,byrow=TRUE),
 #                    extent=terra::ext(c(-2,2,-2,2)),
 #                    crs="epsg:4326")
+# nolint end
 
 # locations (first is off to the side, then two close to each other, and
 # then two points in unique but closeby cells)
@@ -42,7 +44,8 @@ test_that("thin_by_dist_time removes the correct points", {
 
   # repeat with an sf object
   set.seed(123)
-  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>% sf::st_set_crs(4326)
+  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>%
+    sf::st_set_crs(4326)
   thin_100k_t_sf <- thin_by_dist_time(locations_sf,
     dist_min = 100000,
     interval_min = 365 * 2000,

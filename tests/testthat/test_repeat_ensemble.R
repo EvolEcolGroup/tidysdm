@@ -2,15 +2,20 @@ test_that("repeat_ensemble constructor", {
   # an empty workflow
   test_rep_ens <- repeat_ensemble()
   # has all the slots
-  expect_true(all(names(test_rep_ens) == c("rep_id", "wflow_id", "workflow", "metrics")))
+  expect_true(all(names(test_rep_ens) == c(
+    "rep_id", "wflow_id",
+    "workflow", "metrics"
+  )))
   # but they are empty
   expect_true(nrow(test_rep_ens) == 0)
 })
 
 test_that("add_repeat to empty repeat ensemble", {
   # add a single workflow
-  expect_warning(test_ens_1 <-
-    simple_ensemble() %>% add_member(two_class_res[c(1:3), ]))
+  expect_warning(
+    test_ens_1 <-
+      simple_ensemble() %>% add_member(two_class_res[c(1:3), ])
+  )
   test_rep_ens <- repeat_ensemble() %>% add_repeat(test_ens_1)
   expect_true(nrow(test_rep_ens) == 3)
   expect_true(inherits(test_rep_ens, "repeat_ensemble"))
@@ -42,5 +47,8 @@ test_that("add_repeat to empty repeat ensemble", {
   ens_list <- list(test_ens_1, test_ens_1, test_ens_1)
   test_rep_ens <- repeat_ensemble() %>% add_repeat(ens_list)
   expect_true(nrow(test_rep_ens) == 9)
-  expect_true(setequal(unique(test_rep_ens$rep_id), c("rep_01", "rep_02", "rep_03")))
+  expect_true(setequal(unique(test_rep_ens$rep_id), c(
+    "rep_01", "rep_02",
+    "rep_03"
+  )))
 })

@@ -98,11 +98,15 @@ test_that("filter collinear variables with vif_step", {
   # we should remove two variables
   expect_true(all(!c("bio01", "bio18") %in% vars_to_keep))
   # now keep them in
-  expect_true(all(c("bio01", "bio18") %in%
-    filter_collinear(lacerta_thin,
-      method = "vif_step",
-      to_keep = c("bio01", "bio18")
-    )))
+  expect_true(
+    all(
+      c("bio01", "bio18") %in%
+        filter_collinear(lacerta_thin,
+          method = "vif_step",
+          to_keep = c("bio01", "bio18")
+        )
+    )
+  )
 })
 
 test_that("filter collinear variables with vif_cor", {
@@ -114,9 +118,13 @@ test_that("filter collinear variables with vif_cor", {
   # we should remove two variables
   expect_true(all(!c("bio01", "bio18") %in% vars_to_keep))
   # now keep them in
-  expect_true(all(c("bio01", "bio18") %in%
-    filter_collinear(lacerta_thin,
-      method = "vif_cor",
-      to_keep = c("bio01", "bio18")
-    )))
+  expect_true(
+    all(
+      c("bio01", "bio18") %in%
+        filter_collinear(lacerta_thin,
+          method = "vif_cor",
+          to_keep = c("bio01", "bio18")
+        )
+    )
+  )
 })
