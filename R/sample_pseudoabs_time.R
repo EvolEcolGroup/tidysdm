@@ -60,7 +60,8 @@
 #' @export
 
 
-sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, time_col = "time",
+sample_pseudoabs_time <- function(data, raster, n_per_presence,
+                                  coords = NULL, time_col = "time",
                                   lubridate_fun = c,
                                   method = "random", class_label = "pseudoabs",
                                   return_pres = TRUE, time_buffer = 0) {
@@ -100,7 +101,8 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
   if (!inherits(time_steps, "POSIXct")) {
     stop(
       "the units of the time axis of the raster are not defined;\n",
-      "when using terra::time() use either POSIXct or Dates, or set tstep to 'years'"
+      "when using terra::time() use either POSIXct or Dates, or set ",
+      "tstep to 'years'"
     )
   }
 
@@ -128,7 +130,8 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
     n_pres_this_time <- data %>%
       dplyr::filter(time_indices == i_index) %>%
       nrow()
-    # create a dataset with presences for this time step plus presences within the time buffer
+    # create a dataset with presences for this time step plus presences within
+    # the time buffer
     data_sub <- data %>% dplyr::filter(
       i_index >= time_indices_min & i_index <= time_indices_max
     )
@@ -158,7 +161,8 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence, coords = NULL, t
     } else {
       presences <- data[, names(pseudoabsences[1:2])]
     }
-    presences <- presences %>% dplyr::mutate(class = "presence", time_step = time_lub)
+    presences <- presences %>%
+      dplyr::mutate(class = "presence", time_step = time_lub)
     pseudoabsences <- pseudoabsences %>%
       dplyr::bind_rows(presences) %>%
       dplyr::mutate(class = stats::relevel(factor(class), ref = "presence"))

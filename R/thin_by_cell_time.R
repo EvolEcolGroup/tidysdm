@@ -41,7 +41,8 @@
 #' @export
 
 thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
-                              lubridate_fun = c, drop_na = TRUE, agg_fact = NULL) {
+                              lubridate_fun = c, drop_na = TRUE,
+                              agg_fact = NULL) {
   # randomise the row order, so that when we get the first instance in a cell,
   # there should be no pattern
   data <- data[sample(1:nrow(data)), ]
@@ -65,7 +66,8 @@ thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
   time_steps <- terra::time(raster)
 
   if (any(is.na(time_steps))) {
-    stop("`raster` does not have a time dimension; use `terra::time()` to set it")
+    stop("`raster` does not have a time dimension; use `terra::time()` ",
+         "to set it")
   }
   if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)

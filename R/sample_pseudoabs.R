@@ -52,8 +52,10 @@ sample_pseudoabs <- function(data, raster, n, coords = NULL,
     if (all(c("X", "Y") %in% names(data))) {
       if (any(is.na(data[, c("X", "Y")]))) {
         stop("sf object contains NA values in the X and Y coordinates")
-      } else if (all(sf::st_drop_geometry(data[, c("X", "Y")]) ==
-        sf::st_coordinates(data))) {
+      } else if (all(
+        sf::st_drop_geometry(data[, c("X", "Y")]) ==
+          sf::st_coordinates(data)
+      )) {
         bind_col <- FALSE
       } else {
         stop(
@@ -140,7 +142,12 @@ sample_pseudoabs <- function(data, raster, n, coords = NULL,
   if (length(cell_id) > n) {
     cell_id <- sample(x = cell_id, size = n)
   } else {
-    warning("There are fewer available cells for raster '", terra::time(sampling_raster), "' (", nrow(xy_pres), " presences) than the requested ", n, " pseudoabsences. Only ", length(cell_id), " will be returned.\n")
+    warning(
+      "There are fewer available cells for raster '",
+      terra::time(sampling_raster), "' (", nrow(xy_pres),
+      " presences) than the requested ", n,
+      " pseudoabsences. Only ", length(cell_id), " will be returned.\n"
+    )
   }
   pseudoabsences <- as.data.frame(terra::xyFromCell(sampling_raster, cell_id))
   # fix the coordinate names to be the same we started with
