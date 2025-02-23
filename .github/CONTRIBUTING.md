@@ -47,7 +47,7 @@ and lintr to check that it is compliant. Note that `lintr` is run automatically
 via a GitHub action for all Pull Requsts.
 So,
 ```
-styler::style_package()
+styler::style_pkg()
 ```
 will style the code, and
 ```
@@ -117,7 +117,7 @@ add an explanation to your new code.
          
 ## Code of Conduct
          
-Please note that the tidyverse project is released with a
-[Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this
+Please read the
+[Contributor Code of Conduct](CODE_OF_CONDUCT.md), which is based on the one from the tidyverse. By contributing to this
 project you agree to abide by its terms.
          
