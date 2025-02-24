@@ -25,11 +25,19 @@ source("./data-raw/helper_functions/check_returns_in_documentation.R")
 # we can remove by limiting threads
 
 
+
+
 # first check with rhub
+# git config --global credential.helper store
+usethis::create_github_token()
+# then run
+gitcreds::gitcreds_set()
+
 rhub::rhub_doctor()
 rhub::rhub_check()
 
 # answer 1,2,3,4
+
 
 
 # check on macos and windows via devtools

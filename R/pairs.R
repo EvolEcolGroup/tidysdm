@@ -60,7 +60,7 @@ setMethod(
         x[[name]][index]
       },
       x = x, index = ix, simplify = FALSE
-    ) |>
+    ) %>%
       as.data.frame()
 
     dots <- list(...)
