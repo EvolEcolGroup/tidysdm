@@ -7,4 +7,5 @@
 #' @import tidymodels
 #' @import spatialsample
 #' @importFrom rlang .data
+#' @importFrom graphics text
 NULL

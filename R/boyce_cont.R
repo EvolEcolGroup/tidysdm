@@ -1,26 +1,49 @@
 #' Boyce continuous index (BCI)
 #'
-#' This function the Boyce Continuous Index, a measure of model accuracy appropriate
-#' for Species Distribution Models with presence only data (i.e. using pseudoabsences
-#' or background). The algorithm used here comes from the package `enmSdm`, and uses multiple
-#' overlapping windows.
+#' This function the Boyce Continuous Index, a measure of model accuracy
+#' appropriate for Species Distribution Models with presence only data (i.e.
+#' using pseudoabsences or background). The algorithm used here comes from the
+#' package `enmSdm`, and uses multiple overlapping windows.
 #'
 #' There is no multiclass version of this function, it only operates on binary
 #' predictions (e.g. presences and absences in SDMs).
 #'
 #' @param data Either a data.frame containing the columns specified by the truth
-#' and estimate arguments, or a table/matrix where the true class
-#' results should be in the columns of the table.
-#' @param ... A set of unquoted column names or one or more dplyr selector functions to choose which variables contain the class probabilities. If truth is binary, only 1 column should be selected, and it should correspond to the value of event_level. Otherwise, there should be as many columns as factor levels of truth and the ordering of the columns should be the same as the factor levels of truth.
-#' @param truth The column identifier for the true class results (that is a factor). This should be an unquoted column name although this argument is passed by expression and supports quasiquotation (you can unquote column names). For _vec() functions, a factor vector.
-#' @param estimator One of "binary", "hand_till", "macro", or "macro_weighted" to specify the type of averaging to be done. "binary" is only relevant for the two class case. The others are general methods for calculating multiclass metrics. The default will automatically choose "binary" if truth is binary, "hand_till" if truth has >2 levels and case_weights isn't specified, or "macro" if truth has >2 levels and case_weights is specified (in which case "hand_till" isn't well-defined).
-#' @param na_rm A logical value indicating whether NA values should be stripped before the computation proceeds.
-#' @param event_level A single string. Either "first" or "second" to specify which level of truth to consider as the "event". This argument is only applicable when estimator = "binary". The default uses an internal helper that generally defaults to "first"
-#' @param case_weights The optional column identifier for case weights. This should be an unquoted column name that evaluates to a numeric column in data. For _vec() functions, a numeric vector.
-#' @param estimate If truth is binary, a numeric vector of class probabilities corresponding to the "relevant" class. Otherwise, a matrix with as many columns as factor levels of truth. It is assumed that these are in the same order as the levels of truth.
-#' @returns A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
-#' For grouped data frames, the number of rows returned will be the same as the
-#' number of groups.
+#'   and estimate arguments, or a table/matrix where the true class results
+#'   should be in the columns of the table.
+#' @param ... A set of unquoted column names or one or more dplyr selector
+#'   functions to choose which variables contain the class probabilities. If
+#'   truth is binary, only 1 column should be selected, and it should correspond
+#'   to the value of event_level. Otherwise, there should be as many columns as
+#'   factor levels of truth and the ordering of the columns should be the same
+#'   as the factor levels of truth.
+#' @param truth The column identifier for the true class results (that is a
+#'   factor). This should be an unquoted column name although this argument is
+#'   passed by expression and supports quasiquotation (you can unquote column
+#'   names). For _vec() functions, a factor vector.
+#' @param estimator One of "binary", "hand_till", "macro", or "macro_weighted"
+#'   to specify the type of averaging to be done. "binary" is only relevant for
+#'   the two class case. The others are general methods for calculating
+#'   multiclass metrics. The default will automatically choose "binary" if truth
+#'   is binary, "hand_till" if truth has >2 levels and case_weights isn't
+#'   specified, or "macro" if truth has >2 levels and case_weights is specified
+#'   (in which case "hand_till" isn't well-defined).
+#' @param na_rm A logical value indicating whether NA values should be stripped
+#'   before the computation proceeds.
+#' @param event_level A single string. Either "first" or "second" to specify
+#'   which level of truth to consider as the "event". This argument is only
+#'   applicable when estimator = "binary". The default uses an internal helper
+#'   that generally defaults to "first"
+#' @param case_weights The optional column identifier for case weights. This
+#'   should be an unquoted column name that evaluates to a numeric column in
+#'   data. For _vec() functions, a numeric vector.
+#' @param estimate If truth is binary, a numeric vector of class probabilities
+#'   corresponding to the "relevant" class. Otherwise, a matrix with as many
+#'   columns as factor levels of truth. It is assumed that these are in the same
+#'   order as the levels of truth.
+#' @returns A tibble with columns .metric, .estimator, and .estimate and 1 row
+#'   of values. For grouped data frames, the number of rows returned will be the
+#'   same as the number of groups.
 #' @family class probability metrics
 #'
 #' @references
@@ -35,10 +58,11 @@
 #' boyce_cont(two_class_example, truth, Class1)
 #'
 #' @export
+#'
 boyce_cont <- function(data, ...) {
   UseMethod("boyce_cont")
 }
-boyce_cont <- new_prob_metric(
+boyce_cont <- yardstick::new_prob_metric(
   boyce_cont,
   direction = "maximize"
 )
@@ -52,7 +76,7 @@ boyce_cont.data.frame <- function(data,
                                   na_rm = TRUE,
                                   event_level = "first",
                                   case_weights = NULL) {
-  prob_metric_summarizer(
+  yardstick::prob_metric_summarizer(
     name = "boyce_cont",
     fn = boyce_cont_vec,
     data = data,
@@ -84,7 +108,7 @@ boyce_cont_vec <- function(truth,
                            case_weights = NULL,
                            ...) {
   abort_if_class_pred(truth)
-  
+
   estimator <- yardstick::finalize_estimator(truth, estimator, "boyce_cont")
 
   yardstick::check_prob_metric(truth, estimate, case_weights, estimator)
@@ -113,8 +137,11 @@ boyce_cont_estimator_impl <- function(truth,
                                       estimator,
                                       event_level,
                                       case_weights) {
-  if (!identical(estimator, "binary")){
-    stop("boyce_cont is only available for binary classes; multiclass is not supported")
+  if (!identical(estimator, "binary")) {
+    stop(
+      "boyce_cont is only available for binary classes; multiclass ",
+      "is not supported"
+    )
   }
   # separate estimates into presences and background
   if (identical(event_level, "first")) {
@@ -133,7 +160,10 @@ boyce_cont_estimator_impl <- function(truth,
     presWeight <- rep(1, length(pres))
     contrastWeight <- rep(1, length(contrast))
   }
-  contBoyce(pres = pres, contrast = contrast, presWeight = presWeight, contrastWeight = contrastWeight)
+  contBoyce(
+    pres = pres, contrast = contrast,
+    presWeight = presWeight, contrastWeight = contrastWeight
+  )
 }
 
 
@@ -149,16 +179,22 @@ contBoyce <- function(
     autoWindow = TRUE,
     method = "spearman",
     dropZeros = TRUE,
-    # graph = FALSE,
     na.rm = FALSE,
     ...) {
   # if all NAs
-  if (all(is.na(pres)) | all(is.na(contrast)) | all(is.na(presWeight)) | all(is.na(contrastWeight))) {
+  if (
+    all(is.na(pres)) ||
+      all(is.na(contrast)) ||
+      all(is.na(presWeight)) ||
+      all(is.na(contrastWeight))
+  ) {
     return(NA)
   }
 
   # catch errors
-  if (binWidth > 1 | binWidth <= 0) stop('Argument "binWidth" must be between 0 and 1.')
+  if (binWidth > 1 || binWidth <= 0) {
+    stop('Argument "binWidth" must be between 0 and 1.')
+  }
 
   eps <- .Machine$double.eps
 
@@ -204,9 +240,13 @@ contBoyce <- function(
   # mean bin prediction
   meanPred <- rowMeans(cbind(lows, highs))
 
-  # add small number to each bin that has 0 background frequency but does have a presence frequency > 0
+  # add small number to each bin that has 0 background frequency but does have a
+  # presence frequency > 0
   if (any(freqPres > 0 & freqContrast == 0)) {
-    smallValue <- min(0.5 * c(presWeight[presWeight > 0], contrastWeight[contrastWeight > 0]))
+    smallValue <- min(0.5 * c(
+      presWeight[presWeight > 0],
+      contrastWeight[contrastWeight > 0]
+    ))
     freqContrast[freqPres > 0 & freqContrast == 0] <- smallValue
   }
 
@@ -230,15 +270,20 @@ contBoyce <- function(
   E <- freqContrast / sum(contrastWeight, na.rm = TRUE)
   PE <- P / E
 
+  # nolint start
   # # plot (transfer the code to a boyce_curve function in the future)
   # if (graph) {
   #   graphics::par(mfrow=c(1, 2))
   #   lims <- c(0, max(P, E, na.rm=TRUE))
-  #   plot(E, P, col='white', xlab='Expected', ylab='Predicted', main='P/E\nNumbered from lowest to highest class', xlim=lims, ylim=lims)
+  #   plot(E, P, col='white', xlab='Expected', ylab='Predicted',
+  #      main='P/E\nNumbered from lowest to highest class',
+  #      xlim=lims, ylim=lims)
   #   graphics::text(E, P, labels=1:numBins, col=1:20)
-  #   plot(meanPred, PE, type='l', xlab='Mean Prediction in Bin', ylab='P/E Ratio', main='CBI\nNumbered from lowest to highest class')
+  #   plot(meanPred, PE, type='l', xlab='Mean Prediction in Bin',
+  #      ylab='P/E Ratio', main='CBI\nNumbered from lowest to highest class')
   #   graphics::text(meanPred, PE, labels=1:numBins, col='blue')
   # }
+  # nolint end
 
   # remove NAs
   na_in_either <- (is.na(meanPred) | is.na(PE))

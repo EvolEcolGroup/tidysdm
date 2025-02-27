@@ -1,0 +1,133 @@
+---
+title: "Projecting your map"
+author: "Andrea"
+date: "2024-11-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Map projections in R
+
+We start with a raster object that has a geographic coordinate reference system (CRS) and we want to project it to a different CRS. We will use the `terra` package to do this. As an example, we will use a map of the Iberian peninsula:
+
+
+```{r}
+library(pastclim)
+download_dataset(dataset = "WorldClim_2.1_10m")
+land_mask <-
+  get_land_mask(time_ce = 1985, dataset = "WorldClim_2.1_10m")
+
+# Iberia peninsula extension
+iberia_poly <-
+  terra::vect(
+    "POLYGON((-9.8 43.3,-7.8 44.1,-2.0 43.7,3.6 42.5,3.8 41.5,1.3 40.8,0.3 39.5,
+     0.9 38.6,-0.4 37.5,-1.6 36.7,-2.3 36.3,-4.1 36.4,-4.5 36.4,-5.0 36.1,
+    -5.6 36.0,-6.3 36.0,-7.1 36.9,-9.5 36.6,-9.4 38.0,-10.6 38.9,-9.5 40.8,
+    -9.8 43.3))"
+  )
+
+crs(iberia_poly) <- "+proj=longlat"
+
+# crop the extent
+land_mask <- crop(land_mask, iberia_poly)
+land_mask <- mask(land_mask, iberia_poly)
+```
+
+We plot it with `tidyterra`:
+
+```{r}
+library(tidyterra)
+library(ggplot2)
+ggplot() +
+  geom_spatraster(data = land_mask, aes(fill = land_mask_1985))
+```
+Now we project it. To define our projection we use a proj4 string, which provides information
+on the type of projection, its parameters and the units of distance in which the new coordinates
+will be expressed. we can use the website `projectionwizard.org` (https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9) to find an appropriate equal
+area projection for any region, and obtain its associated proj4 string.
+In this case, we will use a Alberts Equal Area Conic projection centered on the Iberian peninsula. The proj4 string for this projection is:
+```{r}
+iberia_proj4 <- "+proj=aea +lon_0=-4.0429687 +lat_1=36.7790694 +lat_2=42.6258819 +lat_0=39.7024757 +datum=WGS84 +units=km +no_defs"
+```
+Note that we set the units to km so that have smaller numbers in the new axes.
+
+For rasters (maps), we use the `terra` function `project` to change the CRS. We pass the raster object and the proj4 string as arguments:
+```{r}
+land_mask_proj <- terra::project(land_mask, y = iberia_proj4)
+```
+
+And replot it:
+```{r}
+ggplot() +
+  geom_spatraster(data = land_mask_proj, aes(fill = land_mask_1985))
+```
+Note that the coordinate system has now changed. We can get the true coordinates using the terra::plot function:
+```{r}
+terra::plot(land_mask_proj)
+
+```
+
+We now need to bring in some points. they come in as lat long, so we use the appropriate proj4 string
+for raw coordinates.
+```{r}
+library(tidysdm)
+library(sf)
+data(lacerta)
+lacerta <- st_as_sf(lacerta, coords = c("longitude", "latitude"))
+st_crs(lacerta) <- "+proj=longlat"
+  #4326
+```
+
+Let's inspect the object:
+```{r}
+lacerta
+```
+We can see in the `geometry` column that are coordinates are in arc-degrees long and lat.
+
+Now we project them to the same CRS as the raster, using the appropriate `sf` function
+to project points:
+```{r}
+lacerta_proj <- st_transform(lacerta, iberia_proj4)
+```
+
+```{r}
+lacerta_proj
+```
+Now the coordinates are in kilometers on the new axes.
+
+Plot the projected points on top of the project map:
+```{r}
+ggplot() +
+  geom_spatraster(data = land_mask_proj, aes(fill = land_mask_1985)) +
+  geom_sf(data = lacerta_proj) + guides(fill="none")
+```
+
+The next step is to project the environemntal variables (layers of a raster). First we
+extract the unprojected layers from `pastclim`
+```{r}
+download_dataset("WorldClim_2.1_10m")
+climate_vars <- get_vars_for_dataset("WorldClim_2.1_10m")
+climate_present <- pastclim::region_slice(
+  time_ce = 1985,
+  bio_variables = climate_vars,
+  data = "WorldClim_2.1_10m",
+  crop = iberia_poly
+)
+```
+And now we project them
+```{r}
+climate_present_proj <- terra::project(climate_present, y = iberia_proj4)
+```
+
+Let's plot a layer with the points on top:
+```{r}
+ggplot() +
+  geom_spatraster(data = climate_present_proj, aes(fill = bio01)) +
+  geom_sf(data = lacerta_proj) + guides(fill="none") +
+  scale_fill_gradientn(colors = terrain.colors(7), na.value = "transparent") 
+```
+
+

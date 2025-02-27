@@ -7,34 +7,38 @@
 thin_by_cell(data, raster, coords = NULL, drop_na = TRUE, agg_fact = NULL)
 }
 \arguments{
-\item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with coordinate variables.
-These can be defined in \code{coords}, unless they have standard names
-(see details below).}
+\item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with coordinate
+variables. These can be defined in \code{coords}, unless they have standard
+names (see details below).}
 
-\item{raster}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object that defined the grid}
+\item{raster}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{stars} object that defined the grid}
 
 \item{coords}{a vector of length two giving the names of the "x" and "y"
-coordinates, as found in \code{data}. If left to NULL, the function will
-try to guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
+coordinates, as found in \code{data}. If left to NULL, the function will try to
+guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
 \code{c("longitude", "latitude")}, or \code{c("lon", "lat")}}
 
-\item{drop_na}{boolean on whether locations that are NA in the raster should be dropped.}
+\item{drop_na}{boolean on whether locations that are NA in the raster should
+be dropped.}
 
-\item{agg_fact}{positive integer. Aggregation factor expressed as number of cells
-in each direction (horizontally and vertically). Or two integers (horizontal
-and vertical aggregation factor) or three integers (when also aggregating over layers).
-Defaults to NULL, which implies no aggregation (i.e. thinning is done on the
-grid of \code{raster})}
+\item{agg_fact}{positive integer. Aggregation factor expressed as number of
+cells in each direction (horizontally and vertically). Or two integers
+(horizontal and vertical aggregation factor) or three integers (when also
+aggregating over layers). Defaults to NULL, which implies no aggregation
+(i.e. thinning is done on the grid of \code{raster})}
 }
 \value{
 An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link{data.frame}}, the same as "data".
 }
 \description{
-This function thins a dataset so that only one observation per cell
-is retained.
+This function thins a dataset so that only one observation per cell is
+retained.
 }
 \details{
-Further thinning can be achieved by aggregating cells in the raster
-before thinning, as achieved by setting \code{agg_fact} > 1 (aggregation works in a
-manner equivalent to \code{\link[terra:aggregate]{terra::aggregate()}}).
+Further thinning can be achieved by aggregating cells in the raster before
+thinning, as achieved by setting \code{agg_fact} > 1 (aggregation works in a
+manner equivalent to \code{\link[terra:aggregate]{terra::aggregate()}}). Note that if \code{data} is an \code{sf}
+object, the function will transform the coordinates to the same projection as
+the \code{raster} (recommended); if \code{data} is a data.frame, it is up to the user
+to ensure that the coordinates are in the correct units.
 }

@@ -33,27 +33,50 @@ tss_max_vec(
 }
 \arguments{
 \item{data}{Either a data.frame containing the columns specified by the truth
-and estimate arguments, or a table/matrix where the true class
-results should be in the columns of the table.}
+and estimate arguments, or a table/matrix where the true class results
+should be in the columns of the table.}
 
-\item{...}{A set of unquoted column names or one or more dplyr selector functions to choose which variables contain the class probabilities. If truth is binary, only 1 column should be selected, and it should correspond to the value of event_level. Otherwise, there should be as many columns as factor levels of truth and the ordering of the columns should be the same as the factor levels of truth.}
+\item{...}{A set of unquoted column names or one or more dplyr selector
+functions to choose which variables contain the class probabilities. If
+truth is binary, only 1 column should be selected, and it should correspond
+to the value of event_level. Otherwise, there should be as many columns as
+factor levels of truth and the ordering of the columns should be the same
+as the factor levels of truth.}
 
-\item{truth}{The column identifier for the true class results (that is a factor). This should be an unquoted column name although this argument is passed by expression and supports quasiquotation (you can unquote column names). For _vec() functions, a factor vector.}
+\item{truth}{The column identifier for the true class results (that is a
+factor). This should be an unquoted column name although this argument is
+passed by expression and supports quasiquotation (you can unquote column
+names). For _vec() functions, a factor vector.}
 
-\item{estimator}{One of "binary", "hand_till", "macro", or "macro_weighted" to specify the type of averaging to be done. "binary" is only relevant for the two class case. The others are general methods for calculating multiclass metrics. The default will automatically choose "binary" if truth is binary, "hand_till" if truth has >2 levels and case_weights isn't specified, or "macro" if truth has >2 levels and case_weights is specified (in which case "hand_till" isn't well-defined).}
+\item{estimator}{One of "binary", "hand_till", "macro", or "macro_weighted"
+to specify the type of averaging to be done. "binary" is only relevant for
+the two class case. The others are general methods for calculating
+multiclass metrics. The default will automatically choose "binary" if truth
+is binary, "hand_till" if truth has >2 levels and case_weights isn't
+specified, or "macro" if truth has >2 levels and case_weights is specified
+(in which case "hand_till" isn't well-defined).}
 
-\item{na_rm}{A logical value indicating whether NA values should be stripped before the computation proceeds.}
+\item{na_rm}{A logical value indicating whether NA values should be stripped
+before the computation proceeds.}
 
-\item{event_level}{A single string. Either "first" or "second" to specify which level of truth to consider as the "event". This argument is only applicable when estimator = "binary". The default uses an internal helper that generally defaults to "first"}
+\item{event_level}{A single string. Either "first" or "second" to specify
+which level of truth to consider as the "event". This argument is only
+applicable when estimator = "binary". The default uses an internal helper
+that generally defaults to "first"}
 
-\item{case_weights}{The optional column identifier for case weights. This should be an unquoted column name that evaluates to a numeric column in data. For _vec() functions, a numeric vector.}
+\item{case_weights}{The optional column identifier for case weights. This
+should be an unquoted column name that evaluates to a numeric column in
+data. For _vec() functions, a numeric vector.}
 
-\item{estimate}{If truth is binary, a numeric vector of class probabilities corresponding to the "relevant" class. Otherwise, a matrix with as many columns as factor levels of truth. It is assumed that these are in the same order as the levels of truth.}
+\item{estimate}{If truth is binary, a numeric vector of class probabilities
+corresponding to the "relevant" class. Otherwise, a matrix with as many
+columns as factor levels of truth. It is assumed that these are in the same
+order as the levels of truth.}
 }
 \value{
-A tibble with columns .metric, .estimator, and .estimate and 1 row of values.
-For grouped data frames, the number of rows returned will be the same as the
-number of groups.
+A tibble with columns .metric, .estimator, and .estimate and 1 row
+of values. For grouped data frames, the number of rows returned will be the
+same as the number of groups.
 }
 \description{
 The True Skills Statistic, which is defined as
@@ -61,8 +84,8 @@ The True Skills Statistic, which is defined as
 \details{
 \emph{sensitivity}+\emph{specificity} +1
 
-This function calibrates the probability threshold to classify presences to maximise the
-TSS.
+This function calibrates the probability threshold to classify presences to
+maximise the TSS.
 
 There is no multiclass version of this function, it only operates on binary
 predictions (e.g. presences and absences in SDMs).

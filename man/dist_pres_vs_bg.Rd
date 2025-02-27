@@ -2,13 +2,14 @@
 % Please edit documentation in R/dist_pres_vs_bg.R
 \name{dist_pres_vs_bg}
 \alias{dist_pres_vs_bg}
-\title{Distance between the distribution of climate values for presences vs background}
+\title{Distance between the distribution of climate values for presences vs
+background}
 \usage{
 dist_pres_vs_bg(.data, .col)
 }
 \arguments{
-\item{.data}{a \code{data.frame} (or derived object, such as \code{tibble}, or
-\code{sf}) with values for the bioclimate variables for presences and background}
+\item{.data}{a \code{data.frame} (or derived object, such as \code{tibble}, or \code{sf})
+with values for the bioclimate variables for presences and background}
 
 \item{.col}{the column containing the presences; it assumes presences to be
 the first level of this factor}
@@ -19,9 +20,9 @@ a name vector of distances
 \description{
 For each environmental variable, this function computes the density functions
 of presences and absences and returns (1-overlap), which is a measure of the
-distance between the two distributions. Variables with a high distance are good
-candidates for SDMs, as species occurrences are confined to a subset
-of the available background.
+distance between the two distributions. Variables with a high distance are
+good candidates for SDMs, as species occurrences are confined to a subset of
+the available background.
 }
 \examples{
 # This should be updated to use a dataset from tidysdm

@@ -15,7 +15,7 @@ optim_thresh_kap_max(presences, absences)
 the probability threshold for the event
 }
 \description{
-This is an internal function returns the threshold to turn probabilities into binary classes
-to maximise kappa
+This is an internal function returns the threshold to turn probabilities into
+binary classes to maximise kappa
 }
 \keyword{internal}

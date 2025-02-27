@@ -10,22 +10,23 @@ calib_class_thresh(object, class_thresh, metric_thresh = NULL)
 \item{object}{an simple_ensemble object}
 
 \item{class_thresh}{probability threshold used to convert probabilities into
-classes. It can be a number (between 0 and 1), or a character metric (currently
-"tss_max", "kap_max" or "sensitivity"). For sensitivity, an additional target value is passed
-along as a second element of a vector, e.g. c("sensitivity",0.8).}
+classes. It can be a number (between 0 and 1), or a character metric
+(currently "tss_max", "kap_max" or "sensitivity"). For sensitivity, an
+additional target value is passed along as a second element of a vector,
+e.g. c("sensitivity",0.8).}
 
 \item{metric_thresh}{a vector of length 2 giving a metric and its threshold,
-which will be used to prune
-which models in the ensemble will be used for the prediction. The 'metrics'
-need to have been computed when the workflow was tuned. The metric's threshold needs to match the value
-used during prediction. Examples are c("accuracy",0.8) or c("boyce_cont",0.7).}
+which will be used to prune which models in the ensemble will be used for
+the prediction. The 'metrics' need to have been computed when the workflow
+was tuned. The metric's threshold needs to match the value used during
+prediction. Examples are c("accuracy",0.8) or c("boyce_cont",0.7).}
 }
 \value{
 a \link{simple_ensemble} object
 }
 \description{
-Predict for a new dataset by using a simple ensemble. Predictions from individual
-models are combined according to \code{fun}
+Predict for a new dataset by using a simple ensemble. Predictions from
+individual models are combined according to \code{fun}
 }
 \examples{
 test_ens <- simple_ensemble() \%>\%

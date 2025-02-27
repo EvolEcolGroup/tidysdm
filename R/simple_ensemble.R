@@ -1,19 +1,19 @@
 #' Simple ensemble
 #'
-#' A simple ensemble is a collection of workflows for which predictions will
-#' be combined in a simple way (e.g. by taking either the mean or median). Usually
-#' these workflows will consists each of the best version of a given model algorithm
-#' following tuning. The workflows are fitted to the full training dataset
-#' before making predictions.
+#' A simple ensemble is a collection of workflows for which predictions will be
+#' combined in a simple way (e.g. by taking either the mean or median). Usually
+#' these workflows will consists each of the best version of a given model
+#' algorithm following tuning. The workflows are fitted to the full training
+#' dataset before making predictions.
 #'
 #' @param ... not used, this function just creates an empty `simple_ensemble`
-#' object. Members are added with `add_best_candidates()`
+#'   object. Members are added with `add_best_candidates()`
 #' @returns an empty `simple_ensemble`. This is a tibble with columns:
 #' * `wflow_id`: the name of the workflows for which the best model was
-#' chosen
+#'   chosen
 #' * `workflow`: the trained workflow objects
 #' * `metrics`: metrics based on the crossvalidation resampling used
-#' to tune the models
+#'   to tune the models
 #' @export
 
 simple_ensemble <- function(...) {

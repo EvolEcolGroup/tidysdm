@@ -14,11 +14,12 @@ the grid offset
 }
 \description{
 This function facilitates using \link[spatialsample:spatial_block_cv]{spatialsample::spatial_block_cv} multiple
-times in an analysis. \link[spatialsample:spatial_block_cv]{spatialsample::spatial_block_cv} creates a grid
-based on the object in \code{data}. However, if spatial blocks are generated
-multiple times in an analysis (e.g. for a \code{\link[=spatial_initial_split]{spatial_initial_split()}}, and then
-subsequently for cross-validation on the training dataset), it might be desirable to keep the
-same grid). By applying this function to the largest dataset, usually the
-full dataset before \code{\link[=spatial_initial_split]{spatial_initial_split()}}. The resulting cellsize can
-be used as an option in \link[spatialsample:spatial_block_cv]{spatialsample::spatial_block_cv}.
+times in an analysis. \link[spatialsample:spatial_block_cv]{spatialsample::spatial_block_cv} creates a grid based
+on the object in \code{data}. However, if spatial blocks are generated multiple
+times in an analysis (e.g. for a \code{\link[=spatial_initial_split]{spatial_initial_split()}}, and then
+subsequently for cross-validation on the training dataset), it might be
+desirable to keep the same grid). By applying this function to the largest
+dataset, usually the full dataset before \code{\link[=spatial_initial_split]{spatial_initial_split()}}. The
+resulting cellsize can be used as an option in
+\link[spatialsample:spatial_block_cv]{spatialsample::spatial_block_cv}.
 }

@@ -51,7 +51,6 @@ bake.step_dummy_coords <- function(object, new_data, ...) {
   if (!all(c("X", "Y") %in% names(new_data))) {
     new_data <- dplyr::add_column(new_data, X = NA, Y = NA)
   }
-  browser()
   return(new_data)
 }
 

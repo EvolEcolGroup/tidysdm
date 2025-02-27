@@ -17,7 +17,7 @@ optim_thresh_sens(presences, absences, sens_target)
 the probability threshold for the event
 }
 \description{
-This is an internal function returns the threshold to turn probabilities into binary classes
-for a given target sensitivity
+This is an internal function returns the threshold to turn probabilities into
+binary classes for a given target sensitivity
 }
 \keyword{internal}

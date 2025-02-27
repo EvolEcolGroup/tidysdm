@@ -16,26 +16,24 @@ spatial_recipe(x, ...)
 }
 \value{
 An object of class \code{spatial_recipe}, which is a derived version of
-\code{\link[recipes:recipe]{recipes::recipe()}} , see
-the manpage for \code{\link[recipes:recipe]{recipes::recipe()}} for details.
+\code{\link[recipes:recipe]{recipes::recipe()}} , see the manpage for \code{\link[recipes:recipe]{recipes::recipe()}} for details.
 }
 \description{
-This method for \code{\link[recipes:recipe]{recipes::recipe()}} handles the
-case when \code{x} is an \link[sf:sf]{sf::sf} object, as commonly
-used in Species Distribution Model, and generates a \code{spatial_recipe}.
+This method for \code{\link[recipes:recipe]{recipes::recipe()}} handles the case when \code{x} is an \link[sf:sf]{sf::sf}
+object, as commonly used in Species Distribution Model, and generates a
+\code{spatial_recipe}.
 }
 \details{
-\code{\link[recipes:recipe]{recipes::recipe()}} are not natively compatible with \link[sf:sf]{sf::sf} objects. The problem is that
-the \code{geometry} column of \link[sf:sf]{sf::sf} objects is a list, which is incompatible with
-the translation of formulae in \code{\link[recipes:recipe]{recipes::recipe()}}. This method strips the \code{geometry}
-column from the \link{data.frame} and replaces it with a simple \code{X} and \code{Y} columns
-before any further operations, thus allowing
-the usual processing by \code{\link[recipes:recipe]{recipes::recipe()}} to succeed (\code{X} and \code{Y} are give the role
-of coords in a spatial recipe). When prepping and baking a \code{spatial_recipe},
-if a data.frame or tibble without coordinates is used as \code{training} or
-\code{new_data}, dummy \code{X} and \code{Y} columns
-are generated and filled with NAs.
-NOTE that order matters! You need to use the syntax
-\code{recipe(x=sf_obj, formula=class~.)} for the method to successfully detect
-the \link[sf:sf]{sf::sf} object. Starting with \code{formula} will fail.
+\code{\link[recipes:recipe]{recipes::recipe()}} are not natively compatible with \link[sf:sf]{sf::sf} objects. The
+problem is that the \code{geometry} column of \link[sf:sf]{sf::sf} objects is a list, which is
+incompatible with the translation of formulae in \code{\link[recipes:recipe]{recipes::recipe()}}. This
+method strips the \code{geometry} column from the \link{data.frame} and replaces it
+with a simple \code{X} and \code{Y} columns before any further operations, thus
+allowing the usual processing by \code{\link[recipes:recipe]{recipes::recipe()}} to succeed (\code{X} and \code{Y}
+are give the role of coords in a spatial recipe). When prepping and baking a
+\code{spatial_recipe}, if a data.frame or tibble without coordinates is used as
+\code{training} or \code{new_data}, dummy \code{X} and \code{Y} columns are generated and filled
+with NAs. NOTE that order matters! You need to use the syntax
+\code{recipe(x=sf_obj, formula=class~.)} for the method to successfully detect the
+\link[sf:sf]{sf::sf} object. Starting with \code{formula} will fail.
 }

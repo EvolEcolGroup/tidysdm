@@ -15,7 +15,7 @@ blockcv2rsample(x, data)
 an \code{rsample} object
 }
 \description{
-This function creates objects created with \code{blockCV} to \code{rsample} objects
+This function converts objects created with \code{blockCV} to \code{rsample} objects
 that can be used by \code{tidysdm}. BlockCV provides more sophisticated sampling
 options than the \code{spatialsample} library. For example, it is possible to
 stratify the sampling to ensure that presences and absences are evenly
@@ -28,7 +28,9 @@ supported.
 \examples{
 \donttest{
 library(blockCV)
-points <- read.csv(system.file("extdata/", "species.csv", package = "blockCV"))
+points <- read.csv(system.file("extdata/", "species.csv",
+  package = "blockCV"
+))
 pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845)
 sb1 <- cv_spatial(
   x = pa_data,

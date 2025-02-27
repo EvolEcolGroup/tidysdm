@@ -40,8 +40,8 @@ the plot data. The return value must be a \code{data.frame}, and
 will be used as the layer data. A \code{function} can be created
 from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
-\item{stat}{Use to override the default connection between \code{\link[ggplot2:geom_violin]{ggplot2::geom_violin()}}
-and \code{\link[ggplot2:geom_violin]{ggplot2::stat_ydensity()}}.}
+\item{stat}{Use to override the default connection between
+\code{\link[ggplot2:geom_violin]{ggplot2::geom_violin()}} and \code{\link[ggplot2:geom_violin]{ggplot2::stat_ydensity()}}.}
 
 \item{position}{A position adjustment to use on the data for this layer. This
 can be used in various ways, including to prevent overplotting and
@@ -116,22 +116,27 @@ a \code{\link[ggplot2:layer]{ggplot2::layer}} object
 }
 \description{
 This geometry displays the density distribution of two groups side by side,
-as two halves of a violin. Note that an empty\code{x} aesthetic has to be provided even
-if you want to plot a single variable (see example below).
+as two halves of a violin. Note that an empty\code{x} aesthetic has to be provided
+even if you want to plot a single variable (see example below).
 }
 \details{
-The implementation is based on https://stackoverflow.com/questions/35717353/split-violin-plot-with-ggplot2.
-Credit goes to @jan-jlx for providing a complete implementation on StackOverflow, and to
-Trang Q. Nguyen for adding the nudge parameter.
+The implementation is based on
+https://stackoverflow.com/questions/35717353/split-violin-plot-with-ggplot2.
+Credit goes to @jan-jlx for providing a complete implementation on
+StackOverflow, and to Trang Q. Nguyen for adding the nudge parameter.
 }
 \examples{
 data("bradypus", package = "maxnet")
-bradypus_tb <- tibble::as_tibble(bradypus) \%>\% dplyr::mutate(presence = relevel(
-  factor(
-    dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
-  ),
-  ref = "presence"
-))
+bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
+  dplyr::mutate(presence = relevel(
+    factor(
+      dplyr::case_match(
+        presence, 1 ~ "presence",
+        0 ~ "absence"
+      )
+    ),
+    ref = "presence"
+  ))
 
 ggplot(bradypus_tb, aes(
   x = "",

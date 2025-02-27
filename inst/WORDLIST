@@ -1,8 +1,10 @@
+Albers
 BCI
 Babak
 BlockCV
 Breugel
 CMD
+CRS
 DALEX
 Ecography
 Ecol
@@ -33,12 +35,14 @@ SSP
 Schmiegelow
 Schoener
 Schoener's
+SpatRaster
 StackOverflow
 TSS
 Tidymodels
 Toxopeus
 Trang
 Turelli
+Vittorio
 WGS
 WorldClim
 YBP
@@ -74,7 +78,10 @@ kap
 kendall
 lacerta
 lacertidae
+lat
 lh
+lon
+longlat
 lonlat
 lqpht
 lubridate
@@ -95,6 +102,7 @@ pearson
 pred
 prepping
 prob
+proj
 pseudoabsence
 pseudoabsences
 quasiquotation
@@ -107,6 +115,7 @@ stackexchange
 stackoverflow
 stat's
 svm
+terra
 thres
 tibble
 tibbles
@@ -114,6 +123,7 @@ tidymodels
 tn
 tp
 tss
+tstep
 unioned
 vec
 vif

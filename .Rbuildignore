@@ -16,3 +16,4 @@ ci_dependencies
 ^doc$
 ^Meta$
 pkgdown/
+.lintr

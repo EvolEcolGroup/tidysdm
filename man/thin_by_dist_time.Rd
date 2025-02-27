@@ -10,43 +10,52 @@ thin_by_dist_time(
   interval_min,
   coords = NULL,
   time_col = "time",
-  lubridate_fun = c
+  lubridate_fun = c,
+  dist_method = c("great_circle", "euclidean")
 )
 }
 \arguments{
-\item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with coordinate variables.
-These can be defined in \code{coords}, unless they have standard names
-(see details below).}
+\item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with coordinate
+variables. These can be defined in \code{coords}, unless they have standard
+names (see details below).}
 
-\item{dist_min}{Minimum distance between points (in units appropriate for
-the projection, or meters for lonlat data).}
+\item{dist_min}{Minimum distance between points (in units appropriate for the
+projection, or meters for lonlat data).}
 
 \item{interval_min}{Minimum time interval between points, in days.}
 
 \item{coords}{A vector of length two giving the names of the "x" and "y"
-coordinates, as found in \code{data}. If left to NULL, the function will
-try to guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
+coordinates, as found in \code{data}. If left to NULL, the function will try to
+guess the columns based on standard names \code{c("x", "y")}, \code{c("X","Y")},
 \code{c("longitude", "latitude")}, or \code{c("lon", "lat")}}
 
-\item{time_col}{The name of the column with time; if time is not a lubridate object,
-use \code{lubridate_fun} to provide a function that can be used to convert appropriately}
+\item{time_col}{The name of the column with time; if time is not a lubridate
+object, use \code{lubridate_fun} to provide a function that can be used to
+convert appropriately}
 
-\item{lubridate_fun}{function to convert the time column into a lubridate object}
+\item{lubridate_fun}{function to convert the time column into a lubridate
+object}
+
+\item{dist_method}{method to compute distance, either "euclidean" or
+"great_circle". Defaults to "great_circle", which is more accurate but
+takes slightly longer.}
 }
 \value{
 An object of class \code{\link[sf:sf]{sf::sf}} or \code{\link{data.frame}}, the same as "data".
 }
 \description{
 This function thins a dataset so that only observations that have a distance
-from each other greater than "dist_min" in space and "interval_min" in time are retained.
+from each other greater than "dist_min" in space and "interval_min" in time
+are retained.
 }
 \details{
-Geographic distances are measured in the appropriate units for the projection used. In case
-of raw latitude and longitude (e.g. as provided in a data.frame), the crs is set
-to WGS84, and units are set to meters. Time interval are estimated in days. Note that for
-very long time period, the simple conversion x years = 365 * x days might lead
-to slightly shorter intervals than expected, as it ignores leap years. The function
-\code{\link[=y2d]{y2d()}} provides a closer approximation.
+Geographic distances are measured in the appropriate units for the projection
+used. In case of raw latitude and longitude (e.g. as provided in a
+data.frame), the crs is set to WGS84, and units are set to meters. Time
+interval are estimated in days. Note that for very long time period, the
+simple conversion x years = 365 * x days might lead to slightly shorter
+intervals than expected, as it ignores leap years. The function \code{\link[=y2d]{y2d()}}
+provides a closer approximation.
 
 This function an algorithm analogous to \code{spThin}, with the exception that
 neighbours are defined in terms of both space and time.

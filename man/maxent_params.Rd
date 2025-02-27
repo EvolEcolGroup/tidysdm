@@ -15,12 +15,13 @@ feature_classes(values = c("l", "lq", "lqp", "lqph", "lqpht"))
 largest possible values, respectively. If a transformation is specified,
 these values should be in the transformed units.}
 
-\item{trans}{A trans object from the scales package, such as scales::log10_trans()
-or scales::reciprocal_trans(). If not provided, the default is used which
-matches the units used in range. If no transformation, NULL.}
+\item{trans}{A trans object from the scales package, such as
+scales::log10_trans() or scales::reciprocal_trans(). If not provided, the
+default is used which matches the units used in range. If no
+transformation, NULL.}
 
-\item{values}{For \code{feature_classes()}, a character string of
-any subset of "lqpht" (for example, "lh")}
+\item{values}{For \code{feature_classes()}, a character string of any subset of
+"lqpht" (for example, "lh")}
 }
 \value{
 a \code{param} object that can be used for tuning.
