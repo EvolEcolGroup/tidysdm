@@ -11,7 +11,7 @@ devtools::check(remote = TRUE, manual = TRUE)
 # grep --color='auto' -P -n "[^\x00-\x7F]" -r *
 
 # to reduce file sizes:
-tools::resaveRdaFiles("./data")
+# tools::resaveRdaFiles("./data")
 
 source("./data-raw/helper_functions/check_returns_in_documentation.R")
 

@@ -1,4 +1,4 @@
-test_that("mess_predictor works on SpatRasters", {
+test_that("mess_predictor works on SpatRasters and df", {
   # now get future climate
   climate_future <- terra::readRDS(
     system.file("extdata/lacerta_climate_future_10m.rds",
@@ -22,6 +22,32 @@ test_that("mess_predictor works on SpatRasters", {
   expect_true(all.equal(mess_df, terra::as.data.frame(mess_rast),
     check.attributes = FALSE
   ))
+
+  # test a single layer
+  climate_future_single <- climate_future[[1]]
+  mess_rast_single <- extrapol_mess(climate_future,
+    training = lacerta_thin,
+    .col = class
+  )
+  expect_true(inherits(mess_rast_single, "SpatRaster"))
+
+  # mismatch the variables
+  expect_error(
+    extrapol_mess(
+      climate_future,
+      training = lacerta_thin %>% dplyr::select(-bio15),
+      .col = class
+    ), "`x` and `training` should contain"
+  )
+
+  # make training too short
+  expect_error(
+    extrapol_mess(
+      climate_future,
+      training = lacerta_thin[1, ],
+      .col = class
+    ), "insufficient number of reference points"
+  )
 })
 
 test_that("mess_predictor works on stars", {
