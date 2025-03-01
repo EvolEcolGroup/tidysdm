@@ -3,6 +3,7 @@
 #' Pairs plot of attributes for `stars` objects. This is equivalent to
 #' [terra::pairs()] but works with `stars` objects.
 #' @inheritParams terra::pairs
+#' @returns a pairs plot of the attributes of the `stars` object.
 #' @rdname pairs-stars
 #' @export
 #' @examples
