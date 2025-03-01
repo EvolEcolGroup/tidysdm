@@ -1,3 +1,4 @@
+# `tidysdm` 1.0.0
 * add interoperability with `stars` (thanks to @btupper)
 * fixed inverted plots for `explain_tidysdm` when plotting for all workflows.
 * when using `explain_tidysdm` with a recipe that contains steps, data have to be
