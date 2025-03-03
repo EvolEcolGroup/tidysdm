@@ -66,4 +66,10 @@ test_that("blockcv2rsample conversion", {
     blockcv2rsample(nndm, pa_data),
     "this function does not support this object type"
   )
+  # give error for deprecated object
+  pa_data_spd <- sf::as_Spatial(pa_data)
+  expect_error(
+    blockcv2rsample(sb1, pa_data_spd),
+    "data is a `SpatialPointsDataFrame`; this object type is deprecated"
+  )
 })
