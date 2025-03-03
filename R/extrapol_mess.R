@@ -134,7 +134,7 @@ extrapol_mess.data.frame <- function(x, training, .col, ...) {
   }
 
   if (ncol(x) == 1) {
-    data.frame(mess = .messi(x, training))
+    data.frame(mess = .messi(x[,1], training))
   } else {
     x <- sapply(seq_len(ncol(x)), function(i) .messi(x[, i], training[, i]))
     rmess <- apply(x, 1, min, na.rm = TRUE)
