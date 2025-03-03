@@ -37,22 +37,20 @@ install.packages("tidysdm")
 The version on CRAN is recommended for every day use. New features and
 bug fixes appear first on the `dev` branch on GitHub, before they make
 their way to CRAN. If you need to have early access to these new
-features, you can install `tidysdm` directly from GitHub. To install
-from GitHub, you will need to use `devtools`; if you haven't done so
-already, get it from CRAN with `install.packages("devtools")`.
-
-You can install the latest `dev` version of `tidysdm` from r-universe with:
+features, you can install the latest `dev` version of `tidysdm` 
+from r-universe with:
 
 ``` r
 install.packages("tidysdm", repos = c("https://evolecolgroup.r-universe.dev", 
                                       "https://cloud.r-project.org"))
 ```
 
-Alternatively, you can also use `devtools` and install the package from source, but you
+Alternatively, you can also use `devtools` and install the package from source
+directly from GitHub, but you
 might need to set up your development environment first:
 
 ``` r
-# install.packages("devtools")
+# install.packages("devtools") # if you haven't installed devtools yet
 devtools::install_github("EvolEcolGroup/tidysdm", ref = "dev")
 ```
 
