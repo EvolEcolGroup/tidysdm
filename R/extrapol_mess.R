@@ -134,7 +134,7 @@ extrapol_mess.data.frame <- function(x, training, .col, ...) {
   }
 
   if (ncol(x) == 1) {
-    data.frame(mess = .messi(x, training))
+    data.frame(mess = .messi(x[, 1], training))
   } else {
     x <- sapply(seq_len(ncol(x)), function(i) .messi(x[, i], training[, i]))
     rmess <- apply(x, 1, min, na.rm = TRUE)
@@ -163,7 +163,7 @@ extrapol_mess.SpatRasterDataset <- function(x, training, .col, ...) {
   # get times from the first layer
   if (!terra::timeInfo(x[[1]])$time) {
     stop(
-      "The rasters in `SpatRasterDataset`x`` have no time info; define ",
+      "The rasters in `SpatRasterDataset` 'x' have no time info; define ",
       "times with terra::time"
     )
   }
