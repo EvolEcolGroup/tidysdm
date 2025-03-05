@@ -70,7 +70,8 @@ Suggests:
     tidyterra,
     vdiffr,
     xgboost, 
-    ggpattern
+    ggpattern,
+    RhpcBLASctl
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: true
