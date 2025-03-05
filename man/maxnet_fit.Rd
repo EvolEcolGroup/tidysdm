@@ -62,7 +62,6 @@ models). A good guide to how options of a Maxent model work can be found in
 https://onlinelibrary.wiley.com/doi/full/10.1111/j.1600-0587.2013.07872.x
 }
 \examples{
-\donttest{
 # we repeat the example in the `maxnet` package
 data("bradypus", package = "maxnet")
 bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
@@ -74,6 +73,5 @@ bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
   ))
 mod <- maxnet_fit(presence ~ ., data = bradypus_tb, classes = "lq")
 plot(mod, "tmp6190_ann")
-}
 }
 \keyword{internal}

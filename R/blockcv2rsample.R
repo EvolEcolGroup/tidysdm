@@ -14,7 +14,6 @@
 #' @returns an `rsample` object
 #' @export
 #' @examples
-#' \donttest{
 #' library(blockCV)
 #' points <- read.csv(system.file("extdata/", "species.csv",
 #'   package = "blockCV"
@@ -31,7 +30,6 @@
 #' sb1_rsample <- blockcv2rsample(sb1, pa_data)
 #' class(sb1_rsample)
 #' autoplot(sb1_rsample)
-#' }
 blockcv2rsample <- function(x, data) {
   if (!requireNamespace("blockCV", quietly = TRUE)) {
     stop(

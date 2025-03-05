@@ -29,12 +29,10 @@
 #' (95% confidence, by default).
 #' @returns A ggplot object.
 #' @examples
-#' \donttest{
 #' #' # we use the two_class_example from `workflowsets`
 #' two_class_ens <- simple_ensemble() %>%
 #'   add_member(two_class_res, metric = "roc_auc")
 #' autoplot(two_class_ens)
-#' }
 #' @export
 #' @keywords ensemble
 

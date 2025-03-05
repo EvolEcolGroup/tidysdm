@@ -14,7 +14,6 @@
 #'   regularization
 #' @returns a [`parsnip::model_spec`] for a `maxent` model
 #' @examples
-#' \donttest{
 #' # format the data
 #' data("bradypus", package = "maxnet")
 #' bradypus_tb <- tibble::as_tibble(bradypus) %>%
@@ -49,7 +48,6 @@
 #' maxent_tune_res <- maxent_spec %>%
 #'   tune_grid(presence ~ ., cv, grid = 3)
 #' show_best(maxent_tune_res, metric = "roc_auc")
-#' }
 #' @export
 maxent <-
   function(mode = "classification", engine = "maxnet", feature_classes = NULL,

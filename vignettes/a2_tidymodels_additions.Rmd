@@ -16,9 +16,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-# set options to limit threads used by imported libraries
-options(cores = 2)
-options(mc.cores = 2)
 # xgboost uses data.table
 data.table::setDTthreads(1)
 

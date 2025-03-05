@@ -26,7 +26,6 @@ Note that currently only objects of type \code{cv_spatial} and \code{cv_cluster}
 supported.
 }
 \examples{
-\donttest{
 library(blockCV)
 points <- read.csv(system.file("extdata/", "species.csv",
   package = "blockCV"
@@ -43,5 +42,4 @@ sb1 <- cv_spatial(
 sb1_rsample <- blockcv2rsample(sb1, pa_data)
 class(sb1_rsample)
 autoplot(sb1_rsample)
-}
 }
