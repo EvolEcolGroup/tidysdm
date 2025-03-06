@@ -90,7 +90,7 @@ see your question and can help you. If you have not received an answer after a c
 feel free to drop us an email in case we missed your post.
 
 2) If you think you have found a bug, or have a feature request, open an issue on our
-[GitHub repository]((https://github.com/EvolEcolGroup/tidysdm/issues). Before doing so, please 
+[GitHub repository](https://github.com/EvolEcolGroup/tidysdm/issues). Before doing so, please 
 make sure that you have installed the latest **development** version of
 `tidysdm` (as the bug might have already been fixed), as well as updating 
 all other packages on your system. If the problem persists, and there is no issue
