@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,13 +93,13 @@ vignette.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: tidymodels</span></span>
-<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ────────────────────────────────────── tidymodels 1.2.0 ──</span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ────────────────────────────────────── tidymodels 1.3.0 ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">broom       </span> 1.0.7     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">recipes     </span> 1.1.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dials       </span> 1.4.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rsample     </span> 1.2.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr       </span> 1.1.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble      </span> 3.2.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2     </span> 3.5.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr       </span> 1.3.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">infer       </span> 1.0.7     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tune        </span> 1.2.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">modeldata   </span> 1.4.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflows   </span> 1.1.4</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">infer       </span> 1.0.7     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tune        </span> 1.3.0</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">modeldata   </span> 1.4.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflows   </span> 1.2.0</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">parsnip     </span> 1.3.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflowsets</span> 1.1.0</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr       </span> 1.0.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">yardstick   </span> 1.3.2</span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ───────────────────────────────────────── tidymodels_conflicts() ──</span></span>
@@ -107,7 +107,6 @@ vignette.</p>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span>  masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">lag()</span>     masks <span style="color: #0000BB;">stats</span>::lag()</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">recipes</span>::<span style="color: #00BB00;">step()</span>  masks <span style="color: #0000BB;">stats</span>::step()</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">•</span> Dig deeper into tidy modeling with R at <span style="color: #00BB00;">https://www.tmwr.org</span></span></span>
 <span><span class="co">#&gt; Loading required package: spatialsample</span></span>
 <span><span class="va">lacerta_ensemble</span></span>
 <span><span class="co">#&gt; A simple_ensemble of models</span></span>
@@ -134,16 +133,16 @@ generate our explainer:</p>
 <code class="sourceCode R"><span><span class="va">explainer_lacerta_ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/explain_tidysdm.html">explain_tidysdm</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
 <span><span class="co">#&gt;   -&gt; model label       :  data.frame  (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; data              :  444  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  448  rows  4  cols </span></span>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
-<span><span class="co">#&gt;   -&gt; target variable   :  444  values </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  predict_function </span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; model_info        :  package tidysdm , ver. 0.9.5 , task classification (  default  ) </span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  package tidysdm , ver. 1.0.0 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.01490969 , mean =  0.2861937 , max =  0.7169324  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.06923795 , mean =  0.3120366 , max =  0.7425985  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.6465921 , mean =  -0.03619367 , max =  0.7891973  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.6522011 , mean =  -0.06203659 , max =  0.7578909  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span></code></pre></div>
 <p>Now that we have our explainer, we can explore variable importance
 for the ensemble:</p>
@@ -174,57 +173,61 @@ tutorial on <a href="https://modeloriented.github.io/DALEX/" class="external-lin
 ensemble:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">explainer_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/explain_tidysdm.html">explain_tidysdm</a></span><span class="op">(</span><span class="fu">tidysdm</span><span class="fu">::</span><span class="va"><a href="../reference/lacerta_ensemble.html">lacerta_ensemble</a></span>, by_workflow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Unknown or uninitialised column: `pre`.</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
 <span><span class="co">#&gt;   -&gt; model label       :  default_glm </span></span>
-<span><span class="co">#&gt;   -&gt; data              :  444  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  448  rows  4  cols </span></span>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
-<span><span class="co">#&gt;   -&gt; target variable   :  444  values </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.2.0 , task classification (  default  ) </span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.3.0 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.2280177 , mean =  0.75 , max =  0.9854359  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.2554356 , mean =  0.75 , max =  0.9838188  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9096205 , mean =  5.395921e-12 , max =  0.7719823  </span></span>
-<span><span class="co">#&gt;   A new explainer has been created!  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9838188 , mean =  -0.5 , max =  0.6967523  </span></span>
+<span><span class="co">#&gt;   A new explainer has been created!</span></span>
+<span><span class="co">#&gt; Warning: Unknown or uninitialised column: `pre`.</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
 <span><span class="co">#&gt;   -&gt; model label       :  default_rf </span></span>
-<span><span class="co">#&gt;   -&gt; data              :  444  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  448  rows  4  cols </span></span>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
-<span><span class="co">#&gt;   -&gt; target variable   :  444  values </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.2.0 , task classification (  default  ) </span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.3.0 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.1315421 , mean =  0.7480648 , max =  1  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.06715952 , mean =  0.7496213 , max =  1  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.6878921 , mean =  0.001935171 , max =  0.5870619  </span></span>
-<span><span class="co">#&gt;   A new explainer has been created!  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -1 , mean =  -0.4996213 , max =  0.9328405  </span></span>
+<span><span class="co">#&gt;   A new explainer has been created!</span></span>
+<span><span class="co">#&gt; Warning: Unknown or uninitialised column: `pre`.</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
 <span><span class="co">#&gt;   -&gt; model label       :  default_gbm </span></span>
-<span><span class="co">#&gt;   -&gt; data              :  444  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  448  rows  4  cols </span></span>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
-<span><span class="co">#&gt;   -&gt; target variable   :  444  values </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.2.0 , task classification (  default  ) </span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.3.0 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.3390188 , mean =  0.7314788 , max =  0.9632964  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.346187 , mean =  0.625061 , max =  0.7453015  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9268645 , mean =  0.01852121 , max =  0.6280424  </span></span>
-<span><span class="co">#&gt;   A new explainer has been created!  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.7453015 , mean =  -0.375061 , max =  0.653813  </span></span>
+<span><span class="co">#&gt;   A new explainer has been created!</span></span>
+<span><span class="co">#&gt; Warning: Unknown or uninitialised column: `pre`.</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
 <span><span class="co">#&gt;   -&gt; model label       :  default_maxent </span></span>
-<span><span class="co">#&gt;   -&gt; data              :  444  rows  4  cols </span></span>
+<span><span class="co">#&gt;   -&gt; data              :  448  rows  4  cols </span></span>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
-<span><span class="co">#&gt;   -&gt; target variable   :  444  values </span></span>
+<span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.2.0 , task classification (  default  ) </span></span>
+<span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.3.0 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.1095764 , mean =  0.6256817 , max =  0.9960248  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.1413389 , mean =  0.6271714 , max =  0.9952112  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.8207859 , mean =  0.1243183 , max =  0.8904236  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9952112 , mean =  -0.3771714 , max =  0.8586611  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span></code></pre></div>
 <p>The resulting list can be then used to build lists of explanations,
 which can then be plotted.</p>
@@ -250,7 +253,7 @@ overview</a> article:</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span>
-<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_sf.RDS"</span>,</span>
+<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_thin_all_vars.rds"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"tidysdm"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We then use <code>spatial_initial_split</code> to do the split, using
@@ -266,22 +269,26 @@ a <code>spatial_block_cv</code> scheme to partition the data:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_splits_balance.html">check_splits_balance</a></span><span class="op">(</span><span class="va">lacerta_initial</span>, <span class="va">class</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
-<span><span class="co">#&gt;   presence_test pseudoabs_test presence_train pseudoabs_train</span></span>
-<span><span class="co">#&gt;           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>            88            267             25              72</span></span></code></pre></div>
+<span><span class="co">#&gt;   presence_test background_test presence_train background_train</span></span>
+<span><span class="co">#&gt;           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>            86             263             26               73</span></span></code></pre></div>
 <p>We can now extract the training set from our
 <code>lacerta_initial</code> split, and sample folds to set up cross
 validation (note that we set the <code>cellsize</code> and
 <code>offset</code> based on the full dataset,
 <code>lacerta_thin</code>; this allows us to use the same grid we used
-for the <code>initial_split</code>).</p>
+for the <code>initial_split</code>). In this example, we also have add a
+very small number to the offset to avoid an error in the
+<code>spatial_block_cv</code> function arising from some points falling
+on the boundary of the grid cells). This is often not necessary, so only
+introduce this if you encounter an error.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1005</span><span class="op">)</span></span>
 <span><span class="va">lacerta_training</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">lacerta_initial</span><span class="op">)</span></span>
 <span><span class="va">lacerta_cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatial_block_cv</a></span><span class="op">(</span><span class="va">lacerta_training</span>,</span>
 <span>  v <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  cellsize <span class="op">=</span> <span class="fu"><a href="../reference/grid_cellsize.html">grid_cellsize</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span>,</span>
-<span>  offset <span class="op">=</span> <span class="fu"><a href="../reference/grid_offset.html">grid_offset</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span></span>
+<span>  offset <span class="op">=</span> <span class="fu"><a href="../reference/grid_offset.html">grid_offset</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.00001</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_cv</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a2_tidymodels_additions_files/figure-html/training_cv-1.png" width="576"></p>
@@ -289,13 +296,14 @@ for the <code>initial_split</code>).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_splits_balance.html">check_splits_balance</a></span><span class="op">(</span><span class="va">lacerta_cv</span>, <span class="va">class</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 4</span></span></span>
-<span><span class="co">#&gt;   presence_assessment pseudoabs_assessment presence_analysis pseudoabs_analysis</span></span>
-<span><span class="co">#&gt;                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                  74                  197                14                 70</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                  59                  225                29                 42</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>                  73                  220                15                 47</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>                  76                  209                12                 58</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>                  70                  218                18                 49</span></span></code></pre></div>
+<span><span class="co">#&gt;   presence_assessment background_assessment presence_analysis</span></span>
+<span><span class="co">#&gt;                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                  69                   228                17</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                  67                   222                19</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>                  62                   191                24</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>                  71                   216                15</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>                  75                   197                11</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: background_analysis &lt;int&gt;</span></span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="different-recipes-for-certain-models">Different recipes for certain models<a class="anchor" aria-label="anchor" href="#different-recipes-for-certain-models"></a>
@@ -349,8 +357,8 @@ spec from <code>yardstick</code>:</p>
 <span>      rf <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_rand_forest.html">sdm_spec_rf</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>      <span class="co"># svm specs with tuning</span></span>
 <span>      svm <span class="op">=</span> <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/svm_poly.html" class="external-link">svm_poly</a></span><span class="op">(</span></span>
-<span>        cost <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>        degree <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span></span>
+<span>        cost <span class="op">=</span> <span class="fu">tune</span><span class="fu">::</span><span class="fu"><a href="https://hardhat.tidymodels.org/reference/tune.html" class="external-link">tune</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        degree <span class="op">=</span> <span class="fu">tune</span><span class="fu">::</span><span class="fu"><a href="https://hardhat.tidymodels.org/reference/tune.html" class="external-link">tune</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>      <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>        <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_engine.html" class="external-link">set_engine</a></span><span class="op">(</span><span class="st">"kernlab"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>        <span class="fu">parsnip</span><span class="fu">::</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_args.html" class="external-link">set_mode</a></span><span class="op">(</span><span class="st">"classification"</span><span class="op">)</span></span>
@@ -394,12 +402,11 @@ variables in the dataset. So, before tuning, we need to finalise
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (307ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (302ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 3 tuning:     all_rf</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> No improvement for 10 iterations; returning current results.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (16s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (20.1s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 3 tuning:     all_svm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (18.8s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (21.8s)</span></span></span></code></pre></div>
 <p>We can have a look at the performance of our models with:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_models</span><span class="op">)</span></span></code></pre></div>
@@ -423,7 +430,7 @@ same algorithm with different hyper-parameters.</p>
 <span>  <span class="fu"><a href="https://stacks.tidymodels.org/reference/add_candidates.html" class="external-link">add_candidates</a></span><span class="op">(</span><span class="va">lacerta_models</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="co"># determine how to combine their predictions</span></span>
 <span>  <span class="fu"><a href="https://stacks.tidymodels.org/reference/blend_predictions.html" class="external-link">blend_predictions</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="co"># fit the candidates with non-zero weights (i.e.non-zero stacking coefficients)</span></span>
+<span>  <span class="co"># fit candidates with non-zero weights (i.e. non-zero stacking coefficients)</span></span>
 <span>  <span class="fu"><a href="https://stacks.tidymodels.org/reference/fit_members.html" class="external-link">fit_members</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_stack</span>, type <span class="op">=</span> <span class="st">"weights"</span><span class="op">)</span></span></code></pre></div>
@@ -446,9 +453,9 @@ function (with empty <code>()</code>) that is then used on the data.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 3</span></span></span>
 <span><span class="co">#&gt;   .metric    .estimator .estimate</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> boyce_cont binary         0.853</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> roc_auc    binary         0.986</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> tss_max    binary         0.92</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> boyce_cont binary         0.805</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> roc_auc    binary         0.820</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> tss_max    binary         0.564</span></span></code></pre></div>
 <p>We can now make predictions with this stacked ensemble. We start by
 extracting the climate for the variables of interest</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -492,22 +499,26 @@ function.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="co"># load the dataset</span></span>
-<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_sf.RDS"</span>,</span>
+<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_thin_all_vars.rds"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"tidysdm"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># create a topography variable with 3 levels based on altitude</span></span>
 <span><span class="va">lacerta_thin</span><span class="op">$</span><span class="va">topography</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">$</span><span class="va">altitude</span>,</span>
-<span>                breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">200</span>, <span class="fl">800</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
-<span>                labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plains"</span>, <span class="st">"hills"</span>, <span class="st">"mountains"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">200</span>, <span class="fl">800</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plains"</span>, <span class="st">"hills"</span>, <span class="st">"mountains"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">$</span><span class="va">topography</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    plains     hills mountains </span></span>
-<span><span class="co">#&gt;        82       233       137</span></span></code></pre></div>
+<span><span class="co">#&gt;       135       231        82</span></span></code></pre></div>
 <p>We then create the recipe by adding a step to create dummy variables
 for the <code>topography</code> variable.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># subset to variable of interest</span></span>
-<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">class</span>, <span class="va">bio05</span>, <span class="va">bio06</span>, <span class="va">bio12</span>, <span class="va">bio15</span>, <span class="va">topography</span><span class="op">)</span></span>
+<span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>  <span class="va">class</span>, <span class="va">bio05</span>, <span class="va">bio06</span>, <span class="va">bio12</span>,</span>
+<span>  <span class="va">bio15</span>, <span class="va">topography</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lacerta_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula <span class="op">=</span> <span class="va">class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">step_dummy</span><span class="op">(</span><span class="va">topography</span><span class="op">)</span></span>
@@ -548,17 +559,17 @@ baking the recipe:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_bake</span> <span class="op">&lt;-</span> <span class="fu">bake</span><span class="op">(</span><span class="va">lacerta_prep</span>, new_data <span class="op">=</span> <span class="va">lacerta_thin</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">lacerta_bake</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 452</span></span>
+<span><span class="co">#&gt; Rows: 448</span></span>
 <span><span class="co">#&gt; Columns: 9</span></span>
-<span><span class="co">#&gt; $ bio05                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 30.50350, 25.28050, 23.67800, 29.68875, 26.34075,…</span></span>
-<span><span class="co">#&gt; $ bio06                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.477000, 3.631750, 0.789500, 6.048750, 1.869000,…</span></span>
-<span><span class="co">#&gt; $ bio12                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 596, 1490, 1395, 729, 1324, 1409, 1260, 1390, 116…</span></span>
-<span><span class="co">#&gt; $ bio15                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 50.59533, 50.07437, 47.24211, 58.88199, 51.62960,…</span></span>
-<span><span class="co">#&gt; $ X                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -5.394226, -8.374844, -7.886102, -8.231414, -7.17…</span></span>
-<span><span class="co">#&gt; $ Y                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.48495, 41.97207, 41.89992, 39.49710, 41.78401,…</span></span>
+<span><span class="co">#&gt; $ bio05                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 24.82805, 25.65241, 24.00614, 28.44062, 28.42171,…</span></span>
+<span><span class="co">#&gt; $ bio06                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3.117023, 2.856565, 1.542353, 6.945411, 4.656421,…</span></span>
+<span><span class="co">#&gt; $ bio12                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1395.0464, 1242.8585, 1380.4235, 563.5615, 965.35…</span></span>
+<span><span class="co">#&gt; $ bio15                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 51.12716, 54.19739, 48.76986, 69.05999, 56.29424,…</span></span>
+<span><span class="co">#&gt; $ X                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -347236.6, -289470.9, -328023.1, -399483.3, -3711…</span></span>
+<span><span class="co">#&gt; $ Y                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 226017.27, 194852.58, 236820.42, -254616.60, 2813…</span></span>
 <span><span class="co">#&gt; $ class                <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> presence, presence, presence, presence, presence,…</span></span>
-<span><span class="co">#&gt; $ topography_hills     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0…</span></span>
-<span><span class="co">#&gt; $ topography_mountains <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1…</span></span></code></pre></div>
+<span><span class="co">#&gt; $ topography_hills     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1…</span></span>
+<span><span class="co">#&gt; $ topography_mountains <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0…</span></span></code></pre></div>
 <p>We can now run the sdm as usual:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># define the models</span></span>
@@ -588,10 +599,10 @@ baking the recipe:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (198ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (193ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (988ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (1.2s)</span></span></span>
 <span><span class="co"># fit the ensemble</span></span>
 <span><span class="va">lacerta_ensemble</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simple_ensemble.html">simple_ensemble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_member.html">add_member</a></span><span class="op">(</span><span class="va">lacerta_models</span>, metric <span class="op">=</span> <span class="st">"boyce_cont"</span><span class="op">)</span></span></code></pre></div>
@@ -606,17 +617,57 @@ the model fit from one of the models in the ensemble:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
 <span><span class="co">#&gt;          (Intercept)                 bio05                 bio06  </span></span>
-<span><span class="co">#&gt;            -6.920024              0.635493             -0.334427  </span></span>
+<span><span class="co">#&gt;            -2.244761              0.284021             -0.084121  </span></span>
 <span><span class="co">#&gt;                bio12                 bio15      topography_hills  </span></span>
-<span><span class="co">#&gt;            -0.002505             -0.113106             -1.851098  </span></span>
+<span><span class="co">#&gt;            -0.001189             -0.049376             -0.668832  </span></span>
 <span><span class="co">#&gt; topography_mountains  </span></span>
-<span><span class="co">#&gt;            -2.531259  </span></span>
+<span><span class="co">#&gt;            -1.181825  </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Degrees of Freedom: 451 Total (i.e. Null);  445 Residual</span></span>
-<span><span class="co">#&gt; Null Deviance:       508.4 </span></span>
-<span><span class="co">#&gt; Residual Deviance: 189.5     AIC: 203.5</span></span></code></pre></div>
+<span><span class="co">#&gt; Degrees of Freedom: 447 Total (i.e. Null);  441 Residual</span></span>
+<span><span class="co">#&gt; Null Deviance:       503.9 </span></span>
+<span><span class="co">#&gt; Residual Deviance: 401.1     AIC: 415.1</span></span></code></pre></div>
 <p>We can see that we have coefficients for <em>topography_hills</em>
 and <em>topography_mountains</em>.</p>
+<p>Let us now predict the presence of the lizard in the Iberian
+Peninsula using the ensemble. Note that, for
+<code><a href="../reference/predict_raster.html">predict_raster()</a></code> to work, the name and levels for a
+categorical variable need to match with those used when training the
+models (i.e. in the recipe with <code>step_dummy()</code>):</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">climate_present</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_climate_present_10m.rds"</span>,</span>
+<span>    package <span class="op">=</span> <span class="st">"tidysdm"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># first we add a topography variable to the climate data</span></span>
+<span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span> <span class="op">&lt;-</span> <span class="va">climate_present</span><span class="op">$</span><span class="va">altitude</span></span>
+<span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/classify.html" class="external-link">classify</a></span><span class="op">(</span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span>,</span>
+<span>  rcl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="cn">Inf</span>, <span class="fl">200</span>, <span class="fl">800</span>, <span class="cn">Inf</span><span class="op">)</span>,</span>
+<span>  include.lowest <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  brackets <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; terra 1.8.29</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'terra'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:kernlab':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     buffer, size</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:tidyr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     extract</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:dials':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     buffer</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:scales':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     rescale</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/factors.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">climate_present</span><span class="op">$</span><span class="va">topography</span><span class="op">)</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, topography <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plains"</span>, <span class="st">"hills"</span>, <span class="st">"mountains"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># now we can predict</span></span>
+<span><span class="va">predict_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span>, <span class="va">climate_present</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">predict_factor</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a2_tidymodels_additions_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

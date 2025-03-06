@@ -43,6 +43,7 @@
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta_ensemble.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/lacerta_rep_ens.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/lacertidae_background.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/make_mask_from_presence.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/maxent.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/maxent_params.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/maxnet_fit.html</loc></url>
@@ -53,6 +54,7 @@
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh_sens.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/optim_thresh_tss_max.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/out_of_range_warning.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/pairs-stars.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/pipe.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/plot_pres_vs_bg.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/predict.repeat_ensemble.html</loc></url>
