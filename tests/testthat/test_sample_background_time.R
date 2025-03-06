@@ -166,6 +166,44 @@ test_that("sample_background_time samples in the right places", {
 
 
 
+test_that("sample_background_time returns the correct objects", {
+  bg_dist_max <- sample_background_time(locations,
+    n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+    method = c("dist_max", buf_dist),
+    return_pres = TRUE
+  )
+  # this should be a df with presences
+  expect_true(inherits(bg_dist_max, "data.frame"))
+  expect_false(inherits(bg_dist_max, "sf"))
+  expect_true(all(levels(bg_dist_max$class) == c("presence", "background")))
+  # cast locations to a sf
+  locations_sf <- sf::st_as_sf(locations,
+    coords = c("lon", "lat"),
+    crs = "EPSG:4326"
+  )
+  bg_dist_max <- sample_background_time(locations_sf,
+    n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+    method = c("dist_max", buf_dist),
+    return_pres = TRUE
+  )
+  # this should be a sf with presences
+  expect_true(inherits(bg_dist_max, "sf"))
+  expect_true(all(levels(bg_dist_max$class) == c("presence", "background")))
+
+  # test error with incorrect n_per_time_step
+  expect_error(
+    sample_background_time(locations,
+      n = c(10, 20), raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+      method = c("dist_max", buf_dist),
+      return_pres = TRUE
+    ), "length of 'n_per_time_step' should be the same"
+  )
+})
+
+
+
+# note that due to shallow copying, the following code will change the raster if
+# it used further below (i.e. outside the test_that block)
 test_that("sample_background_time treats time correctly", {
   # change time of raster to POSIX
   time(grid_raster) <- lubridate::date_decimal(time(grid_raster))

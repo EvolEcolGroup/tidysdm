@@ -26,6 +26,9 @@
 
 \item{...}{additional arguments (graphical parameters)}
 }
+\value{
+a pairs plot of the attributes of the \code{stars} object.
+}
 \description{
 Pairs plot of attributes for \code{stars} objects. This is equivalent to
 \code{\link[terra:pairs]{terra::pairs()}} but works with \code{stars} objects.

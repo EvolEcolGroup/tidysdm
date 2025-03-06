@@ -13,11 +13,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-# set options to limit threads used by imported libraries
-options(cores = 2)
-options(mc.cores = 2)
 # xgboost uses data.table
 data.table::setDTthreads(2)
+RhpcBLASctl::blas_set_num_threads(2)
+RhpcBLASctl::omp_set_num_threads(2)
 
 # set the two variables below to FALSE for a normal vignette using the data
 # included in the package
@@ -568,6 +567,11 @@ library(tidysdm)
 set.seed(105)
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
 autoplot(lacerta_cv)
+```
+
+We can check that the splits are reasonably balanced with:
+```{r check_balance}
+check_splits_balance(lacerta_cv, class)
 ```
 
 We can now use the block CV folds to tune and assess the models (to keep

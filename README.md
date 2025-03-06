@@ -37,15 +37,20 @@ install.packages("tidysdm")
 The version on CRAN is recommended for every day use. New features and
 bug fixes appear first on the `dev` branch on GitHub, before they make
 their way to CRAN. If you need to have early access to these new
-features, you can install `tidysdm` directly from GitHub. To install
-from GitHub, you will need to use `devtools`; if you haven't done so
-already, get it from CRAN with `install.packages("devtools")`.
-
-
-You can install the latest `dev` version of tidysdm from [GitHub](https://github.com/) with:
+features, you can install the latest `dev` version of `tidysdm` 
+from r-universe with:
 
 ``` r
-# install.packages("devtools")
+install.packages("tidysdm", repos = c("https://evolecolgroup.r-universe.dev", 
+                                      "https://cloud.r-project.org"))
+```
+
+Alternatively, you can also use `devtools` and install the package from source
+directly from GitHub, but you
+might need to set up your development environment first:
+
+``` r
+# install.packages("devtools") # if you haven't installed devtools yet
 devtools::install_github("EvolEcolGroup/tidysdm", ref = "dev")
 ```
 
@@ -85,7 +90,7 @@ see your question and can help you. If you have not received an answer after a c
 feel free to drop us an email in case we missed your post.
 
 2) If you think you have found a bug, or have a feature request, open an issue on our
-[GitHub repository]((https://github.com/EvolEcolGroup/tidysdm/issues). Before doing so, please 
+[GitHub repository](https://github.com/EvolEcolGroup/tidysdm/issues). Before doing so, please 
 make sure that you have installed the latest **development** version of
 `tidysdm` (as the bug might have already been fixed), as well as updating 
 all other packages on your system. If the problem persists, and there is no issue
@@ -94,5 +99,3 @@ example](https://reprex.tidyverse.org/)
 for the developers to investigate the problem. A small **reproducible example** is
 crucial in allowing us to understand the problem and fix it, so please do your best to
 come up with the shortest bit of code needed to show the bug.
-
-

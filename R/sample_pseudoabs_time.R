@@ -65,13 +65,6 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence,
                                   lubridate_fun = c,
                                   method = "random", class_label = "pseudoabs",
                                   return_pres = TRUE, time_buffer = 0) {
-  if (inherits(raster, "stars")) {
-    d <- stars::st_dimensions(raster)
-    time <- stars::st_get_dimension_values(raster, "time")
-    raster <- as(raster, "SpatRaster")
-    terra::time(raster, tstep = d$time$refsys) <- time
-  }
-
   # create a vector of times formatted as proper dates
   time_lub <- data %>%
     sf::st_drop_geometry() %>%
@@ -83,6 +76,14 @@ sample_pseudoabs_time <- function(data, raster, n_per_presence,
   # create max and min date of influence for a presence with time_buffer
   time_lub_min <- time_lub - lubridate::days(time_buffer)
   time_lub_max <- time_lub + lubridate::days(time_buffer)
+
+  # if raster is a stars object, cast it to a SpatRaster
+  if (inherits(raster, "stars")) {
+    d <- stars::st_dimensions(raster)
+    time <- stars::st_get_dimension_values(raster, "time")
+    raster <- as(raster, "SpatRaster")
+    terra::time(raster, tstep = d$time$refsys) <- time
+  }
 
   # if it is a SpatRasterDataset, use the first dataset
   if (inherits(raster, "SpatRasterDataset")) {

@@ -1,4 +1,4 @@
-test_that("mess_predictor works on SpatRasters", {
+test_that("mess_predictor works on SpatRasters and df", {
   # now get future climate
   climate_future <- terra::readRDS(
     system.file("extdata/lacerta_climate_future_10m.rds",
@@ -22,6 +22,47 @@ test_that("mess_predictor works on SpatRasters", {
   expect_true(all.equal(mess_df, terra::as.data.frame(mess_rast),
     check.attributes = FALSE
   ))
+
+  # test a single layer
+  climate_future_single <- climate_future[[1]]
+  mess_rast_single <- extrapol_mess(climate_future_single,
+    training = lacerta_thin %>% select(bio15, class),
+    .col = class
+  )
+  expect_true(inherits(mess_rast_single, "SpatRaster"))
+  # same for df
+  climate_future_single_df <- climate_future_df %>% select(bio15)
+  mess_df_single <- extrapol_mess(climate_future_single_df,
+    training = lacerta_thin %>% select(bio15, class),
+    .col = class
+  )
+  expect_true(inherits(mess_df_single, "data.frame"))
+
+  # mismatch the variables
+  expect_error(
+    extrapol_mess(
+      climate_future,
+      training = lacerta_thin %>% dplyr::select(-bio15),
+      .col = class
+    ), "`x` and `training` should contain"
+  )
+
+  # make training too short for spatraster
+  expect_error(
+    extrapol_mess(
+      climate_future,
+      training = lacerta_thin[1, ],
+      .col = class
+    ), "insufficient number of reference points"
+  )
+  # same for df
+  expect_error(
+    extrapol_mess(
+      climate_future_df,
+      training = lacerta_thin[1, ],
+      .col = class
+    ), "insufficient number of reference points"
+  )
 })
 
 test_that("mess_predictor works on stars", {
@@ -63,5 +104,17 @@ test_that("mess_predictor works on SpatRasterDatasets", {
       global(mess_rast[[1]], mean, na.rm = TRUE)
     ) <
       unlist(global(mess_rast[[5]], mean, na.rm = TRUE))
+  )
+  # catch lack of units for time
+  terra::time(climate_full) <- terra::time(climate_full)
+  expect_error(
+    extrapol_mess(climate_full, training = horses_env),
+    "The time step of `x` is not `years`"
+  )
+  # catch lack of time
+  time(climate_full) <- NULL
+  expect_error(
+    extrapol_mess(climate_full, training = horses_env),
+    "The rasters in `SpatRasterDataset` "
   )
 })

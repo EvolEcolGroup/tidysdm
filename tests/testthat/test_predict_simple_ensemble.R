@@ -1,5 +1,5 @@
+data.table::setDTthreads(2)
 test_that("simple_ensemble predictions", {
-  data.table::setDTthreads(2)
   ## now add some models (the first 3) using default metric
   test_ens <- simple_ensemble() %>% add_member(two_class_res[1:3, ],
     metric = "roc_auc"
@@ -73,7 +73,13 @@ test_that("simple_ensemble predictions", {
   test_ens <- simple_ensemble() %>% add_member(two_class_res[1:3, ],
     metric = "roc_auc"
   )
-  # first we calibrate the model
+  # expect error if we haven't calibrated the model
+  expect_error(predict(test_ens,
+    new_data = two_class_dat, type = "class", class_thresh = c("tss_max"),
+    fun = c("mean", "median"),
+    "this model needs to be first calibrated"
+  ))
+  # fix this by first calibrating the model
   test_ens <- calib_class_thresh(test_ens, class_thresh = "tss_max")
   pred_class <- predict(test_ens,
     new_data = two_class_dat, type = "class", class_thresh = c("tss_max"),
@@ -83,6 +89,23 @@ test_that("simple_ensemble predictions", {
   pred_class <- predict(test_ens,
     new_data = two_class_dat, type = "class", class_thresh = 0.4,
     fun = c("mean", "median")
+  )
+
+  # expect error if we give invalid function
+  expect_error(
+    predict(test_ens,
+      new_data = two_class_dat, type = "class", fun = "blah",
+      class_thresh = 0.4,
+    ),
+    "fun should be either "
+  )
+  # expect error if we give invalid function
+  expect_error(
+    predict(test_ens,
+      new_data = two_class_dat, type = "class", fun = c(1, 2, 3),
+      class_thresh = 0.4,
+    ),
+    "fun should be either "
   )
 })
 
