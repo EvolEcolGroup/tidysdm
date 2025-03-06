@@ -37,22 +37,20 @@ install.packages("tidysdm")
 The version on CRAN is recommended for every day use. New features and
 bug fixes appear first on the `dev` branch on GitHub, before they make
 their way to CRAN. If you need to have early access to these new
-features, you can install `tidysdm` directly from GitHub. To install
-from GitHub, you will need to use `devtools`; if you haven't done so
-already, get it from CRAN with `install.packages("devtools")`.
-
-You can install the latest `dev` version of `tidysdm` from r-universe with:
+features, you can install the latest `dev` version of `tidysdm` 
+from r-universe with:
 
 ``` r
 install.packages("tidysdm", repos = c("https://evolecolgroup.r-universe.dev", 
                                       "https://cloud.r-project.org"))
 ```
 
-Alternatively, you can also use `devtools` and install the package from source, but you
+Alternatively, you can also use `devtools` and install the package from source
+directly from GitHub, but you
 might need to set up your development environment first:
 
 ``` r
-# install.packages("devtools")
+# install.packages("devtools") # if you haven't installed devtools yet
 devtools::install_github("EvolEcolGroup/tidysdm", ref = "dev")
 ```
 
@@ -63,7 +61,7 @@ you can find Articles giving you a step-by-step [overview of the
 fitting SDMs to contemporary species](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html),
 as well as an equivalent [tutorial for using palaeontological data](https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html).
 Furthermore, there is an [Article with examples of how to leverage various
-features of tidymodels](https://evolecolgroup.github.io/tidysdm/dev/articles/a2_tidymodels_additions.html) that are not commonly adopted in SDM pipelines
+features of tidymodels](https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html) that are not commonly adopted in SDM pipelines
 
 There is also a [dev
 version](https://evolecolgroup.github.io/tidysdm/dev/) of the site

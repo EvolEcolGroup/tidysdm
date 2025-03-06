@@ -16,13 +16,12 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-# set options to limit threads used by imported libraries
-options(cores=2)
-options(mc.cores=2)
 # xgboost uses data.table
 data.table::setDTthreads(2)
+RhpcBLASctl::blas_set_num_threads(2)
+RhpcBLASctl::omp_set_num_threads(2)
 
-download_data = FALSE
+download_data <- FALSE
 # note that data were created in the overview vignette
 ```
 
@@ -109,7 +108,7 @@ analogous to the one that we generated in the [`tidysdm` overview](https://evole
 ```{r}
 library(tidysdm)
 library(sf)
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 ```
@@ -134,14 +133,17 @@ check_splits_balance(lacerta_initial, class)
 We can now extract the training set from our `lacerta_initial` split, and sample
 folds to set up cross validation (note that we set the `cellsize` and `offset`
 based on the full dataset, `lacerta_thin`; this allows us to use the same grid 
-we used for the `initial_split`).
+we used for the `initial_split`). In this example, we also have add a very small number
+to the offset to avoid an error in the `spatial_block_cv` function arising from
+some points falling on the boundary of the grid cells). This is often not necessary,
+so only introduce this if you encounter an error.
 ```{r training_cv, fig.width=6, fig.height=4}
 set.seed(1005)
 lacerta_training <- training(lacerta_initial)
 lacerta_cv <- spatial_block_cv(lacerta_training,
   v = 5,
   cellsize = grid_cellsize(lacerta_thin),
-  offset = grid_offset(lacerta_thin)
+  offset = grid_offset(lacerta_thin) + 0.00001
 )
 autoplot(lacerta_cv)
 ```
@@ -192,8 +194,8 @@ lacerta_models <-
       rf = sdm_spec_rf(),
       # svm specs with tuning
       svm = parsnip::svm_poly(
-        cost = tune(),
-        degree = tune()
+        cost = tune::tune(),
+        degree = tune::tune()
       ) %>%
         parsnip::set_engine("kernlab") %>%
         parsnip::set_mode("classification")
@@ -270,7 +272,7 @@ lacerta_stack <-
   add_candidates(lacerta_models) %>%
   # determine how to combine their predictions
   blend_predictions() %>%
-  # fit the candidates with non-zero weights (i.e.non-zero stacking coefficients)
+  # fit candidates with non-zero weights (i.e. non-zero stacking coefficients)
   fit_members()
 
 autoplot(lacerta_stack, type = "weights")
@@ -348,20 +350,24 @@ Let's create a factor variable with 3 levels based on altitude.
 ```{r}
 library(tidysdm)
 # load the dataset
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 # create a topography variable with 3 levels based on altitude
 lacerta_thin$topography <- cut(lacerta_thin$altitude,
-                breaks = c(-Inf, 200, 800, Inf),
-                labels = c("plains", "hills", "mountains"))
+  breaks = c(-Inf, 200, 800, Inf),
+  labels = c("plains", "hills", "mountains")
+)
 table(lacerta_thin$topography)
 ```
 
 We then create the recipe by adding a step to create dummy variables for the `topography` variable.
 ```{r}
 # subset to variable of interest
-lacerta_thin <- lacerta_thin %>% select(class, bio05, bio06, bio12, bio15, topography)
+lacerta_thin <- lacerta_thin %>% select(
+  class, bio05, bio06, bio12,
+  bio15, topography
+)
 
 lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
   step_dummy(topography)
@@ -424,3 +430,26 @@ lacerta_ensemble$workflow[[1]] %>% extract_fit_parsnip()
 
 We can see that we have coefficients for *topography_hills* and *topography_mountains*.
 
+Let us now predict the presence of the lizard in the Iberian Peninsula using the ensemble. Note that,
+for `predict_raster()` to work, the name and levels for a categorical variable need to match with those used
+when training the models (i.e. in the recipe with `step_dummy()`):
+```{r}
+climate_present <- terra::readRDS(
+  system.file("extdata/lacerta_climate_present_10m.rds",
+    package = "tidysdm"
+  )
+)
+# first we add a topography variable to the climate data
+climate_present$topography <- climate_present$altitude
+climate_present$topography <- terra::classify(climate_present$topography,
+  rcl = c(-Inf, 200, 800, Inf),
+  include.lowest = TRUE,
+  brackets = TRUE
+)
+library(terra)
+levels(climate_present$topography) <-
+  data.frame(ID = c(0, 1, 2), topography = c("plains", "hills", "mountains"))
+# now we can predict
+predict_factor <- predict_raster(lacerta_ensemble, climate_present)
+plot(predict_factor)
+```

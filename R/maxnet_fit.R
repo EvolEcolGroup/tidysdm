@@ -1,14 +1,13 @@
 #' Wrapper to fit maxnet models with formulae
 #'
-#' This function is a wrapper around [maxnet::maxnet], which takes a formula with data
-#' as well exposing parameters for normalisation in a manner compatible with
-#' `parsnip`. Users are unlikely to use this function directly.  For the
-#'  `parsnip` model specification for MaxEnt, see [maxent()].
+#' This function is a wrapper around [maxnet::maxnet], which takes a formula
+#' with data as well exposing parameters for normalisation in a manner
+#' compatible with `parsnip`. Users are unlikely to use this function directly.
+#' For the `parsnip` model specification for MaxEnt, see [maxent()].
 #'
-#' The response needs to be a factor with the class representing presences
-#' as the reference level of the factor (as expected by other
-#'  classification models).
-#' A good guide to how options of a Maxent model work can be found in
+#' The response needs to be a factor with the class representing presences as
+#' the reference level of the factor (as expected by other classification
+#' models). A good guide to how options of a Maxent model work can be found in
 #' https://onlinelibrary.wiley.com/doi/full/10.1111/j.1600-0587.2013.07872.x
 #'
 #' @param formula a formula defining the outcome and the predictors
@@ -32,11 +31,11 @@
 #'  \item{featuremaxs}{ maximum of each feature, to be used for clamping }
 #'  \item{varmin}{ minimum of each predictor, to be used for clamping }
 #'  \item{varmax}{ maximum of each predictor, to be used for clamping }
-#'  \item{samplemeans}{ mean of each predictor over samples (majority for factors) }
+#'  \item{samplemeans}{ mean of each predictor over samples (majority for
+#'  factors) }
 #'  \item{levels}{ levels of each predictor that is a factor }
 #' }
 #' @examples
-#' \donttest{
 #' # we repeat the example in the `maxnet` package
 #' data("bradypus", package = "maxnet")
 #' bradypus_tb <- tibble::as_tibble(bradypus) %>%
@@ -48,7 +47,6 @@
 #'   ))
 #' mod <- maxnet_fit(presence ~ ., data = bradypus_tb, classes = "lq")
 #' plot(mod, "tmp6190_ann")
-#' }
 #' @keywords internal
 #' @export
 
@@ -58,8 +56,12 @@ maxnet_fit <- function(formula, data, regmult = 1.0, classes = "default",
   # extract the response and turn it into a numeric vector
   response <- data[, form_resp(stats::terms(formula, data = data))] %>%
     dplyr::pull(1)
-  resp_levels <- levels(response)
-  response <- dplyr::case_match(response, resp_levels[1] ~ 1, resp_levels[2] ~ 0)
+  resp_levels <- levels(response) # nolint (false positive claiming this variable is not used)
+  response <- dplyr::case_match(
+    response,
+    resp_levels[1] ~ 1,
+    resp_levels[2] ~ 0
+  )
   # extract the responses
   predictors <- data[, rsample::form_pred(stats::terms(formula, data = data))]
 

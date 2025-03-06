@@ -8,7 +8,7 @@
 #' the results. If none is given, the first metric in the metric set is used
 #' (after filtering by the `metric` option).
 #' @param metric A character vector for which metrics (apart from `rank_metric`)
-#' to be included in the visualization. If NULL (the default), all available 
+#' to be included in the visualization. If NULL (the default), all available
 #' metrics will be plotted
 #' @param std_errs The number of standard errors to plot (if the standard error
 #' exists).
@@ -29,12 +29,10 @@
 #' (95% confidence, by default).
 #' @returns A ggplot object.
 #' @examples
-#' \donttest{
 #' #' # we use the two_class_example from `workflowsets`
 #' two_class_ens <- simple_ensemble() %>%
 #'   add_member(two_class_res, metric = "roc_auc")
 #' autoplot(two_class_ens)
-#' }
 #' @export
 #' @keywords ensemble
 
@@ -71,7 +69,7 @@ autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
     dplyr::filter(.data$.metric == rank_metric) %>%
     dplyr::arrange(mean)
 
-  res$rank <- (1:nrow(res_rank_metric))[match(
+  res$rank <- seq_len(nrow(res_rank_metric))[match(
     res$wflow_id,
     res_rank_metric$wflow_id
   )]
@@ -96,7 +94,10 @@ autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
   if (num_metrics > 1) {
     p <-
       p +
-      ggplot2::facet_wrap(~ .data$.metric, scales = "free_y", as.table = FALSE) +
+      ggplot2::facet_wrap(~ .data$.metric,
+        scales = "free_y",
+        as.table = FALSE
+      ) +
       ggplot2::labs(x = "Workflow Rank", y = "Metric")
   } else {
     p <- p + ggplot2::labs(x = "Workflow Rank", y = unique(res$.metric))

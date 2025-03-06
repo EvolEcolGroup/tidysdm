@@ -21,18 +21,20 @@ distrib <- readr::read_delim(file.path(tempdir(), "0068808-230530130749713.csv")
 lacerta <- distrib[, c("gbifID", "decimalLatitude", "decimalLongitude")]
 names(lacerta) <- c("ID", "latitude", "longitude")
 
-# quality checks and filter and exclude outliers 
+# quality checks and filter and exclude outliers
 # (it may take some time, depending on the size of the dataset):
 library(CoordinateCleaner)
 
 lacerta_df <- data.frame(lacerta)
 
-flags <- clean_coordinates(x = lacerta_df,
-                           lon = "longitude",
-                           lat = "latitude",
-                           species = "ID")
+flags <- clean_coordinates(
+  x = lacerta_df,
+  lon = "longitude",
+  lat = "latitude",
+  species = "ID"
+)
 
-lacerta <- lacerta_df[flags$.summary,]
+lacerta <- lacerta_df[flags$.summary, ]
 
 usethis::use_data(lacerta, overwrite = TRUE)
 # saveRDS(lacerta, file="./inst/extdata/lacerta_coords.RDS")
@@ -65,13 +67,13 @@ climate_present <- pastclim::region_slice(
 )
 
 terra::saveRDS(climate_present, "./inst/extdata/lacerta_climate_present_10m.rds")
-#writeCDF(climate_present, "./inst/extdata/lacerta_climate_present_10m.nc",
+# writeCDF(climate_present, "./inst/extdata/lacerta_climate_present_10m.nc",
 #  compression = 9, split = TRUE, overwrite = TRUE
-#)
+# )
 # fix time axis (this is a workaround if we open the file with sf)
-#nc_in <- ncdf4::nc_open("./inst/extdata/lacerta_climate_present_10m.nc", write = TRUE)
-#ncdf4::ncatt_put(nc_in, varid = "time", attname = "axis", attval = "T")
-#ncdf4::nc_close(nc_in)
+# nc_in <- ncdf4::nc_open("./inst/extdata/lacerta_climate_present_10m.nc", write = TRUE)
+# ncdf4::ncatt_put(nc_in, varid = "time", attname = "axis", attval = "T")
+# ncdf4::nc_close(nc_in)
 
 
 vars_uncor <- c("bio15", "bio05", "bio13", "bio06")
@@ -83,19 +85,19 @@ climate_future <- pastclim::region_slice(
   crop = iberia_poly
 )
 terra::saveRDS(climate_future, "./inst/extdata/lacerta_climate_future_10m.rds")
-#writeCDF(climate_future, "./inst/extdata/lacerta_climate_future_10m.nc",
+# writeCDF(climate_future, "./inst/extdata/lacerta_climate_future_10m.nc",
 #  compression = 9, split = TRUE, overwrite = TRUE
-#)
+# )
 # fix time axis (this is a workaround if we open the file with sf)
-#nc_in <- ncdf4::nc_open("./inst/extdata/lacerta_climate_future_10m.nc", write = TRUE)
-#ncdf4::ncatt_put(nc_in, varid = "time", attname = "axis", attval = "T")
-#ncdf4::nc_close(nc_in)
+# nc_in <- ncdf4::nc_open("./inst/extdata/lacerta_climate_future_10m.nc", write = TRUE)
+# ncdf4::ncatt_put(nc_in, varid = "time", attname = "axis", attval = "T")
+# ncdf4::nc_close(nc_in)
 
 #####
 # from the vignette, we save
 # lacerta_thin (present, absences plus all climatic variables)
 # lacerta ensemble
-usethis::use_data(lacerta_ensemble, overwrite=TRUE)
+usethis::use_data(lacerta_ensemble, overwrite = TRUE)
 
 ################################
 occ_download_get(key = "0121761-240321170329656", path = tempdir())
@@ -104,6 +106,7 @@ library(readr)
 backg_distrib <- readr::read_delim(file.path(tempdir(), "0121761-240321170329656.zip"))
 
 # keep the necessary columns
-lacertidae_background <- backg_distrib %>% select(gbifID, decimalLatitude, decimalLongitude) %>%
+lacertidae_background <- backg_distrib %>%
+  select(gbifID, decimalLatitude, decimalLongitude) %>%
   rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
-usethis::use_data(lacertidae_background, overwrite=TRUE)
+usethis::use_data(lacertidae_background, overwrite = TRUE)

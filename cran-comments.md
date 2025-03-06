@@ -1,18 +1,11 @@
-This is a resubmission. The previous version raised a problem of some remaining missing package
-anchors. All documentation should now include the required package anchors.
-
 ## Test environments
-- R-hub linux (r-devel)
-- R-hub macos (r-devel)
-- R-hub macos-arm64 (r-devel)
-- devtools::check_mac_release
+- Github Actions R-CMD-check (ubuntu-20.04): r-devel, r-release, r-oldrel
+- Github Actions R-CMD-check (windows): r-release
+- Github Actions R-CMD-check (macOS): r-release
+- R-hub r-devel: linux, m1-san, macos, macos-arm64, windows
 - devtools::check_win_devel
 
-## R CMD check results
-Not issues on any system.
+No NOTES on any environment.
 
 ## Issues with previous version on CRAN
-A few tests showed a problem related to a recent change in `pastclim`, where a variable
-is now returned as a discrete factor and is thus incompatible with a continuous 
-colour scale used for plotting. The plotting code has now been fixed to use a
-discrete scale.
+No issues reported on the previous version.

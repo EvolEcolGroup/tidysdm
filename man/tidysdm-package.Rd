@@ -26,7 +26,13 @@ Authors:
 \itemize{
   \item Michela Leonardi
   \item Margherita Colucci
-  \item Andrea Pozzi
+  \item Andrea Vittorio Pozzi
+  \item Eleanor M.L. Scerri
+}
+
+Other contributors:
+\itemize{
+  \item Ben Tupper [contributor]
 }
 
 }

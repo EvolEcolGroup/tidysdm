@@ -1,15 +1,19 @@
 x <- lacerta_rec
 n_per_model <- 2
 
-recipes_esm <- function (x, n_per_model){
-  var_names <- x$var_info %>% filter(role=="predictor") %>% pull(variable)
-  outcome_name <- x$var_info  %>% filter(role=="outcome") %>% pull(variable)
-  var_combn <- combn(var_names,n_per_model)
-  subset_predictors <- function(vars,x){
-    x %>% step_select(any_of(!!c(vars,outcome_name)))
+recipes_esm <- function(x, n_per_model) {
+  var_names <- x$var_info %>%
+    filter(role == "predictor") %>%
+    pull(variable)
+  outcome_name <- x$var_info %>%
+    filter(role == "outcome") %>%
+    pull(variable)
+  var_combn <- combn(var_names, n_per_model)
+  subset_predictors <- function(vars, x) {
+    x %>% step_select(any_of(!!c(vars, outcome_name)))
   }
   recipe_list <- apply(var_combn, 2, subset_predictors, x = x)
-  names(recipe_list)<-apply(var_combn,2,paste,collapse=".")
+  names(recipe_list) <- apply(var_combn, 2, paste, collapse = ".")
   return(recipe_list)
 }
 
@@ -40,8 +44,8 @@ set.seed(1234567)
 lacerta_esm <-
   lacerta_esm %>%
   workflow_map("tune_grid",
-               resamples = lacerta_cv, grid = 3,
-               metrics = sdm_metric_set(), verbose = TRUE
+    resamples = lacerta_cv, grid = 3,
+    metrics = sdm_metric_set(), verbose = TRUE
   )
 ## This gives error
 # - Error(s) x1: object '.' not found

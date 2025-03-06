@@ -1,9 +1,10 @@
 #' Check that the column with presences is correctly formatted
 #'
-#' In `tidysdm`, the string defining presences should be the first level of
-#' the response factor. This function checks that the column is correctly formatted.
+#' In `tidysdm`, the string defining presences should be the first level of the
+#' response factor. This function checks that the column is correctly formatted.
 #'
-#' @param .data a `data.frame` or `tibble`, or a derived object such as an `sf` data.frame
+#' @param .data a `data.frame` or `tibble`, or a derived object such as an `sf`
+#'   data.frame, or a factor (e.g. the column with the response variable)
 #' @param .col the column containing the presences
 #' @param presence_level the string used to define the presence level of `.col`
 #' @returns TRUE if correctly formatted
@@ -19,7 +20,13 @@ check_sdm_presence <- function(
   presence_level <- rlang::enquo(presence_level) %>%
     rlang::quo_get_expr() %>%
     rlang::as_string()
-  x <- .data %>% dplyr::pull(.col)
+  browser
+  # extract the column if .data is a dataframe
+  if (inherits(.data, "data.frame")) {
+    x <- .data %>% dplyr::pull(.col)
+  } else {
+    x <- .data
+  }
   if (!is.factor(x)) {
     stop(.col, " should be a factor")
   }

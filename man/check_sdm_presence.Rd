@@ -7,7 +7,8 @@
 check_sdm_presence(.data, .col, presence_level = "presence")
 }
 \arguments{
-\item{.data}{a \code{data.frame} or \code{tibble}, or a derived object such as an \code{sf} data.frame}
+\item{.data}{a \code{data.frame} or \code{tibble}, or a derived object such as an \code{sf}
+data.frame, or a factor (e.g. the column with the response variable)}
 
 \item{.col}{the column containing the presences}
 
@@ -17,6 +18,6 @@ check_sdm_presence(.data, .col, presence_level = "presence")
 TRUE if correctly formatted
 }
 \description{
-In \code{tidysdm}, the string defining presences should be the first level of
-the response factor. This function checks that the column is correctly formatted.
+In \code{tidysdm}, the string defining presences should be the first level of the
+response factor. This function checks that the column is correctly formatted.
 }

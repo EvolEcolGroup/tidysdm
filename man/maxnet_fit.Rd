@@ -44,25 +44,24 @@ over the background data }
 \item{featuremaxs}{ maximum of each feature, to be used for clamping }
 \item{varmin}{ minimum of each predictor, to be used for clamping }
 \item{varmax}{ maximum of each predictor, to be used for clamping }
-\item{samplemeans}{ mean of each predictor over samples (majority for factors) }
+\item{samplemeans}{ mean of each predictor over samples (majority for
+factors) }
 \item{levels}{ levels of each predictor that is a factor }
 }
 }
 \description{
-This function is a wrapper around \link[maxnet:maxnet]{maxnet::maxnet}, which takes a formula with data
-as well exposing parameters for normalisation in a manner compatible with
-\code{parsnip}. Users are unlikely to use this function directly.  For the
-\code{parsnip} model specification for MaxEnt, see \code{\link[=maxent]{maxent()}}.
+This function is a wrapper around \link[maxnet:maxnet]{maxnet::maxnet}, which takes a formula
+with data as well exposing parameters for normalisation in a manner
+compatible with \code{parsnip}. Users are unlikely to use this function directly.
+For the \code{parsnip} model specification for MaxEnt, see \code{\link[=maxent]{maxent()}}.
 }
 \details{
-The response needs to be a factor with the class representing presences
-as the reference level of the factor (as expected by other
-classification models).
-A good guide to how options of a Maxent model work can be found in
+The response needs to be a factor with the class representing presences as
+the reference level of the factor (as expected by other classification
+models). A good guide to how options of a Maxent model work can be found in
 https://onlinelibrary.wiley.com/doi/full/10.1111/j.1600-0587.2013.07872.x
 }
 \examples{
-\donttest{
 # we repeat the example in the `maxnet` package
 data("bradypus", package = "maxnet")
 bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
@@ -74,6 +73,5 @@ bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
   ))
 mod <- maxnet_fit(presence ~ ., data = bradypus_tb, classes = "lq")
 plot(mod, "tmp6190_ann")
-}
 }
 \keyword{internal}

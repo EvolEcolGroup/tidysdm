@@ -7,8 +7,8 @@
 sdm_spec_boost_tree(..., tune = c("sdm", "all", "custom", "none"))
 }
 \arguments{
-\item{...}{parameters to be passed to \code{\link[parsnip:boost_tree]{parsnip::boost_tree()}} to
-customise the model. See the help of that function for details.}
+\item{...}{parameters to be passed to \code{\link[parsnip:boost_tree]{parsnip::boost_tree()}} to customise
+the model. See the help of that function for details.}
 
 \item{tune}{character defining the tuning strategy. Valid strategies are:
 \itemize{
@@ -16,8 +16,8 @@ customise the model. See the help of that function for details.}
 an sdm (for \emph{boost_tree}: 'mtry', 'trees', 'tree_depth', 'learn_rate',
 'loss_reduction', and 'stop_iter')
 \item "all" tunes all hyperparameters (for \emph{boost_tree}: 'mtry', 'trees',
-'tree_depth', 'learn_rate',
-'loss_reduction', 'stop_iter','min_n' and 'sample_size')
+'tree_depth', 'learn_rate', 'loss_reduction', 'stop_iter','min_n' and
+'sample_size')
 \item "custom" passes the options from '...'
 \item "none" does not tune any hyperparameter
 }}
@@ -26,15 +26,15 @@ an sdm (for \emph{boost_tree}: 'mtry', 'trees', 'tree_depth', 'learn_rate',
 a \link[parsnip:model_spec]{parsnip::model_spec} of the model.
 }
 \description{
-This function returns a \link[parsnip:model_spec]{parsnip::model_spec} for a Boosted Trees model to
-be used as a classifier of presences and absences in Species Distribution Model.
-It uses the library \code{xgboost} to fit boosted trees; to use another library, simply build the
-\link[parsnip:model_spec]{parsnip::model_spec} directly.
+This function returns a \link[parsnip:model_spec]{parsnip::model_spec} for a Boosted Trees model to be
+used as a classifier of presences and absences in Species Distribution Model.
+It uses the library \code{xgboost} to fit boosted trees; to use another library,
+simply build the \link[parsnip:model_spec]{parsnip::model_spec} directly.
 }
 \examples{
 standard_bt_spec <- sdm_spec_boost_tree()
 full_bt_spec <- sdm_spec_boost_tree(tune = "all")
-custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune())
+custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune::tune())
 }
 \seealso{
 Other "sdm model specifications": 

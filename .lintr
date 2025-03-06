@@ -1,0 +1,13 @@
+linters: linters_with_defaults(
+    return_linter = NULL
+  )
+exclusions: list(
+    "data-raw",
+    "R/boyce_cont.R" = list( # it includes legacy code from unmantained pkg
+      object_name_linter = Inf
+    ),
+    "vignettes/a0_tidysdm_overview.Rmd" = list( # remove a long line needed for the proj4 string
+      line_length_linter = 198
+    )
+  )
+encoding: "UTF-8"

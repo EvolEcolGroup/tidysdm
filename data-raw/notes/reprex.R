@@ -1,7 +1,10 @@
 library(tidymodels)
 test_dataset <- bivariate_train
 test_dataset$Class <- as.character(test_dataset$Class)
-test_dataset$another_factor <- sample(c("a", "b"), nrow(test_dataset), replace = TRUE)
+test_dataset$another_factor <- sample(c("a", "b"),
+  nrow(test_dataset),
+  replace = TRUE
+)
 test_rec <- recipe(test_dataset, formula = Class ~ .) %>%
   step_string2factor(Class) %>%
   step_string2factor(another_factor) %>%

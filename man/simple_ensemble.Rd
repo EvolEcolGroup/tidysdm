@@ -21,9 +21,9 @@ to tune the models
 }
 }
 \description{
-A simple ensemble is a collection of workflows for which predictions will
-be combined in a simple way (e.g. by taking either the mean or median). Usually
-these workflows will consists each of the best version of a given model algorithm
-following tuning. The workflows are fitted to the full training dataset
-before making predictions.
+A simple ensemble is a collection of workflows for which predictions will be
+combined in a simple way (e.g. by taking either the mean or median). Usually
+these workflows will consists each of the best version of a given model
+algorithm following tuning. The workflows are fitted to the full training
+dataset before making predictions.
 }

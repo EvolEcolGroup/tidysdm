@@ -13,11 +13,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-# set options to limit threads used by imported libraries
-options(cores=2)
-options(mc.cores=2)
 # xgboost uses data.table
 data.table::setDTthreads(2)
+RhpcBLASctl::blas_set_num_threads(2)
+RhpcBLASctl::omp_set_num_threads(2)
 ```
 
 # SDMs with tidymodels for palaeo data

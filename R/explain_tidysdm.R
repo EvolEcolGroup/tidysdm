@@ -1,14 +1,23 @@
 #' Create explainer from your tidysdm ensembles.
 #'
 #' DALEX is designed to explore and explain the behaviour of Machine Learning
-#' methods. This function creates a DALEX explainer (see [DALEX::explain()]), which can then be queried
-#' by multiple function to create explanations of the model.
+#' methods. This function creates a DALEX explainer (see [DALEX::explain()]),
+#' which can then be queried by multiple functions from the DALEX package to
+#' create explanations of the model.
+#'
+#' By default, the response variable is extracted form the ensemble object. Note
+#' that, if the response variable is passed directly, `y` should be a factor
+#' with presence as a reference level. To check that `y` is formatted correctly,
+#' use [check_sdm_presence()].
 #' @inheritParams DALEX::explain
-#' @param by_workflow boolean determining whether a list of explainer, one per model,
-#' should be returned instead of a single explainer for the ensemble
+#' @param by_workflow boolean determining whether a list of explainer, one per
+#'   model, should be returned instead of a single explainer for the ensemble
 #' @return explainer object [`DALEX::explain`] ready to work with DALEX
 #' @export
 #' @examples
+#' \dontshow{data.table::setDTthreads(2)
+#' RhpcBLASctl::blas_set_num_threads(2)
+#' RhpcBLASctl::omp_set_num_threads(2)}
 #' \donttest{
 #' # using the whole ensemble
 #' lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
@@ -72,7 +81,7 @@ explain_tidysdm.simple_ensemble <- function(
     type = "classification",
     by_workflow = FALSE) {
   if (by_workflow) {
-    explain_simple_ensemble_by_workflow(
+    explain_simple_ens_by_wkflow(
       model = model,
       data = data,
       y = y,
@@ -162,15 +171,31 @@ explain_simple_ensemble <- function(
     stop("type has to be classification for a tidysdm ensemble")
   }
   if (is.null(data)) {
-    data <- workflowsets::extract_mold(model$workflow[[1]])$predictors
+    if (is.null(model$workflow[[1]]$pre$actions$recipe$recipe$steps)) {
+      data <- workflowsets::extract_mold(model$workflow[[1]])$predictors
+    } else {
+      stop(
+        "your recipe contains steps; please provide a copy of the ",
+        "original dataset as 'data' argument"
+      )
+    }
   }
   if (is.null(y)) {
-    # note that we need presences to be 1 and absences to be zero
-    y <- (as.numeric(workflowsets::extract_mold(model$workflow[[1]])$outcomes %>% dplyr::pull()) - 2) * -1
+    # note that, for DALEX, we need presences to be 1 and absences to be zero
+    # that's the opposite of what we usually have in tidymodels, where presence
+    # is the reference
+    y <-
+      (as.numeric(
+        workflowsets::extract_mold(
+          model$workflow[[1]]
+        )$outcomes %>%
+          dplyr::pull()
+      ) - 2) * -1
   } else {
-    # TODO it would be better if we used check_sdm_presence to make sure that the
-    # response variable is properly formatted (and not just a factor)
-    # the error message suggests as much.
+    # ideally we would use check_sdm_presence to make sure that the response
+    # variable is properly formatted (and not just a factor) the error message
+    # suggests as much. However, this would require passing info on column and
+    # presence level, which leads to a proliferation of parameters
     if (!is.factor(y)) {
       stop("y should be a factor with presences as reference levels")
     } else {
@@ -243,7 +268,7 @@ model_info.repeat_ensemble <- function(model, is_multiclass = FALSE, ...) {
 }
 
 
-explain_simple_ensemble_by_workflow <- function(
+explain_simple_ens_by_wkflow <- function(
     model,
     data = NULL,
     y = NULL,
@@ -260,17 +285,36 @@ explain_simple_ensemble_by_workflow <- function(
   if (type != "classification") {
     stop("type has to be classification for a tidysdm ensemble")
   }
+
+  if (!requireNamespace("DALEXtra", quietly = TRUE)) {
+    stop(
+      "to use this function, first install package 'DALEXtra' with\n",
+      "install.packages('DALEXtra')"
+    )
+  }
+
   explainer_list <- list()
   for (i in seq_len(nrow(model))) {
     if (is.null(data)) {
-      data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
+      if (is.null(model$pre$actions$recipe$recipe$steps)) {
+        data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
+      } else {
+        stop(
+          "your recipe contains steps; please provide a copy of the ",
+          "original dataset as data argument"
+        )
+      }
     } else {
       data_train <- data
     }
     if (is.null(y)) {
-      data_response <- as.numeric(workflowsets::extract_mold(model$workflow[[i]])$outcomes %>% dplyr::pull()) - 1
+      data_response <-
+        (as.numeric(
+          workflowsets::extract_mold(model$workflow[[i]])$outcomes %>%
+            dplyr::pull()
+        ) - 2) * -1
     } else {
-      data_response <- y
+      data_response <- (as.numeric(y) - 2) * -1
     }
 
     explainer_list[[i]] <-

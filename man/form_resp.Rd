@@ -16,7 +16,8 @@ character the name of the response
 This is the counterpart of \link[rsample:form_pred]{rsample::form_pred}.
 }
 \details{
-Note: this might not behave well with functions such as log(y). But neither does form_pred
+Note: this might not behave well with functions such as log(y). But neither
+does \link[rsample:form_pred]{rsample::form_pred}.
 
 modified from
 https://stackoverflow.com/questions/13217322/how-to-reliably-get-dependent-variable-name-from-formula-object

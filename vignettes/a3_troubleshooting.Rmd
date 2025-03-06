@@ -13,11 +13,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-# set options to limit threads used by imported libraries
-options(cores=2)
-options(mc.cores=2)
 # xgboost uses data.table
 data.table::setDTthreads(2)
+RhpcBLASctl::blas_set_num_threads(2)
+RhpcBLASctl::omp_set_num_threads(2)
 ```
 
 In this vignette, we illustrate how to troubleshoot tuning errors. This is not a 
@@ -30,7 +29,7 @@ Most algorithms do not allow NAs. We can generate a problematic dataset by
 loading the *Lacerta* dataset, and manually add an NA:
 ```{r}
 library(tidysdm)
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 lacerta_thin$bio05[37] <- NA
@@ -104,7 +103,7 @@ variables of interest, and the error is less than clear:
 
 Let's load the data and create a recipe with `step_select`:
 ```{r}
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 suggested_vars <- c("bio05", "bio06", "bio13", "bio14", "bio15")
@@ -166,7 +165,7 @@ simplify this process, assuming that the user just wants to fit a standard smoot
 to every continuous predictor.
 
 ```{r}
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 
@@ -230,12 +229,12 @@ investigate fitting it to the specific `rsplit`.
 We generate a problematic dataset by subsampling the lacerta dataset:
 
 ```{r}
-lacerta_thin <- readRDS(system.file("extdata/lacerta_climate_sf.RDS",
+lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
 set.seed(123)
 lacerta_thin <- lacerta_thin[sample(
-  1:nrow(lacerta_thin),
+  seq_len(nrow(lacerta_thin)),
   nrow(lacerta_thin) / 5
 ), ]
 

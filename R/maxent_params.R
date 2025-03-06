@@ -5,13 +5,14 @@
 #' access them directly.
 #'
 #' @param range A two-element vector holding the defaults for the smallest and
-#' largest possible values, respectively. If a transformation is specified,
-#' these values should be in the transformed units.
-#' @param trans A trans object from the scales package, such as scales::log10_trans()
-#' or scales::reciprocal_trans(). If not provided, the default is used which
-#' matches the units used in range. If no transformation, NULL.
-#' @param values For `feature_classes()`, a character string of
-#' any subset of "lqpht" (for example, "lh")
+#'   largest possible values, respectively. If a transformation is specified,
+#'   these values should be in the transformed units.
+#' @param trans A trans object from the scales package, such as
+#'   scales::log10_trans() or scales::reciprocal_trans(). If not provided, the
+#'   default is used which matches the units used in range. If no
+#'   transformation, NULL.
+#' @param values For `feature_classes()`, a character string of any subset of
+#'   "lqpht" (for example, "lh")
 #' @returns a `param` object that can be used for tuning.
 #' @examples
 #' regularization_multiplier()

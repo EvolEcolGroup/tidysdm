@@ -51,7 +51,8 @@ test_that("thin_by_cell_time removes the correct points", {
 
   # repeat with an sf object
   set.seed(123)
-  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>% sf::st_set_crs(4326)
+  locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>%
+    sf::st_set_crs(4326)
   thin_100k_t_sf <- thin_by_cell_time(locations_sf,
     raster = grid_raster,
     time_col = "time_bp",
@@ -73,7 +74,7 @@ test_that("thin_by_cell_time removes the correct points", {
     thin_by_cell(locations_xy,
       raster = grid_raster
     ),
-    "sf object contained 'X' and 'Y' coordinates that did not match the sf point geometry"
+    "sf object contained 'X' and 'Y' coordinates that did not match the sf point geometry" # nolint
   )
 
   # now use a SpatRasterDataset
@@ -89,7 +90,23 @@ test_that("thin_by_cell_time removes the correct points", {
   expect_true(all(thin_100k_t$id == thin_100k_sd$id))
 })
 
+test_that("thin_by_cell_time works with stars", {
+  pastclim::time_bp(grid_raster) <- c(0, -10)
+  grid_stars <- stars::st_as_stars(grid_raster, as_attributes = FALSE)
+  d <- stars::st_dimensions(grid_stars)
+  d$time$refsys <- terra::timeInfo(grid_raster)$step[1]
+  stars::st_dimensions(grid_stars) <- d
+  set.seed(123)
+  expect_no_error(thin_by_cell_time(locations,
+    raster = grid_stars,
+    time_col = "time_bp",
+    lubridate_fun = pastclim::ybp2date
+  ))
+})
+
+# nolint start
 # sample code to plot the small world to inspect what is going on
 # plot(grid_raster,colNA="darkgray")
 # polys(terra::as.polygons(grid_raster))
 # points(vect(locations), col="red", cex=2)
+# nolint end
