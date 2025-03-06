@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.6.90057</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,10 +73,13 @@
 </h2>
 <p><code>tidysdm</code> is on CRAN, and the easiest way to install it is with:</p>
 <pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"tidysdm"</span><span class="op">)</span></span></code></pre>
-<p>The version on CRAN is recommended for every day use. New features and bug fixes appear first on the <code>dev</code> branch on GitHub, before they make their way to CRAN. If you need to have early access to these new features, you can install <code>tidysdm</code> directly from GitHub. To install from GitHub, you will need to use <code>devtools</code>; if you haven’t done so already, get it from CRAN with <code>install.packages("devtools")</code>.</p>
-<p>You can install the latest <code>dev</code> version of tidysdm from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>The version on CRAN is recommended for every day use. New features and bug fixes appear first on the <code>dev</code> branch on GitHub, before they make their way to CRAN. If you need to have early access to these new features, you can install the latest <code>dev</code> version of <code>tidysdm</code> from r-universe with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"tidysdm"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://evolecolgroup.r-universe.dev"</span>, </span>
+<span>                                      <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Alternatively, you can also use <code>devtools</code> and install the package from source directly from GitHub, but you might need to set up your development environment first:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools") # if you haven't installed devtools yet</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"EvolEcolGroup/tidysdm"</span>, ref <span class="op">=</span> <span class="st">"dev"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -93,7 +96,7 @@
 <p>If after reading the article you are still unsure what is going wrong, there are two places to get help with <code>tidysdm</code>:</p>
 <ol style="list-style-type: decimal">
 <li><p>If you are unsure how to do something, go to <a href="https://stackoverflow.com/" class="external-link">StackOverflow</a> and, after checking that a similar question has not been asked yet, tag your question with <code>tidymodels</code> and <code>r</code> (there is no <code>tidysdm</code> tag yet, as there aren’t enough questions), and make sure <code>tidysdm</code> is in the title. This will ensure that the developers see your question and can help you. If you have not received an answer after a couple of days, feel free to drop us an email in case we missed your post.</p></li>
-<li><p>If you think you have found a bug, or have a feature request, open an issue on our [GitHub repository]((<a href="https://github.com/EvolEcolGroup/tidysdm/issues" class="external-link uri">https://github.com/EvolEcolGroup/tidysdm/issues</a>). Before doing so, please make sure that you have installed the latest <strong>development</strong> version of <code>tidysdm</code> (as the bug might have already been fixed), as well as updating all other packages on your system. If the problem persists, and there is no issue already opened that deals with your bug, file a new issue <strong>providing</strong> a <a href="https://reprex.tidyverse.org/" class="external-link">reproducible example</a> for the developers to investigate the problem. A small <strong>reproducible example</strong> is crucial in allowing us to understand the problem and fix it, so please do your best to come up with the shortest bit of code needed to show the bug.</p></li>
+<li><p>If you think you have found a bug, or have a feature request, open an issue on our <a href="https://github.com/EvolEcolGroup/tidysdm/issues" class="external-link">GitHub repository</a>. Before doing so, please make sure that you have installed the latest <strong>development</strong> version of <code>tidysdm</code> (as the bug might have already been fixed), as well as updating all other packages on your system. If the problem persists, and there is no issue already opened that deals with your bug, file a new issue <strong>providing</strong> a <a href="https://reprex.tidyverse.org/" class="external-link">reproducible example</a> for the developers to investigate the problem. A small <strong>reproducible example</strong> is crucial in allowing us to understand the problem and fix it, so please do your best to come up with the shortest bit of code needed to show the bug.</p></li>
 </ol>
 </div>
 </div>

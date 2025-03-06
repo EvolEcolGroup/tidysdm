@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.6.90057</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,20 @@
       <small>Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/dev/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="tidysdm-development-version">tidysdm (development version)<a class="anchor" aria-label="anchor" href="#tidysdm-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0" id="tidysdm-100">
+<code>tidysdm</code> 1.0.0<a class="anchor" aria-label="anchor" href="#tidysdm-100"></a></h2><p class="text-muted">CRAN release: 2025-03-05</p>
+<ul><li>add interoperability with <code>stars</code> (thanks to <a href="https://github.com/btupper" class="external-link">@btupper</a>)</li>
+<li>fixed inverted plots for <code>explain_tidysdm</code> when plotting for all workflows.</li>
+<li>when using <code>explain_tidysdm</code> with a recipe that contains steps, data have to be passed explicitly to the <code>data</code> argument</li>
+<li>implement <code>make_mask_from_presence</code> to define the area of interest</li>
+<li>check time units of rasters for <code><a href="../reference/sample_background_time.html">sample_background_time()</a></code> and <code>sample_pseudo_absences_time()</code> (thanks to <a href="https://github.com/zpmdal" class="external-link">@zpmdal</a>)</li>
+<li>show the use of map projections in the overview vignette, and make sure that projections are properly handled in functions such as <code>thin_by_cell</code> and <code>thin_by_dist</code>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.5" id="tidysdm-095">
 <code>tidysdm</code> 0.9.5<a class="anchor" aria-label="anchor" href="#tidysdm-095"></a></h2><p class="text-muted">CRAN release: 2024-06-23</p>
