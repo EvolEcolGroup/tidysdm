@@ -31,7 +31,7 @@ predict_raster <- function(object, raster, ...) {
 #' @rdname predict_raster
 #' @export
 predict_raster.default <- function(object, raster, filename = "", n = 4,
-                                   test_rows = 100, ...) {
+                                   test_rows = 20, ...) {
   if (inherits(raster, "stars")) {
     is_stars <- TRUE
     raster <- as(raster, "SpatRaster")
@@ -46,7 +46,7 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
                                        min(test_rows, terra::nrow(raster)),
                                        dataframe = TRUE)
   # remove NAs
-  rast_sub_values <- rast_sub_values %>% dplyr::drop_na()
+  rast_sub_values <- rast_sub_values %>% tidyr::drop_na()
   if (nrow(rast_sub_values) == 0) {
     stop("increase the value of `test_rows`")
   }
@@ -59,7 +59,7 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
   # start reading the raster
   terra::readStart(raster)
   on.exit(terra::readStop(raster))
-  
+
   # now create an output raster with the correct number of layers
   pred_raster <- terra::rast(raster, nlyr = n_layers_out)
   pred_raster_out <- terra::writeStart(pred_raster, filename = filename, n=n)
@@ -75,7 +75,7 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
     # add row numbers to the data frame
     rast_sub_values <- rast_sub_values %>%
       dplyr::mutate(row = dplyr::row_number()) %>%
-      dplyr::drop_na()
+      tidyr::drop_na()
     # remove lines with any NA
     # this is important, as the predict function will not work with NA values
     # and we need to remove them before passing the data to the predict function
