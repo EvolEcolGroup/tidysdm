@@ -56,6 +56,7 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
   # make predictions
   pred <- stats::predict(object, rast_sub_values, ...)
   n_layers_out <- ncol(pred)
+  layer_names <- names(pred)
   rm(pred)
 
 
@@ -84,17 +85,22 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
     # this is important, as the predict function will not work with NA values
     # and we need to remove them before passing the data to the predict function
 
-    # make predictions
-    pred <- stats::predict(object, rast_sub_values, ...)
+
 
     # create a data.frame with predictions that has the same number of rows
     # as the original data frame
     pred_all <- data.frame(matrix(NA_real_,
       nrow = tot_df_rows,
-      ncol = ncol(pred)
+      ncol = n_layers_out
     ))
-    names(pred_all) <- names(pred)
-    pred_all[rast_sub_values$row, ] <- pred
+    names(pred_all) <- layer_names
+    
+    # make predictions (only if we have some values to predict)
+    if (nrow(rast_sub_values) > 0){
+      pred <- stats::predict(object, rast_sub_values, ...)
+      pred_all[rast_sub_values$row, ] <- pred      
+    }
+
 
     # write the values
     terra::writeValues(
