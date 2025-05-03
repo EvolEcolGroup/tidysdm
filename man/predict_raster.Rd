@@ -8,7 +8,7 @@
 \usage{
 predict_raster(object, raster, ...)
 
-\method{predict_raster}{default}(object, raster, filename = "", n = 4, test_rows = 100, ...)
+\method{predict_raster}{default}(object, raster, filename = "", n = 4, test_rows = 20, ...)
 
 \method{predict_raster_old}{default}(object, raster, ...)
 }

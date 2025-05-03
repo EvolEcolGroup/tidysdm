@@ -22,7 +22,7 @@
 #'   predictions
 #' @export
 #' @keywords predict
-#' 
+#'
 predict_raster <- function(object, raster, ...) {
   UseMethod("predict_raster", object)
 }
@@ -38,73 +38,82 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
   } else {
     is_stars <- FALSE
   }
-  
+
   # we need to figure out how many layers we will need in the output raster
   # we predict the first 20 rows (or less if we have less than 20 rows)
   rast_sub_values <- terra::readValues(raster,
-                                       1,
-                                       min(test_rows, terra::nrow(raster)),
-                                       dataframe = TRUE)
+    1,
+    min(test_rows, terra::nrow(raster)),
+    dataframe = TRUE
+  )
   # remove NAs
-  rast_sub_values <- rast_sub_values %>% tidyr::drop_na()
+  rast_sub_values <- rast_sub_values %>%
+    dplyr::filter(stats::complete.cases(rast_sub_values))
   if (nrow(rast_sub_values) == 0) {
     stop("increase the value of `test_rows`")
   }
   # make predictions
   pred <- stats::predict(object, rast_sub_values, ...)
-  n_layers_out <-ncol(pred)
+  n_layers_out <- ncol(pred)
   rm(pred)
-  
-  
+
+
   # start reading the raster
   terra::readStart(raster)
   on.exit(terra::readStop(raster))
 
   # now create an output raster with the correct number of layers
   pred_raster <- terra::rast(raster, nlyr = n_layers_out)
-  pred_raster_out <- terra::writeStart(pred_raster, filename = filename, n=n)
-  
-  
+  pred_raster_out <- terra::writeStart(pred_raster, filename = filename, n = n)
+
+
   for (i in 1:pred_raster_out$n) {
     # read the values
     rast_sub_values <- terra::readValues(raster,
-                                         pred_raster_out$row[i],
-                                         pred_raster_out$nrows[i],
-                                         dataframe = TRUE)
+      pred_raster_out$row[i],
+      pred_raster_out$nrows[i],
+      dataframe = TRUE
+    )
     tot_df_rows <- nrow(rast_sub_values)
     # add row numbers to the data frame
     rast_sub_values <- rast_sub_values %>%
       dplyr::mutate(row = dplyr::row_number()) %>%
-      tidyr::drop_na()
+      dplyr::filter(stats::complete.cases(rast_sub_values))
     # remove lines with any NA
     # this is important, as the predict function will not work with NA values
     # and we need to remove them before passing the data to the predict function
 
     # make predictions
     pred <- stats::predict(object, rast_sub_values, ...)
-    
+
     # create a data.frame with predictions that has the same number of rows
     # as the original data frame
-    pred_all <- data.frame(matrix(NA_real_, nrow = tot_df_rows,
-                        ncol = ncol(pred)))
+    pred_all <- data.frame(matrix(NA_real_,
+      nrow = tot_df_rows,
+      ncol = ncol(pred)
+    ))
     names(pred_all) <- names(pred)
     pred_all[rast_sub_values$row, ] <- pred
-    
+
     # write the values
-    terra::writeValues(pred_raster, as.matrix(pred_all),
-                                          pred_raster_out$row[i],
-                                          pred_raster_out$nrows[i])
+    terra::writeValues(
+      pred_raster, as.matrix(pred_all),
+      pred_raster_out$row[i],
+      pred_raster_out$nrows[i]
+    )
   }
-  
-  
+
+
   for (i in 1:ncol(pred)) {
     # if a given prediction is a factor, we need to convert teh relevant layer
     if (is.factor(pred %>% dplyr::pull(i))) {
       levels_in_factor <- levels(pred %>% dplyr::pull(i))
-      
-      levels(pred_raster[[i]]) <- 
-        data.frame(id = 1:length(levels_in_factor),
-                   class = levels_in_factor)
+
+      levels(pred_raster[[i]]) <-
+        data.frame(
+          id = 1:length(levels_in_factor),
+          class = levels_in_factor
+        )
     }
   }
 
@@ -112,14 +121,14 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
   names(pred_raster) <- names(pred)
   # update if it is a factor
   if (is.factor(pred %>% dplyr::pull(1))) {
-     names(pred_raster) <- paste0("binary_", names(pred_raster))
+    names(pred_raster) <- paste0("binary_", names(pred_raster))
   }
   # set the time to match the raster of origin
-  terra::time(pred_raster, tstep = terra::timeInfo(raster)$step) <- 
+  terra::time(pred_raster, tstep = terra::timeInfo(raster)$step) <-
     rep(terra::time(raster)[1], terra::nlyr(pred_raster))
-  
+
   terra::writeStop(pred_raster)
-  
+
   if (is_stars) {
     pred_raster <- stars::st_as_stars(pred_raster, as_attributes = TRUE)
   }
