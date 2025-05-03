@@ -94,11 +94,11 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
       ncol = n_layers_out
     ))
     names(pred_all) <- layer_names
-    
+
     # make predictions (only if we have some values to predict)
-    if (nrow(rast_sub_values) > 0){
+    if (nrow(rast_sub_values) > 0) {
       pred <- stats::predict(object, rast_sub_values, ...)
-      pred_all[rast_sub_values$row, ] <- pred      
+      pred_all[rast_sub_values$row, ] <- pred
     }
 
 
