@@ -85,7 +85,6 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
 
     # make predictions
     pred <- stats::predict(object, rast_sub_values, ...)
-#    pred <- pred %>% mutate_if(is.factor, as.integer)
 
     # create a data.frame with predictions that has the same number of rows
     # as the original data frame
@@ -104,14 +103,14 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
     )
   }
 
-  for (i in 1:ncol(pred)) {
+  for (i in seq_len(ncol(pred))) {
     # if a given prediction is a factor, we need to convert teh relevant layer
     if (is.factor(pred %>% dplyr::pull(i))) {
       levels_in_factor <- levels(pred %>% dplyr::pull(i))
 
       levels(pred_raster[[i]]) <-
         data.frame(
-          id = 1:length(levels_in_factor),
+          id = seq_along(levels_in_factor),
           class = levels_in_factor
         )
     }
@@ -123,16 +122,12 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
   if (is.factor(pred %>% dplyr::pull(1))) {
     names(pred_raster) <- paste0("binary_", names(pred_raster))
   }
-  
+
   # set the time to match the raster of origin
   terra::time(pred_raster, tstep = terra::timeInfo(raster)$step) <-
     rep(terra::time(raster)[1], terra::nlyr(pred_raster))
 
   terra::writeStop(pred_raster)
-  
-  # set varnames to be the same as names
-  #terra::varnames(pred_raster) <- names(pred_raster)
-  
 
   if (is_stars) {
     pred_raster <- stars::st_as_stars(pred_raster, as_attributes = TRUE)

@@ -260,5 +260,7 @@ predict.simple_ensemble <-
 prob_to_binary <- function(x, thresh, class_levels) {
   classes_bin <- rep(class_levels[2], length(x))
   classes_bin[x >= thresh] <- class_levels[1]
-  stats::relevel(factor(classes_bin, levels = class_levels), ref = class_levels[1])
+  stats::relevel(factor(classes_bin, levels = class_levels),
+    ref = class_levels[1]
+  )
 }

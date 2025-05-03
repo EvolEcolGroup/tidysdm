@@ -68,7 +68,7 @@ test_that("predict_raster works correctly in chunks", {
     terra::timeInfo(prediction_future_m),
     terra::timeInfo(prediction_future_m_chunk)
   )
-  
+
   ######################################
   # binary predictions
 
