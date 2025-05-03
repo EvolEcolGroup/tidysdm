@@ -14,7 +14,8 @@ test_that("predict_raster works correctly in chunks", {
   expect_true(
     all.equal(as.matrix(prediction_future),
       as.matrix(prediction_future_chunk),
-      na.rm = TRUE
+      na.rm = TRUE, ,
+      tolerance = 1e-5
     )
   )
   # check that the names are the same

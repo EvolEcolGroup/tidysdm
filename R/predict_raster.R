@@ -10,7 +10,8 @@
 #'   large rasters.
 #' @param n positive integer indicating how many copies the data may be in
 #'   memory at any point in time (it defaults to 4). This is used to determine
-#'   how many blocks (large) datasets need to be read. See [terra::writeStart()]
+#'   whether rasters can be processed in one go, or in chunks. If you get an
+#'   out of memory error, increase `n`. See [terra::writeStart()]
 #'   for more details.
 #' @param test_rows the number of rows used to test the prediction, before it is
 #'   applied to the whole raster. This is used to determine how many layers will
