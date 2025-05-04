@@ -6,20 +6,20 @@
 #' @param object the `tidymodels` object of interest
 #' @param raster the [`terra::SpatRaster`] or `stars` with the input data. It
 #'   has to include levels with the same names as the variables used in `object`
-#' @param filename the name of the output file raster file, if needed to save
-#'   large rasters.
+#' @param filename the name of the output file raster file; this is only needed
+#'   to save large rasters, and can be left blank for rasters that can be kept
+#'   in memory.
 #' @param n positive integer indicating how many copies the data may be in
 #'   memory at any point in time (it defaults to 4). This is used to determine
-#'   whether rasters can be processed in one go, or in chunks. If you get an
-#'   out of memory error, increase `n`. See [terra::writeStart()]
-#'   for more details.
+#'   whether rasters can be processed in one go, or in chunks. If you get an out
+#'   of memory error, increase `n`. See [terra::writeStart()] for more details.
 #' @param ... parameters to be passed to the standard `predict()` function for
 #'   the appropriate object type (e.g. `metric_thresh` or `class_thresh`).
 #' @returns a [`terra::SpatRaster`] (or `stars` if that is the input) with the
 #'   predictions
 #' @export
 #' @keywords predict
-#'
+#' 
 predict_raster <- function(object, raster, ...) {
   UseMethod("predict_raster", object)
 }
