@@ -7,7 +7,7 @@
 \usage{
 predict_raster(object, raster, ...)
 
-\method{predict_raster}{default}(object, raster, filename = "", n = 4, test_rows = 20, ...)
+\method{predict_raster}{default}(object, raster, filename = "", n = 4, ...)
 }
 \arguments{
 \item{object}{the \code{tidymodels} object of interest}
@@ -26,11 +26,6 @@ memory at any point in time (it defaults to 4). This is used to determine
 whether rasters can be processed in one go, or in chunks. If you get an
 out of memory error, increase \code{n}. See \code{\link[terra:readwrite]{terra::writeStart()}}
 for more details.}
-
-\item{test_rows}{the number of rows used to test the prediction, before it is
-applied to the whole raster. This is used to determine how many layers will
-be needed in the output raster. It defaults to 20, increase it if you get
-an error.}
 }
 \value{
 a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} (or \code{stars} if that is the input) with the

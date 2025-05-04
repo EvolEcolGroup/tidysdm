@@ -13,10 +13,6 @@
 #'   whether rasters can be processed in one go, or in chunks. If you get an
 #'   out of memory error, increase `n`. See [terra::writeStart()]
 #'   for more details.
-#' @param test_rows the number of rows used to test the prediction, before it is
-#'   applied to the whole raster. This is used to determine how many layers will
-#'   be needed in the output raster. It defaults to 20, increase it if you get
-#'   an error.
 #' @param ... parameters to be passed to the standard `predict()` function for
 #'   the appropriate object type (e.g. `metric_thresh` or `class_thresh`).
 #' @returns a [`terra::SpatRaster`] (or `stars` if that is the input) with the
@@ -32,7 +28,7 @@ predict_raster <- function(object, raster, ...) {
 #' @rdname predict_raster
 #' @export
 predict_raster.default <- function(object, raster, filename = "", n = 4,
-                                   test_rows = 20, ...) {
+                                   ...) {
   if (inherits(raster, "stars")) {
     is_stars <- TRUE
     raster <- as(raster, "SpatRaster")
@@ -41,18 +37,18 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
   }
 
   # we need to figure out how many layers we will need in the output raster
-  # we predict the first 20 rows (or less if we have less than 20 rows)
-  rast_sub_values <- terra::readValues(raster,
-    1,
-    min(test_rows, terra::nrow(raster)),
-    dataframe = TRUE
+  # we predict with 5 random points
+  rast_sub_values <- terra::spatSample(raster, 
+    size = 5,
+    na.rm = TRUE,
+    replace = FALSE,
+    method = "random"
   )
-  # remove NAs
-  rast_sub_values <- rast_sub_values %>%
-    dplyr::filter(stats::complete.cases(rast_sub_values))
+
   if (nrow(rast_sub_values) == 0) {
-    stop("increase the value of `test_rows`")
+    stop("We could not find any non-NA value in the raster")
   }
+  
   # make predictions
   pred <- stats::predict(object, rast_sub_values, ...)
   n_layers_out <- ncol(pred)
@@ -84,8 +80,6 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
     # remove lines with any NA
     # this is important, as the predict function will not work with NA values
     # and we need to remove them before passing the data to the predict function
-
-
 
     # create a data.frame with predictions that has the same number of rows
     # as the original data frame
@@ -124,7 +118,7 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
   }
 
   # update names of the prediction raster
-  names(pred_raster) <- names(pred)
+  names(pred_raster) <- layer_names
   # update if it is a factor
   if (is.factor(pred %>% dplyr::pull(1))) {
     names(pred_raster) <- paste0("binary_", names(pred_raster))
