@@ -19,7 +19,7 @@
 #'   predictions
 #' @export
 #' @keywords predict
-#' 
+#'
 predict_raster <- function(object, raster, ...) {
   UseMethod("predict_raster", object)
 }
@@ -38,7 +38,7 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
 
   # we need to figure out how many layers we will need in the output raster
   # we predict with 5 random points
-  rast_sub_values <- terra::spatSample(raster, 
+  rast_sub_values <- terra::spatSample(raster,
     size = 5,
     na.rm = TRUE,
     replace = FALSE,
@@ -48,7 +48,7 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
   if (nrow(rast_sub_values) == 0) {
     stop("We could not find any non-NA value in the raster")
   }
-  
+
   # make predictions
   pred <- stats::predict(object, rast_sub_values, ...)
   n_layers_out <- ncol(pred)
