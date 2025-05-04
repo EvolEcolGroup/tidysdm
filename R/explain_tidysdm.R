@@ -15,9 +15,11 @@
 #' @return explainer object [`DALEX::explain`] ready to work with DALEX
 #' @export
 #' @examples
-#' \dontshow{data.table::setDTthreads(2)
+#' \dontshow{
+#' data.table::setDTthreads(2)
 #' RhpcBLASctl::blas_set_num_threads(2)
-#' RhpcBLASctl::omp_set_num_threads(2)}
+#' RhpcBLASctl::omp_set_num_threads(2)
+#' }
 #' \donttest{
 #' # using the whole ensemble
 #' lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)

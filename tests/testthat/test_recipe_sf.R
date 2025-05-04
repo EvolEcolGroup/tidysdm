@@ -29,11 +29,19 @@ test_that("sdm_recipe_sf", {
     "sf object"
   )
   # check prep methods
-  lacerta_rec_prep <- prep(lacerta_rec)
+  # @TODO expect warning from soft deprecation (to be removed when
+  # warnings are gone)
+  expect_warning(
+    lacerta_rec_prep <- prep(lacerta_rec)
+  )
   expect_true(recipes::fully_trained(lacerta_rec_prep))
   expect_false(recipes::fully_trained(lacerta_rec))
   # work if we pass an sf object
-  lacerta_rec_prep <- prep(lacerta_rec, training = lacerta_thin)
+  # @TODO expect warning from soft deprecation (to be removed when
+  # warnings are gone)
+  expect_warning(
+    lacerta_rec_prep <- prep(lacerta_rec, training = lacerta_thin)
+  )
   expect_true(recipes::fully_trained(lacerta_rec_prep))
 
   ## now bake

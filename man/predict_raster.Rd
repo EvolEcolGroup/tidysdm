@@ -7,7 +7,7 @@
 \usage{
 predict_raster(object, raster, ...)
 
-\method{predict_raster}{default}(object, raster, ...)
+\method{predict_raster}{default}(object, raster, filename = "", n = 4, ...)
 }
 \arguments{
 \item{object}{the \code{tidymodels} object of interest}
@@ -17,6 +17,15 @@ has to include levels with the same names as the variables used in \code{object}
 
 \item{...}{parameters to be passed to the standard \code{predict()} function for
 the appropriate object type (e.g. \code{metric_thresh} or \code{class_thresh}).}
+
+\item{filename}{the name of the output file raster file; this is only needed
+to save large rasters, and can be left blank for rasters that can be kept
+in memory.}
+
+\item{n}{positive integer indicating how many copies the data may be in
+memory at any point in time (it defaults to 4). This is used to determine
+whether rasters can be processed in one go, or in chunks. If you get an out
+of memory error, increase \code{n}. See \code{\link[terra:readwrite]{terra::writeStart()}} for more details.}
 }
 \value{
 a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} (or \code{stars} if that is the input) with the

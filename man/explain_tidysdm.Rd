@@ -122,7 +122,11 @@ with presence as a reference level. To check that \code{y} is formatted correctl
 use \code{\link[=check_sdm_presence]{check_sdm_presence()}}.
 }
 \examples{
-\dontshow{data.table::setDTthreads(2)}
+\dontshow{
+data.table::setDTthreads(2)
+RhpcBLASctl::blas_set_num_threads(2)
+RhpcBLASctl::omp_set_num_threads(2)
+}
 \donttest{
 # using the whole ensemble
 lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
