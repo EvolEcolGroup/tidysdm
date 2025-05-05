@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@ illustrate how an error can be approached.</p>
 <div class="section level2">
 <h2 id="nas-in-the-data">NAs in the data<a class="anchor" aria-label="anchor" href="#nas-in-the-data"></a>
 </h2>
-<p>Most algorithms do not allow NAs. We can generate a problematic
+<p>Several algorithms do not allow NAs. We can generate a problematic
 dataset by loading the <em>Lacerta</em> dataset, and manually add an
 NA:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -98,6 +98,7 @@ NA:</p>
 <span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/serialize.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/lacerta_thin_all_vars.rds"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"tidysdm"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">lacerta_thin</span><span class="op">$</span><span class="va">bio05</span><span class="op">[</span><span class="fl">37</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
 <p>Let us set up a recipe and fit workflow_set</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -115,8 +116,8 @@ NA:</p>
 <span>    models <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      <span class="co"># the standard glm specs</span></span>
 <span>      glm <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_glm.html">sdm_spec_glm</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>      <span class="co"># rf specs with tuning</span></span>
-<span>      rf <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_rand_forest.html">sdm_spec_rf</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>      <span class="co"># maxent specs with tuning</span></span>
+<span>      maxent <span class="op">=</span> <span class="fu"><a href="../reference/sdm_spec_maxent.html">sdm_spec_maxent</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    <span class="co"># make all combinations of preproc and models,</span></span>
 <span>    cross <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -141,13 +142,26 @@ NA:</p>
 <span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (359ms)</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (2.4s)</span></span></span></code></pre></div>
-<p>We can see that the error is self-explanatory. Also, note that the
-error impacts all data splits (technically, <code>rset</code> objects):
-error A is repeated 15 times (5 splits for 3 hyperparameter values).</p>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (378ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
+<span><span class="co">#&gt; → <span style="color: #BB0000; font-weight: bold;">A</span> | <span style="color: #BB0000;">error</span>:   NA values in data table. Please remove them and rerun.</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x1</span></span>
+<span><span class="co">#&gt; → <span style="color: #BB0000; font-weight: bold;">B</span> | <span style="color: #BB0000;">error</span>:   Assigned data `orig_rows` must be compatible with existing data.</span></span>
+<span><span class="co">#&gt;                <span style="color: #BB0000;">✖</span> Existing data has 87 rows.</span></span>
+<span><span class="co">#&gt;                <span style="color: #BB0000;">✖</span> Assigned data has 88 rows.</span></span>
+<span><span class="co">#&gt;                <span style="color: #00BBBB;">ℹ</span> Only vectors of size 1 are recycled.</span></span>
+<span><span class="co">#&gt;                <span style="font-weight: bold;">Caused by error in `vectbl_recycle_rhs_rows()`:</span></span></span>
+<span><span class="co">#&gt;                <span style="color: #BBBB00;">!</span> Can't recycle input of size 88 to size 87.</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x1There were issues with some computations   <span style="color: #BB0000; font-weight: bold;">A</span>: x12   <span style="color: #BB0000; font-weight: bold;">B</span>: x3</span></span>
+<span><span class="co">#&gt; Warning: All models failed. Run `show_notes(.Last.tune.result)` for more</span></span>
+<span><span class="co">#&gt; information.</span></span>
+<span><span class="co">#&gt; Warning: Unknown or uninitialised column: `.notes`.</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent failed with </span></span></span></code></pre></div>
+<p>We can see that the error for maxent is self-explanatory. Also, note
+that the error impacts all data splits (technically, <code>rset</code>
+objects): error A is repeated 12 times (4 splits for 3 hyperparameter
+values; one split would have the NA in the testing set, which does not
+cause an error in this case).</p>
 <p>Prepping the recipe (which trains it on the dataset) can help
 diagnosing problems:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -192,8 +206,10 @@ model will fit, but then it will fail when we start making
 predictions.</p>
 <p>Another potential mistake is to remove the response variable when
 selecting variables of interest. This can happen if we use
-<code>step_select</code> to choose variables of interest, and the error
-is less than clear:</p>
+<code>step_select</code> to choose variables of interest
+(<strong>Note</strong> that <code>step_select()</code> is now deprecated
+in <code>recipes</code>; so it is best avoided), and the error is less
+than clear:</p>
 <p>Let’s load the data and create a recipe with
 <code>step_select</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -284,8 +300,8 @@ not show anything obvious:</p>
 <p>In this case, it is a process of exclusion. Everything seems fine,
 but the models don’t work. Then ask yourself if the outcome variable
 might be problematic. As a general rule, we have found it easier to rely
-on <code>step_rm</code> to remove variables (e.g. correlated
-variables).</p>
+on <code>step_rm</code> to remove variables (e.g. correlated variables
+highlighted by <code><a href="../reference/filter_collinear.html">tidysdm::filter_collinear()</a></code>).</p>
 </div>
 <div class="section level2">
 <h2 id="using-the-desired-formula-with-gam">Using the desired formula with GAM<a class="anchor" aria-label="anchor" href="#using-the-desired-formula-with-gam"></a>
@@ -337,10 +353,10 @@ wants to fit a standard smooth to every continuous predictor.</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (297ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (356ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 resampling: default_gam</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 resampling: default_gam (696ms)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 resampling: default_gam (754ms)</span></span></span></code></pre></div>
 <p>Note that the step of defining a formula is incompatible with using
 <code>step_cor</code> in a recipe. <code>step_cor</code> removes
 correlated variables in recipes, using a similar algorithm to
@@ -371,7 +387,7 @@ dataset:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">lacerta_thin</span> <span class="op">&lt;-</span> <span class="va">lacerta_thin</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span> <span class="op">/</span> <span class="fl">5</span></span>
+<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span> <span class="op">/</span> <span class="fl">7</span></span>
 <span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="va">lacerta_rec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">lacerta_thin</span>, formula <span class="op">=</span> <span class="va">class</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -415,13 +431,17 @@ dataset:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 3 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: default_glm (200ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: default_glm (224ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 3 resampling: default_gam</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 resampling: default_gam (607ms)</span></span></span>
+<span><span class="co">#&gt; → <span style="color: #BBBB00; font-weight: bold;">A</span> | <span style="color: #BBBB00;">warning</span>: Fitting terminated with step failure - check results carefully</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x1</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 resampling: default_gam (1s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 3 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize unknown parameter: mtry</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     default_rf (709ms)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     default_rf (796ms)</span></span></span></code></pre></div>
 <p>We see that one of the folds gives us an error when using GAMs. The
 error (“Fitting terminated with step failure - check results carefully”)
 comes from the gam function in the package <code>mgcv</code>. A quick
@@ -436,75 +456,98 @@ gives us an idea of where this error comes from.</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 5</span></span></span>
 <span><span class="co">#&gt;   splits          id    .metrics         .notes           .predictions     </span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">&lt;split [57/32]&gt;</span> Fold1 <span style="color: #949494;">&lt;tibble [3 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [0 × 3]&gt;</span> <span style="color: #949494;">&lt;tibble [32 × 5]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">&lt;split [53/36]&gt;</span> Fold2 <span style="color: #949494;">&lt;tibble [3 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [0 × 3]&gt;</span> <span style="color: #949494;">&lt;tibble [36 × 5]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">&lt;split [68/21]&gt;</span> Fold3 <span style="color: #949494;">&lt;tibble [3 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [0 × 3]&gt;</span> <span style="color: #949494;">&lt;tibble [21 × 5]&gt;</span></span></span></code></pre></div>
-<p>We see that, in the <code>.notes</code> column, the second item is
-not empty (it does not have zero rows). We can check that it indeed
-contains the error that we wanted:</p>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">&lt;split [46/18]&gt;</span> Fold1 <span style="color: #949494;">&lt;tibble [3 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [0 × 3]&gt;</span> <span style="color: #949494;">&lt;tibble [18 × 5]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">&lt;split [41/23]&gt;</span> Fold2 <span style="color: #949494;">&lt;tibble [3 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [0 × 3]&gt;</span> <span style="color: #949494;">&lt;tibble [23 × 5]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">&lt;split [41/23]&gt;</span> Fold3 <span style="color: #949494;">&lt;tibble [3 × 4]&gt;</span> <span style="color: #949494;">&lt;tibble [1 × 3]&gt;</span> <span style="color: #949494;">&lt;tibble [23 × 5]&gt;</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; There were issues with some computations:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   - Warning(s) x1: Fitting terminated with step failure - check results carefully</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Run `show_notes(.Last.tune.result)` for more information.</span></span></code></pre></div>
+<p>We can</p>
+<p>We see that, in the <code>.notes</code> column, the third item is not
+empty (it does not have zero rows). We can check that it indeed contains
+the error that we wanted:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gam_results</span><span class="op">$</span><span class="va">.notes</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="va">gam_results</span><span class="op">$</span><span class="va">.notes</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 0 × 3</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 variables: location &lt;chr&gt;, type &lt;chr&gt;, note &lt;chr&gt;</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 variables: location &lt;chr&gt;, type &lt;chr&gt;, note &lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 0 × 3</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 variables: location &lt;chr&gt;, type &lt;chr&gt;, note &lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 3</span></span></span>
+<span><span class="co">#&gt;   location                    type    note                                      </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> preprocessor 1/1, model 1/1 warning Fitting terminated with step failure - ch…</span></span></code></pre></div>
 <p>We can now get the problematic data split, and extract the training
 data:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">problem_split</span> <span class="op">&lt;-</span> <span class="va">gam_results</span><span class="op">$</span><span class="va">splits</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="va">problem_split</span> <span class="op">&lt;-</span> <span class="va">gam_results</span><span class="op">$</span><span class="va">splits</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">training</span><span class="op">(</span><span class="va">problem_split</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         class             geometry      bio01            bio02       </span></span>
-<span><span class="co">#&gt;  presence  :15   POINT        :53   Min.   : 3.852   Min.   : 7.111  </span></span>
-<span><span class="co">#&gt;  background:38   epsg:NA      : 0   1st Qu.:12.058   1st Qu.: 8.990  </span></span>
-<span><span class="co">#&gt;                  +proj=aea ...: 0   Median :13.846   Median :10.037  </span></span>
-<span><span class="co">#&gt;                                     Mean   :13.340   Mean   :10.027  </span></span>
-<span><span class="co">#&gt;                                     3rd Qu.:15.911   3rd Qu.:10.693  </span></span>
-<span><span class="co">#&gt;                                     Max.   :18.194   Max.   :13.309  </span></span>
-<span><span class="co">#&gt;      bio03           bio04           bio05           bio06         </span></span>
-<span><span class="co">#&gt;  Min.   :32.96   Min.   :328.5   Min.   :20.40   Min.   :-7.35195  </span></span>
-<span><span class="co">#&gt;  1st Qu.:37.73   1st Qu.:463.6   1st Qu.:24.17   1st Qu.: 0.02899  </span></span>
-<span><span class="co">#&gt;  Median :39.73   Median :565.6   Median :27.24   Median : 3.24637  </span></span>
-<span><span class="co">#&gt;  Mean   :40.31   Mean   :541.0   Mean   :27.58   Mean   : 2.53016  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:43.04   3rd Qu.:621.7   3rd Qu.:30.74   3rd Qu.: 5.02963  </span></span>
-<span><span class="co">#&gt;  Max.   :46.16   Max.   :721.1   Max.   :34.80   Max.   : 7.35438  </span></span>
-<span><span class="co">#&gt;      bio07           bio08            bio09            bio10      </span></span>
-<span><span class="co">#&gt;  Min.   :16.33   Min.   :-2.000   Min.   : 5.432   Min.   :12.29  </span></span>
-<span><span class="co">#&gt;  1st Qu.:21.80   1st Qu.: 8.173   1st Qu.:17.646   1st Qu.:18.35  </span></span>
-<span><span class="co">#&gt;  Median :25.99   Median :10.099   Median :19.799   Median :20.57  </span></span>
-<span><span class="co">#&gt;  Mean   :25.05   Mean   :10.232   Mean   :19.396   Mean   :20.38  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:27.75   3rd Qu.:12.354   3rd Qu.:22.679   3rd Qu.:22.89  </span></span>
-<span><span class="co">#&gt;  Max.   :32.79   Max.   :17.571   Max.   :25.189   Max.   :25.44  </span></span>
-<span><span class="co">#&gt;      bio11            bio12            bio13            bio14      </span></span>
-<span><span class="co">#&gt;  Min.   :-3.213   Min.   : 284.9   Min.   : 43.00   Min.   : 1.00  </span></span>
-<span><span class="co">#&gt;  1st Qu.: 5.283   1st Qu.: 563.6   1st Qu.: 76.04   1st Qu.: 5.90  </span></span>
-<span><span class="co">#&gt;  Median : 8.226   Median : 711.5   Median :101.60   Median :20.31  </span></span>
-<span><span class="co">#&gt;  Mean   : 7.223   Mean   : 816.5   Mean   :109.89   Mean   :22.86  </span></span>
-<span><span class="co">#&gt;  3rd Qu.: 9.734   3rd Qu.:1060.2   3rd Qu.:137.29   3rd Qu.:36.00  </span></span>
-<span><span class="co">#&gt;  Max.   :11.853   Max.   :1635.6   Max.   :227.81   Max.   :66.92  </span></span>
+<span><span class="co">#&gt;  presence  :12   POINT        :41   Min.   : 7.757   Min.   : 6.786  </span></span>
+<span><span class="co">#&gt;  background:29   epsg:NA      : 0   1st Qu.:13.055   1st Qu.: 8.901  </span></span>
+<span><span class="co">#&gt;                  +proj=aea ...: 0   Median :14.198   Median : 9.506  </span></span>
+<span><span class="co">#&gt;                                     Mean   :13.902   Mean   : 9.785  </span></span>
+<span><span class="co">#&gt;                                     3rd Qu.:15.580   3rd Qu.:10.861  </span></span>
+<span><span class="co">#&gt;                                     Max.   :18.111   Max.   :13.009  </span></span>
+<span><span class="co">#&gt;      bio03           bio04           bio05           bio06       </span></span>
+<span><span class="co">#&gt;  Min.   :36.53   Min.   :328.5   Min.   :21.65   Min.   :-3.143  </span></span>
+<span><span class="co">#&gt;  1st Qu.:38.00   1st Qu.:446.1   1st Qu.:24.57   1st Qu.: 2.724  </span></span>
+<span><span class="co">#&gt;  Median :39.85   Median :546.6   Median :27.66   Median : 3.597  </span></span>
+<span><span class="co">#&gt;  Mean   :40.57   Mean   :522.7   Mean   :27.78   Mean   : 3.488  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:42.93   3rd Qu.:579.3   3rd Qu.:30.74   3rd Qu.: 5.085  </span></span>
+<span><span class="co">#&gt;  Max.   :46.16   Max.   :721.1   Max.   :34.39   Max.   : 8.134  </span></span>
+<span><span class="co">#&gt;      bio07           bio08            bio09           bio10      </span></span>
+<span><span class="co">#&gt;  Min.   :16.33   Min.   : 2.534   Min.   :14.81   Min.   :14.95  </span></span>
+<span><span class="co">#&gt;  1st Qu.:21.45   1st Qu.: 8.148   1st Qu.:18.43   1st Qu.:19.03  </span></span>
+<span><span class="co">#&gt;  Median :24.27   Median : 9.423   Median :19.82   Median :20.94  </span></span>
+<span><span class="co">#&gt;  Mean   :24.29   Mean   : 9.631   Mean   :20.38   Mean   :20.70  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:27.49   3rd Qu.:11.306   3rd Qu.:22.68   3rd Qu.:22.75  </span></span>
+<span><span class="co">#&gt;  Max.   :32.79   Max.   :15.847   Max.   :25.23   Max.   :25.42  </span></span>
+<span><span class="co">#&gt;      bio11            bio12            bio13            bio14       </span></span>
+<span><span class="co">#&gt;  Min.   : 1.604   Min.   : 450.6   Min.   : 59.80   Min.   : 1.000  </span></span>
+<span><span class="co">#&gt;  1st Qu.: 7.109   1st Qu.: 615.5   1st Qu.: 88.01   1st Qu.: 6.005  </span></span>
+<span><span class="co">#&gt;  Median : 8.273   Median : 750.2   Median :109.13   Median :14.008  </span></span>
+<span><span class="co">#&gt;  Mean   : 7.985   Mean   : 895.4   Mean   :126.04   Mean   :18.392  </span></span>
+<span><span class="co">#&gt;  3rd Qu.: 9.433   3rd Qu.:1191.8   3rd Qu.:148.15   3rd Qu.:26.601  </span></span>
+<span><span class="co">#&gt;  Max.   :11.852   Max.   :1635.6   Max.   :227.81   Max.   :51.974  </span></span>
 <span><span class="co">#&gt;      bio15           bio16           bio17            bio18       </span></span>
-<span><span class="co">#&gt;  Min.   :16.81   Min.   :106.0   Min.   : 15.77   Min.   : 22.52  </span></span>
-<span><span class="co">#&gt;  1st Qu.:30.08   1st Qu.:203.6   1st Qu.: 38.17   1st Qu.: 42.01  </span></span>
-<span><span class="co">#&gt;  Median :42.82   Median :278.6   Median : 84.75   Median : 90.28  </span></span>
-<span><span class="co">#&gt;  Mean   :42.93   Mean   :302.4   Mean   : 94.49   Mean   :104.30  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:54.96   3rd Qu.:388.6   3rd Qu.:144.16   3rd Qu.:156.29  </span></span>
-<span><span class="co">#&gt;  Max.   :76.74   Max.   :635.7   Max.   :231.83   Max.   :231.83  </span></span>
+<span><span class="co">#&gt;  Min.   :21.49   Min.   :145.1   Min.   : 15.77   Min.   : 22.52  </span></span>
+<span><span class="co">#&gt;  1st Qu.:40.18   1st Qu.:254.0   1st Qu.: 38.17   1st Qu.: 42.01  </span></span>
+<span><span class="co">#&gt;  Median :52.94   Median :313.2   Median : 75.24   Median : 78.96  </span></span>
+<span><span class="co">#&gt;  Mean   :49.48   Mean   :352.9   Mean   : 81.17   Mean   : 90.91  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:57.78   3rd Qu.:417.8   3rd Qu.:121.37   3rd Qu.:146.25  </span></span>
+<span><span class="co">#&gt;  Max.   :76.74   Max.   :635.7   Max.   :178.73   Max.   :189.18  </span></span>
 <span><span class="co">#&gt;      bio19           altitude      </span></span>
-<span><span class="co">#&gt;  Min.   : 77.48   Min.   :  67.29  </span></span>
-<span><span class="co">#&gt;  1st Qu.:174.77   1st Qu.: 167.05  </span></span>
-<span><span class="co">#&gt;  Median :253.72   Median : 402.55  </span></span>
-<span><span class="co">#&gt;  Mean   :274.80   Mean   : 554.89  </span></span>
-<span><span class="co">#&gt;  3rd Qu.:361.03   3rd Qu.: 754.81  </span></span>
-<span><span class="co">#&gt;  Max.   :634.26   Max.   :2056.80</span></span></code></pre></div>
+<span><span class="co">#&gt;  Min.   : 94.69   Min.   :  30.93  </span></span>
+<span><span class="co">#&gt;  1st Qu.:231.06   1st Qu.: 167.04  </span></span>
+<span><span class="co">#&gt;  Median :292.31   Median : 392.57  </span></span>
+<span><span class="co">#&gt;  Mean   :332.27   Mean   : 480.18  </span></span>
+<span><span class="co">#&gt;  3rd Qu.:403.43   3rd Qu.: 582.54  </span></span>
+<span><span class="co">#&gt;  Max.   :634.26   Max.   :1686.49</span></span></code></pre></div>
 <p>In this case, there is nothing too obvious that leads to the error
 (an important check is to make sure that you have enough presences in a
-split; too few presences will generally lead to errors).</p>
+split; too few presences will generally lead to errors; you can use
+<code>tidysdm::check_split_balance()</code> to investigate split balance
+).</p>
 <p>We can now extract the workflow and refit it to the split to confirm
 that we have isolated the problem:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gam_workflow</span> <span class="op">&lt;-</span> <span class="fu">extract_workflow</span><span class="op">(</span><span class="va">lacerta_models</span>, id <span class="op">=</span> <span class="st">"default_gam"</span><span class="op">)</span></span>
-<span><span class="va">faulty_gam</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">gam_workflow</span>, <span class="fu">training</span><span class="op">(</span><span class="va">problem_split</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">faulty_gam</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">gam_workflow</span>, <span class="fu">training</span><span class="op">(</span><span class="va">problem_split</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,</span></span>
+<span><span class="co">#&gt; : Fitting terminated with step failure - check results carefully</span></span></code></pre></div>
 <p>The next step would be to dig deeper into the data, trying to
 understand whether there are some outliers that are problematic. The
-specific steps will depend on the algorithm that is giving problems.</p>
+specific steps will depend on the algorithm that is giving problems.
+Note that some algorithms, such as GAMs, tend to be fragile with small
+datasets.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
