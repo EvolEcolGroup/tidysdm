@@ -25,13 +25,14 @@ can be approached.
 
 # NAs in the data
 
-Most algorithms do not allow NAs. We can generate a problematic dataset by
+Several algorithms do not allow NAs. We can generate a problematic dataset by
 loading the *Lacerta* dataset, and manually add an NA:
 ```{r}
 library(tidysdm)
 lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
+
 lacerta_thin$bio05[37] <- NA
 ```
 
@@ -51,8 +52,8 @@ lacerta_models <-
     models = list(
       # the standard glm specs
       glm = sdm_spec_glm(),
-      # rf specs with tuning
-      rf = sdm_spec_rf()
+      # maxent specs with tuning
+      maxent = sdm_spec_maxent()
     ),
     # make all combinations of preproc and models,
     cross = TRUE
@@ -72,9 +73,10 @@ lacerta_models <-
   )
 ```
 
-We can see that the error is self-explanatory. Also, note that the error impacts
-all data splits (technically, `rset` objects): error A is repeated 15 times (5
-splits for 3 hyperparameter values).
+We can see that the error for maxent is self-explanatory. Also, note that the error impacts
+all data splits (technically, `rset` objects): error A is repeated 12 times (4
+splits for 3 hyperparameter values; one split would have the NA in the testing
+set, which does not cause an error in this case).
 
 Prepping the recipe (which trains it on the dataset) can help diagnosing
 problems:
@@ -99,7 +101,9 @@ will fit, but then it will fail when we start making predictions.
 
 Another potential mistake is to remove the response variable when selecting
 variables of interest. This can happen if we use `step_select` to choose
-variables of interest, and the error is less than clear:
+variables of interest (**Note** that `step_select()` is now deprecated in `recipes`; so
+it is best avoided),
+and the error is less than clear:
 
 Let's load the data and create a recipe with `step_select`:
 ```{r}
@@ -155,7 +159,7 @@ lacerta_prep_sel
 In this case, it is a process of exclusion. Everything seems fine, but the models
 don't work. Then ask yourself if the outcome variable might be problematic. As
 a general rule, we have found it easier to rely on `step_rm` to remove variables
-(e.g. correlated variables).
+(e.g. correlated variables highlighted by `tidysdm::filter_collinear()`).
 
 # Using the desired formula with GAM
 
@@ -235,7 +239,7 @@ lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
 set.seed(123)
 lacerta_thin <- lacerta_thin[sample(
   seq_len(nrow(lacerta_thin)),
-  nrow(lacerta_thin) / 5
+  nrow(lacerta_thin) / 7
 ), ]
 
 lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
@@ -294,23 +298,27 @@ gam_results <- extract_workflow_set_result(lacerta_models, id = "default_gam")
 gam_results
 ```
 
-We see that, in the `.notes` column, the second item is not empty (it does not
+We can 
+
+We see that, in the `.notes` column, the third item is not empty (it does not
 have zero rows). We can check that it indeed contains the error that we wanted:
 
 ```{r}
-gam_results$.notes[2]
+gam_results$.notes
 ```
 
 We can now get the problematic data split, and extract the training data:
 
 ```{r}
-problem_split <- gam_results$splits[2][[1]]
+problem_split <- gam_results$splits[3][[1]]
 summary(training(problem_split))
 ```
 
 In this case, there is nothing too obvious that leads to the error (an important
 check is to make sure that you have enough presences in a split; too few presences will
-generally lead to errors).
+generally lead to errors; you can use `tidysdm::check_split_balance()` to investigate
+split balance
+).
 
 We can now extract the workflow and refit it to the split to confirm that we
 have isolated the problem:
@@ -322,4 +330,5 @@ faulty_gam <- fit(gam_workflow, training(problem_split))
 
 The next step would be to dig deeper into the data, trying to understand whether
 there are some outliers that are problematic. The specific steps will depend on the
-algorithm that is giving problems.
+algorithm that is giving problems. Note that some algorithms, such as GAMs,
+tend to be fragile with small datasets.
