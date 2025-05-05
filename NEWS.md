@@ -1,5 +1,5 @@
 # tidysdm (development version)
-* when using `predict_rastere()`, process the raster in chunks if it is too
+* when using `predict_raster()`, process the raster in chunks if it is too
   large to fit in memory.
 
 # `tidysdm` 1.0.0
