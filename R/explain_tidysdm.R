@@ -337,3 +337,88 @@ explain_simple_ens_by_wkflow <- function(
   }
   return(explainer_list)
 }
+
+#' @rdname explain_tidysdm
+#' @export
+explain_tidysdm.linear_stack <- function(
+    model,
+    data = NULL,
+    y = NULL,
+    predict_function = NULL,
+    predict_function_target_column = NULL,
+    residual_function = NULL,
+    ...,
+    label = NULL,
+    verbose = TRUE,
+    precalculate = TRUE,
+    colorize = !isTRUE(getOption("knitr.in.progress")),
+    model_info = NULL,
+    type = "classification") {
+  if (type != "classification") {
+    stop("type has to be classification for a tidysdm ensemble")
+  }
+  if (is.null(data)) {
+    data <- model$train
+    # remove the response, and, if present, the geometry column
+    data <- data %>%
+      sf::st_drop_geometry() %>%
+      dplyr::select(-dplyr::any_of(c(model$outcome, "geometry")))
+  }
+  if (is.null(y)) {
+    # note that, for DALEX, we need presences to be 1 and absences to be zero
+    # that's the opposite of what we usually have in tidymodels, where presence
+    # is the reference
+    y <-
+      (as.numeric(model$train[[model$outcome]]) - 2) * -1
+  } else {
+    # ideally we would use check_sdm_presence to make sure that the response
+    # variable is properly formatted (and not just a factor) the error message
+    # suggests as much. However, this would require passing info on column and
+    # presence level, which leads to a proliferation of parameters
+    if (!is.factor(y)) {
+      stop("y should be a factor with presences as reference levels")
+    } else {
+      y <- (as.numeric(y) - 2) * -1
+    }
+  }
+  if (is.null(predict_function)) {
+    predict_function <- function(model, newdata) {
+      predict(model, newdata, type = "prob")
+    }
+  }
+
+  DALEX::explain(
+    model = model,
+    data = data,
+    y = y,
+    predict_function = predict_function,
+    predict_function_target_column = predict_function_target_column,
+    residual_function = residual_function,
+    weights = NULL,
+    label = label,
+    verbose = verbose,
+    precalculate = precalculate,
+    colorize = colorize,
+    model_info = NULL,
+    type = type
+  )
+}
+
+# method for model info to work on linear_stack
+#' @importFrom DALEX model_info
+#' @export
+#' @method model_info linear_stack
+model_info.linear_stack <- function(model, is_multiclass = FALSE, ...) {
+  if (is_multiclass) {
+    stop("tidysdm linear_stack can not be multiclass")
+  }
+  package <- "tidysdm"
+  type <- "classification"
+  ver <- try(as.character(utils::packageVersion(package)), silent = TRUE)
+  if (inherits(ver, "try-error")) {
+    ver <- "Unknown"
+  }
+  model_info <- list(package = package, ver = ver, type = type)
+  class(model_info) <- "model_info"
+  model_info
+}
