@@ -383,7 +383,7 @@ explain_tidysdm.linear_stack <- function(
   }
   if (is.null(predict_function)) {
     predict_function <- function(model, newdata) {
-      predict(model, newdata, type = "prob")
+      predict(model, newdata, type = "prob")[[".pred_presence"]]
     }
   }
 
