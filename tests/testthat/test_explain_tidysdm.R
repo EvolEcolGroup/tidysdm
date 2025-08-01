@@ -1,3 +1,6 @@
+skip_if_not_installed("ranger")
+skip_if_not_installed("earth")
+
 test_that("we can explain tidysdm objects", {
   # simple ensemble
   expect_true(

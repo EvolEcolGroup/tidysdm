@@ -28,7 +28,7 @@
 #' If multiple resamples are used, confidence bounds are shown for each result
 #' (95% confidence, by default).
 #' @returns A ggplot object.
-#' @examples
+#' @examplesIf rlang::is_installed("earth")
 #' #' # we use the two_class_example from `workflowsets`
 #' two_class_ens <- simple_ensemble() %>%
 #'   add_member(two_class_res, metric = "roc_auc")
