@@ -8,7 +8,7 @@ on:
   schedule: # this will automatically run once a month on main
     - cron: "0 0 1 * *"
 
-name: R-CMD-check
+name: R-CMD-check-no-suggests
 
 jobs:
   R-CMD-check:
@@ -23,7 +23,7 @@ jobs:
 #          - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
 #          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-#          - {os: ubuntu-latest,   r: 'release'}
+          - {os: ubuntu-latest,   r: 'release'}
 #          - {os: ubuntu-latest,   r: 'oldrel-1'}
 
     env:
