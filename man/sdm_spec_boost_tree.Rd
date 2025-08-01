@@ -32,9 +32,11 @@ It uses the library \code{xgboost} to fit boosted trees; to use another library,
 simply build the \link[parsnip:model_spec]{parsnip::model_spec} directly.
 }
 \examples{
+\dontshow{if (rlang::is_installed("xgboost")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 standard_bt_spec <- sdm_spec_boost_tree()
 full_bt_spec <- sdm_spec_boost_tree(tune = "all")
 custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune::tune())
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other "sdm model specifications": 
