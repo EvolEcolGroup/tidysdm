@@ -13,7 +13,7 @@
 #' @param data the `sf` object used to create `x`
 #' @returns an `rsample` object
 #' @export
-#' @examples
+#' @examplesIf rlang::is_installed("blockCV")
 #' library(blockCV)
 #' points <- read.csv(system.file("extdata/", "species.csv",
 #'   package = "blockCV"

@@ -1,3 +1,4 @@
+skip_if_not_installed("pastclim")
 # set up a small world
 # small grid
 library(terra)
