@@ -14,7 +14,7 @@
 #'   additional target value is passed along as a second element of a vector,
 #'   e.g. c("sensitivity",0.8).
 #' @returns a [simple_ensemble] object
-#' @examples
+#' @examplesIf rlang::is_installed("earth")
 #' test_ens <- simple_ensemble() %>%
 #'   add_member(two_class_res[1:3, ], metric = "roc_auc")
 #' test_ens <- calib_class_thresh(test_ens, class_thresh = "tss_max")
