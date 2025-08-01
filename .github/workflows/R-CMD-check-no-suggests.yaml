@@ -42,7 +42,7 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
-        dependencies: hard
+        dependencies: 'hard'
         with:
           extra-packages: any::rcmdcheck
                           any::testhat
@@ -57,7 +57,8 @@ jobs:
 #        shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
-        _R_CHECK_FORCE_SUGGESTS_: false
+        env:
+          _R_CHECK_FORCE_SUGGESTS_: false
         with:
           build_args: 'c("--no-manual", "--no-build-vignettes")'
           args: 'c("--no-manual", "--ignore-vignettes", "--as-cran")'
