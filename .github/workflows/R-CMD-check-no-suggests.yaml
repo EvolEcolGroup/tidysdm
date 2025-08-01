@@ -45,7 +45,7 @@ jobs:
         with:
           dependencies: '"hard"'
           extra-packages: any::rcmdcheck
-                          any::testhat
+                          any::testthat
           needs: check
 
 #      - name: Get dev terra and pastclim
