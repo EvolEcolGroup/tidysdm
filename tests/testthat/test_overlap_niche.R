@@ -1,3 +1,4 @@
+skip_if_not_installed("ranger")
 test_that("niche_overlap quantifies difference between rasters", {
   climate_present <- terra::readRDS(
     system.file("extdata/lacerta_climate_present_10m.rds",
