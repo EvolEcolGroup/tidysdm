@@ -1,3 +1,4 @@
+skip_if_not_installed("earth")
 data.table::setDTthreads(2)
 test_that("simple_ensemble predictions", {
   ## now add some models (the first 3) using default metric

@@ -1,3 +1,4 @@
+skip_if_not_installed("pastclim")
 # nolint start
 # set up a small world
 # small grid

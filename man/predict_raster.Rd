@@ -34,6 +34,6 @@ predictions
 \description{
 This function allows to use a raster as data to make predictions from a
 variety of \code{tidymodels} objects, such as \code{\link{simple_ensemble}} or
-\code{\link[stacks:stacks]{stacks::stacks}}
+\code{stacks::stacks}
 }
 \keyword{predict}

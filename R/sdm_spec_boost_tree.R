@@ -17,7 +17,7 @@
 #' * "custom" passes the options from '...'
 #' * "none" does not tune any hyperparameter
 #' @returns a [parsnip::model_spec] of the model.
-#' @examples
+#' @examplesIf rlang::is_installed("xgboost")
 #' standard_bt_spec <- sdm_spec_boost_tree()
 #' full_bt_spec <- sdm_spec_boost_tree(tune = "all")
 #' custom_bt_spec <- sdm_spec_boost_tree(tune = "custom", mtry = tune::tune())

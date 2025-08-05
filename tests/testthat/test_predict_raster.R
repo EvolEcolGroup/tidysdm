@@ -1,3 +1,4 @@
+skip_if_not_installed("ranger")
 climate_future <- terra::readRDS(
   system.file("extdata/lacerta_climate_future_10m.rds",
     package = "tidysdm"

@@ -1,3 +1,5 @@
+skip_if_not_installed("earth")
+
 test_that("simple_ensemble constructor", {
   # an empty workflow
   test_ens <- simple_ensemble()
