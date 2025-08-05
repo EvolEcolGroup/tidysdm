@@ -44,17 +44,10 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           dependencies: '"hard"'
+          cache: false
           extra-packages: any::rcmdcheck
                           any::testthat
           needs: check
-
-#      - name: Get dev terra and pastclim
-       # if: matrix.config.os == 'macos-latest' || ${{ github.base_ref == 'dev' }} || ${{ github.ref_name == 'dev' }}
-#        run: |
-#          install.packages('terra', repos='https://rspatial.r-universe.dev')
-#          install.packages('devtools')
-#          devtools::install_github("EvolEcolGroup/pastclim", ref="dev")
-#        shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
         env:
