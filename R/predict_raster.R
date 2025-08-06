@@ -2,7 +2,7 @@
 #'
 #' This function allows to use a raster as data to make predictions from a
 #' variety of `tidymodels` objects, such as [`simple_ensemble`] or
-#' [`stacks::stacks`]
+#' `stacks::stacks`
 #' @param object the `tidymodels` object of interest
 #' @param raster the [`terra::SpatRaster`] or `stars` with the input data. It
 #'   has to include levels with the same names as the variables used in `object`
@@ -105,7 +105,7 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
   }
 
   for (i in seq_len(ncol(pred))) {
-    # if a given prediction is a factor, we need to convert teh relevant layer
+    # if a given prediction is a factor, we need to convert the relevant layer
     if (is.factor(pred %>% dplyr::pull(i))) {
       levels_in_factor <- levels(pred %>% dplyr::pull(i))
 

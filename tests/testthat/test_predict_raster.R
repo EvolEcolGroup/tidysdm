@@ -1,3 +1,4 @@
+skip_if_not_installed("ranger")
 climate_future <- terra::readRDS(
   system.file("extdata/lacerta_climate_future_10m.rds",
     package = "tidysdm"
@@ -12,7 +13,7 @@ test_that("predict_raster works correctly in chunks", {
   expect_true(
     all.equal(as.matrix(prediction_future),
       as.matrix(prediction_future_chunk),
-      na.rm = TRUE, ,
+      na.rm = TRUE,
       tolerance = 1e-5
     )
   )

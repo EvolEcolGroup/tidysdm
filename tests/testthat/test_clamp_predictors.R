@@ -1,3 +1,5 @@
+skip_if_not_installed("pastclim")
+
 test_that("clamping_predictor works on SpatRasters", {
   # get current climate and subset to 3 variables
   climate_present <- terra::readRDS(
