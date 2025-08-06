@@ -1,3 +1,5 @@
+skip_if_not_installed("pastclim")
+
 test_that("mess_predictor works on SpatRasters and df", {
   # now get future climate
   climate_future <- terra::readRDS(

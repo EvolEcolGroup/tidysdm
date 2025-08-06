@@ -1,3 +1,7 @@
+# tidysdm (development version)
+* when using `predict_raster()`, process the raster in chunks if it is too
+  large to fit in memory.
+
 # `tidysdm` 1.0.0
 * add interoperability with `stars` (thanks to @btupper)
 * fixed inverted plots for `explain_tidysdm` when plotting for all workflows.

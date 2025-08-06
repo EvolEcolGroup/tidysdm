@@ -12,7 +12,7 @@
 #' @param .col the column containing the presences; it assumes presences to be
 #'   the first level of this factor
 #' @returns a name vector of distances
-#' @examples
+#' @examplesIf rlang::is_installed("overlapping")
 #' # This should be updated to use a dataset from tidysdm
 #' data("bradypus", package = "maxnet")
 #' bradypus_tb <- tibble::as_tibble(bradypus) %>%

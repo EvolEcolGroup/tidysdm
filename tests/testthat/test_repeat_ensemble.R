@@ -1,3 +1,4 @@
+skip_if_not_installed("earth")
 test_that("repeat_ensemble constructor", {
   # an empty workflow
   test_rep_ens <- repeat_ensemble()

@@ -1,3 +1,4 @@
+skip_if_not_installed("earth")
 test_that("simple_ensemble predictions", {
   # class predictions
   ## now add some models (the first 3) using default metric

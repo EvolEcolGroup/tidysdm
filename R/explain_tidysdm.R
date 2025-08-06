@@ -14,10 +14,12 @@
 #'   model, should be returned instead of a single explainer for the ensemble
 #' @return explainer object [`DALEX::explain`] ready to work with DALEX
 #' @export
-#' @examples
-#' \dontshow{data.table::setDTthreads(2)
+#' @examplesIf rlang::is_installed("RhpcBLASctl")
+#' \dontshow{
+#' data.table::setDTthreads(2)
 #' RhpcBLASctl::blas_set_num_threads(2)
-#' RhpcBLASctl::omp_set_num_threads(2)}
+#' RhpcBLASctl::omp_set_num_threads(2)
+#' }
 #' \donttest{
 #' # using the whole ensemble
 #' lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
