@@ -1,4 +1,4 @@
-# `tidysdm` 1.0.1
+# `tidysdm` 1.0.2
 * when using `predict_raster()`, process the raster in chunks if it is too
   large to fit in memory.
 * run tests relying on suggested packages on if those packages are already

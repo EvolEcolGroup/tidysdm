@@ -8,6 +8,10 @@
 No NOTES on any environment; on a couple of macos environments, BlockCV is still
 not available (see below).
 
+## Issues with previous submission
+  On Windows: Overall checktime 11 min > 10 min
+    A particularly time consuming test in now skipped on CRAN
+
 ## Issues with previous version on CRAN
 * There was an error due to a suggested package, BlockCV, being removed from
   CRAN, but it is now reinstated, so everything works again.
