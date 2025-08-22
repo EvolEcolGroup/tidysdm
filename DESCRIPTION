@@ -47,7 +47,6 @@ Imports:
     terra,
     tibble,
     tune,
-    xgboost,
     workflows,
     workflowsets,
     yardstick
@@ -68,6 +67,7 @@ Suggests:
     stacks,
     testthat (>= 3.0.0),
     tidyterra,
+    xgboost,
     vdiffr,
     ggpattern,
     RhpcBLASctl
