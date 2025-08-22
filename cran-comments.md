@@ -5,7 +5,8 @@
 - R-hub r-devel: linux, m1-san, macos, macos-arm64, windows
 - devtools::check_win_devel
 
-No NOTES on any environment.
+No NOTES on any environment; on a couple of macos environments, BlockCV is still
+not available (see below).
 
 ## Issues with previous version on CRAN
 * There was an error due to a suggested package, BlockCV, being removed from
