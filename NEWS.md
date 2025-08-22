@@ -1,6 +1,8 @@
 # tidysdm (development version)
 * when using `predict_raster()`, process the raster in chunks if it is too
   large to fit in memory.
+* run tests relying on suggested packages on if those packages are already
+  installed
 
 # `tidysdm` 1.0.0
 * add interoperability with `stars` (thanks to @btupper)
