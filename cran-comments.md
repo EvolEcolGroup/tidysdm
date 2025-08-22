@@ -8,4 +8,9 @@
 No NOTES on any environment.
 
 ## Issues with previous version on CRAN
-No issues reported on the previous version.
+* There was an error due to a suggested package, BlockCV, being removed from
+  CRAN, but it is now reinstated, so everything works again.
+  
+* There were some tests and examples failing if not all suggested packages were
+  installed. This is now fixed, and tests/examples relying on suggested packages
+  are only run if those packages are installed.
