@@ -1,3 +1,5 @@
+skip_if_not_installed("overlapping")
+
 test_that("NAs in dataframe", {
   # create dataframe with NAs
   test_dataset <- tibble(

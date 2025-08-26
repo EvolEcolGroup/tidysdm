@@ -1,6 +1,6 @@
 Package: tidysdm
 Title: Species Distribution Models with Tidymodels
-Version: 1.0.0.9001
+Version: 1.0.2
 Authors@R: c(
     person("Michela", "Leonardi", role = "aut"),
     person("Margherita", "Colucci", role = "aut"),
@@ -47,6 +47,7 @@ Imports:
     terra,
     tibble,
     tune,
+    xgboost,
     workflows,
     workflowsets,
     yardstick
@@ -68,7 +69,6 @@ Suggests:
     testthat (>= 3.0.0),
     tidyterra,
     vdiffr,
-    xgboost, 
     ggpattern,
     RhpcBLASctl
 VignetteBuilder: knitr

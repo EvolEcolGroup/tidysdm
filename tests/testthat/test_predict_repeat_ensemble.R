@@ -1,5 +1,6 @@
+skip_if_not_installed("earth")
+
 test_that("repeat_ensemble predictions", {
-  skip_if(FALSE)
   ## now add some models (the first 2) using default metric
   test_ens_2 <- simple_ensemble() %>%
     add_member(two_class_res[1:3, ], metric = "roc_auc")
