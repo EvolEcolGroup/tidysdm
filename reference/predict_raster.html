@@ -11,7 +11,7 @@ stacks::stacks"><meta property="og:image" content="https://evolecolgroup.github.
 
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@ variety of <code>tidymodels</code> objects, such as <code><a href="simple_ensemb
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predict_raster</span><span class="op">(</span><span class="va">object</span>, <span class="va">raster</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
-<span><span class="fu">predict_raster</span><span class="op">(</span><span class="va">object</span>, <span class="va">raster</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">predict_raster</span><span class="op">(</span><span class="va">object</span>, <span class="va">raster</span>, filename <span class="op">=</span> <span class="st">""</span>, n <span class="op">=</span> <span class="fl">4</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -74,6 +74,19 @@ has to include levels with the same names as the variables used in <code>object<
 <dd><p>parameters to be passed to the standard <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> function for
 the appropriate object type (e.g. <code>metric_thresh</code> or <code>class_thresh</code>).</p></dd>
 
+
+<dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
+<dd><p>the name of the output file raster file; this is only needed
+to save large rasters, and can be left blank for rasters that can be kept
+in memory.</p></dd>
+
+
+<dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
+<dd><p>positive integer indicating how many copies the data may be in
+memory at any point in time (it defaults to 4). This is used to determine
+whether rasters can be processed in one go, or in chunks. If you get an out
+of memory error, increase <code>n</code>. See <code><a href="https://rspatial.github.io/terra/reference/readwrite.html" class="external-link">terra::writeStart()</a></code> for more details.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -90,7 +103,7 @@ predictions</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
