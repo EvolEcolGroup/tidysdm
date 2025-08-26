@@ -314,9 +314,11 @@ explain_simple_ens_by_wkflow <- function(
         (as.numeric(
           workflowsets::extract_mold(model$workflow[[i]])$outcomes %>%
             dplyr::pull()
-        ) - 2) * -1
+#        ) - 2) * -1
+        ) -1)
     } else {
-      data_response <- (as.numeric(y) - 2) * -1
+#      data_response <- (as.numeric(y) - 2) * -1
+      data_response <- y
     }
 
     explainer_list[[i]] <-
