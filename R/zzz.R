@@ -7,3 +7,8 @@
     make_maxent()
   }
 }
+
+# bogus function to avoid xgboost warning
+xgboost_dummy <- function() {
+  xgboost::xgb.get.config()
+}
