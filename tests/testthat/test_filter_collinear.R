@@ -1,3 +1,6 @@
+# these tests are time consuming, so skip them on CRAN
+skip_on_cran()
+
 test_that("filter collinear variables with cor_caret", {
   lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
     package = "tidysdm"
