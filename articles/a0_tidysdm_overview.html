@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>tidysdm overview</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/dev/vignettes/a0_tidysdm_overview.Rmd" class="external-link"><code>vignettes/a0_tidysdm_overview.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/main/vignettes/a0_tidysdm_overview.Rmd" class="external-link"><code>vignettes/a0_tidysdm_overview.Rmd</code></a></small>
       <div class="d-none name"><code>a0_tidysdm_overview.Rmd</code></div>
     </div>
 
@@ -94,9 +94,9 @@ models:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EvolEcolGroup/tidysdm" class="external-link">tidysdm</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: tidymodels</span></span>
-<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ────────────────────────────────────── tidymodels 1.3.0 ──</span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching packages</span> ────────────────────────────────────── tidymodels 1.4.0 ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">broom       </span> 1.0.9     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">recipes     </span> 1.3.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dials       </span> 1.4.1     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rsample     </span> 1.3.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dials       </span> 1.4.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rsample     </span> 1.3.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr       </span> 1.1.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble      </span> 3.3.0</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2     </span> 3.5.2     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr       </span> 1.3.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">infer       </span> 1.0.9     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tune        </span> 2.0.0</span></span>
@@ -639,7 +639,7 @@ hyperparameters per model; this is far too little in real life!):</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 4 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (534ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (514ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 4 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize 1 unknown parameter: </span><span style="color: #0000BB;">"mtry"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 tuning:     default_rf (2.7s)</span></span></span>
@@ -647,11 +647,12 @@ hyperparameters per model; this is far too little in real life!):</p>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize 1 unknown parameter: </span><span style="color: #0000BB;">"mtry"</span></span></span>
 <span><span class="co">#&gt; → <span style="color: #BBBB00; font-weight: bold;">A</span> | <span style="color: #BBBB00;">warning</span>: `early_stop` was reduced to 0.</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x1</span></span>
+<span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x2</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x3</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x5</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x5</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm (9.9s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm (9.8s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">4 of 4 tuning:     default_maxent</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_maxent (2.2s)</span></span></span></code></pre></div>
 <p>Note that <code>workflow_set</code> correctly detects that we have no
@@ -995,17 +996,17 @@ pseudo-absences instead of background.</p>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (461ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (453ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (2.2s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (476ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (470ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (2.2s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (476ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (462ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (2.2s)</span></span></span></code></pre></div>
 <p>Now we can create a <code>repeat_ensemble</code> from the list:</p>
