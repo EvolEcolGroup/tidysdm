@@ -1,3 +1,6 @@
+# `tidysdm` 1.0.3
+* add `mgcv` to suggested packages to deal with upcoming changes in `ggplot2`
+
 # `tidysdm` 1.0.2
 * when using `predict_raster()`, process the raster in chunks if it is too
   large to fit in memory.

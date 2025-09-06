@@ -2,7 +2,7 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, dev]
+    branches: [main, dev, cran_update]
   pull_request:
     branches: [main, dev]
   schedule: # this will automatically run once a month on main
