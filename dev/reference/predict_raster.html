@@ -11,7 +11,7 @@ stacks::stacks"><meta property="og:image" content="https://evolecolgroup.github.
 
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.0.9001</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.3.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@ stacks::stacks"><meta property="og:image" content="https://evolecolgroup.github.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Make predictions for a whole raster</h1>
-      <small class="dont-index">Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/main/R/predict_raster.R" class="external-link"><code>R/predict_raster.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/dev/R/predict_raster.R" class="external-link"><code>R/predict_raster.R</code></a></small>
       <div class="d-none name"><code>predict_raster.Rd</code></div>
     </div>
 
@@ -72,7 +72,9 @@ has to include levels with the same names as the variables used in <code>object<
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>parameters to be passed to the standard <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> function for
-the appropriate object type (e.g. <code>metric_thresh</code> or <code>class_thresh</code>).</p></dd>
+the appropriate object type (e.g. <code>metric_thresh</code>, <code>class_thresh</code> or
+<code>fun</code>). See the documentation of the relevant <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method for
+possible parameters (e.g. <code><a href="predict.simple_ensemble.html">predict.simple_ensemble()</a></code>).</p></dd>
 
 
 <dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
