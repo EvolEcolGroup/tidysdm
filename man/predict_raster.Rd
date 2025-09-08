@@ -16,7 +16,9 @@ predict_raster(object, raster, ...)
 has to include levels with the same names as the variables used in \code{object}}
 
 \item{...}{parameters to be passed to the standard \code{predict()} function for
-the appropriate object type (e.g. \code{metric_thresh} or \code{class_thresh}).}
+the appropriate object type (e.g. \code{metric_thresh}, \code{class_thresh} or
+\code{fun}). See the documentation of the relevant \code{predict()} method for
+possible parameters (e.g. \code{\link[=predict.simple_ensemble]{predict.simple_ensemble()}}).}
 
 \item{filename}{the name of the output file raster file; this is only needed
 to save large rasters, and can be left blank for rasters that can be kept

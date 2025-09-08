@@ -29,7 +29,10 @@ predictors.}
 \code{mean}, \code{median}, \code{weighted_mean}, \code{weighted_median} and \code{none}. It is
 possible to combine multiple functions, except for "none". If it is set to
 "none", only the individual member predictions are returned (this
-automatically sets \code{member} to TRUE)}
+automatically sets \code{member} to TRUE). Weights are based on the metric used
+to tune models in the ensemble (see \code{\link{simple_ensemble}}); the weights are
+proportional to the metric values (so, a model with a metric that is 10\%
+higher than another model will have a weight that is 10\% higher).}
 
 \item{metric_thresh}{a vector of length 2 giving a metric and its threshold,
 which will be used to prune which models in the ensemble will be used for
@@ -54,6 +57,9 @@ a tibble of predictions
 }
 \description{
 Predict for a new dataset by using a simple ensemble. Predictions from
-individual models (i.e. workflows) are combined according to \code{fun}
+individual models (i.e. workflows) are combined according to \code{fun}: if a
+weighted function is used (\code{weighted_mean} or \code{weighted_median}), weights are
+based on the metric used to tune models in the ensemble (see
+\code{\link{simple_ensemble}}).
 }
 \keyword{predict}

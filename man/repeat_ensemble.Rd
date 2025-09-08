@@ -19,5 +19,5 @@ a collection (list) of \code{\link{simple_ensemble}} objects for which predictio
 be combined in a simple way (e.g. by taking either the mean or median). Each
 \code{\link{simple_ensemble}} contains the best version of a each given model type
 following turning; all simple ensembles will need to have the same metric
-estimated during the cv process.
+estimated during the cross-validation process.
 }

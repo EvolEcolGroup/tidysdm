@@ -5,7 +5,7 @@
 #' be combined in a simple way (e.g. by taking either the mean or median). Each
 #' [`simple_ensemble`] contains the best version of a each given model type
 #' following turning; all simple ensembles will need to have the same metric
-#' estimated during the cv process.
+#' estimated during the cross-validation process.
 #'
 #' @param ... not used, this function just creates an empty `repeat_ensemble`
 #'   object. Members are added with `add_best_candidates()`
