@@ -21,6 +21,7 @@
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/check_sdm_presence.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/check_splits_balance.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/clamp_predictors.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/collect_class_thresh.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/collect_metrics.simple_ensemble.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/conf_matrix_df.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/control_ensemble.html</loc></url>
