@@ -21,7 +21,7 @@
 #'   predictions
 #' @export
 #' @keywords predict
-#' 
+#'
 predict_raster <- function(object, raster, ...) {
   UseMethod("predict_raster", object)
 }

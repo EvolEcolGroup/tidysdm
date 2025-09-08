@@ -1,7 +1,18 @@
 #' Calibrate class thresholds
 #'
-#' Predict for a new dataset by using a simple ensemble. Predictions from
-#' individual models are combined according to `fun`
+#' Calibrate the probability thresholds that convert probabilities into classes
+#' for a simple ensemble object. This is done by generating predictions for the
+#' training data, and then optimizing the threshold according to the metric
+#' given in `class_thresh`. The calibration depends on how the ensemble is
+#' pruned, which is defined by `metric_thresh`, and how predictions are
+#' combined. `calib_class_threshold` considers the four possible combining
+#' options available via the parameter `fun` in [predict.simple_ensemble]; note
+#' that the weighted functions `weighted_mean` and `weighted_median` use weights
+#' based on the metric used to tune the ensemble, and so they might make little
+#' sense if used in conjunction with a different metric. The updated simple
+#' ensemble contains information on the optimal thresholds for the given
+#' combination of `class_thresh`, `metric_thresh` and `fun`, and these will be
+#' used when predicting classes with [predict.simple_ensemble].
 #' @param object an simple_ensemble object
 #' @param metric_thresh a vector of length 2 giving a metric and its threshold,
 #'   which will be used to prune which models in the ensemble will be used for
@@ -13,7 +24,13 @@
 #'   (currently "tss_max", "kap_max" or "sensitivity"). For sensitivity, an
 #'   additional target value is passed along as a second element of a vector,
 #'   e.g. c("sensitivity",0.8).
-#' @returns a [simple_ensemble] object
+#' @returns a [simple_ensemble] object with an additional attribute
+#'   `class_thresholds`, which is a tibble with columns:
+#'  * `class_thresh`: the value passed to `class_thresh`
+#'  * `metric_thresh`: the value passed to `metric_thresh`
+#'  * `fun`: the aggregating function used to combine predictions
+#'  * `optim_value`: the optimal threshold for the given combination of
+#'   `class_thresh`, `metric_thresh` and `fun`
 #' @examplesIf rlang::is_installed("earth")
 #' test_ens <- simple_ensemble() %>%
 #'   add_member(two_class_res[1:3, ], metric = "roc_auc")
@@ -24,6 +41,11 @@
 #' @keywords predict
 
 calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
+  # check that object is a simple_ensemble
+  if (!inherits(object, "simple_ensemble")) {
+    stop("`object` should be a simple_ensemble")
+  }
+
   # check that there is no entry for this calibration
   if (!is.null(attr(object, "class_thresholds"))) {
     ref_calib_tb <- attr(object, "class_thresholds")

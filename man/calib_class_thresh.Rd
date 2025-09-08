@@ -22,11 +22,30 @@ was tuned. The metric's threshold needs to match the value used during
 prediction. Examples are c("accuracy",0.8) or c("boyce_cont",0.7).}
 }
 \value{
-a \link{simple_ensemble} object
+a \link{simple_ensemble} object with an additional attribute
+\code{class_thresholds}, which is a tibble with columns:
+\itemize{
+\item \code{class_thresh}: the value passed to \code{class_thresh}
+\item \code{metric_thresh}: the value passed to \code{metric_thresh}
+\item \code{fun}: the aggregating function used to combine predictions
+\item \code{optim_value}: the optimal threshold for the given combination of
+\code{class_thresh}, \code{metric_thresh} and \code{fun}
+}
 }
 \description{
-Predict for a new dataset by using a simple ensemble. Predictions from
-individual models are combined according to \code{fun}
+Calibrate the probability thresholds that convert probabilities into classes
+for a simple ensemble object. This is done by generating predictions for the
+training data, and then optimizing the threshold according to the metric
+given in \code{class_thresh}. The calibration depends on how the ensemble is
+pruned, which is defined by \code{metric_thresh}, and how predictions are
+combined. \code{calib_class_threshold} considers the four possible combining
+options available via the parameter \code{fun} in \link{predict.simple_ensemble}; note
+that the weighted functions \code{weighted_mean} and \code{weighted_median} use weights
+based on the metric used to tune the ensemble, and so they might make little
+sense if used in conjunction with a different metric. The updated simple
+ensemble contains information on the optimal thresholds for the given
+combination of \code{class_thresh}, \code{metric_thresh} and \code{fun}, and these will be
+used when predicting classes with \link{predict.simple_ensemble}.
 }
 \examples{
 \dontshow{if (rlang::is_installed("earth")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
