@@ -11,6 +11,7 @@
 #' test_ens <- calib_class_thresh(test_ens, class_thresh = "kap_max")
 #' collect_class_thresh(test_ens)
 #' @export
+#' @keywords predict
 #'
 
 # note that this function is tested in test_calib_class_thresh.R

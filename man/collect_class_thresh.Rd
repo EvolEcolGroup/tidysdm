@@ -26,3 +26,4 @@ test_ens <- calib_class_thresh(test_ens, class_thresh = "kap_max")
 collect_class_thresh(test_ens)
 \dontshow{\}) # examplesIf}
 }
+\keyword{predict}
