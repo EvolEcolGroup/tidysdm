@@ -682,19 +682,19 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (512ms)
+#> ✔ 1 of 4 resampling: default_glm (507ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 4 tuning:     default_rf (2.6s)
+#> ✔ 2 of 4 tuning:     default_rf (2.7s)
 #> i 3 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
-#> There were issues with some computations   A: x2
-#> There were issues with some computations   A: x4
+#> There were issues with some computations   A: x3
+#> There were issues with some computations   A: x5
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 3 of 4 tuning:     default_gbm (7.7s)
+#> ✔ 3 of 4 tuning:     default_gbm (8.1s)
 #> i 4 of 4 tuning:     default_maxent
 #> ✔ 4 of 4 tuning:     default_maxent (2.1s)
 ```
@@ -753,7 +753,7 @@ lacerta_ensemble %>% collect_metrics()
 #>    wflow_id       .metric     mean std_err     n
 #>    <chr>          <chr>      <dbl>   <dbl> <int>
 #>  1 default_glm    boyce_cont 0.443  0.0899     5
-#>  2 default_glm    roc_auc    0.786  0.0392     5
+#>  2 default_glm    roc_auc    0.785  0.0391     5
 #>  3 default_glm    tss_max    0.556  0.0745     5
 #>  4 default_rf     boyce_cont 0.600  0.0567     5
 #>  5 default_rf     roc_auc    0.805  0.0449     5
@@ -1103,17 +1103,17 @@ for (i_repeat in 1:3) {
 }
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (443ms)
+#> ✔ 1 of 2 resampling: default_glm (446ms)
 #> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
+#> ✔ 2 of 2 tuning:     default_maxent (2.2s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (453ms)
+#> ✔ 1 of 2 resampling: default_glm (447ms)
 #> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
+#> ✔ 2 of 2 tuning:     default_maxent (2.2s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (451ms)
+#> ✔ 1 of 2 resampling: default_glm (458ms)
 #> i 2 of 2 tuning:     default_maxent
 #> ✔ 2 of 2 tuning:     default_maxent (2.1s)
 ```
