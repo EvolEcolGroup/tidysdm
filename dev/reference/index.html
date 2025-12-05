@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.3.9001</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.3.9002</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,11 +15,11 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/tidysdm.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/a0_tidysdm_overview.html">tidysdm overview</a></li>
-    <li><a class="dropdown-item" href="../articles/a1_palaeodata_application.html">Application with palaeodata</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/a1_palaeodata_application.html">Application with palaeodata</a></li>
     <li><a class="dropdown-item" href="../articles/a2_tidymodels_additions.html">Examples of additional tidymodels features</a></li>
     <li><a class="dropdown-item" href="../articles/a3_troubleshooting.html">Troubleshooting models that fail</a></li>
   </ul></li>
@@ -42,8 +42,7 @@
 
       <div class="section-desc"><p>Functions for sampling background/pseudo-absences points and thinning the data.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -54,49 +53,57 @@
 
         </dt>
         <dd>Sample background points for SDM analysis</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sample_background_time.html">sample_background_time()</a></code>
 
         </dt>
         <dd>Sample background points for SDM analysis for points with a time point.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sample_pseudoabs.html">sample_pseudoabs()</a></code>
 
         </dt>
         <dd>Sample pseudo-absence points for SDM analysis</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sample_pseudoabs_time.html">sample_pseudoabs_time()</a></code>
 
         </dt>
         <dd>Sample pseudo-absence points for SDM analysis for points with a time point.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="thin_by_cell.html">thin_by_cell()</a></code>
 
         </dt>
         <dd>Thin point dataset to have 1 observation per raster cell</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="thin_by_cell_time.html">thin_by_cell_time()</a></code>
 
         </dt>
         <dd>Thin point dataset to have 1 observation per raster cell per time slice</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="thin_by_dist.html">thin_by_dist()</a></code>
 
         </dt>
         <dd>Thin points dataset based on geographic distance</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="thin_by_dist_time.html">thin_by_dist_time()</a></code>
 
         </dt>
         <dd>Thin points dataset based on geographic and temporal distance</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="make_mask_from_presence.html">make_mask_from_presence()</a></code>
 
@@ -107,8 +114,7 @@
 
       <div class="section-desc"><p>Functions for removing collinearity and visualising the distribution of predictors.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -119,19 +125,22 @@
 
         </dt>
         <dd>Filter to retain only variables that have low collinearity</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="plot_pres_vs_bg.html">plot_pres_vs_bg()</a></code>
 
         </dt>
         <dd>Plot presences vs background</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="geom_split_violin.html">geom_split_violin()</a></code>
 
         </dt>
         <dd>Split violin geometry for ggplots</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="dist_pres_vs_bg.html">dist_pres_vs_bg()</a></code>
 
@@ -142,8 +151,7 @@
 
       <div class="section-desc"><p>Functions for recipes with spatial SDM data (additional steps can be added with standard <code>recipes</code> functions).</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -154,7 +162,8 @@
 
         </dt>
         <dd>Recipe for <code>sf</code> objects</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_sdm_presence.html">check_sdm_presence()</a></code>
 
@@ -165,8 +174,7 @@
 
       <div class="section-desc"><p>Predefined model specifications (custom models can be added with standard <code>parsnip</code> model specifications).</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -177,43 +185,50 @@
 
         </dt>
         <dd>Model specification for a GLM for SDM</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sdm_spec_gam.html">sdm_spec_gam()</a></code>
 
         </dt>
         <dd>Model specification for a GAM for SDM</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="gam_formula.html">gam_formula()</a></code>
 
         </dt>
         <dd>Create a formula for gam</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sdm_spec_rand_forest.html">sdm_spec_rand_forest()</a></code> <code><a href="sdm_spec_rand_forest.html">sdm_spec_rf()</a></code>
 
         </dt>
         <dd>Model specification for a Random Forest for SDM</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sdm_spec_boost_tree.html">sdm_spec_boost_tree()</a></code>
 
         </dt>
         <dd>Model specification for a Boosted Trees model for SDM</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="sdm_spec_maxent.html">sdm_spec_maxent()</a></code>
 
         </dt>
         <dd>Model specification for a MaxEnt for SDM</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="maxent.html">maxent()</a></code>
 
         </dt>
         <dd>MaxEnt model</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="maxent_params.html">regularization_multiplier()</a></code> <code><a href="maxent_params.html">feature_classes()</a></code>
 
@@ -224,8 +239,7 @@
 
       <div class="section-desc"><p>Functions for splitting the data into folds (in additiona to standard <code>spatialsample</code> functions.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -236,31 +250,36 @@
 
         </dt>
         <dd>Simple Training/Test Set Splitting for spatial data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="blockcv2rsample.html">blockcv2rsample()</a></code>
 
         </dt>
         <dd>Convert an object created with <code>blockCV</code> to an <code>rsample</code> object</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="check_splits_balance.html">check_splits_balance()</a></code>
 
         </dt>
         <dd>Check the balance of presences vs pseudoabsences among splits</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="autoplot.spatial_initial_split.html">autoplot(<i>&lt;spatial_initial_split&gt;</i>)</a></code>
 
         </dt>
         <dd>Create a ggplot for a spatial initial rsplit.</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="grid_offset.html">grid_offset()</a></code>
 
         </dt>
         <dd>Get default grid cellsize for a given dataset</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="grid_cellsize.html">grid_cellsize()</a></code>
 
@@ -271,8 +290,7 @@
 
       <div class="section-desc"><p>Specialised metrics for SDM, and methods of metrics from <code>yardstick</code> adapted to work on <code>sf</code> objects</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -283,37 +301,43 @@
 
         </dt>
         <dd>Metric set for SDM</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="optim_thresh.html">optim_thresh()</a></code>
 
         </dt>
         <dd>Find threshold that optimises a given metric</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="boyce_cont.html">boyce_cont()</a></code> <code><a href="boyce_cont.html">boyce_cont_vec()</a></code>
 
         </dt>
         <dd>Boyce continuous index (BCI)</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="kap_max.html">kap_max()</a></code> <code><a href="kap_max.html">kap_max_vec()</a></code>
 
         </dt>
         <dd>Maximum Cohen's Kappa</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="tss_max.html">tss_max()</a></code> <code><a href="tss_max.html">tss_max_vec()</a></code>
 
         </dt>
         <dd>Maximum TSS - True Skill Statistics</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="tss.html">tss()</a></code>
 
         </dt>
         <dd>TSS - True Skill Statistics</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="prob_metrics_sf.html">average_precision(<i>&lt;sf&gt;</i>)</a></code> <code><a href="prob_metrics_sf.html">brier_class(<i>&lt;sf&gt;</i>)</a></code> <code><a href="prob_metrics_sf.html">classification_cost(<i>&lt;sf&gt;</i>)</a></code> <code><a href="prob_metrics_sf.html">gain_capture(<i>&lt;sf&gt;</i>)</a></code> <code><a href="prob_metrics_sf.html">mn_log_loss(<i>&lt;sf&gt;</i>)</a></code> <code><a href="prob_metrics_sf.html">pr_auc(<i>&lt;sf&gt;</i>)</a></code> <code><a href="prob_metrics_sf.html">roc_auc(<i>&lt;sf&gt;</i>)</a></code> <code><a href="prob_metrics_sf.html">roc_aunp(<i>&lt;sf&gt;</i>)</a></code> <code><a href="prob_metrics_sf.html">roc_aunu(<i>&lt;sf&gt;</i>)</a></code>
 
@@ -324,8 +348,7 @@
 
       <div class="section-desc"><p>Functions for creating an ensemble selecting the best set of parameters for each model.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -336,43 +359,50 @@
 
         </dt>
         <dd>Simple ensemble</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="autoplot.simple_ensemble.html">autoplot(<i>&lt;simple_ensemble&gt;</i>)</a></code>
 
         </dt>
         <dd>Plot the results of a simple ensemble</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="repeat_ensemble.html">repeat_ensemble()</a></code>
 
         </dt>
         <dd>Repeat ensemble</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="add_member.html">add_member()</a></code>
 
         </dt>
         <dd>Add best member of workflow to a simple ensemble</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="add_repeat.html">add_repeat()</a></code>
 
         </dt>
         <dd>Add repeat(s) to a repeated ensemble</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="collect_metrics.simple_ensemble.html">collect_metrics(<i>&lt;simple_ensemble&gt;</i>)</a></code> <code><a href="collect_metrics.simple_ensemble.html">collect_metrics(<i>&lt;repeat_ensemble&gt;</i>)</a></code>
 
         </dt>
         <dd>Obtain and format results produced by tuning functions for ensemble objects</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="control_ensemble.html">control_ensemble_grid()</a></code> <code><a href="control_ensemble.html">control_ensemble_resamples()</a></code> <code><a href="control_ensemble.html">control_ensemble_bayes()</a></code>
 
         </dt>
         <dd>Control wrappers</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="explain_tidysdm.html">explain_tidysdm()</a></code>
 
@@ -383,8 +413,7 @@
 
       <div class="section-desc"><p>Functions for making predictions.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -395,25 +424,29 @@
 
         </dt>
         <dd>Calibrate class thresholds</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="collect_class_thresh.html">collect_class_thresh()</a></code>
 
         </dt>
         <dd>Obtain and format the class thresholds for ensemble objects</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="predict.repeat_ensemble.html">predict(<i>&lt;repeat_ensemble&gt;</i>)</a></code>
 
         </dt>
         <dd>Predict for a repeat ensemble set</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="predict.simple_ensemble.html">predict(<i>&lt;simple_ensemble&gt;</i>)</a></code>
 
         </dt>
         <dd>Predict for a simple ensemble set</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="predict_raster.html">predict_raster()</a></code>
 
@@ -424,8 +457,7 @@
 
       <div class="section-desc"><p>Functions for managing extrapolation.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -436,7 +468,8 @@
 
         </dt>
         <dd>Clamp the predictors to match values in training set</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="extrapol_mess.html">extrapol_mess()</a></code>
 
@@ -447,8 +480,7 @@
 
       <div class="section-desc"><p>Additional helpful functions.</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -459,25 +491,29 @@
 
         </dt>
         <dd>Compute overlap metrics of the two niches</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="km2m.html">km2m()</a></code>
 
         </dt>
         <dd>Convert a geographic distance from km to m</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="y2d.html">y2d()</a></code>
 
         </dt>
         <dd>Convert a time interval from years to days</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="filter_high_cor.html">filter_high_cor()</a></code>
 
         </dt>
         <dd>Deprecated: Filter to retain only variables below a given correlation threshold</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="pairs-stars.html">pairs(<i>&lt;stars&gt;</i>)</a></code>
 
@@ -488,8 +524,7 @@
 
       <div class="section-desc"><p>Example datasets and simple models used in the documentation</p></div>
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
@@ -500,25 +535,29 @@
 
         </dt>
         <dd>Coordinates of radiocarbon dates for horses</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="lacerta.html">lacerta</a></code>
 
         </dt>
         <dd>Coordinates of presences for Iberian emerald lizard</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="lacertidae_background.html">lacertidae_background</a></code>
 
         </dt>
         <dd>Coordinates of presences for lacertidae in the Iberian peninsula</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="lacerta_ensemble.html">lacerta_ensemble</a></code>
 
         </dt>
         <dd>A simple ensemble for the lacerta data</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="lacerta_rep_ens.html">lacerta_rep_ens</a></code>
 
@@ -534,7 +573,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
