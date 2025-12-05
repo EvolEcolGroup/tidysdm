@@ -1,6 +1,7 @@
 # tidysdm (development version)
 * improve documentation of `calib_class_threshold` and implement 
   `collect_calib_thresh`
+* update saved objects to the new version of `xgboost`
 
 # `tidysdm` 1.0.3
 * add `mgcv` to suggested packages to deal with upcoming changes in `ggplot2`
