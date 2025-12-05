@@ -1,5 +1,6 @@
 linters: linters_with_defaults(
-    return_linter = NULL
+    return_linter = NULL,
+    pipe_consistency_linter = NULL
   )
 exclusions: list(
     "data-raw",
