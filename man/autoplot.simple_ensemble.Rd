@@ -51,7 +51,7 @@ If multiple resamples are used, confidence bounds are shown for each result
 (95\% confidence, by default).
 }
 \examples{
-\dontshow{if (rlang::is_installed("earth")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("earth")) withAutoprint(\{ # examplesIf}
 # we use the two_class_example from `workflowsets`
 two_class_ens <- simple_ensemble() \%>\%
   add_member(two_class_res, metric = "roc_auc")

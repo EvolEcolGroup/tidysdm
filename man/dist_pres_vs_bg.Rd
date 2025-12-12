@@ -25,7 +25,7 @@ good candidates for SDMs, as species occurrences are confined to a subset of
 the available background.
 }
 \examples{
-\dontshow{if (rlang::is_installed("overlapping")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("overlapping")) withAutoprint(\{ # examplesIf}
 # This should be updated to use a dataset from tidysdm
 data("bradypus", package = "maxnet")
 bradypus_tb <- tibble::as_tibble(bradypus) \%>\%

@@ -18,7 +18,7 @@ A tibble.
 Return a tibble of class thresholds, as computed by \code{calib_class_thresh()}.
 }
 \examples{
-\dontshow{if (rlang::is_installed("earth")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("earth")) withAutoprint(\{ # examplesIf}
 test_ens <- simple_ensemble() \%>\%
   add_member(two_class_res[1:3, ], metric = "roc_auc")
 test_ens <- calib_class_thresh(test_ens, class_thresh = "tss_max")

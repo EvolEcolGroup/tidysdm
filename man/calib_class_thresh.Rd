@@ -48,12 +48,13 @@ combination of \code{class_thresh}, \code{metric_thresh} and \code{fun}, and the
 used when predicting classes with \link{predict.simple_ensemble}.
 }
 \examples{
-\dontshow{if (rlang::is_installed("earth")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("earth")) withAutoprint(\{ # examplesIf}
 test_ens <- simple_ensemble() \%>\%
   add_member(two_class_res[1:3, ], metric = "roc_auc")
 test_ens <- calib_class_thresh(test_ens, class_thresh = "tss_max")
 test_ens <- calib_class_thresh(test_ens, class_thresh = "kap_max")
 test_ens <- calib_class_thresh(test_ens, class_thresh = c("sens", 0.9))
+collect_class_thresh(test_ens)
 \dontshow{\}) # examplesIf}
 }
 \keyword{predict}

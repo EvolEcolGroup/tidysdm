@@ -26,7 +26,7 @@ Note that currently only objects of type \code{cv_spatial} and \code{cv_cluster}
 supported.
 }
 \examples{
-\dontshow{if (rlang::is_installed("blockCV")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("blockCV")) withAutoprint(\{ # examplesIf}
 library(blockCV)
 points <- read.csv(system.file("extdata/", "species.csv",
   package = "blockCV"
