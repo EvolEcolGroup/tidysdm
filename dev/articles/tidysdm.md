@@ -682,21 +682,22 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (508ms)
+#> ✔ 1 of 4 resampling: default_glm (540ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 4 tuning:     default_rf (2.7s)
+#> ✔ 2 of 4 tuning:     default_rf (2.8s)
 #> i 3 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
-#> There were issues with some computations   A: x3
+#> There were issues with some computations   A: x2
 #> There were issues with some computations   A: x4
 #> There were issues with some computations   A: x5
+#> There were issues with some computations   A: x5
 #> 
-#> ✔ 3 of 4 tuning:     default_gbm (8.3s)
+#> ✔ 3 of 4 tuning:     default_gbm (8.6s)
 #> i 4 of 4 tuning:     default_maxent
-#> ✔ 4 of 4 tuning:     default_maxent (2.2s)
+#> ✔ 4 of 4 tuning:     default_maxent (2.3s)
 ```
 
 Note that `workflow_set` correctly detects that we have no tuning
@@ -1103,17 +1104,17 @@ for (i_repeat in 1:3) {
 }
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (457ms)
+#> ✔ 1 of 2 resampling: default_glm (476ms)
 #> i 2 of 2 tuning:     default_maxent
 #> ✔ 2 of 2 tuning:     default_maxent (2.2s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (457ms)
+#> ✔ 1 of 2 resampling: default_glm (473ms)
 #> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2.2s)
+#> ✔ 2 of 2 tuning:     default_maxent (2.3s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (464ms)
+#> ✔ 1 of 2 resampling: default_glm (487ms)
 #> i 2 of 2 tuning:     default_maxent
 #> ✔ 2 of 2 tuning:     default_maxent (2.2s)
 ```
