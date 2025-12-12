@@ -68,4 +68,20 @@ test_ens <- simple_ensemble() %>%
 test_ens <- calib_class_thresh(test_ens, class_thresh = "tss_max")
 test_ens <- calib_class_thresh(test_ens, class_thresh = "kap_max")
 test_ens <- calib_class_thresh(test_ens, class_thresh = c("sens", 0.9))
+collect_class_thresh(test_ens)
+#> # A tibble: 12 × 4
+#>    class_thresh metric_thresh fun             optim_value
+#>    <list>       <list>        <chr>                 <dbl>
+#>  1 <chr [1]>    <NULL>        mean                  0.544
+#>  2 <chr [1]>    <NULL>        median                0.545
+#>  3 <chr [1]>    <NULL>        weighted_mean         0.544
+#>  4 <chr [1]>    <NULL>        weighted_median       0.447
+#>  5 <chr [1]>    <NULL>        mean                  0.544
+#>  6 <chr [1]>    <NULL>        median                0.451
+#>  7 <chr [1]>    <NULL>        weighted_mean         0.544
+#>  8 <chr [1]>    <NULL>        weighted_median       0.447
+#>  9 <chr [2]>    <NULL>        mean                  0.350
+#> 10 <chr [2]>    <NULL>        median                0.351
+#> 11 <chr [2]>    <NULL>        weighted_mean         0.350
+#> 12 <chr [2]>    <NULL>        weighted_median       0.310
 ```

@@ -6,9 +6,7 @@ their outputs. 'tidysdm' expands 'tidymodels' by providing methods for
 spatial objects, models and metrics specific to SDMs, as well as a
 number of specialised functions to process occurrences for contemporary
 and palaeo datasets. The full functionalities of the package are
-described in Leonardi et al. (2023)
-[doi:10.1101/2023.07.24.550358](https://doi.org/10.1101/2023.07.24.550358)
-.
+described in Leonardi et al. (2024) \< doi:10.1111/2041-210X.14406\>.
 
 ## See also
 

@@ -156,7 +156,8 @@ geom_split_violin(
   If `FALSE`, overrides the default aesthetics, rather than combining
   with them. This is most useful for helper functions that define both
   data and aesthetics and shouldn't inherit behaviour from the default
-  plot specification, e.g. `ggplot2:annotation_borders`.
+  plot specification, e.g.
+  [`annotation_borders()`](https://ggplot2.tidyverse.org/reference/annotation_borders.html).
 
 ## Value
 

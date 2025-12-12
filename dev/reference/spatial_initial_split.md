@@ -19,7 +19,11 @@ spatial_initial_split(data, prop, strategy, ...)
 
 - prop:
 
-  The proportion of data to be retained for modelling/analysis.
+  The proportion of data to be retained for modelling/analysis. This
+  parameter is used to define the appropriate number of partitions for
+  the selected `strategy`. For example, if `prop = 0.2`, then 5
+  partitions will be created and one of these will be used as the
+  testing set. Set to NULL for leave-one-out crossvalidation.
 
 - strategy:
 
