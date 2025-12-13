@@ -11,7 +11,8 @@
 #'   will be created and one of these will be used as the testing set. Set to
 #'   NULL for leave-one-out crossvalidation.
 #' @param strategy A sampling strategy from `spatialsample`
-#' @param ... parameters to be passed to the `strategy`
+#' @param ... parameters to be passed to the `strategy` function (with the
+#' exception of `v` which is calculated internally based on `prop`)
 #' @returns An `rsplit` object that can be used with the [rsample::training] and
 #'   [rsample::testing] functions to extract the data in each split.
 #' @examples
