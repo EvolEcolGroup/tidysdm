@@ -3,11 +3,11 @@
 <url><loc>https://evolecolgroup.github.io/tidysdm/CODE_OF_CONDUCT.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/CONTRIBUTING.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/LICENSE.html</loc></url>
-<url><loc>https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/articles/a1_palaeodata_application.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/articles/a3_troubleshooting.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/articles/index.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/articles/tidysdm.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/authors.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/index.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/news/index.html</loc></url>
@@ -22,6 +22,7 @@
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/check_sdm_presence.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/check_splits_balance.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/clamp_predictors.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/reference/collect_class_thresh.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/collect_metrics.simple_ensemble.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/conf_matrix_df.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/reference/control_ensemble.html</loc></url>

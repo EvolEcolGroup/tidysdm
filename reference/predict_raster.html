@@ -11,7 +11,7 @@ stacks::stacks"><meta property="og:image" content="https://evolecolgroup.github.
 
     <a class="navbar-brand me-2" href="../index.html">tidysdm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">1.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,11 +19,11 @@ stacks::stacks"><meta property="og:image" content="https://evolecolgroup.github.
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/tidysdm.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/a0_tidysdm_overview.html">tidysdm overview</a></li>
-    <li><a class="dropdown-item" href="../articles/a1_palaeodata_application.html">Application with palaeodata</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/a1_palaeodata_application.html">Application with palaeodata</a></li>
     <li><a class="dropdown-item" href="../articles/a2_tidymodels_additions.html">Examples of additional tidymodels features</a></li>
     <li><a class="dropdown-item" href="../articles/a3_troubleshooting.html">Troubleshooting models that fail</a></li>
   </ul></li>
@@ -39,7 +39,7 @@ stacks::stacks"><meta property="og:image" content="https://evolecolgroup.github.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Make predictions for a whole raster</h1>
-      <small class="dont-index">Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/dev/R/predict_raster.R" class="external-link"><code>R/predict_raster.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/main/R/predict_raster.R" class="external-link"><code>R/predict_raster.R</code></a></small>
       <div class="d-none name"><code>predict_raster.Rd</code></div>
     </div>
 
@@ -72,7 +72,9 @@ has to include levels with the same names as the variables used in <code>object<
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>parameters to be passed to the standard <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> function for
-the appropriate object type (e.g. <code>metric_thresh</code> or <code>class_thresh</code>).</p></dd>
+the appropriate object type (e.g. <code>metric_thresh</code>, <code>class_thresh</code> or
+<code>fun</code>). See the documentation of the relevant <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method for
+possible parameters (e.g. <code><a href="predict.simple_ensemble.html">predict.simple_ensemble()</a></code>).</p></dd>
 
 
 <dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
@@ -103,7 +105,7 @@ predictions</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
