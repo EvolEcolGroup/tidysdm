@@ -122,7 +122,7 @@ with presence as a reference level. To check that \code{y} is formatted correctl
 use \code{\link[=check_sdm_presence]{check_sdm_presence()}}.
 }
 \examples{
-\dontshow{if (rlang::is_installed("RhpcBLASctl")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("RhpcBLASctl")) withAutoprint(\{ # examplesIf}
 \dontshow{
 data.table::setDTthreads(2)
 RhpcBLASctl::blas_set_num_threads(2)

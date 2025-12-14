@@ -52,6 +52,9 @@ a tibble of predictions
 }
 \description{
 Predict for a new dataset by using a repeat ensemble. Predictions from
-individual models are combined according to \code{fun}
+individual models are combined according to \code{fun}: if a
+weighted function is used (\code{weighted_mean} or \code{weighted_median}), weights are
+based on the metric used to tune models in the ensemble (see
+\code{\link{repeat_ensemble}}).
 }
 \keyword{predict}

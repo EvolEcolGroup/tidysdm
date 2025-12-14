@@ -29,7 +29,10 @@ predictors.}
 \code{mean}, \code{median}, \code{weighted_mean}, \code{weighted_median} and \code{none}. It is
 possible to combine multiple functions, except for "none". If it is set to
 "none", only the individual member predictions are returned (this
-automatically sets \code{member} to TRUE)}
+automatically sets \code{member} to TRUE). Weights are based on the metric used
+to tune models in the ensemble (see \code{\link{simple_ensemble}}); the weights are
+proportional to the metric values (so, a model with a metric that is 10\%
+higher than another model will have a weight that is 10\% higher).}
 
 \item{metric_thresh}{a vector of length 2 giving a metric and its threshold,
 which will be used to prune which models in the ensemble will be used for
@@ -38,9 +41,9 @@ was tuned. Examples are c("accuracy",0.8) or c("boyce_cont",0.7)}
 
 \item{class_thresh}{probability threshold used to convert probabilities into
 classes. It can be a number (between 0 and 1), or a character metric
-(currently "tss_max" or "sensitivity"). For sensitivity, an additional
-target value is passed along as a second element of a vector, e.g.
-c("sensitivity",0.8).}
+(currently "tss_max", "kap_max", or "sensitivity"). For sensitivity, an
+additional target value is passed along as a second element of a vector,
+e.g. c("sensitivity",0.8).}
 
 \item{members}{boolean defining whether individual predictions for each
 member should be added to the ensemble prediction. The columns for
@@ -54,6 +57,9 @@ a tibble of predictions
 }
 \description{
 Predict for a new dataset by using a simple ensemble. Predictions from
-individual models (i.e. workflows) are combined according to \code{fun}
+individual models (i.e. workflows) are combined according to \code{fun}: if a
+weighted function is used (\code{weighted_mean} or \code{weighted_median}), weights are
+based on the metric used to tune models in the ensemble (see
+\code{\link{simple_ensemble}}).
 }
 \keyword{predict}

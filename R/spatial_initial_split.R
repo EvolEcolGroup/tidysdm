@@ -6,8 +6,13 @@
 #' initial split.
 #' @param data A dataset (data.frame or tibble)
 #' @param prop The proportion of data to be retained for modelling/analysis.
+#'   This parameter is used to define the appropriate number of partitions for
+#'   the selected `strategy`. For example, if `prop = 0.2`, then 5 partitions
+#'   will be created and one of these will be used as the testing set. Set to
+#'   NULL for leave-one-out crossvalidation.
 #' @param strategy A sampling strategy from `spatialsample`
-#' @param ... parameters to be passed to the `strategy`
+#' @param ... parameters to be passed to the `strategy` function (with the
+#' exception of `v` which is calculated internally based on `prop`)
 #' @returns An `rsplit` object that can be used with the [rsample::training] and
 #'   [rsample::testing] functions to extract the data in each split.
 #' @examples
@@ -30,7 +35,9 @@ spatial_initial_split <- function(data, prop, strategy, ...) {
     stop(deparse(substitute(strategy)), " is not a function in spatialsample")
   }
 
-  if (!is.numeric(prop) || prop >= 1 || prop <= 0) {
+  if (is.null(prop)) {
+    v <- NULL
+  } else if (!is.numeric(prop) || prop >= 1 || prop <= 0) {
     rlang::abort("`prop` must be a number between 0 and 1")
   } else {
     v <- round(1 / prop, digits = 0)
