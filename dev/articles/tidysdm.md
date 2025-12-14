@@ -685,18 +685,18 @@ lacerta_models <-
 #> ✔ 1 of 4 resampling: default_glm (519ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 4 tuning:     default_rf (2.6s)
+#> ✔ 2 of 4 tuning:     default_rf (2.7s)
 #> i 3 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
-#> There were issues with some computations   A: x3
-#> There were issues with some computations   A: x5
+#> There were issues with some computations   A: x2
+#> There were issues with some computations   A: x4
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 3 of 4 tuning:     default_gbm (8.1s)
+#> ✔ 3 of 4 tuning:     default_gbm (8.2s)
 #> i 4 of 4 tuning:     default_maxent
-#> ✔ 4 of 4 tuning:     default_maxent (2.1s)
+#> ✔ 4 of 4 tuning:     default_maxent (2.2s)
 ```
 
 Note that `workflow_set` correctly detects that we have no tuning
@@ -1103,19 +1103,19 @@ for (i_repeat in 1:3) {
 }
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (442ms)
-#> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
-#> i  No tuning parameters. `fit_resamples()` will be attempted
-#> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (448ms)
+#> ✔ 1 of 2 resampling: default_glm (467ms)
 #> i 2 of 2 tuning:     default_maxent
 #> ✔ 2 of 2 tuning:     default_maxent (2.2s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (449ms)
+#> ✔ 1 of 2 resampling: default_glm (464ms)
 #> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
+#> ✔ 2 of 2 tuning:     default_maxent (2.2s)
+#> i  No tuning parameters. `fit_resamples()` will be attempted
+#> i 1 of 2 resampling: default_glm
+#> ✔ 1 of 2 resampling: default_glm (476ms)
+#> i 2 of 2 tuning:     default_maxent
+#> ✔ 2 of 2 tuning:     default_maxent (2.2s)
 ```
 
 Now we can create a `repeat_ensemble` from the list:

@@ -323,20 +323,20 @@ horses_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (480ms)
+#> ✔ 1 of 4 resampling: default_glm (488ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 4 resampling: default_gam
-#> ✔ 2 of 4 resampling: default_gam (689ms)
+#> ✔ 2 of 4 resampling: default_gam (720ms)
 #> i 3 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 3 of 4 tuning:     default_rf (2.9s)
+#> ✔ 3 of 4 tuning:     default_rf (3s)
 #> i 4 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
 #> There were issues with some computations   A: x2
 #> There were issues with some computations   A: x3
-#> There were issues with some computations   A: x5
+#> There were issues with some computations   A: x4
 #> There were issues with some computations   A: x5
 #> 
 #> ✔ 4 of 4 tuning:     default_gbm (11.6s)

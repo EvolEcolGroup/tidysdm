@@ -191,7 +191,7 @@ lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  predict_function 
 #>   -> predicted values  :  No value for predict function target column. (  default  )
-#>   -> model_info        :  package tidysdm , ver. 1.0.3.9002 , task classification (  default  ) 
+#>   -> model_info        :  package tidysdm , ver. 1.0.4.9001 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.02117606 , mean =  0.2977721 , max =  0.8709933  
 #>   -> residual function :  difference between y and yhat (  default  )

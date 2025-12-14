@@ -1,6 +1,8 @@
 # Changelog
 
-## tidysdm (development version)
+## `tidysdm` 1.0.4
+
+CRAN release: 2025-12-13
 
 - improve documentation of `calib_class_threshold` and implement
   `collect_calib_thresh`

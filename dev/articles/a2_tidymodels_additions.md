@@ -77,7 +77,7 @@ explainer_lacerta_ens <- explain_tidysdm(lacerta_ensemble)
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  predict_function 
 #>   -> predicted values  :  No value for predict function target column. (  default  )
-#>   -> model_info        :  package tidysdm , ver. 1.0.3.9002 , task classification (  default  ) 
+#>   -> model_info        :  package tidysdm , ver. 1.0.4.9001 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.02117606 , mean =  0.2977721 , max =  0.8709933  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -408,12 +408,12 @@ lacerta_models <-
 #> generated.
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 3 resampling: uncor_glm
-#> ✔ 1 of 3 resampling: uncor_glm (572ms)
+#> ✔ 1 of 3 resampling: uncor_glm (586ms)
 #> i 2 of 3 tuning:     all_rf
-#> ✔ 2 of 3 tuning:     all_rf (24s)
+#> ✔ 2 of 3 tuning:     all_rf (24.4s)
 #> i 3 of 3 tuning:     all_svm
 #> maximum number of iterations reached 0.0034067 -0.003351595maximum number of iterations reached 0.001168737 -0.001158111maximum number of iterations reached 0.002921528 -0.002882749maximum number of iterations reached 0.0004828243 -0.000481011maximum number of iterations reached 0.001552743 -0.001540265maximum number of iterations reached 0.0001848999 -0.0001848551maximum number of iterations reached 0.001378261 -0.001375637maximum number of iterations reached 0.002290727 -0.002260986maximum number of iterations reached 0.0001738087 -0.000173766maximum number of iterations reached 4.866901e-05 -4.861083e-05maximum number of iterations reached 0.003507683 -0.003470935maximum number of iterations reached 0.0009094785 -0.0008994086
-#> ✔ 3 of 3 tuning:     all_svm (26.1s)
+#> ✔ 3 of 3 tuning:     all_svm (26.4s)
 ```
 
 We can have a look at the performance of our models with:
@@ -643,10 +643,10 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (805ms)
+#> ✔ 1 of 2 resampling: default_glm (815ms)
 #> i 2 of 2 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 2 tuning:     default_rf (1.9s)
+#> ✔ 2 of 2 tuning:     default_rf (2s)
 # fit the ensemble
 lacerta_ensemble <- simple_ensemble() %>%
   add_member(lacerta_models, metric = "boyce_cont")
