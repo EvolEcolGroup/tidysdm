@@ -1,6 +1,6 @@
 Package: tidysdm
 Title: Species Distribution Models with Tidymodels
-Version: 1.0.3.9002
+Version: 1.0.4
 Authors@R: c(
     person("Michela", "Leonardi", role = "aut"),
     person("Margherita", "Colucci", role = "aut"),
@@ -15,7 +15,7 @@ Description: Fit species distribution models (SDMs) using the 'tidymodels' frame
   as well as a number of specialised functions to process occurrences
   for contemporary and palaeo datasets. The full 
   functionalities of the package are described
-  in Leonardi et al. (2024) < doi:10.1111/2041-210X.14406>.
+  in Leonardi et al. (2024) <doi:10.1111/2041-210X.14406>.
 License: AGPL (>= 3)
 Encoding: UTF-8
 Language: en-GB
