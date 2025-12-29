@@ -27,6 +27,10 @@ add_repeat.default <- function(x, rep, ...) {
 #' @rdname add_repeat
 #' @export
 add_repeat.simple_ensemble <- function(x, rep, ...) {
+  # check that x is of class repeat_ensemble
+  if (!inherits(x, "repeat_ensemble")) {
+    stop("x must be a repeat_ensemble object")
+  }
   # if the repeated ensemble is empty
   if (nrow(x) == 0) {
     attr(x, "best_metric") <- attr(rep, "best_metric")

@@ -52,4 +52,13 @@ test_that("add_repeat to empty repeat ensemble", {
     "rep_01", "rep_02",
     "rep_03"
   )))
+  # test errors for wrong object type
+  expect_error(
+    repeat_ensemble() %>% add_repeat("blah"),
+    "no method available"
+  )
+  expect_error(
+    "blah" %>% add_repeat(test_ens_1),
+    "x must be a repeat_ensemble object"
+  )
 })
