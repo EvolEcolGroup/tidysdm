@@ -17,7 +17,8 @@ NULL for leave-one-out crossvalidation.}
 
 \item{strategy}{A sampling strategy from \code{spatialsample}}
 
-\item{...}{parameters to be passed to the \code{strategy}}
+\item{...}{parameters to be passed to the \code{strategy} function (with the
+exception of \code{v} which is calculated internally based on \code{prop})}
 }
 \value{
 An \code{rsplit} object that can be used with the \link[rsample:initial_split]{rsample::training} and
