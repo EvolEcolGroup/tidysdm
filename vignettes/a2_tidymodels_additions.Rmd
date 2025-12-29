@@ -278,7 +278,7 @@ lacerta_stack <-
 autoplot(lacerta_stack, type = "weights")
 ```
 
-We can see that three versions of the SVM and one of the random forests were selected;
+We can see that two versions of the random forest and one of SVM were selected;
 the stacking coefficients give an indication of the weight each model carries
 within the ensemble. We can now use the ensemble to make predictions about the
 testing data:
