@@ -14,7 +14,9 @@
 #'   whether rasters can be processed in one go, or in chunks. If you get an out
 #'   of memory error, increase `n`. See [terra::writeStart()] for more details.
 #' @param ... parameters to be passed to the standard `predict()` function for
-#'   the appropriate object type (e.g. `metric_thresh` or `class_thresh`).
+#'   the appropriate object type (e.g. `metric_thresh`, `class_thresh` or
+#'   `fun`). See the documentation of the relevant `predict()` method for
+#'   possible parameters (e.g. [predict.simple_ensemble()]).
 #' @returns a [`terra::SpatRaster`] (or `stars` if that is the input) with the
 #'   predictions
 #' @export

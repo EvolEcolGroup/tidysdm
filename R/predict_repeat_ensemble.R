@@ -1,7 +1,10 @@
 #' Predict for a repeat ensemble set
 #'
 #' Predict for a new dataset by using a repeat ensemble. Predictions from
-#' individual models are combined according to `fun`
+#' individual models are combined according to `fun`: if a
+#' weighted function is used (`weighted_mean` or `weighted_median`), weights are
+#' based on the metric used to tune models in the ensemble (see
+#' [`repeat_ensemble`]).
 #' @param object an repeat_ensemble object
 #' @param new_data a data frame in which to look for variables with which to
 #'   predict.

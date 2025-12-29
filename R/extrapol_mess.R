@@ -178,7 +178,7 @@ extrapol_mess.SpatRasterDataset <- function(x, training, .col, ...) {
   # null mess raster to fill in
   mess_rast <- NULL
   # cycle over the time steps
-  for (i_time in seq_len(length(raster_times))) {
+  for (i_time in seq_along(raster_times)) {
     # get a slice
     this_slice <- pastclim::slice_region_series(x,
       time_ce = raster_times[i_time]

@@ -3,8 +3,10 @@
 #' A simple ensemble is a collection of workflows for which predictions will be
 #' combined in a simple way (e.g. by taking either the mean or median). Usually
 #' these workflows will consists each of the best version of a given model
-#' algorithm following tuning. The workflows are fitted to the full training
-#' dataset before making predictions.
+#' algorithm following tuning based on a chosen metric (note that the metric
+#' is defined when tuning the workflows, it can not be changed at this stage).
+#' The workflows are fitted
+#' to the full training dataset before making predictions.
 #'
 #' @param ... not used, this function just creates an empty `simple_ensemble`
 #'   object. Members are added with `add_best_candidates()`

@@ -1,9 +1,9 @@
 ---
-title: "tidysdm overview"
+title: "tidysdm"
 output: rmarkdown::html_vignette
 #output: rmarkdown::pdf_document
 vignette: >
-  %\VignetteIndexEntry{tidysdm overview}
+  %\VignetteIndexEntry{tidysdm}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

@@ -33,4 +33,15 @@ test_that("spatial_initial_split", {
     ),
     "`prop` must be a number between 0 and 1"
   )
+
+  # create a smaller dataset, and set up a remove one crossvalidation
+  lacerta_small <- lacerta_thin[1:20, ]
+  set.seed(1005)
+  lacerta_initial_loocv <- spatial_initial_split(lacerta_small,
+    prop = NULL, spatial_block_cv
+  )
+  expect_true(inherits(lacerta_initial_loocv, "spatial_initial_split"))
+  # expect that only one row is in the assessment set
+  expect_equal(length(lacerta_initial_loocv$in_id), 19)
+
 })

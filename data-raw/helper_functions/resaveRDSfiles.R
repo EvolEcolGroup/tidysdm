@@ -15,9 +15,8 @@
 #' @export
 #'
 
-resaveRDSfiles <- function(paths, compress = c("auto", "gzip", "bzip2", "xz"),
+resaveRDSfiles <- function(paths, compress = c("auto", "gzip", "bzip2", "xz", "zstd"),
                            version = NULL) {
-  stop("This function does not work yet")
   if (length(paths) == 1L && dir.exists(paths)) {
     paths <- Sys.glob(c(file.path(paths, "*.rds")))
   }
@@ -29,25 +28,23 @@ resaveRDSfiles <- function(paths, compress = c("auto", "gzip", "bzip2", "xz"),
   for (p in paths) {
     this_obj <- readRDS(p)
     if (compress == "auto") {
-      f1 <- tempfile()
-      saveRDS(this_obj, file = f1, version = version)
-      f2 <- tempfile()
-      save(this_obj, file = f2, compress = "bzip2", version = version)
-      ss <- file.size(c(f1, f2)) * c(0.9, 1)
-      names(ss) <- c(f1, f2)
-      if (ss[1L] > 10240) {
-        f3 <- tempfile()
-        save(this_obj,
-          file = f3,
-          compress = "xz", version = version
+      compress_options <- c("gzip", "bzip2", "xz", "zstd")
+      compress_files <- c()
+      # we try all compression options and pick the smallest one
+      for (i_compress in compress_options)
+      {
+        f_temp <- tempfile()
+        saveRDS(this_obj,
+          file = f_temp,
+          compress = i_compress,
+          version = version
         )
-        ss <- c(ss, file.size(f3))
-        names(ss) <- c(f1, f2, f3)
+        compress_files <- c(compress_files, f_temp)
       }
-      nm <- names(ss)
-      ind <- which.min(ss)
-      file.copy(nm[ind], p, overwrite = TRUE)
-      unlink(nm)
+      file_sizes <- file.size(compress_files)
+      which_min <- which.min(file_sizes)
+      file.copy(compress_files[which_min], p, overwrite = TRUE)
+      unlink(compress_files)
     } else {
       saveRDS(this_obj,
         file = p, compress = compress,

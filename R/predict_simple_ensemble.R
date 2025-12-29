@@ -1,7 +1,10 @@
 #' Predict for a simple ensemble set
 #'
 #' Predict for a new dataset by using a simple ensemble. Predictions from
-#' individual models (i.e. workflows) are combined according to `fun`
+#' individual models (i.e. workflows) are combined according to `fun`: if a
+#' weighted function is used (`weighted_mean` or `weighted_median`), weights are
+#' based on the metric used to tune models in the ensemble (see
+#' [`simple_ensemble`]).
 #' @param object an simple_ensemble object
 #' @param new_data a data frame in which to look for variables with which to
 #'   predict. If `NULL`, the predictors from the first workflow in the ensemble
@@ -12,16 +15,19 @@
 #'   `mean`, `median`, `weighted_mean`, `weighted_median` and `none`. It is
 #'   possible to combine multiple functions, except for "none". If it is set to
 #'   "none", only the individual member predictions are returned (this
-#'   automatically sets `member` to TRUE)
+#'   automatically sets `member` to TRUE). Weights are based on the metric used
+#'   to tune models in the ensemble (see [`simple_ensemble`]); the weights are
+#'   proportional to the metric values (so, a model with a metric that is 10%
+#'   higher than another model will have a weight that is 10% higher).
 #' @param metric_thresh a vector of length 2 giving a metric and its threshold,
 #'   which will be used to prune which models in the ensemble will be used for
 #'   the prediction. The 'metrics' need to have been computed when the workflow
 #'   was tuned. Examples are c("accuracy",0.8) or c("boyce_cont",0.7)
 #' @param class_thresh probability threshold used to convert probabilities into
 #'   classes. It can be a number (between 0 and 1), or a character metric
-#'   (currently "tss_max" or "sensitivity"). For sensitivity, an additional
-#'   target value is passed along as a second element of a vector, e.g.
-#'   c("sensitivity",0.8).
+#'   (currently "tss_max", "kap_max", or "sensitivity"). For sensitivity, an
+#'   additional target value is passed along as a second element of a vector,
+#'   e.g. c("sensitivity",0.8).
 #' @param members boolean defining whether individual predictions for each
 #'   member should be added to the ensemble prediction. The columns for
 #'   individual members have the name of the workflow a a prefix, separated by
