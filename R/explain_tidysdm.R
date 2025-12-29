@@ -186,7 +186,7 @@ explain_tidysdm.repeat_ensemble <- function(
     predict_function = predict_function,
     predict_function_target_column = predict_function_target_column,
     residual_function = residual_function,
-    ... = ...,
+    ...,
     label = label,
     verbose = verbose,
     precalculate = precalculate,
@@ -215,7 +215,6 @@ explain_simple_ensemble <- function(
   if (type != "classification") {
     stop("type has to be classification for a tidysdm ensemble")
   }
-  
   if (is.null(data)) {
     if (is.null(model$workflow[[1]]$pre$actions$recipe$recipe$steps)) {
       data <- workflowsets::extract_mold(model$workflow[[1]])$predictors
@@ -231,12 +230,12 @@ explain_simple_ensemble <- function(
     # that's the opposite of what we usually have in tidymodels, where presence
     # is the reference
     y <-
-      (as.numeric(
+      as.numeric(
         workflowsets::extract_mold(
           model$workflow[[1]]
         )$outcomes %>%
           dplyr::pull()
-      ) - 2) * -1
+      )
   } else {
     # ideally we would use check_sdm_presence to make sure that the response
     # variable is properly formatted (and not just a factor) the error message
@@ -245,13 +244,19 @@ explain_simple_ensemble <- function(
     if (!is.factor(y)) {
       stop("y should be a factor with presences as reference levels")
     } else {
-      y <- (as.numeric(y) - 2) * -1
+      y <- as.numeric(y)
     }
   }
   if (is.null(predict_function)) {
     predict_function <- function(model, newdata) {
       stats::predict(model, newdata)$mean
     }
+  }
+
+  # if predict_function_target_column is NULL, set it to 1
+  # (which is the presence class)
+  if (is.null(predict_function_target_column)) {
+    predict_function_target_column <- 1
   }
 
   DALEX::explain(
@@ -359,7 +364,7 @@ explain_simple_ens_by_wkflow <- function(
         (as.numeric(
           workflowsets::extract_mold(model$workflow[[i]])$outcomes %>%
             dplyr::pull()
-        ) - 1)
+        ))
     } else {
       data_response <- y
     }
