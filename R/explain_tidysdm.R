@@ -226,9 +226,6 @@ explain_simple_ensemble <- function(
     }
   }
   if (is.null(y)) {
-    # note that, for DALEX, we need presences to be 1 and absences to be zero
-    # that's the opposite of what we usually have in tidymodels, where presence
-    # is the reference
     y <-
       as.numeric(
         workflowsets::extract_mold(
