@@ -48,40 +48,42 @@ explain_tidysdm <- function(model,
 #' @rdname explain_tidysdm
 #' @export
 explain_tidysdm.default <- function(
-    model,
-    data = NULL,
-    y = NULL,
-    predict_function = NULL,
-    predict_function_target_column = NULL,
-    residual_function = NULL,
-    ...,
-    label = NULL,
-    verbose = TRUE,
-    precalculate = TRUE,
-    colorize = !isTRUE(getOption("knitr.in.progress")),
-    model_info = NULL,
-    type = "classification",
-    by_workflow = FALSE) {
+  model,
+  data = NULL,
+  y = NULL,
+  predict_function = NULL,
+  predict_function_target_column = NULL,
+  residual_function = NULL,
+  ...,
+  label = NULL,
+  verbose = TRUE,
+  precalculate = TRUE,
+  colorize = !isTRUE(getOption("knitr.in.progress")),
+  model_info = NULL,
+  type = "classification",
+  by_workflow = FALSE
+) {
   stop("no method defined for this object type")
 }
 
 #' @rdname explain_tidysdm
 #' @export
 explain_tidysdm.simple_ensemble <- function(
-    model,
-    data = NULL,
-    y = NULL,
-    predict_function = NULL,
-    predict_function_target_column = NULL,
-    residual_function = NULL,
-    ...,
-    label = NULL,
-    verbose = TRUE,
-    precalculate = TRUE,
-    colorize = !isTRUE(getOption("knitr.in.progress")),
-    model_info = NULL,
-    type = "classification",
-    by_workflow = FALSE) {
+  model,
+  data = NULL,
+  y = NULL,
+  predict_function = NULL,
+  predict_function_target_column = NULL,
+  residual_function = NULL,
+  ...,
+  label = NULL,
+  verbose = TRUE,
+  precalculate = TRUE,
+  colorize = !isTRUE(getOption("knitr.in.progress")),
+  model_info = NULL,
+  type = "classification",
+  by_workflow = FALSE
+) {
   if (by_workflow) {
     explain_simple_ens_by_wkflow(
       model = model,
@@ -120,20 +122,21 @@ explain_tidysdm.simple_ensemble <- function(
 #' @rdname explain_tidysdm
 #' @export
 explain_tidysdm.repeat_ensemble <- function(
-    model,
-    data = NULL,
-    y = NULL,
-    predict_function = NULL,
-    predict_function_target_column = NULL,
-    residual_function = NULL,
-    ...,
-    label = NULL,
-    verbose = TRUE,
-    precalculate = TRUE,
-    colorize = !isTRUE(getOption("knitr.in.progress")),
-    model_info = NULL,
-    type = "classification",
-    by_workflow = FALSE) {
+  model,
+  data = NULL,
+  y = NULL,
+  predict_function = NULL,
+  predict_function_target_column = NULL,
+  residual_function = NULL,
+  ...,
+  label = NULL,
+  verbose = TRUE,
+  precalculate = TRUE,
+  colorize = !isTRUE(getOption("knitr.in.progress")),
+  model_info = NULL,
+  type = "classification",
+  by_workflow = FALSE
+) {
   # we change the names of the workflows to combine with the repeat ids
   model$workflow_id <- paste(model$rep_id, model$wflow_id, sep = ".")
   class(model)[1] <- "simple_ensemble"
@@ -156,19 +159,20 @@ explain_tidysdm.repeat_ensemble <- function(
 }
 
 explain_simple_ensemble <- function(
-    model,
-    data = NULL,
-    y = NULL,
-    predict_function = NULL,
-    predict_function_target_column = NULL,
-    residual_function = NULL,
-    ...,
-    label = NULL,
-    verbose = TRUE,
-    precalculate = TRUE,
-    colorize = !isTRUE(getOption("knitr.in.progress")),
-    model_info = NULL,
-    type = "classification") {
+  model,
+  data = NULL,
+  y = NULL,
+  predict_function = NULL,
+  predict_function_target_column = NULL,
+  residual_function = NULL,
+  ...,
+  label = NULL,
+  verbose = TRUE,
+  precalculate = TRUE,
+  colorize = !isTRUE(getOption("knitr.in.progress")),
+  model_info = NULL,
+  type = "classification"
+) {
   if (type != "classification") {
     stop("type has to be classification for a tidysdm ensemble")
   }
@@ -271,19 +275,20 @@ model_info.repeat_ensemble <- function(model, is_multiclass = FALSE, ...) {
 
 
 explain_simple_ens_by_wkflow <- function(
-    model,
-    data = NULL,
-    y = NULL,
-    predict_function = NULL,
-    predict_function_target_column = NULL,
-    residual_function = NULL,
-    ...,
-    label = NULL,
-    verbose = TRUE,
-    precalculate = TRUE,
-    colorize = !isTRUE(getOption("knitr.in.progress")),
-    model_info = NULL,
-    type = "classification") {
+  model,
+  data = NULL,
+  y = NULL,
+  predict_function = NULL,
+  predict_function_target_column = NULL,
+  residual_function = NULL,
+  ...,
+  label = NULL,
+  verbose = TRUE,
+  precalculate = TRUE,
+  colorize = !isTRUE(getOption("knitr.in.progress")),
+  model_info = NULL,
+  type = "classification"
+) {
   if (type != "classification") {
     stop("type has to be classification for a tidysdm ensemble")
   }
@@ -314,12 +319,17 @@ explain_simple_ens_by_wkflow <- function(
         (as.numeric(
           workflowsets::extract_mold(model$workflow[[i]])$outcomes %>%
             dplyr::pull()
-#        ) - 2) * -1
-        ) -1)
+        ) - 1)
     } else {
-#      data_response <- (as.numeric(y) - 2) * -1
       data_response <- y
     }
+
+    # if predict_function_target_column is NULL, set it to 1
+    # (which is the presence class)
+    if (is.null(predict_function_target_column)) {
+      predict_function_target_column <- 1
+    }
+
 
     explainer_list[[i]] <-
       DALEXtra::explain_tidymodels(
