@@ -18,8 +18,8 @@ library(tidysdm)
 #> ✔ broom        1.0.11     ✔ recipes      1.3.1 
 #> ✔ dials        1.4.2      ✔ rsample      1.3.1 
 #> ✔ dplyr        1.1.4      ✔ tailor       0.1.0 
-#> ✔ ggplot2      4.0.1      ✔ tidyr        1.3.1 
-#> ✔ infer        1.0.9      ✔ tune         2.0.1 
+#> ✔ ggplot2      4.0.1      ✔ tidyr        1.3.2 
+#> ✔ infer        1.1.0      ✔ tune         2.0.1 
 #> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
 #> ✔ parsnip      1.4.0      ✔ workflowsets 1.1.1 
 #> ✔ purrr        1.2.0      ✔ yardstick    1.3.2
@@ -323,10 +323,10 @@ horses_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (488ms)
+#> ✔ 1 of 4 resampling: default_glm (495ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 4 resampling: default_gam
-#> ✔ 2 of 4 resampling: default_gam (720ms)
+#> ✔ 2 of 4 resampling: default_gam (725ms)
 #> i 3 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> ✔ 3 of 4 tuning:     default_rf (3s)
@@ -339,7 +339,7 @@ horses_models <-
 #> There were issues with some computations   A: x4
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 4 of 4 tuning:     default_gbm (11.6s)
+#> ✔ 4 of 4 tuning:     default_gbm (11.7s)
 ```
 
 Note that `workflow_set` correctly detects that we have no tuning

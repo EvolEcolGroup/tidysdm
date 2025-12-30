@@ -34,8 +34,8 @@ library(tidysdm)
 #> ✔ broom        1.0.11     ✔ recipes      1.3.1 
 #> ✔ dials        1.4.2      ✔ rsample      1.3.1 
 #> ✔ dplyr        1.1.4      ✔ tailor       0.1.0 
-#> ✔ ggplot2      4.0.1      ✔ tidyr        1.3.1 
-#> ✔ infer        1.0.9      ✔ tune         2.0.1 
+#> ✔ ggplot2      4.0.1      ✔ tidyr        1.3.2 
+#> ✔ infer        1.1.0      ✔ tune         2.0.1 
 #> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
 #> ✔ parsnip      1.4.0      ✔ workflowsets 1.1.1 
 #> ✔ purrr        1.2.0      ✔ yardstick    1.3.2
@@ -76,12 +76,12 @@ explainer_lacerta_ens <- explain_tidysdm(lacerta_ensemble)
 #>   -> data              :  tibble converted into a data.frame 
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  predict_function 
-#>   -> predicted values  :  No value for predict function target column. (  default  )
+#>   -> predicted values  :  Predict function column set to:  1 (  OK  )
 #>   -> model_info        :  package tidysdm , ver. 1.0.4.9001 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.02117606 , mean =  0.2977721 , max =  0.8709933  
 #>   -> residual function :  difference between y and yhat (  default  )
-#>   -> residuals         :  numerical, min =  -0.6238706 , mean =  -0.04777213 , max =  0.6884733  
+#>   -> residuals         :  numerical, min =  0.1290067 , mean =  1.452228 , max =  1.978824  
 #>   A new explainer has been created!
 ```
 
@@ -138,12 +138,12 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
 #>   -> data              :  tibble converted into a data.frame 
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
-#>   -> predicted values  :  No value for predict function target column. (  default  )
+#>   -> predicted values  :  Predict function column set to:  1 (  OK  )
 #>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
-#>   -> predicted values  :  numerical, min =  0.2554356 , mean =  0.75 , max =  0.9838188  
+#>   -> predicted values  :  numerical, min =  0.01618118 , mean =  0.25 , max =  0.7445644  
 #>   -> residual function :  difference between y and yhat (  default  )
-#>   -> residuals         :  numerical, min =  -0.9838188 , mean =  -0.5 , max =  0.6967523  
+#>   -> residuals         :  numerical, min =  0.3032477 , mean =  1.5 , max =  1.983819  
 #>   A new explainer has been created!
 #> Warning: Unknown or uninitialised column: `pre`.
 #> Preparation of a new explainer is initiated
@@ -152,12 +152,12 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
 #>   -> data              :  tibble converted into a data.frame 
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
-#>   -> predicted values  :  No value for predict function target column. (  default  )
+#>   -> predicted values  :  Predict function column set to:  1 (  OK  )
 #>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
-#>   -> predicted values  :  numerical, min =  0.07413889 , mean =  0.7493837 , max =  1  
+#>   -> predicted values  :  numerical, min =  0 , mean =  0.2506163 , max =  0.9258611  
 #>   -> residual function :  difference between y and yhat (  default  )
-#>   -> residuals         :  numerical, min =  -1 , mean =  -0.4993837 , max =  0.9258611  
+#>   -> residuals         :  numerical, min =  0.07413889 , mean =  1.499384 , max =  2  
 #>   A new explainer has been created!
 #> Warning: Unknown or uninitialised column: `pre`.
 #> Preparation of a new explainer is initiated
@@ -166,12 +166,12 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
 #>   -> data              :  tibble converted into a data.frame 
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
-#>   -> predicted values  :  No value for predict function target column. (  default  )
+#>   -> predicted values  :  Predict function column set to:  1 (  OK  )
 #>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
-#>   -> predicted values  :  numerical, min =  0.003044844 , mean =  0.7499699 , max =  0.9997277  
+#>   -> predicted values  :  numerical, min =  0.0002722652 , mean =  0.2500301 , max =  0.9969552  
 #>   -> residual function :  difference between y and yhat (  default  )
-#>   -> residuals         :  numerical, min =  -0.9997277 , mean =  -0.4999699 , max =  0.9969552  
+#>   -> residuals         :  numerical, min =  0.003044844 , mean =  1.49997 , max =  1.999728  
 #>   A new explainer has been created!
 #> Warning: Unknown or uninitialised column: `pre`.
 #> Preparation of a new explainer is initiated
@@ -180,12 +180,12 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
 #>   -> data              :  tibble converted into a data.frame 
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
-#>   -> predicted values  :  No value for predict function target column. (  default  )
+#>   -> predicted values  :  Predict function column set to:  1 (  OK  )
 #>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
-#>   -> predicted values  :  numerical, min =  0.04779839 , mean =  0.5595578 , max =  0.9341279  
+#>   -> predicted values  :  numerical, min =  0.06587215 , mean =  0.4404422 , max =  0.9522016  
 #>   -> residual function :  difference between y and yhat (  default  )
-#>   -> residuals         :  numerical, min =  -0.9341279 , mean =  -0.3095578 , max =  0.9283669  
+#>   -> residuals         :  numerical, min =  0.07163309 , mean =  1.309558 , max =  1.934128  
 #>   A new explainer has been created!
 ```
 
@@ -408,12 +408,12 @@ lacerta_models <-
 #> generated.
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 3 resampling: uncor_glm
-#> ✔ 1 of 3 resampling: uncor_glm (586ms)
+#> ✔ 1 of 3 resampling: uncor_glm (589ms)
 #> i 2 of 3 tuning:     all_rf
 #> ✔ 2 of 3 tuning:     all_rf (24.4s)
 #> i 3 of 3 tuning:     all_svm
 #> maximum number of iterations reached 0.0034067 -0.003351595maximum number of iterations reached 0.001168737 -0.001158111maximum number of iterations reached 0.002921528 -0.002882749maximum number of iterations reached 0.0004828243 -0.000481011maximum number of iterations reached 0.001552743 -0.001540265maximum number of iterations reached 0.0001848999 -0.0001848551maximum number of iterations reached 0.001378261 -0.001375637maximum number of iterations reached 0.002290727 -0.002260986maximum number of iterations reached 0.0001738087 -0.000173766maximum number of iterations reached 4.866901e-05 -4.861083e-05maximum number of iterations reached 0.003507683 -0.003470935maximum number of iterations reached 0.0009094785 -0.0008994086
-#> ✔ 3 of 3 tuning:     all_svm (26.4s)
+#> ✔ 3 of 3 tuning:     all_svm (26.5s)
 ```
 
 We can have a look at the performance of our models with:
@@ -450,10 +450,10 @@ autoplot(lacerta_stack, type = "weights")
 
 ![](a2_tidymodels_additions_files/figure-html/build_stack-1.png)
 
-We can see that three versions of the SVM and one of the random forests
-were selected; the stacking coefficients give an indication of the
-weight each model carries within the ensemble. We can now use the
-ensemble to make predictions about the testing data:
+We can see that two versions of the random forest and one of SVM were
+selected; the stacking coefficients give an indication of the weight
+each model carries within the ensemble. We can now use the ensemble to
+make predictions about the testing data:
 
 ``` r
 lacerta_testing <- testing(lacerta_initial)
@@ -643,7 +643,7 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (815ms)
+#> ✔ 1 of 2 resampling: default_glm (784ms)
 #> i 2 of 2 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> ✔ 2 of 2 tuning:     default_rf (2s)

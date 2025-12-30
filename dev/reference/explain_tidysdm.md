@@ -110,10 +110,8 @@ explain_tidysdm(
   Character or numeric containing either column name or column number in
   the model prediction object of the class that should be considered as
   positive (i.e. the class that is associated with probability 1). If
-  NULL, the second column of the output will be taken for binary
-  classification. For a multiclass classification setting, that
-  parameter cause switch to binary classification mode with one vs
-  others probabilities.
+  NULL, the first column of the output will be taken for binary
+  classification.
 
 - residual_function:
 
@@ -152,12 +150,11 @@ explain_tidysdm(
 - model_info:
 
   a named list (`package`, `version`, `type`) containing information
-  about model. If `NULL`, `DALEX` will seek for information on it's own.
+  about model. If `NULL`, `DALEX` will seek for information on its own.
 
 - type:
 
-  type of a model, either `classification` or `regression`. If not
-  specified then `type` will be extracted from `model_info`.
+  type of a model, only `classification` is supported.
 
 - by_workflow:
 
@@ -177,6 +174,9 @@ Note that, if the response variable is passed directly, `y` should be a
 factor with presence as a reference level. To check that `y` is
 formatted correctly, use
 [`check_sdm_presence()`](https://evolecolgroup.github.io/tidysdm/dev/reference/check_sdm_presence.md).
+For this reason, `predict_function_target_column` uses by default the
+first column of the prediction output, which is assumed to be the
+presence class.
 
 ## Examples
 
@@ -190,12 +190,12 @@ lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
 #>   -> data              :  tibble converted into a data.frame 
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  predict_function 
-#>   -> predicted values  :  No value for predict function target column. (  default  )
+#>   -> predicted values  :  Predict function column set to:  1 (  OK  )
 #>   -> model_info        :  package tidysdm , ver. 1.0.4.9001 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.02117606 , mean =  0.2977721 , max =  0.8709933  
 #>   -> residual function :  difference between y and yhat (  default  )
-#>   -> residuals         :  numerical, min =  -0.6238706 , mean =  -0.04777213 , max =  0.6884733  
+#>   -> residuals         :  numerical, min =  0.1290067 , mean =  1.452228 , max =  1.978824  
 #>   A new explainer has been created!  
 # by workflow
 explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
@@ -208,12 +208,12 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
 #>   -> data              :  tibble converted into a data.frame 
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
-#>   -> predicted values  :  No value for predict function target column. (  default  )
+#>   -> predicted values  :  Predict function column set to:  1 (  OK  )
 #>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
-#>   -> predicted values  :  numerical, min =  0.2554356 , mean =  0.75 , max =  0.9838188  
+#>   -> predicted values  :  numerical, min =  0.01618118 , mean =  0.25 , max =  0.7445644  
 #>   -> residual function :  difference between y and yhat (  default  )
-#>   -> residuals         :  numerical, min =  -0.9838188 , mean =  -0.5 , max =  0.6967523  
+#>   -> residuals         :  numerical, min =  0.3032477 , mean =  1.5 , max =  1.983819  
 #>   A new explainer has been created!  
 #> Warning: Unknown or uninitialised column: `pre`.
 #> Preparation of a new explainer is initiated
@@ -222,12 +222,12 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
 #>   -> data              :  tibble converted into a data.frame 
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
-#>   -> predicted values  :  No value for predict function target column. (  default  )
+#>   -> predicted values  :  Predict function column set to:  1 (  OK  )
 #>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
-#>   -> predicted values  :  numerical, min =  0.07413889 , mean =  0.7493837 , max =  1  
+#>   -> predicted values  :  numerical, min =  0 , mean =  0.2506163 , max =  0.9258611  
 #>   -> residual function :  difference between y and yhat (  default  )
-#>   -> residuals         :  numerical, min =  -1 , mean =  -0.4993837 , max =  0.9258611  
+#>   -> residuals         :  numerical, min =  0.07413889 , mean =  1.499384 , max =  2  
 #>   A new explainer has been created!  
 #> Warning: Unknown or uninitialised column: `pre`.
 #> Preparation of a new explainer is initiated
@@ -236,12 +236,12 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
 #>   -> data              :  tibble converted into a data.frame 
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
-#>   -> predicted values  :  No value for predict function target column. (  default  )
+#>   -> predicted values  :  Predict function column set to:  1 (  OK  )
 #>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
-#>   -> predicted values  :  numerical, min =  0.003044844 , mean =  0.7499699 , max =  0.9997277  
+#>   -> predicted values  :  numerical, min =  0.0002722652 , mean =  0.2500301 , max =  0.9969552  
 #>   -> residual function :  difference between y and yhat (  default  )
-#>   -> residuals         :  numerical, min =  -0.9997277 , mean =  -0.4999699 , max =  0.9969552  
+#>   -> residuals         :  numerical, min =  0.003044844 , mean =  1.49997 , max =  1.999728  
 #>   A new explainer has been created!  
 #> Warning: Unknown or uninitialised column: `pre`.
 #> Preparation of a new explainer is initiated
@@ -250,12 +250,12 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
 #>   -> data              :  tibble converted into a data.frame 
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
-#>   -> predicted values  :  No value for predict function target column. (  default  )
+#>   -> predicted values  :  Predict function column set to:  1 (  OK  )
 #>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
-#>   -> predicted values  :  numerical, min =  0.04779839 , mean =  0.5595578 , max =  0.9341279  
+#>   -> predicted values  :  numerical, min =  0.06587215 , mean =  0.4404422 , max =  0.9522016  
 #>   -> residual function :  difference between y and yhat (  default  )
-#>   -> residuals         :  numerical, min =  -0.9341279 , mean =  -0.3095578 , max =  0.9283669  
+#>   -> residuals         :  numerical, min =  0.07163309 , mean =  1.309558 , max =  1.934128  
 #>   A new explainer has been created!  
 # }
 ```

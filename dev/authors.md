@@ -17,7 +17,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/EvolEcolGroup/tidysdm/blob/v1.0.4/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/EvolEcolGroup/tidysdm/blob/dev/DESCRIPTION)
 
 Leonardi M, Colucci M, Pozzi A, Scerri E, Manica A (2025). *tidysdm:
 Species Distribution Models with Tidymodels*. R package version

@@ -62,7 +62,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Examples of additional tidymodels features</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/v1.0.4/vignettes/a2_tidymodels_additions.Rmd" class="external-link"><code>vignettes/a2_tidymodels_additions.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/dev/vignettes/a2_tidymodels_additions.Rmd" class="external-link"><code>vignettes/a2_tidymodels_additions.Rmd</code></a></small>
       <div class="d-none name"><code>a2_tidymodels_additions.Rmd</code></div>
     </div>
 
@@ -98,8 +98,8 @@ vignette.</p>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">broom       </span> 1.0.11     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">recipes     </span> 1.3.1 </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dials       </span> 1.4.2      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">rsample     </span> 1.3.1 </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">dplyr       </span> 1.1.4      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tailor      </span> 0.1.0 </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2     </span> 4.0.1      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr       </span> 1.3.1 </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">infer       </span> 1.0.9      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tune        </span> 2.0.1 </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">ggplot2     </span> 4.0.1      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr       </span> 1.3.2 </span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">infer       </span> 1.1.0      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tune        </span> 2.0.1 </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">modeldata   </span> 1.5.1      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflows   </span> 1.3.0 </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">parsnip     </span> 1.4.0      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">workflowsets</span> 1.1.1 </span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr       </span> 1.2.0      <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">yardstick   </span> 1.3.2</span></span>
@@ -138,12 +138,12 @@ generate our explainer:</p>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
 <span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  predict_function </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  Predict function column set to:  1 (  OK  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidysdm , ver. 1.0.4.9001 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
 <span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.02117606 , mean =  0.2977721 , max =  0.8709933  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.6238706 , mean =  -0.04777213 , max =  0.6884733  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  0.1290067 , mean =  1.452228 , max =  1.978824  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span></code></pre></div>
 <p>Now that we have our explainer, we can explore variable importance
 for the ensemble:</p>
@@ -168,13 +168,13 @@ for the ensemble:</p>
 <span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
-<p><img src="a2_tidymodels_additions_files/figure-html/vip-1.png" class="r-plt" width="576"></p>
+<p><img src="a2_tidymodels_additions_files/figure-html/vip-1.png" class="r-plt" alt="" width="576"></p>
 <p>Or generate partial dependency plots for a given variable
 (e.g. bio05):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pdp_bio05</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://modeloriented.github.io/DALEX/reference/model_profile.html" class="external-link">model_profile</a></span><span class="op">(</span><span class="va">explainer_lacerta_ens</span>, N <span class="op">=</span> <span class="fl">500</span>, variables <span class="op">=</span> <span class="st">"bio05"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pdp_bio05</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a2_tidymodels_additions_files/figure-html/pdp-1.png" class="r-plt" width="576"></p>
+<p><img src="a2_tidymodels_additions_files/figure-html/pdp-1.png" class="r-plt" alt="" width="576"></p>
 <p>There are many other functions in DALEX that can be applied to the
 explainer to further explore the behaviour of the model; see several
 tutorial on <a href="https://modeloriented.github.io/DALEX/" class="external-link uri">https://modeloriented.github.io/DALEX/</a></p>
@@ -189,12 +189,12 @@ ensemble:</p>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
 <span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  Predict function column set to:  1 (  OK  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.2554356 , mean =  0.75 , max =  0.9838188  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.01618118 , mean =  0.25 , max =  0.7445644  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9838188 , mean =  -0.5 , max =  0.6967523  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  0.3032477 , mean =  1.5 , max =  1.983819  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span>
 <span><span class="co">#&gt; Warning: Unknown or uninitialised column: `pre`.</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
@@ -203,12 +203,12 @@ ensemble:</p>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
 <span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  Predict function column set to:  1 (  OK  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.07413889 , mean =  0.7493837 , max =  1  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0 , mean =  0.2506163 , max =  0.9258611  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -1 , mean =  -0.4993837 , max =  0.9258611  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  0.07413889 , mean =  1.499384 , max =  2  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span>
 <span><span class="co">#&gt; Warning: Unknown or uninitialised column: `pre`.</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
@@ -217,12 +217,12 @@ ensemble:</p>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
 <span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  Predict function column set to:  1 (  OK  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.003044844 , mean =  0.7499699 , max =  0.9997277  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.0002722652 , mean =  0.2500301 , max =  0.9969552  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9997277 , mean =  -0.4999699 , max =  0.9969552  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  0.003044844 , mean =  1.49997 , max =  1.999728  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span>
 <span><span class="co">#&gt; Warning: Unknown or uninitialised column: `pre`.</span></span>
 <span><span class="co">#&gt; Preparation of a new explainer is initiated</span></span>
@@ -231,12 +231,12 @@ ensemble:</p>
 <span><span class="co">#&gt;   -&gt; data              :  tibble converted into a data.frame </span></span>
 <span><span class="co">#&gt;   -&gt; target variable   :  448  values </span></span>
 <span><span class="co">#&gt;   -&gt; predict function  :  yhat.workflow  will be used (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  No value for predict function target column. (  default  )</span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  Predict function column set to:  1 (  OK  )</span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) </span></span>
 <span><span class="co">#&gt;   -&gt; model_info        :  type set to  classification </span></span>
-<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.04779839 , mean =  0.5595578 , max =  0.9341279  </span></span>
+<span><span class="co">#&gt;   -&gt; predicted values  :  numerical, min =  0.06587215 , mean =  0.4404422 , max =  0.9522016  </span></span>
 <span><span class="co">#&gt;   -&gt; residual function :  difference between y and yhat (  default  )</span></span>
-<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  -0.9341279 , mean =  -0.3095578 , max =  0.9283669  </span></span>
+<span><span class="co">#&gt;   -&gt; residuals         :  numerical, min =  0.07163309 , mean =  1.309558 , max =  1.934128  </span></span>
 <span><span class="co">#&gt;   A new explainer has been created!</span></span></code></pre></div>
 <p>The resulting list can be then used to build lists of explanations,
 which can then be plotted.</p>
@@ -255,7 +255,7 @@ which can then be plotted.</p>
 <span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
-<p><img src="a2_tidymodels_additions_files/figure-html/profile-1.png" class="r-plt" width="576"></p>
+<p><img src="a2_tidymodels_additions_files/figure-html/profile-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="the-initial-split">The initial split<a class="anchor" aria-label="anchor" href="#the-initial-split"></a>
@@ -282,7 +282,7 @@ a <code>spatial_block_cv</code> scheme to partition the data:</p>
 <span>  prop <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">5</span>, <span class="va">spatial_block_cv</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_initial</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a2_tidymodels_additions_files/figure-html/initial_split-1.png" class="r-plt" width="576"></p>
+<p><img src="a2_tidymodels_additions_files/figure-html/initial_split-1.png" class="r-plt" alt="" width="576"></p>
 <p>And check the balance of presences vs pseudoabsences:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_splits_balance.html">check_splits_balance</a></span><span class="op">(</span><span class="va">lacerta_initial</span>, <span class="va">class</span><span class="op">)</span></span>
@@ -309,7 +309,7 @@ introduce this if you encounter an error.</p>
 <span>  offset <span class="op">=</span> <span class="fu"><a href="../reference/grid_offset.html">grid_offset</a></span><span class="op">(</span><span class="va">lacerta_thin</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.00001</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_cv</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a2_tidymodels_additions_files/figure-html/training_cv-1.png" class="r-plt" width="576"></p>
+<p><img src="a2_tidymodels_additions_files/figure-html/training_cv-1.png" class="r-plt" alt="" width="576"></p>
 <p>And check the balance in the dataset:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_splits_balance.html">check_splits_balance</a></span><span class="op">(</span><span class="va">lacerta_cv</span>, <span class="va">class</span><span class="op">)</span></span>
@@ -430,16 +430,16 @@ variables in the dataset. So, before tuning, we need to finalise
 <span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (586ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 3 resampling: uncor_glm (589ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 3 tuning:     all_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 3 tuning:     all_rf (24.4s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 3 tuning:     all_svm</span></span></span>
 <span><span class="co">#&gt; maximum number of iterations reached 0.0034067 -0.003351595maximum number of iterations reached 0.001168737 -0.001158111maximum number of iterations reached 0.002921528 -0.002882749maximum number of iterations reached 0.0004828243 -0.000481011maximum number of iterations reached 0.001552743 -0.001540265maximum number of iterations reached 0.0001848999 -0.0001848551maximum number of iterations reached 0.001378261 -0.001375637maximum number of iterations reached 0.002290727 -0.002260986maximum number of iterations reached 0.0001738087 -0.000173766maximum number of iterations reached 4.866901e-05 -4.861083e-05maximum number of iterations reached 0.003507683 -0.003470935maximum number of iterations reached 0.0009094785 -0.0008994086</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (26.4s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 3 tuning:     all_svm (26.5s)</span></span></span></code></pre></div>
 <p>We can have a look at the performance of our models with:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_models</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a2_tidymodels_additions_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="700"></p>
+<p><img src="a2_tidymodels_additions_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="stack-ensembles">Stack ensembles<a class="anchor" aria-label="anchor" href="#stack-ensembles"></a>
@@ -463,11 +463,11 @@ same algorithm with different hyper-parameters.</p>
 <span>  <span class="fu"><a href="https://stacks.tidymodels.org/reference/fit_members.html" class="external-link">fit_members</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_stack</span>, type <span class="op">=</span> <span class="st">"weights"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a2_tidymodels_additions_files/figure-html/build_stack-1.png" class="r-plt" width="576"></p>
-<p>We can see that three versions of the SVM and one of the random
-forests were selected; the stacking coefficients give an indication of
-the weight each model carries within the ensemble. We can now use the
-ensemble to make predictions about the testing data:</p>
+<p><img src="a2_tidymodels_additions_files/figure-html/build_stack-1.png" class="r-plt" alt="" width="576"></p>
+<p>We can see that two versions of the random forest and one of SVM were
+selected; the stacking coefficients give an indication of the weight
+each model carries within the ensemble. We can now use the ensemble to
+make predictions about the testing data:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_testing</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">lacerta_initial</span><span class="op">)</span></span>
 <span></span>
@@ -514,7 +514,7 @@ extracting the climate for the variables of interest</p>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/scale_terrain.html" class="external-link">scale_fill_terrain_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># plot presences used in the model</span></span>
 <span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">class</span> <span class="op">==</span> <span class="st">"presence"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a2_tidymodels_additions_files/figure-html/plot_present-1.png" class="r-plt" width="576"></p>
+<p><img src="a2_tidymodels_additions_files/figure-html/plot_present-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level2">
 <h2 id="using-multi-level-factors-as-predictors">Using multi-level factors as predictors<a class="anchor" aria-label="anchor" href="#using-multi-level-factors-as-predictors"></a>
@@ -634,7 +634,7 @@ baking the recipe:</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (815ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (784ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize 1 unknown parameter: </span><span style="color: #0000BB;">"mtry"</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_rf (2s)</span></span></span>
@@ -699,7 +699,7 @@ models (i.e. in the recipe with <code>step_dummy()</code>):</p>
 <span><span class="co"># now we can predict</span></span>
 <span><span class="va">predict_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_ensemble</span>, <span class="va">climate_present</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">predict_factor</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a2_tidymodels_additions_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="700"></p>
+<p><img src="a2_tidymodels_additions_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

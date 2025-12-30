@@ -31,7 +31,8 @@ spatial_initial_split(data, prop, strategy, ...)
 
 - ...:
 
-  parameters to be passed to the `strategy`
+  parameters to be passed to the `strategy` function (with the exception
+  of `v` which is calculated internally based on `prop`)
 
 ## Value
 

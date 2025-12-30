@@ -41,7 +41,7 @@ create explanations of the model."><meta property="og:image" content="https://ev
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create explainer from your tidysdm ensembles.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/v1.0.4/R/explain_tidysdm.R" class="external-link"><code>R/explain_tidysdm.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/EvolEcolGroup/tidysdm/blob/dev/R/explain_tidysdm.R" class="external-link"><code>R/explain_tidysdm.R</code></a></small>
       <div class="d-none name"><code>explain_tidysdm.Rd</code></div>
     </div>
 
@@ -135,23 +135,38 @@ create explanations of the model.</p>
 
 
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><p>data.frame or matrix - data which will be used to calculate the explanations. If not provided, then it will be extracted from the model. Data should be passed without a target column (this shall be provided as the <code>y</code> argument). NOTE: If the target variable is present in the <code>data</code>, some of the functionalities may not work properly.</p></dd>
+<dd><p>data.frame or matrix - data which will be used to calculate the
+explanations. If not provided, then it will be extracted from the model.
+Data should be passed without a target column (this shall be provided as
+the <code>y</code> argument). NOTE: If the target variable is present in the
+<code>data</code>, some of the functionalities may not work properly.</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>numeric vector with outputs/scores. If provided, then it shall have the same size as <code>data</code></p></dd>
+<dd><p>numeric vector with outputs/scores. If provided, then it shall have
+the same size as <code>data</code></p></dd>
 
 
 <dt id="arg-predict-function">predict_function<a class="anchor" aria-label="anchor" href="#arg-predict-function"></a></dt>
-<dd><p>function that takes two arguments: model and new data and returns a numeric vector with predictions.   By default it is <code>yhat</code>.</p></dd>
+<dd><p>function that takes two arguments: model and new data
+and returns a numeric vector with predictions.   By default it is
+<code>yhat</code>.</p></dd>
 
 
 <dt id="arg-predict-function-target-column">predict_function_target_column<a class="anchor" aria-label="anchor" href="#arg-predict-function-target-column"></a></dt>
-<dd><p>Character or numeric containing either column name or column number in the model prediction object of the class that should be considered as positive (i.e. the class that is associated with probability 1). If NULL, the second column of the output will be taken for binary classification. For a multiclass classification setting, that parameter cause switch to binary classification mode with one vs others probabilities.</p></dd>
+<dd><p>Character or numeric containing either
+column name or column number in the model prediction object of the class
+that should be considered as positive (i.e. the class that is associated
+with probability 1). If NULL, the first column of the output will be taken
+for binary classification.</p></dd>
 
 
 <dt id="arg-residual-function">residual_function<a class="anchor" aria-label="anchor" href="#arg-residual-function"></a></dt>
-<dd><p>function that takes four arguments: model, data, target vector y and predict function (optionally). It should return a numeric vector with model residuals for given data. If not provided, response residuals (\(y-\hat{y}\)) are calculated. By default it is <code>residual_function_default</code>.</p></dd>
+<dd><p>function that takes four arguments: model, data,
+target vector y and predict function (optionally). It should return a
+numeric vector with model residuals for given data. If not provided,
+response residuals (\(y-\hat{y}\)) are calculated. By default it is
+<code>residual_function_default</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -159,28 +174,37 @@ create explanations of the model.</p>
 
 
 <dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
-<dd><p>character - the name of the model. By default it's extracted from the 'class' attribute of the model</p></dd>
+<dd><p>character - the name of the model. By default it's extracted
+from the 'class' attribute of the model</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>logical. If TRUE (default) then diagnostic messages will be printed</p></dd>
+<dd><p>logical. If TRUE (default) then diagnostic messages will be
+printed</p></dd>
 
 
 <dt id="arg-precalculate">precalculate<a class="anchor" aria-label="anchor" href="#arg-precalculate"></a></dt>
-<dd><p>logical. If TRUE (default) then <code>predicted_values</code> and <code>residual</code> are calculated when explainer is created.
-This will happen also if <code>verbose</code> is TRUE. Set both <code>verbose</code> and <code>precalculate</code> to FALSE to omit calculations.</p></dd>
+<dd><p>logical. If TRUE (default) then <code>predicted_values</code>
+and <code>residual</code> are calculated when explainer is created. This will
+happen also if <code>verbose</code> is TRUE. Set both <code>verbose</code> and
+<code>precalculate</code> to FALSE to omit calculations.</p></dd>
 
 
 <dt id="arg-colorize">colorize<a class="anchor" aria-label="anchor" href="#arg-colorize"></a></dt>
-<dd><p>logical. If TRUE (default) then <code>WARNINGS</code>, <code>ERRORS</code> and <code>NOTES</code> are colorized. Will work only in the R console. Now by default it is <code>FALSE</code> while knitting and <code>TRUE</code> otherwise.</p></dd>
+<dd><p>logical. If TRUE (default) then <code>WARNINGS</code>,
+<code>ERRORS</code> and <code>NOTES</code> are colorized. Will work only in the R
+console. Now by default it is <code>FALSE</code> while knitting and <code>TRUE</code>
+otherwise.</p></dd>
 
 
 <dt id="arg-model-info">model_info<a class="anchor" aria-label="anchor" href="#arg-model-info"></a></dt>
-<dd><p>a named list (<code>package</code>, <code>version</code>, <code>type</code>) containing information about model. If <code>NULL</code>, <code>DALEX</code> will seek for information on it's own.</p></dd>
+<dd><p>a named list (<code>package</code>, <code>version</code>, <code>type</code>)
+containing information about model. If <code>NULL</code>, <code>DALEX</code> will seek
+for information on its own.</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>type of a model, either <code>classification</code> or <code>regression</code>. If not specified then <code>type</code> will be extracted from <code>model_info</code>.</p></dd>
+<dd><p>type of a model, only <code>classification</code> is supported.</p></dd>
 
 
 <dt id="arg-by-workflow">by_workflow<a class="anchor" aria-label="anchor" href="#arg-by-workflow"></a></dt>
@@ -197,7 +221,9 @@ model, should be returned instead of a single explainer for the ensemble</p></dd
     <p>By default, the response variable is extracted form the ensemble object. Note
 that, if the response variable is passed directly, <code>y</code> should be a factor
 with presence as a reference level. To check that <code>y</code> is formatted correctly,
-use <code><a href="check_sdm_presence.html">check_sdm_presence()</a></code>.</p>
+use <code><a href="check_sdm_presence.html">check_sdm_presence()</a></code>. For this reason, <code>predict_function_target_column</code>
+uses by default the first column of the prediction output, which is assumed
+to be the presence class.</p>
     </div>
 
     <div class="section level2">
@@ -211,12 +237,12 @@ use <code><a href="check_sdm_presence.html">check_sdm_presence()</a></code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; data              :  tibble converted into a data.frame </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; target variable   :  448  values </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predict function  :  predict_function </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  No value for predict function target column. ( <span style="color: #BBBB00;"> default </span> )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  Predict function column set to:  1 ( <span style="color: #00BB00;"> OK </span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  package tidysdm , ver. 1.0.4.9001 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  type set to  classification </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.02117606 , mean =  0.2977721 , max =  0.8709933  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  -0.6238706 , mean =  -0.04777213 , max =  0.6884733  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  0.1290067 , mean =  1.452228 , max =  1.978824  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;"> A new explainer has been created! </span> </span>
 <span class="r-in"><span><span class="co"># by workflow</span></span></span>
 <span class="r-in"><span><span class="va">explainer_list</span> <span class="op">&lt;-</span> <span class="fu">explain_tidysdm</span><span class="op">(</span><span class="fu">tidysdm</span><span class="fu">::</span><span class="va"><a href="lacerta_ensemble.html">lacerta_ensemble</a></span>,</span></span>
@@ -229,12 +255,12 @@ use <code><a href="check_sdm_presence.html">check_sdm_presence()</a></code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; data              :  tibble converted into a data.frame </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; target variable   :  448  values </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predict function  :  yhat.workflow  will be used ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  No value for predict function target column. ( <span style="color: #BBBB00;"> default </span> )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  Predict function column set to:  1 ( <span style="color: #00BB00;"> OK </span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  package tidymodels , ver. 1.4.1 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  type set to  classification </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.2554356 , mean =  0.75 , max =  0.9838188  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.01618118 , mean =  0.25 , max =  0.7445644  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  -0.9838188 , mean =  -0.5 , max =  0.6967523  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  0.3032477 , mean =  1.5 , max =  1.983819  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;"> A new explainer has been created! </span> </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Unknown or uninitialised column: `pre`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Preparation of a new explainer is initiated</span>
@@ -243,12 +269,12 @@ use <code><a href="check_sdm_presence.html">check_sdm_presence()</a></code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; data              :  tibble converted into a data.frame </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; target variable   :  448  values </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predict function  :  yhat.workflow  will be used ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  No value for predict function target column. ( <span style="color: #BBBB00;"> default </span> )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  Predict function column set to:  1 ( <span style="color: #00BB00;"> OK </span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  package tidymodels , ver. 1.4.1 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  type set to  classification </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.07413889 , mean =  0.7493837 , max =  1  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0 , mean =  0.2506163 , max =  0.9258611  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  -1 , mean =  -0.4993837 , max =  0.9258611  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  0.07413889 , mean =  1.499384 , max =  2  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;"> A new explainer has been created! </span> </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Unknown or uninitialised column: `pre`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Preparation of a new explainer is initiated</span>
@@ -257,12 +283,12 @@ use <code><a href="check_sdm_presence.html">check_sdm_presence()</a></code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; data              :  tibble converted into a data.frame </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; target variable   :  448  values </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predict function  :  yhat.workflow  will be used ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  No value for predict function target column. ( <span style="color: #BBBB00;"> default </span> )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  Predict function column set to:  1 ( <span style="color: #00BB00;"> OK </span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  package tidymodels , ver. 1.4.1 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  type set to  classification </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.003044844 , mean =  0.7499699 , max =  0.9997277  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.0002722652 , mean =  0.2500301 , max =  0.9969552  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  -0.9997277 , mean =  -0.4999699 , max =  0.9969552  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  0.003044844 , mean =  1.49997 , max =  1.999728  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;"> A new explainer has been created! </span> </span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Unknown or uninitialised column: `pre`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Preparation of a new explainer is initiated</span>
@@ -271,12 +297,12 @@ use <code><a href="check_sdm_presence.html">check_sdm_presence()</a></code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; data              :  tibble converted into a data.frame </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; target variable   :  448  values </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predict function  :  yhat.workflow  will be used ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  No value for predict function target column. ( <span style="color: #BBBB00;"> default </span> )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  Predict function column set to:  1 ( <span style="color: #00BB00;"> OK </span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  package tidymodels , ver. 1.4.1 , task classification ( <span style="color: #BBBB00;"> default </span> ) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; model_info        :  type set to  classification </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.04779839 , mean =  0.5595578 , max =  0.9341279  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; predicted values  :  numerical, min =  0.06587215 , mean =  0.4404422 , max =  0.9522016  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residual function :  difference between y and yhat ( <span style="color: #BBBB00;"> default </span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  -0.9341279 , mean =  -0.3095578 , max =  0.9283669  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -&gt; residuals         :  numerical, min =  0.07163309 , mean =  1.309558 , max =  1.934128  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  <span style="color: #00BB00;"> A new explainer has been created! </span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
