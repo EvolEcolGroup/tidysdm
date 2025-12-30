@@ -29,8 +29,9 @@
 #' @export
 
 dist_pres_vs_bg <- function(
-    .data,
-    .col) {
+  .data,
+  .col
+) {
   if (requireNamespace("overlapping", quietly = TRUE)) {
     .col <- rlang::enquo(.col) %>%
       rlang::quo_get_expr() %>%

@@ -612,6 +612,7 @@ lacerta_ensemble
 
 ```{r echo=FALSE, results='hide', eval=create_sample_data}
 usethis::use_data(lacerta_ensemble, overwrite = TRUE)
+saveRDS(lacerta_models, "../tests/testthat/testdata/lacerta_models.rds")
 ```
 
 And visualise it

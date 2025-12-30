@@ -24,8 +24,9 @@
 #' @export
 
 plot_pres_vs_bg <- function(
-    .data,
-    .col) {
+  .data,
+  .col
+) {
   .col <- rlang::enquo(.col) %>%
     rlang::quo_get_expr() %>%
     rlang::as_string()

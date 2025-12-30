@@ -72,3 +72,30 @@ add_repeat.list <- function(x, rep, ...) {
   }
   x
 }
+
+#' @rdname add_repeat
+#' @export
+add_repeat.linear_stack <- function(x, rep, ...) {
+  # check that x is of class repeat_stack
+  if (!inherits(x, "repeat_stack")) {
+    stop("x must be a repeat_stack object")
+  }
+  # if the repeated ensemble is empty
+  if (nrow(x) == 0) {
+    attr(x, "best_metric") <- rep$model_metrics[[1]]$.metric[1]
+    new_rep <- "rep_01"
+  } else {
+    # check that the new rep is compatible
+    # check that metrics match
+    if (attr(x, "best_metric") != rep$model_metrics[[1]]$.metric[1]) {
+      stop(
+        "the best metric in the repeated stack ensemble differs ",
+        "from the repeat being added"
+      )
+    }
+    rep_number <- max(as.numeric(substr(x$rep_id, 5, nchar(x$rep_id)))) + 1
+    new_rep <- paste0("rep_", sprintf("%02d", rep_number))
+  }
+  rep <- tibble::tibble(rep_id = new_rep, .stack = list(rep))
+  x %>% dplyr::bind_rows(rep)
+}

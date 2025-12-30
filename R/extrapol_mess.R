@@ -198,7 +198,6 @@ extrapol_mess.SpatRasterDataset <- function(x, training, .col, ...) {
 }
 
 
-
 .messi <- function(p, v) {
   if (inherits(v, "data.frame")) {
     v <- v %>% dplyr::pull()

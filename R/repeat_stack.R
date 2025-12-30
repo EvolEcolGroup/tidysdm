@@ -17,10 +17,7 @@ repeat_stack <- function(...) {
   # a tibble with columns: name, workflow
   base_ensemble <- tibble::tibble(
     rep_id = character(),
-    stack = list(),
-    # tibble of metrics from the CV on the training dataset (coming from when
-    # the workflow was originally fit, potentially as part of a workflow_set)
-    metrics = list()
+    .stack = list()
   )
   base_ensemble <- structure(base_ensemble, class = c(
     "repeat_stack",
@@ -34,9 +31,6 @@ print.repeat_stack <- function(x, ...) {
 
   if (nrow(x) > 0) {
     rlang::inform(c("\nNumber of repeats:", length(unique(x$rep_id))))
-##    rlang::inform(c("\nMembers:", unique(x$wflow_id)))
-    # all simple_ensembles need to have the same metrics
-    rlang::inform(c("\nAvailable metrics:", attr(x, "metrics")))
     rlang::inform(c("\nMetric used to tune workflows:", attr(x, "best_metric")))
   } else {
     rlang::inform("\nThis object is empty; add models with `add_stacks()`")
@@ -47,6 +41,3 @@ print.repeat_stack <- function(x, ...) {
 summary.repeat_stack <- function(object, ...) {
   print(object)
 }
-
-
-## TODO we need to add a function to add stacks to the repeat_stack object

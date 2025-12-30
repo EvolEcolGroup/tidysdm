@@ -41,7 +41,6 @@ test_that("we can explain tidysdm objects", {
 })
 
 
-
 test_that("explain_tidysdm works correctly with recipes with steps", {
   # we catch the problem of data not being explicitly provided if we have steps
   # in recipe

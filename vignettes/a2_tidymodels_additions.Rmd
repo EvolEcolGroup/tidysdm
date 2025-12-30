@@ -94,8 +94,6 @@ profile_list <- lapply(explainer_list, model_profile,
 plot(profile_list)
 ```
 
-
-
 # The initial split
 
 The standard approach in `tidymodels` is to make an initial split of the data
@@ -205,7 +203,7 @@ lacerta_models <-
   ) %>%
   # tweak controls to store information needed later to create the ensemble
   # note that we use the bayes version as we will use a Bayes search (see later)
-  option_add(control = stacks::control_stack_bayes())
+  option_add(control = control_ensemble_bayes())
 ```
 
 
@@ -213,9 +211,8 @@ We can now use the block CV folds to
 tune and assess the models. Note that there are multiple tuning approaches,
 besides the standard grid method. Here we will use `tune_bayes` from the
 `tune` package (see its
-help page to see how a Gaussian Process model is used to choose parameter
+help page on how a Gaussian Process model is used to choose parameter
 combinations).
-
 
 This tuning method (as opposed to use a standard grid) does not allow for
 hyper-parameters with unknown limits, but

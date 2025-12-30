@@ -5,6 +5,7 @@
 \alias{add_repeat.default}
 \alias{add_repeat.simple_ensemble}
 \alias{add_repeat.list}
+\alias{add_repeat.linear_stack}
 \title{Add repeat(s) to a repeated ensemble}
 \usage{
 add_repeat(x, rep, ...)
@@ -14,6 +15,8 @@ add_repeat(x, rep, ...)
 \method{add_repeat}{simple_ensemble}(x, rep, ...)
 
 \method{add_repeat}{list}(x, rep, ...)
+
+\method{add_repeat}{linear_stack}(x, rep, ...)
 }
 \arguments{
 \item{x}{a \link{repeat_ensemble} to which repeat(s) will be added}

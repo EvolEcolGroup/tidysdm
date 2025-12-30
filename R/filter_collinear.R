@@ -156,7 +156,6 @@ filter_collinear.SpatRaster <-
   }
 
 
-
 #' @rdname filter_collinear
 #' @export
 filter_collinear.data.frame <-
