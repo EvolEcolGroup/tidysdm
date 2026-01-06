@@ -268,7 +268,10 @@ lacerta_stack <-
   # add candidate members
   add_candidates(lacerta_models) %>%
   # determine how to combine their predictions
-  blend_predictions() %>%
+  # the stacking penalty is selected to maximize the continuous Boyce index
+  blend_predictions(
+    metric = yardstick::metric_set(tidysdm::boyce_cont)
+  ) %>%
   # fit candidates with non-zero weights (i.e. non-zero stacking coefficients)
   fit_members()
 
