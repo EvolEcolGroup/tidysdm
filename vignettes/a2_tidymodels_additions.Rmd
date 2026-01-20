@@ -6,7 +6,6 @@ output:
     toc_depth: 2
     toc_float: false
 
-#output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{Examples of additional tidymodels features}
   %\VignetteEngine{knitr::rmarkdown}
@@ -142,6 +141,12 @@ climate_present <- terra::readRDS(
     package = "tidysdm"
   )
 )
+
+# project climate layers
+iberia_proj4 <-
+  "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+climate_present <- terra::project(climate_present, y = iberia_proj4)
+
 # first we add a topography variable to the climate data
 climate_present$topography <- climate_present$altitude
 climate_present$topography <- terra::classify(climate_present$topography,
@@ -152,16 +157,16 @@ climate_present$topography <- terra::classify(climate_present$topography,
 library(terra)
 levels(climate_present$topography) <-
   data.frame(ID = c(0, 1, 2), topography = c("plains", "hills", "mountains"))
+
 # now we can predict
 predict_factor <- predict_raster(lacerta_ensemble, climate_present)
+
 # and plot
 ggplot() +
   geom_spatraster(data = predict_factor, aes(fill = mean)) +
   scale_fill_terrain_c() +
   geom_sf(data = lacerta_thin %>% filter(class == "presence"))
 ```
-
-TODO project properly
 
 ```{r cleanup_multilevel_factors, include=FALSE}
 # Clean up objects created in the "Using multi-level factors as predictors"
@@ -224,7 +229,7 @@ plot(pdp_bio05)
 
 There are many other functions in DALEX that can be applied to the explainer to
 further explore the behaviour of the model; see several tutorial on
-https://modeloriented.github.io/DALEX/
+https://modeloriented.github.io/DALEX/ for more details.
 
 It is also possible to explore the individual models that make up the ensemble:
 ```{r}
@@ -539,6 +544,11 @@ climate_present <- terra::readRDS(
   )
 )
 
+# project climate layers
+iberia_proj4 <-
+  "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+climate_present <- terra::project(climate_present, y = iberia_proj4)
+
 # predict using only the best models
 prediction_present_boyce <- predict_raster(lacerta_ensemble, climate_present,
   metric_thresh = c("boyce_cont", 0.5),
@@ -551,8 +561,6 @@ ggplot() +
   scale_fill_terrain_c() +
   geom_sf(data = lacerta_thin %>% filter(class == "presence"))
 ```
-
-TODO project properly
 
 # Stack ensembles
 
@@ -567,7 +575,7 @@ exploit complementary strengths across model configurations.
 
 ```{r build_stack, fig.width=6, fig.height=4}
 library(stacks)
-set.seed(1003)
+set.seed(1005)
 lacerta_stack <-
   # initialize the stack
   stacks() %>%
@@ -615,12 +623,14 @@ climate_present <- terra::readRDS(
     package = "tidysdm"
   )
 )
+
+# project climate layers
+iberia_proj4 <-
+  "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+climate_present <- terra::project(climate_present, y = iberia_proj4)
 ```
 
 ```{r echo=FALSE, results='hide', eval=!download_data}
-climate_present <- terra::readRDS(
-  system.file("extdata/lacerta_climate_present_10m.rds", package = "tidysdm")
-)
 climate_vars <- lacerta_rec$var_info %>%
   filter(role == "predictor") %>%
   pull(variable)
