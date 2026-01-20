@@ -16,7 +16,9 @@ test_that("add_repeat to empty repeat ensemble", {
   expect_warning(
     test_stack_1 <- stacks::stacks() %>%
       stacks::add_candidates(lacerta_models) %>%
-      stacks::blend_predictions() %>%
+      stacks::blend_predictions(
+        metric = sdm_metric_set()
+      ) %>%
       stacks:::fit_members()
   )
 

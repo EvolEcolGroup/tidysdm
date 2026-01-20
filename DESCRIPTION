@@ -7,6 +7,7 @@ Authors@R: c(
     person("Andrea Vittorio", "Pozzi", role = "aut"),
     person("Eleanor M.L.","Scerri", role = "aut"),
     person("Ben","Tupper", role = "ctb"),
+    person("Ondrej","Pelanek", role = "ctb"),
     person("Andrea", "Manica", email = "am315@cam.ac.uk", role = c("aut", "cre")))
 Description: Fit species distribution models (SDMs) using the 'tidymodels' framework, 
   which provides a standardised interface to define models and process their 
