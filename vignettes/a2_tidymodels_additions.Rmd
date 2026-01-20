@@ -5,7 +5,7 @@ output:
     toc: true
     toc_depth: 2
     toc_float: false
-    
+
 #output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{Examples of additional tidymodels features}
@@ -30,15 +30,19 @@ download_data <- FALSE
 
 In this vignette, we illustrate how a number of features from `tidymodels` can
 be used to enhance a conventional SDM pipeline. If you’re new to `tidymodels`;
-there are a number of excellent tutorials (both introductory and advanced) on its dedicated [website](https://www.tidymodels.org/).
-We reuse the example on the Iberian lizard from the 
-[`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article. Each subsection is written to be self-contained, so you can read and run them independently.
+there are a number of excellent tutorials (both introductory and advanced) on
+its dedicated [website](https://www.tidymodels.org/). We reuse the example on
+the Iberian lizard from the [`tidysdm`
+overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html)
+article. Each subsection is written to be self-contained, so you can read and
+run them independently.
 
 # Using multi-level factors as predictors
 
-Most machine learning algorithms do not natively use multilevel factors as predictors.
-The solution is to create dummy variables, which are binary variables that represent
-the levels of the factor. In `tidymodels`, this is done using the `step_dummy` function.
+Most machine learning algorithms do not natively use multilevel factors as
+predictors. The solution is to create dummy variables, which are binary
+variables that represent the levels of the factor. In `tidymodels`, this is
+done using the `step_dummy` function.
 
 Let's create a factor variable with 3 levels based on altitude.
 ```{r}
@@ -56,7 +60,8 @@ lacerta_thin$topography <- cut(lacerta_thin$altitude,
 table(lacerta_thin$topography)
 ```
 
-We then create the recipe by adding a step to create dummy variables for the `topography` variable.
+We then create the recipe by adding a step to create dummy variables for the
+`topography` variable.
 ```{r}
 # subset to variable of interest
 lacerta_thin <- lacerta_thin %>% select(
@@ -74,11 +79,11 @@ Let's us see what this does:
 lacerta_prep <- prep(lacerta_rec)
 summary(lacerta_prep)
 ```
-We have added two "derived" variables, *topography_hills* and *topography_mountains*, which are binary
-variables that 
-allow us to code topography (with plains
-being used as the reference level, which is coded by both hills and mountains being 0 for a given location).
-We can look at the first few rows of the data to see the new variables by baking the recipe:
+We have added two "derived" variables, *topography_hills* and
+*topography_mountains*, which are binary variables that allow us to code
+topography (with plains being used as the reference level, which is coded by
+both hills and mountains being 0 for a given location). We can look at the
+first few rows of the data to see the new variables by baking the recipe:
 
 ```{r}
 lacerta_bake <- bake(lacerta_prep, new_data = lacerta_thin)
@@ -117,17 +122,19 @@ lacerta_ensemble <- simple_ensemble() %>%
   add_member(lacerta_models, metric = "boyce_cont")
 ```
 
-We can now verify that the dummy variables were used by extracting the model fit from
-one of the models in the ensemble:
+We can now verify that the dummy variables were used by extracting the model
+fit from one of the models in the ensemble:
 ```{r}
 lacerta_ensemble$workflow[[1]] %>% extract_fit_parsnip()
 ```
 
-We can see that we have coefficients for *topography_hills* and *topography_mountains*.
+We can see that we have coefficients for *topography_hills* and
+*topography_mountains*.
 
-Let us now predict the presence of the lizard in the Iberian Peninsula using the ensemble. Note that,
-for `predict_raster()` to work, the name and levels for a categorical variable need to match with those used
-when training the models (i.e. in the recipe with `step_dummy()`):
+Let us now predict the presence of the lizard in the Iberian Peninsula using
+the ensemble. Note that, for `predict_raster()` to work, the name and levels
+for a categorical variable need to match with those used when training the
+models (i.e. in the recipe with `step_dummy()`):
 
 ```{r add_levels, fig.width=6, fig.height=4}
 climate_present <- terra::readRDS(
@@ -157,7 +164,8 @@ ggplot() +
 TODO project properly
 
 ```{r cleanup_multilevel_factors, include=FALSE}
-# Clean up objects created in the "Using multi-level factors as predictors" section
+# Clean up objects created in the "Using multi-level factors as predictors"
+# section
 rm(
   lacerta_thin,
   lacerta_rec,
@@ -173,14 +181,17 @@ rm(
 
 # Exploring models with `DALEX`
 
-An issue with machine learning algorithms is that it is not easy to understand the
-role of different variables in giving the final prediction. A number of packages
-have been created to explore and explain the behaviour of ML algorithms, such as those
-used in `tidysdm`. In the [`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article, we illustrated how to use `recipes` to create profiles.
+An issue with machine learning algorithms is that it is not easy to understand
+the role of different variables in giving the final prediction. A number of
+packages have been created to explore and explain the behaviour of ML
+algorithms, such as those used in `tidysdm`. In the [`tidysdm`
+overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html)
+article, we illustrated how to use `recipes` to create profiles.
 
-Here we demonstrate how to use [DALEX](https://modeloriented.github.io/DALEX/), an excellent package
-that has methods to deal with `tidymodels`. `tidysdm` contains additional functions that
-allow use to use the DALEX functions directly on `tidysdm` ensembles. 
+Here we demonstrate how to use [DALEX](https://modeloriented.github.io/DALEX/),
+an excellent package that has methods to deal with `tidymodels`. `tidysdm`
+contains additional functions that allow use to use the DALEX functions
+directly on `tidysdm` ensembles.
 
 We will use a simple ensemble that we built in the overview vignette.
 
@@ -191,12 +202,13 @@ lacerta_ensemble
 
 The first step in DALEX is to create an explainer object, which can then be
 queried by different functions in the package, to turn the explainer into an
-explanation (following the DALEX lingo). As a first step, we use the
-custom function `explain_tidysdm` to generate our explainer:
+explanation (following the DALEX lingo). As a first step, we use the custom
+function `explain_tidysdm` to generate our explainer:
 ```{r}
 explainer_lacerta_ens <- explain_tidysdm(lacerta_ensemble)
 ```
-Now that we have our explainer, we can explore variable importance for the ensemble:
+Now that we have our explainer, we can explore variable importance for the
+ensemble:
 
 ```{r vip, fig.width=6, fig.height=4}
 library(DALEX)
@@ -211,8 +223,8 @@ plot(pdp_bio05)
 ```
 
 There are many other functions in DALEX that can be applied to the explainer to
-further explore the behaviour of the model; see
-several tutorial on https://modeloriented.github.io/DALEX/
+further explore the behaviour of the model; see several tutorial on
+https://modeloriented.github.io/DALEX/
 
 It is also possible to explore the individual models that make up the ensemble:
 ```{r}
@@ -243,7 +255,11 @@ rm(
 
 # Different recipes for certain models
 
-Some model types (e.g. GLMs and SVMs) can be sensitive to multicollinearity among predictors, while others (notably random forests) are generally more robust to correlated inputs. In this section, we create two separate recipes: one that keeps all predictors, and another that retains only a reduced set of weakly correlated variables.
+Some model types (e.g. GLMs and SVMs) can be sensitive to multicollinearity
+among predictors, while others (notably random forests) are generally more
+robust to correlated inputs. In this section, we create two separate recipes:
+one that keeps all predictors, and another that retains only a reduced set of
+weakly correlated variables.
 
 Load the data:
 
@@ -255,7 +271,8 @@ lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
 ))
 ```
 
-We then create two recipes: one that keeps all variables, and another that removes highly correlated ones.
+We then create two recipes: one that keeps all variables, and another that
+removes highly correlated ones.
 
 ```{r two_recipes}
 lacerta_rec_all <- recipe(lacerta_thin, formula = class ~ .)
@@ -269,11 +286,11 @@ lacerta_rec_uncor <- lacerta_rec_all %>%
 lacerta_rec_uncor
 ```
 
-And now use these two recipes in a `workflowset` (we will keep it small for computational time),
-selecting the appropriate recipe for each model. We will include a model (polynomial
-support vector machines, or SVM) which does not have a wrapper in `tidysdm`
-for creating a model specification. However, we can use a standard model spec from
-`yardstick`:
+And now use these two recipes in a `workflowset` (we will keep it small for
+computational time), selecting the appropriate recipe for each model. We will
+include a model (polynomial support vector machines, or SVM) which does not
+have a wrapper in `tidysdm` for creating a model specification. However, we can
+use a standard model spec from `yardstick`:
 
 ```{r workflow_set_different_recipes}
 lacerta_models <-
@@ -306,19 +323,17 @@ lacerta_models <-
 ```
 
 
-We can now use the block CV folds to
-tune and assess the models. Note that there are multiple tuning approaches,
-besides the standard grid method. Here we will use `tune_bayes` from the
-`tune` package (see its
-help page to see how a Gaussian Process model is used to choose parameter
-combinations).
+We can now use the block CV folds to tune and assess the models. Note that
+there are multiple tuning approaches, besides the standard grid method. Here we
+will use `tune_bayes` from the `tune` package (see its help page to see how a
+Gaussian Process model is used to choose parameter combinations).
 
 
 This tuning method (as opposed to use a standard grid) does not allow for
-hyper-parameters with unknown limits, but
-`mtry` for random forest is undefined as its upper range depends on the number of 
-variables in the dataset. So, before tuning, we need to finalise `mtry` by 
-informing the set dials with the actual data:
+hyper-parameters with unknown limits, but `mtry` for random forest is undefined
+as its upper range depends on the number of variables in the dataset. So,
+before tuning, we need to finalise `mtry` by informing the set dials with the
+actual data:
 
 ```{r finalize_mtry}
 set.seed(100)
@@ -372,10 +387,19 @@ rm(list = intersect(objs, ls()))
 
 # The initial split {#initial-split}
 
-The standard `tidymodels` workflow begins by splitting the data into a **training set** (used to fit and tune models) and an **independent testing set** (held out for final evaluation). This step is essential for getting an honest estimate of predictive performance of any SDM, yet it has often been omitted in traditional SDM practice. This is largely for historical reasons: SDM datasets were frequently small, and holding data back for testing felt too costly. In this section, we demonstrate a robust approach by holding out 20% of the data (1/5) for testing and use the remaining 80% for training.
+The standard `tidymodels` workflow begins by splitting the data into a
+**training set** (used to fit and tune models) and an **independent testing
+set** (held out for final evaluation). This step is essential for getting an
+honest estimate of predictive performance of any SDM, yet it has often been
+omitted in traditional SDM practice. This is largely for historical reasons:
+SDM datasets were frequently small, and holding data back for testing felt too
+costly. In this section, we demonstrate a robust approach by holding out 20% of
+the data (1/5) for testing and use the remaining 80% for training.
 
-We start by loading a set of presences and absences and their associated climate,
-analogous to the one that we generated in the [`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article:
+We start by loading a set of presences and absences and their associated
+climate, analogous to the one that we generated in the [`tidysdm`
+overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html)
+article:
 
 ```{r load_data}
 library(tidysdm)
@@ -415,13 +439,13 @@ And confirm that we have the data correctly formatted with:
 lacerta_thin %>% check_sdm_presence(class)
 ```
 
-We can now extract the training set from our `lacerta_initial` split, and sample
-folds to set up cross validation (note that we set the `cellsize` and `offset`
-based on the full dataset, `lacerta_thin`; this allows us to use the same grid 
-we used for the `initial_split`). In this example, we also have add a very small number
-to the offset to avoid an error in the `spatial_block_cv` function arising from
-some points falling on the boundary of the grid cells). This is often not necessary,
-so only introduce this if you encounter an error.
+We can now extract the training set from our `lacerta_initial` split, and
+sample folds to set up cross validation (note that we set the `cellsize` and
+`offset` based on the full dataset, `lacerta_thin`; this allows us to use the
+same grid we used for the `initial_split`). In this example, we also have add a
+very small number to the offset to avoid an error in the `spatial_block_cv`
+function arising from some points falling on the boundary of the grid cells).
+This is often not necessary, so only introduce this if you encounter an error.
 
 ```{r training_cv, fig.width=6, fig.height=4}
 set.seed(1005)
@@ -439,7 +463,9 @@ And check the balance in the dataset:
 check_splits_balance(lacerta_cv, class)
 ```
 
-Same as in the [`tidysdm` overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html) article we can now build a `workflow_set` of different models:
+Same as in the [`tidysdm`
+overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html)
+article we can now build a `workflow_set` of different models:
 
 ```{r workflow_set_initial_split}
 lacerta_models <-
@@ -477,7 +503,8 @@ lacerta_models <-
 autoplot(lacerta_models)
 ```
 
-And create an ensemble, selecting the best set of parameters for each model using Boyce continuous index as our metric:
+And create an ensemble, selecting the best set of parameters for each model
+using Boyce continuous index as our metric:
 
 ```{r build_ensemble, fig.width=6, fig.height=4}
 lacerta_ensemble <- simple_ensemble() %>%
@@ -529,11 +556,18 @@ TODO project properly
 
 # Stack ensembles
 
-Now that we have an explicit training/testing split (see the [previous section](#initial-split) section), we can go beyond a simple ensemble that keeps only the single best version of each model type. Instead, we can build a stack ensemble using the `stacks` package. Stacking fits a meta-learner that learns how to combine predictions from multiple candidate models, including multiple tuned versions of the same algorithm with different hyper-parameters, so that the final ensemble can exploit complementary strengths across model configurations.
+Now that we have an explicit training/testing split (see the [previous
+section](#initial-split) section), we can go beyond a simple ensemble that
+keeps only the single best configuration of each model type and averages their
+predictions. Instead, we can build a stack ensemble using the `stacks` package.
+Stacking fits a meta-learner that learns how to combine predictions from
+multiple candidate models, including multiple tuned versions of the same
+algorithm with different hyper-parameters, so that the final ensemble can
+exploit complementary strengths across model configurations.
 
 ```{r build_stack, fig.width=6, fig.height=4}
 library(stacks)
-set.seed(1005)
+set.seed(1003)
 lacerta_stack <-
   # initialize the stack
   stacks() %>%
@@ -541,7 +575,8 @@ lacerta_stack <-
   add_candidates(lacerta_models) %>%
   # determine how to combine their predictions
   blend_predictions(
-    metric = sdm_metric_set() # use our SDM metrics for calculating stacking coefficients
+    metric = sdm_metric_set() # use our SDM metrics for calculating stacking
+    # coefficients
   ) %>%
   # fit candidates with non-zero weights (i.e. non-zero stacking coefficients)
   fit_members()
@@ -549,10 +584,11 @@ lacerta_stack <-
 autoplot(lacerta_stack, type = "weights")
 ```
 
-We can see that two versions of the random forest and one of SVM were selected;
-the stacking coefficients give an indication of the weight each model carries
-within the ensemble. We can now use the ensemble to make predictions about the
-testing data:
+In this example, one random forest variant and one SVM variant were selected
+(though more can be, depending on tuning and the data). The stacking
+coefficients indicate how much weight each selected model contributes to the
+final ensemble prediction. We can now use the ensemble to make predictions
+about the testing data:
 
 ```{r predict_test_stack}
 lacerta_testing <- testing(lacerta_initial)
@@ -563,14 +599,15 @@ lacerta_test_pred <-
 ```
 
 And look at the goodness of fit using some commonly used sdm metrics. Note that
-`sdm_metric_set` is first invoked to generate a function (with empty `()`) that is then used
-on the data.
+`sdm_metric_set` is first invoked to generate a function (with empty `()`) that
+is then used on the data.
 
 ```{r assess_test_stack}
 sdm_metric_set()(data = lacerta_test_pred, truth = class, .pred_presence)
 ```
 
-We can now make predictions with this stacked ensemble. We start by extracting the climate for the variables of interest
+We can now make predictions with this stacked ensemble. We start by extracting
+the climate for the variables of interest:
 
 ```{r eval=download_data}
 climate_present <- terra::readRDS(
@@ -591,7 +628,7 @@ if (!all(climate_vars %in% names(climate_present))) {
   stop("mismatched variables in the raster")
 }
 ```
-
+And predict the presence of the lizard using the stacked ensemble:
 
 ```{r plot_present, fig.width=6, fig.height=4}
 prediction_present <- predict_raster(lacerta_stack, climate_present,
