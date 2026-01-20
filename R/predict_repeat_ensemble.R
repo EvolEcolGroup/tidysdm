@@ -33,26 +33,70 @@
 #' @export
 #' @keywords predict
 
-predict.repeat_ensemble <-
-  function(object,
-           new_data,
-           type = "prob",
-           fun = "mean",
-           metric_thresh = NULL,
-           class_thresh = NULL,
-           members = FALSE,
-           ...) {
-    # we change the names of the workflows to combine with the repeat ids
-    object$workflow_id <- paste(object$rep_id, object$wflow_id, sep = ".")
-    class(object)[1] <- "simple_ensemble"
-    # now predict the object as if it was a simple ensemble
+# predict.repeat_ensemble <-
+#   function(object,
+#            new_data,
+#            type = "prob",
+#            fun = "mean",
+#            metric_thresh = NULL,
+#            class_thresh = NULL,
+#            members = FALSE,
+#            ...) {
+#     # we change the names of the workflows to combine with the repeat ids
+#     object$workflow_id <- paste(object$rep_id, object$wflow_id, sep = ".")
+#     class(object)[1] <- "simple_ensemble"
+#     # now predict the object as if it was a simple ensemble
+#     stats::predict(
+#       object = object,
+#       new_data = new_data,
+#       type = type,
+#       fun = fun,
+#       metric_thresh = metric_thresh,
+#       class_thresh = class_thresh,
+#       members = members
+#     )
+#   }
+
+
+predict.repeat_ensemble <- function(object,
+                                    new_data,
+                                    type = "prob",
+                                    fun = "mean",
+                                    metric_thresh = NULL,
+                                    class_thresh = NULL,
+                                    members = FALSE,
+                                    ...) {
+  # store unique repeat ids
+  rep_ids <- unique(object$rep_id)
+  
+  # predict within each repeat (aggregate members within repeat)
+  pred_per_rep <- lapply(rep_ids, function(rep_id) {
+    obj_rep <- object[object$rep_id == rep_id, , drop = FALSE]
+    
+    # reuse simple_ensemble predict method
+    class(obj_rep)[1] <- "simple_ensemble"
+    
     stats::predict(
-      object = object,
+      object = obj_rep,
       new_data = new_data,
-      type = type,
+      type = "prob",
       fun = fun,
       metric_thresh = metric_thresh,
       class_thresh = class_thresh,
-      members = members
+      ...
     )
-  }
+  })
+  
+  # set names of the list to the unique repeat ids
+  names(pred_per_rep) <- rep_ids
+  
+  # average repeat level predictions across repeats (equal weight per repeat)
+  out <- lapply(fun, function(col) {
+    mat <- do.call(cbind, lapply(pred_per_rep, function(x) { x[[col]] }))
+    rowMeans(mat, na.rm = TRUE)
+  })
+  names(out) <- fun
+  
+  as.data.frame(out)
+}
+
