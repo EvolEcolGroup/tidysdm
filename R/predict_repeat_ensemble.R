@@ -68,14 +68,14 @@ predict.repeat_ensemble <- function(object,
                                     ...) {
   # store unique repeat ids
   rep_ids <- unique(object$rep_id)
-  
+
   # predict within each repeat (aggregate members within repeat)
   pred_per_rep <- lapply(rep_ids, function(rep_id) {
     obj_rep <- object[object$rep_id == rep_id, , drop = FALSE]
-    
+
     # reuse simple_ensemble predict method
     class(obj_rep)[1] <- "simple_ensemble"
-    
+
     stats::predict(
       object = obj_rep,
       new_data = new_data,
@@ -86,17 +86,47 @@ predict.repeat_ensemble <- function(object,
       ...
     )
   })
-  
+
   # set names of the list to the unique repeat ids
   names(pred_per_rep) <- rep_ids
-  
+
   # average repeat level predictions across repeats (equal weight per repeat)
   out <- lapply(fun, function(col) {
     mat <- do.call(cbind, lapply(pred_per_rep, function(x) { x[[col]] }))
     rowMeans(mat, na.rm = TRUE)
   })
   names(out) <- fun
-  
-  as.data.frame(out)
+
+  return(as.data.frame(out))
 }
+
+
+
+#' Predict for a repeat stack
+predict.repeat_stack <- function(object, 
+                                 new_data, 
+                                 fun = "mean", 
+                                 ...) {
+
+  pred_per_rep <- lapply(object$.stack, function(s) {
+    p <- stats::predict(s, new_data = new_data, type = "prob", ...)
+    p[[".pred_presence"]]  # probability of "presence"
+  })
+  
+  mat <- do.call(cbind, pred_per_rep)
+  
+  out <- lapply(fun, function(f) {
+    if (f == "mean") {
+      rowMeans(mat, na.rm = TRUE)
+    } else if (f == "median") {
+      apply(mat, 1, stats::median, na.rm = TRUE)
+    } else {
+      stop("fun must be 'mean' and/or 'median'")
+    }
+  })
+  
+  names(out) <- fun
+  return(as.data.frame(out))
+}
+
 
