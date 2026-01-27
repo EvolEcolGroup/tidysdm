@@ -4,7 +4,6 @@ output:
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 2
-    toc_float: false
 
 vignette: >
   %\VignetteIndexEntry{Examples of additional tidymodels features}
@@ -135,7 +134,7 @@ the ensemble. Note that, for `predict_raster()` to work, the name and levels
 for a categorical variable need to match with those used when training the
 models (i.e. in the recipe with `step_dummy()`):
 
-```{r add_levels, fig.width=6, fig.height=4}
+```{r add_levels, fig.width=7, fig.height=4}
 climate_present <- terra::readRDS(
   system.file("extdata/lacerta_climate_present_10m.rds",
     package = "tidysdm"
@@ -215,14 +214,14 @@ explainer_lacerta_ens <- explain_tidysdm(lacerta_ensemble)
 Now that we have our explainer, we can explore variable importance for the
 ensemble:
 
-```{r vip, fig.width=6, fig.height=4}
+```{r vip, fig.width=7, fig.height=4}
 library(DALEX)
 vip_ensemble <- model_parts(explainer = explainer_lacerta_ens)
 plot(vip_ensemble)
 ```
 
 Or generate partial dependency plots for a given variable (e.g. bio05):
-```{r pdp, fig.width=6, fig.height=4}
+```{r pdp, fig.width=7, fig.height=4}
 pdp_bio05 <- model_profile(explainer_lacerta_ens, N = 500, variables = "bio05")
 plot(pdp_bio05)
 ```
@@ -239,7 +238,7 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
 The resulting list can be then used to build lists of explanations, which can
 then be plotted.
 
-```{r profile, fig.width=6, fig.height=4}
+```{r profile, fig.width=7, fig.height=4}
 profile_list <- lapply(explainer_list, model_profile,
   N = 500,
   variables = "bio05"
@@ -373,7 +372,7 @@ lacerta_models <-
 
 We can have a look at the performance of our models with:
 
-```{r autoplot_models, fig.width=6, fig.height=4}
+```{r autoplot_models, fig.width=7, fig.height=4}
 autoplot(lacerta_models)
 ```
 
@@ -396,10 +395,18 @@ The standard `tidymodels` workflow begins by splitting the data into a
 **training set** (used to fit and tune models) and an **independent testing
 set** (held out for final evaluation). This step is essential for getting an
 honest estimate of predictive performance of any SDM, yet it has often been
-omitted in traditional SDM practice. This is largely for historical reasons:
-SDM datasets were frequently small, and holding data back for testing felt too
-costly. In this section, we demonstrate a robust approach by holding out 20% of
-the data (1/5) for testing and use the remaining 80% for training.
+omitted in traditional SDM practice, where model assessment has instead relied
+primarily on (spatial) cross-validation. This is largely for historical
+reasons: SDM datasets were frequently small, and holding data back for testing
+felt too costly.
+
+In this section, we demonstrate a robust approach by holding out 20% of the
+data (1/5) for testing and using the remaining 80% for training. While we
+strongly recommend this approach whenever the data allow, we acknowledge that
+it can be data-hungry and may not always be feasible for smaller datasets. We
+therefore recommend exploring multiple random seeds for the initial split to
+assess the sensitivity of results to a particular partition, and to avoid
+splitting the data when results are highly sensitive and unstable.
 
 We start by loading a set of presences and absences and their associated
 climate, analogous to the one that we generated in the [`tidysdm`
@@ -418,7 +425,7 @@ lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
 We then use `spatial_initial_split` to do the split, using a `spatial_block_cv`
 scheme to partition the data:
 
-```{r initial_split, fig.width=6, fig.height=4}
+```{r initial_split, fig.width=7, fig.height=4}
 set.seed(1005)
 lacerta_initial <- spatial_initial_split(lacerta_thin,
   prop = 1 / 5, spatial_block_cv
@@ -453,7 +460,7 @@ add a very small number to the offset to avoid an error in the
 the grid cells). This is often not necessary, so only introduce this if you
 encounter an error.
 
-```{r training_cv, fig.width=6, fig.height=4}
+```{r training_cv, fig.width=7, fig.height=4}
 set.seed(1005)
 lacerta_training <- training(lacerta_initial)
 lacerta_cv <- spatial_block_cv(lacerta_training,
@@ -497,7 +504,7 @@ lacerta_models <-
 
 And use the block CV folds to tune and assess the models:
 
-```{r tune_grid_initial_split, fig.width=6, fig.height=4}
+```{r tune_grid_initial_split, fig.width=7, fig.height=4}
 set.seed(1234567)
 lacerta_models <-
   lacerta_models %>%
@@ -512,7 +519,7 @@ autoplot(lacerta_models)
 And create an ensemble, selecting the best set of parameters for each model
 using Boyce continuous index as our metric:
 
-```{r build_ensemble, fig.width=6, fig.height=4}
+```{r build_ensemble, fig.width=7, fig.height=4}
 lacerta_ensemble <- simple_ensemble() %>%
   add_member(lacerta_models, metric = "boyce_cont")
 
@@ -537,7 +544,7 @@ sdm_metric_set()(data = lacerta_test_pred, truth = class, mean)
 
 We can now make predictions with this ensemble using the best models.
 
-```{r plot_present_best, fig.width=6, fig.height=4}
+```{r plot_present_best, fig.width=7, fig.height=4}
 # load climate data
 climate_present <- terra::readRDS(
   system.file("extdata/lacerta_climate_present_10m.rds",
@@ -566,15 +573,21 @@ ggplot() +
 # Stack ensembles
 
 Now that we have an explicit training/testing split (see the [previous
-section](#initial-split) section if you don't), we can go beyond a simple
-ensemble that keeps only the single best configuration of each model type and
-averages their predictions. Instead, we can build a stack ensemble using the
-`stacks` package. Stacking fits a meta-learner that learns how to optimally
-weight predictions from multiple candidate models, including multiple tuned
-versions of the same algorithm with different hyper-parameters, so that the
-final ensemble can exploit complementary strengths across model configurations.
+section](#initial-split) section), we can go beyond a simple ensemble that
+keeps only the single best configuration of each model type and averages their
+predictions. Instead, we can build a stack ensemble using the `stacks` package.
+Stacking fits a meta-learner that learns how to optimally weight predictions
+from multiple candidate models, including multiple tuned versions of the same
+algorithm with different hyper-parameters, so that the final ensemble can
+exploit complementary strengths across model configurations.
 
-```{r build_stack, fig.width=6, fig.height=4}
+An explicit testing split is not strictly required for stacking, since model
+performance can be estimated using cross-validation. However, an independent
+test set is recommended whenever an unbiased estimate of the final model’s
+predictive performance is required. This is particularly important for stacked
+ensembles, which can be prone to overfitting.
+
+```{r build_stack, fig.width=7, fig.height=4}
 library(stacks)
 set.seed(1005)
 lacerta_stack <-
@@ -641,7 +654,7 @@ if (!all(climate_vars %in% names(climate_present))) {
 ```
 And predict the presence of the lizard using the stacked ensemble:
 
-```{r plot_present, fig.width=6, fig.height=4}
+```{r plot_present, fig.width=7, fig.height=4}
 prediction_present <- predict_raster(lacerta_stack, climate_present,
   type = "prob"
 )
