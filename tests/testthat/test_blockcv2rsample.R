@@ -7,6 +7,13 @@ test_that("blockcv2rsample conversion", {
     package = "blockCV"
   ))
   pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845)
+  pa_data$occ <- as.factor(pa_data$occ)
+  path <- system.file("extdata/au/bio_5.tif", package = "blockCV")
+  covar <- terra::rast(path)
+
+  pa_data <- pa_data %>% select(geometry, occ) %>%
+    bind_cols(terra::extract(covar, pa_data, ID = FALSE))
+
   sb1 <- cv_spatial(
     x = pa_data,
     column = "occ", # the response column (binary or multi-class)
@@ -48,11 +55,9 @@ test_that("blockcv2rsample conversion", {
     report = FALSE
   )
   ec_rsample <- blockcv2rsample(ec, pa_data)
-  path <- system.file("extdata/au/bio_5.tif", package = "blockCV")
   expect_true(inherits(ec_rsample, "spatial_rset"))
 
   # give error for unsuppored mode in blockcv
-  covar <- terra::rast(path)
   nndm <- cv_nndm(
     x = pa_data,
     column = "occ", # optional
@@ -74,4 +79,47 @@ test_that("blockcv2rsample conversion", {
     blockcv2rsample(sb1, pa_data_spd),
     "data is a `SpatialPointsDataFrame`; this object type is deprecated"
   )
+
+  # check blockcv2rsample object works with workflow_map
+
+  # create example recipe
+  example_rec <- recipe(pa_data, formula = occ ~ .)
+
+  # create test model workflow
+  example_models <-
+    # create the workflow_set
+    workflow_set(
+      preproc = list(default = example_rec),
+      models = list(
+        # rf specs with tuning
+        rf = sdm_spec_rf(),
+        # boosted tree model (gbm) specs with tuning
+        gbm = sdm_spec_boost_tree(),
+        # maxent specs with tuning
+        maxent = sdm_spec_maxent()
+      ),
+      # make all combinations of preproc and models,
+      cross = TRUE
+    ) %>%
+    # tweak controls to store information needed later to create the ensemble
+    option_add(control = control_ensemble_grid())
+
+  # workflow_map with the blockcv2rsample object - cv_spatial
+example_workflow_spatial <- example_models %>%
+    workflow_map("tune_grid",
+                 resamples = sb1_rsample, grid = 1,
+                 metrics = sdm_metric_set(), verbose = TRUE)
+
+    # class of results should include "tune_results"
+expect_true("tune_results" %in% class(example_workflow_spatial$result[[1]]))
+
+# workflow_map with the blockcv2rsample object - cv_cluster
+example_workflow_cluster <- example_models %>%
+  workflow_map("tune_grid",
+               resamples = sc_rsample, grid = 1,
+               metrics = sdm_metric_set(), verbose = TRUE)
+
+# class of results should include "tune_results"
+expect_true("tune_results" %in% class(example_workflow_cluster$result[[1]]))
+
 })

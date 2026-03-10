@@ -52,15 +52,31 @@ blockcv2rsample <- function(x, data) {
       "convert your data to `sf` and rebuild your `blockCV` object with it"
     )
   }
-  splits <- lapply(
-    x$folds_list,
-    function(this_fold) {
-      names(this_fold) <- c("analysis", "assessment")
-      rsample::make_splits(this_fold, data = data, class = "spatial_rsplit")
-    }
-  )
-  rsample::new_rset(splits,
-    ids = paste0("Fold", seq_along(splits)),
-    attrib = NULL, subclass = c("spatial_rset", "rset")
-  )
+  if (inherits(x, "cv_spatial")) {
+    splits <- lapply(
+      x$folds_list,
+      function(this_fold) {
+        names(this_fold) <- c("analysis", "assessment")
+        rsample::make_splits(this_fold, data = data, class = "spatial_rsplit")
+      }
+    )
+    rsample::new_rset(splits,
+                      ids = paste0("Fold", seq_along(splits)),
+                      attrib = NULL, subclass = c("cv_spatial","spatial_rset", "rset")
+    )
+  } else if (inherits(x, "cv_cluster")) {
+    splits <- lapply(
+      x$folds_list,
+      function(this_fold) {
+        names(this_fold) <- c("analysis", "assessment")
+        rsample::make_splits(this_fold, data = data, class = "spatial_rsplit")
+      }
+    )
+    rsample::new_rset(splits,
+                      ids = paste0("Fold", seq_along(splits)),
+                      attrib = NULL, subclass = c("cv_cluster", "spatial_rset", "rset")
+    )
+
+  }
+
 }
