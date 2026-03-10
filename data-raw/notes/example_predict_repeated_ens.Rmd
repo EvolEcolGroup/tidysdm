@@ -159,6 +159,67 @@ ggplot() +
   scale_fill_terrain_c()
 ```
 
+Test further predict functionalities:
+
+Filtering across repeats
+
+```{r}
+lacerta_rep_ens_pred <- predict_raster(lacerta_rep_ens, climate_present_lac,
+  metric_thresh_repeat = c("boyce_cont", 0.5),
+  fun = c("mean", "median")
+)
+
+ggplot() +
+  geom_spatraster(data = lacerta_rep_ens_pred, aes(fill = median)) +
+  scale_fill_terrain_c()
+```
+
+Filtering both within and across repeats
+
+```{r}
+lacerta_rep_ens_pred <- predict_raster(lacerta_rep_ens, climate_present_lac,
+  metric_thresh = c("boyce_cont", 0.5),
+  metric_thresh_repeat = c("boyce_cont", 0.8),
+  fun = c("mean", "median")
+)
+
+ggplot() +
+  geom_spatraster(data = lacerta_rep_ens_pred, aes(fill = median)) +
+  scale_fill_terrain_c()
+```
+
+Weighted aggregation across repeats
+
+```{r}
+lacerta_rep_ens_pred <- predict_raster(lacerta_rep_ens, climate_present_lac,
+  fun = c("weighted_mean", "weighted_median")
+)
+
+ggplot() +
+  geom_spatraster(data = lacerta_rep_ens_pred, aes(fill = weighted_mean)) +
+  scale_fill_terrain_c()
+```
+
+And then also with filtering:
+
+```{r}
+lacerta_rep_ens_pred <- predict_raster(lacerta_rep_ens, climate_present_lac,
+  metric_thresh = c("boyce_cont", 0.5),
+  metric_thresh_repeat = c("boyce_cont", 0.8),
+  fun = c("weighted_mean", "weighted_median")
+)
+
+ggplot() +
+  geom_spatraster(data = lacerta_rep_ens_pred, aes(fill = weighted_mean)) +
+  scale_fill_terrain_c()
+```
+
+
+
+
+
+
+
 Using DALEX
 
 ```{r, error = TRUE}
