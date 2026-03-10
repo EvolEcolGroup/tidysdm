@@ -32,7 +32,7 @@ there are a number of excellent tutorials (both introductory and advanced) on
 its dedicated [website](https://www.tidymodels.org/). We reuse the example on
 the Iberian lizard from the [`tidysdm`
 overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.html)
-article. Each subsection is written to be self-contained, so you can read and
+article. Subsection are written to be self-contained, so you can read and
 run them independently.
 
 # Using multi-level factors as predictors
@@ -72,7 +72,7 @@ lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
 lacerta_rec
 ```
 
-Let's us see what this does:
+Let's see what this does:
 ```{r}
 lacerta_prep <- prep(lacerta_rec)
 summary(lacerta_prep)
@@ -142,8 +142,10 @@ climate_present <- terra::readRDS(
 )
 
 # project climate layers
-iberia_proj4 <-
-  "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+iberia_proj4 <- paste0(
+  "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 ",
+  "+lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+)
 climate_present <- terra::project(climate_present, y = iberia_proj4)
 
 # first we add a topography variable to the climate data
@@ -227,7 +229,7 @@ plot(pdp_bio05)
 ```
 
 There are many other functions in DALEX that can be applied to the explainer to
-further explore the behaviour of the model; see several tutorial on
+further explore the behaviour of the model; see several tutorials on
 https://modeloriented.github.io/DALEX/ for more details.
 
 It is also possible to explore the individual models that make up the ensemble:
@@ -294,7 +296,7 @@ And now use these two recipes in a `workflowset` (we will keep it small for
 computational time), selecting the appropriate recipe for each model. We will
 include a model (polynomial support vector machines, or SVM) which does not
 have a wrapper in `tidysdm` for creating a model specification. However, we can
-use a standard model spec from `yardstick`:
+use a standard model spec from `parsnip`:
 
 ```{r workflow_set_different_recipes}
 lacerta_models <-
@@ -303,7 +305,7 @@ lacerta_models <-
     preproc = list(
       uncor = lacerta_rec_uncor, # recipe for the glm
       all = lacerta_rec_all, # recipe for the random forest
-      all = lacerta_rec_uncor # recipe for svm
+      uncor = lacerta_rec_uncor # recipe for svm
     ),
     models = list(
       # the standard glm specs
@@ -360,7 +362,7 @@ lacerta_models <- lacerta_models %>%
 
 
 And now we can tune the models:
-```{r tune_grid_different_recipes}
+```{r tune_bayes_different_recipes}
 set.seed(1234567)
 lacerta_models <-
   lacerta_models %>%
@@ -438,13 +440,6 @@ And check the balance of presences vs pseudoabsences:
 check_splits_balance(lacerta_initial, class)
 ```
 
-Next, we need to set up a `recipe` to define how to handle our dataset.
-
-```{r recipe_initial_split}
-lacerta_rec <- recipe(lacerta_thin, formula = class ~ .)
-lacerta_rec
-```
-
 And confirm that we have the data correctly formatted with:
 
 ```{r}
@@ -474,6 +469,13 @@ autoplot(lacerta_cv)
 And check the balance in the dataset:
 ```{r}
 check_splits_balance(lacerta_cv, class)
+```
+
+Next, we need to set up a `recipe` to define how to handle our dataset.
+
+```{r recipe_initial_split}
+lacerta_rec <- recipe(lacerta_training, formula = class ~ .)
+lacerta_rec
 ```
 
 Same as in the [`tidysdm`
@@ -553,8 +555,10 @@ climate_present <- terra::readRDS(
 )
 
 # project climate layers
-iberia_proj4 <-
-  "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+iberia_proj4 <- paste0(
+  "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 ",
+  "+lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+)
 climate_present <- terra::project(climate_present, y = iberia_proj4)
 
 # predict using only the best models
@@ -631,7 +635,7 @@ sdm_metric_set()(data = lacerta_test_pred, truth = class, .pred_presence)
 We can now make predictions with this stacked ensemble. We start by extracting
 the climate for the variables of interest:
 
-```{r eval=download_data}
+```{r redownload_climate_present, eval=TRUE}
 climate_present <- terra::readRDS(
   system.file("extdata/lacerta_climate_present_10m.rds",
     package = "tidysdm"
@@ -639,8 +643,10 @@ climate_present <- terra::readRDS(
 )
 
 # project climate layers
-iberia_proj4 <-
-  "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6 +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+iberia_proj4 <- paste0(
+  "+proj=aea +lon_0=-4.0 +lat_1=36.8 +lat_2=42.6",
+  " +lat_0=39.7 +datum=WGS84 +units=m +no_defs"
+)
 climate_present <- terra::project(climate_present, y = iberia_proj4)
 ```
 
