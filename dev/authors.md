@@ -12,6 +12,8 @@
 
 - **Ben Tupper**. Contributor.
 
+- **Ondrej Pelanek**. Contributor.
+
 - **Andrea Manica**. Author, maintainer.
 
 ## Citation
@@ -19,14 +21,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/EvolEcolGroup/tidysdm/blob/dev/DESCRIPTION)
 
-Leonardi M, Colucci M, Pozzi A, Scerri E, Manica A (2025). *tidysdm:
+Leonardi M, Colucci M, Pozzi A, Scerri E, Manica A (2026). *tidysdm:
 Species Distribution Models with Tidymodels*. R package version
 1.0.4.9001, <https://github.com/EvolEcolGroup/tidysdm>.
 
     @Manual{,
       title = {tidysdm: Species Distribution Models with Tidymodels},
       author = {Michela Leonardi and Margherita Colucci and Andrea Vittorio Pozzi and Eleanor M.L. Scerri and Andrea Manica},
-      year = {2025},
+      year = {2026},
       note = {R package version 1.0.4.9001},
       url = {https://github.com/EvolEcolGroup/tidysdm},
     }

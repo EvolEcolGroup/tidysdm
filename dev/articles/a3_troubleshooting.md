@@ -13,14 +13,14 @@ dataset by loading the *Lacerta* dataset, and manually add an NA:
 library(tidysdm)
 #> Loading required package: tidymodels
 #> ── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──
-#> ✔ broom        1.0.11     ✔ recipes      1.3.1 
-#> ✔ dials        1.4.2      ✔ rsample      1.3.1 
-#> ✔ dplyr        1.1.4      ✔ tailor       0.1.0 
-#> ✔ ggplot2      4.0.1      ✔ tidyr        1.3.2 
+#> ✔ broom        1.0.12     ✔ recipes      1.3.1 
+#> ✔ dials        1.4.2      ✔ rsample      1.3.2 
+#> ✔ dplyr        1.2.0      ✔ tailor       0.1.0 
+#> ✔ ggplot2      4.0.2      ✔ tidyr        1.3.2 
 #> ✔ infer        1.1.0      ✔ tune         2.0.1 
 #> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
-#> ✔ parsnip      1.4.0      ✔ workflowsets 1.1.1 
-#> ✔ purrr        1.2.0      ✔ yardstick    1.3.2
+#> ✔ parsnip      1.4.1      ✔ workflowsets 1.1.1 
+#> ✔ purrr        1.2.1      ✔ yardstick    1.3.2
 #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 #> ✖ purrr::discard() masks scales::discard()
 #> ✖ dplyr::filter()  masks stats::filter()
@@ -74,12 +74,12 @@ lacerta_models <-
 #> 1.2.0.
 #> ℹ See details at
 #>   <https://tidyselect.r-lib.org/reference/faq-selection-context.html>
-#> This warning is displayed once every 8 hours.
+#> This warning is displayed once per session.
 #> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 #> generated.
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (598ms)
+#> ✔ 1 of 2 resampling: default_glm (643ms)
 #> i 2 of 2 tuning:     default_maxent
 #> → A | error:   NA values in data table. Please remove them and rerun.
 #> There were issues with some computations   A: x1
@@ -89,7 +89,7 @@ lacerta_models <-
 #>                ℹ Only vectors of size 1 are recycled.
 #>                Caused by error in `vectbl_recycle_rhs_rows()`:
 #>                ! Can't recycle input of size 88 to size 87.
-#> There were issues with some computations   A: x1There were issues with some computations   A: x19   B: x6
+#> There were issues with some computations   A: x1There were issues with some computations   A: x7   B: x6
 #> Warning: All models failed. Run `show_notes(.Last.tune.result)` for more
 #> information.
 #> There were issues with some computations   A: x24   B: x6
@@ -111,7 +111,7 @@ lacerta_prep <- lacerta_rec %>% prep(lacerta_thin)
 #> Warning: The `strings_as_factors` argument of `prep.recipe()` is deprecated as of
 #> recipes 1.3.0.
 #> ℹ Please use the `strings_as_factors` argument of `recipe()` instead.
-#> This warning is displayed once every 8 hours.
+#> This warning is displayed once per session.
 #> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 #> generated.
 lacerta_prep
@@ -164,7 +164,7 @@ lacerta_rec_sel <- recipe(lacerta_thin, formula = class ~ .) %>%
   step_select(all_of(suggested_vars))
 #> Warning: `step_select()` was deprecated in recipes 1.3.0.
 #> ℹ See `?select_select()` for recommended alternatives.
-#> This warning is displayed once every 8 hours.
+#> This warning is displayed once per session.
 #> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 #> generated.
 ```
@@ -298,10 +298,10 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (539ms)
+#> ✔ 1 of 2 resampling: default_glm (560ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 2 resampling: default_gam
-#> ✔ 2 of 2 resampling: default_gam (915ms)
+#> ✔ 2 of 2 resampling: default_gam (969ms)
 ```
 
 Note that the step of defining a formula is incompatible with using
@@ -379,7 +379,7 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 3 resampling: default_glm
-#> ✔ 1 of 3 resampling: default_glm (349ms)
+#> ✔ 1 of 3 resampling: default_glm (353ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 3 resampling: default_gam
 #> → A | warning: Fitting terminated with step failure - check results carefully
@@ -389,7 +389,7 @@ lacerta_models <-
 #> ✔ 2 of 3 resampling: default_gam (1.2s)
 #> i 3 of 3 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 3 of 3 tuning:     default_rf (939ms)
+#> ✔ 3 of 3 tuning:     default_rf (975ms)
 ```
 
 We see that one of the folds gives us an error when using GAMs. The

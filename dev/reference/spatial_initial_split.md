@@ -57,7 +57,7 @@ testing(block_initial)
 #> Projected CRS: NAD83 / Massachusetts Mainland (ftUS)
 #> # A tibble: 153 × 19
 #>    grid_id land_area canopy_gain canopy_loss canopy_no_change canopy_area_2014
-#>    <chr>       <dbl>       <dbl>       <dbl>            <dbl>            <dbl>
+#>  * <chr>       <dbl>       <dbl>       <dbl>            <dbl>            <dbl>
 #>  1 M-9      2690727.      52443.      53467.          304239.          357706.
 #>  2 Q-21     2690727.      54712.     101816.         1359305.         1461121.
 #>  3 AB-23     725043.      13737.      13278.           52628.           65906.
@@ -83,7 +83,7 @@ training(block_initial)
 #> Projected CRS: NAD83 / Massachusetts Mainland (ftUS)
 #> # A tibble: 529 × 19
 #>    grid_id land_area canopy_gain canopy_loss canopy_no_change canopy_area_2014
-#>    <chr>       <dbl>       <dbl>       <dbl>            <dbl>            <dbl>
+#>  * <chr>       <dbl>       <dbl>       <dbl>            <dbl>            <dbl>
 #>  1 AB-4      795045.      15323.       3126.           53676.           56802.
 #>  2 I-33      265813.       8849.      11795.           78677.           90472.
 #>  3 AO-9      270153        6187.       1184.           26930.           28114.
