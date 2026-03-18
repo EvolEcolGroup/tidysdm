@@ -33,6 +33,7 @@ Authors:
 Other contributors:
 \itemize{
   \item Ben Tupper [contributor]
+  \item Ondrej Pelanek [contributor]
 }
 
 }
