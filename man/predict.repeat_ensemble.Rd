@@ -11,7 +11,7 @@
   fun = "mean",
   metric_thresh = NULL,
   class_thresh = NULL,
-  members = FALSE,
+  by_repeat = FALSE,
   ...
 )
 }
@@ -26,8 +26,7 @@ predict.}
 \item{fun}{string defining the aggregating function. It can take values
 \code{mean}, \code{median}, \code{weighted_mean}, \code{weighted_median} and \code{none}. It is
 possible to combine multiple functions, except for "none". If it is set to
-"none", only the individual member predictions are returned (this
-automatically sets \code{member} to TRUE)}
+"none", only the individual member predictions are returned.}
 
 \item{metric_thresh}{a vector of length 2 giving a metric and its threshold,
 which will be used to prune which models in the ensemble will be used for
@@ -40,8 +39,9 @@ classes. It can be a number (between 0 and 1), or a character metric
 target value is passed along as a second element of a vector, e.g.
 c("sensitivity",0.8).}
 
-\item{members}{boolean defining whether individual predictions for each
-member should be added to the ensemble prediction. The columns for
+\item{by_repeat}{boolean defining whether individual predictions for each
+repeat should be returned (no aggregating function will be applied at the
+repeat level). The columns for
 individual members have the name of the workflow a a prefix, separated by
 "." from the usual column names of the predictions.}
 

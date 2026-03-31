@@ -1,3 +1,7 @@
+# `tidysdm` dev
+* fix bug in predict.simple_ensemble where weights were ignored 
+  for "weighted mean"
+
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
   `collect_calib_thresh`

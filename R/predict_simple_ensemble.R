@@ -208,7 +208,7 @@ predict.simple_ensemble <-
 
     # define the weighted functions
     weighted_mean <- function(x, w = metric_ens) { # nolint
-      stats::weighted.mean(x, weights = w)
+      stats::weighted.mean(x, w = w)
     }
 
     weighted_median <- function(x, w = metric_ens) { # nolint
