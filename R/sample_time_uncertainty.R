@@ -12,38 +12,41 @@
 #'
 #' @param data An [`sf::sf`] data frame, or a data frame with time information.
 #'   If an `sf` object, the geometry is ignored.
-#' @param mean_sd_truncnorm_col a vector of length 2 with the names of the
-#'   columns with the mean and standard deviation of the truncated normal
-#'   distribution to sample from. It defaults to "mean_time" and "sd_time", but
-#'   if the column names are with different names, they can be specified here.
-#'   The "mean_time" column should be either a lubridate object, or an object
-#'   that can be converted to a lubridate object with `lubridate_fun`.
+#' @param trnorm_cols a vector of length 2 with the names of the columns with
+#'   the mean and standard deviation of the truncated normal distribution to
+#'   sample from. It defaults to "mean_time" and "sd_time", but if the column
+#'   names are with different names, they can be specified here. The "mean_time"
+#'   column should be either a lubridate object, or an object that can be
+#'   converted to a lubridate object with `lubridate_fun`.
+#' @param trnorm_n_sd the number of standard deviations to use for the truncated
+#'   normal distribution (defaults to 2, giving the 95% confidence interval).
 #' @param sd_time_units the units of the standard deviation of the truncated
-#'   normal'   distribution (e.g. "years" or "days"). This has to be defined
-#'   if the sd_time column exists (i.e. if some dates are being resampled from
-#'   a truncated normal).
-#' @param old_young_unif_col a vector of length 2 with the names of the columns
-#'   with the minimum and maximum values of the uniform distribution to sample
-#'   from. It defaults to "oldest_time" and "youngest_time", but if the column names are
-#'   different, they can be specified here. The "oldest_time" and "youngest_time"
-#'   columns should be either lubridate objects, or objects that can be
-#'   converted to lubridate objects with `lubridate_fun`.
-#' @param fixed_time_col The name of the column with fixed times that do not
-#'   need resampling (e.g. contemporary samples). It defaults to "fixed_time",
-#'   but if the column name is different, it can be specified here. The
-#'   "fixed_time" column should be either a lubridate object, or an object that
-#'   can be converted to a lubridate object with `lubridate_fun`.
-#' @param lubridate_fun function to convert the time columns (mean, oldest, youngest and
-#'   fixed) into a lubridate object
+#'   normal'   distribution (e.g. "years" or "days"). This has to be defined if
+#'   the sd_time column exists (i.e. if some dates are being resampled from a
+#'   truncated normal).
+#' @param unif_cols a vector of length 2 with the names of the columns with the
+#'   oldest and youngest values of the uniform distribution to sample from. It
+#'   defaults to "oldest_time" and "youngest_time", but if the column names are
+#'   different, they can be specified here. The "oldest_time" and
+#'   "youngest_time" columns should be either lubridate objects, or objects that
+#'   can be converted to lubridate objects with `lubridate_fun`.
+#' @param fixed_col The name of the column with fixed times that do not need
+#'   resampling (e.g. contemporary samples). It defaults to "fixed_time", but if
+#'   the column name is different, it can be specified here. The "fixed_time"
+#'   column should be either a lubridate object, or an object that can be
+#'   converted to a lubridate object with `lubridate_fun`.
+#' @param lubridate_fun function to convert the time columns (mean, oldest,
+#'   youngest and fixed) into a lubridate object
 #' @returns a vector of lubridate objects with the sampled times
 #' @export
 
 
 sample_time_uncertainty <- function(data,
-                                    mean_sd_truncnorm_col = c("mean_time", "sd_time"),
+                                    trnorm_cols = c("mean_time", "sd_time"),
+                                    trnorm_n_sd = 2,
                                     sd_time_units = NULL,
-                                    old_young_unif_col = c("oldest_time", "youngest_time"),
-                                    fixed_time_col = "fixed_time",
+                                    unif_cols = c("oldest_time", "youngest_time"),
+                                    fixed_col = "fixed_time",
                                     lubridate_fun = c) {
   # check that data is a dataframe or an sf object
   if (!inherits(data, c("data.frame", "sf"))) {
@@ -55,18 +58,18 @@ sample_time_uncertainty <- function(data,
     sf::st_drop_geometry()
 
   # check that the mean and sd columns exist
-  if (all(mean_sd_truncnorm_col %in% names(data))) {
+  if (all(trnorm_cols %in% names(data))) {
     mean_sd_exist <- TRUE
     # convert to lubridate objects
     data <- data %>%
       dplyr::mutate(
-        mean_time = lubridate_fun(.data[[mean_sd_truncnorm_col[1]]]),
+        mean_time = lubridate_fun(.data[[trnorm_cols[1]]]),
         # convert sd_time into the right units
-        sd_time = units::as_units(.data[[mean_sd_truncnorm_col[2]]], sd_time_units)
+        sd_time = units::as_units(.data[[trnorm_cols[2]]], sd_time_units)
       )
     # test that they are valid dates
     if (!inherits(data$mean_time, "POSIXct")) {
-      stop("the first (mean) column specified in `mean_sd_truncnorm_col` ",
+      stop("the first (mean) column specified in `trnorm_cols` ",
       "cannot be converted to dates with `lubridate_fun`")
     }
     # check that for every row with mean_time, we also have a value for sd time,
@@ -79,23 +82,23 @@ sample_time_uncertainty <- function(data,
   } else { # if they don't exist
     mean_sd_exist <- FALSE
     # throw an error if we were custom values for the mean and sd columns
-    if (!all(mean_sd_truncnorm_col == c("mean_time", "sd_time"))) {
-      stop("the columns specified in `mean_sd_truncnorm_col` do not exist in `data`")
+    if (!all(trnorm_cols == c("mean_time", "sd_time"))) {
+      stop("the columns specified in `trnorm_cols` do not exist in `data`")
     }
   }
 
   # now do the same for the min and max columns
-  if (all(old_young_unif_col %in% names(data))) {
+  if (all(unif_cols %in% names(data))) {
     old_young_exist <- TRUE
     # convert to lubridate objects
     data <- data %>%
       dplyr::mutate(
-        oldest_time = lubridate_fun(.data[[old_young_unif_col[1]]]),
-        youngest_time = lubridate_fun(.data[[old_young_unif_col[2]]])
+        oldest_time = lubridate_fun(.data[[unif_cols[1]]]),
+        youngest_time = lubridate_fun(.data[[unif_cols[2]]])
       )
     # test that they are valid dates
     if (!inherits(data$oldest_time, "POSIXct") || !inherits(data$youngest_time, "POSIXct")) {
-      stop("the columns specified in `old_young_unif_col` ",
+      stop("the columns specified in `unif_cols` ",
       "cannot be converted to dates with `lubridate_fun`")
     }
     # check that for every row with oldest_time, we also have a value for youngest_time,
@@ -107,35 +110,35 @@ sample_time_uncertainty <- function(data,
     }
   } else {
     old_young_exist <- FALSE
-    if (!all(old_young_unif_col == c("oldest_time", "youngest_time")))
-      stop("the columns specified in `old_young_unif_col` do not exist in `data`")
+    if (!all(unif_cols == c("oldest_time", "youngest_time")))
+      stop("the columns specified in `unif_cols` do not exist in `data`")
   }
 
   # and for the fixed time column
-  if (fixed_time_col %in% names(data)) {
+  if (fixed_col %in% names(data)) {
     fixed_time_exist <- TRUE
     # convert to lubridate objects
     data <- data %>%
       dplyr::mutate(
-        fixed_time = lubridate_fun(.data[[fixed_time_col]])
+        fixed_time = lubridate_fun(.data[[fixed_col]])
       )
     # test that they are valid dates
     if (!inherits(data$fixed_time, "POSIXct")) {
-      stop("the column specified in `fixed_time_col` ",
+      stop("the column specified in `fixed_col` ",
       "cannot be converted to dates with `lubridate_fun`")
     }
   } else {
     fixed_time_exist <- FALSE
-    if (fixed_time_col != "fixed_time") {
-      stop("the column specified in `fixed_time_col` does not exist in `data`")
+    if (fixed_col != "fixed_time") {
+      stop("the column specified in `fixed_col` does not exist in `data`")
     }
   }
 
   # now check that at least one of either mean_sd or min_max exist
   if (!mean_sd_exist && !old_young_exist) {
     stop(
-      "none of the columns specified in `mean_sd_truncnorm_col` and ",
-      "`old_young_unif_col` exist in `data`"
+      "none of the columns specified in `trnorm_cols` and ",
+      "`unif_cols` exist in `data`"
     )
   }
 
@@ -187,6 +190,7 @@ sample_time_uncertainty <- function(data,
     } else {
       sampled_times[[i]] <- NA
     }
+  }
   }
 }
 
