@@ -16,7 +16,7 @@
 #'   distribution.
 #' @keywords internal
 
-rtnorm_naive <- function(mean, sd, lower, upper) {
+rtrnorm_naive <- function(mean, sd, lower, upper) {
   
   # Check that all inputs are numeric
   if (!is.numeric(mean) || !is.numeric(sd) ||
