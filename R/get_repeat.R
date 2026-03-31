@@ -1,0 +1,36 @@
+#' Extract a simple ensemble out of a repeat ensemble
+#' @description This function extracts a simple ensemble out of a repeat
+#'   ensemble, by index or by name.
+#' @param x a repeat ensemble object
+#' @param i index of the simple ensemble to extract, or name of the simple
+#'   ensemble to extract
+#' @return a simple ensemble object
+#' @export
+#' @examples
+#' # extract the second simple ensemble out of the repeat ensemble
+#' get_repeat(lacerta_rep_ens, i = 2)
+get_repeat <- function(x, i) {
+  if (!inherits(x, "repeat_ensemble")) {
+    stop("x must be a repeat ensemble object")
+  }
+  if (is.numeric(i)){
+    # check that it is an integer
+    if (i != as.integer(i)) {
+      stop("i must be an integer")
+    }
+    i <- levels(as.factor(x$rep_id))[i]
+  }
+
+
+  if (is.character(i)) {
+    if (!i %in% x$rep_id) {
+      stop("i must be a valid name of a repeat in x")
+    }
+    simple_ens <- x %>% dplyr::filter(.data$rep_id == i)
+  }
+  # change the class to a repeated ensemble
+  class(simple_ens)[class(simple_ens) == "repeat_ensemble"] <- "simple_ensemble"
+  # TODO extract the attributes of the simple ensemble from the repeat ensemble
+  # e.g. calibration info
+  return(simple_ens)
+}

@@ -30,6 +30,12 @@ test_that("predict correctly a repeated ensemble",{
   expect_true(ncol(pred_multi) == 3)
   # TODO check that median and weighted median differ from the mean and from each other
 
+  # make prediction by class thresholding with a metric threshold
+  pred_class_mean <- predict(lacerta_rep_ens, new_data = new_data_ex,
+    fun = "mean", type = "class", class_thresh = c("tss_max"))
+  # this should have 4 columns (two algorithms and three repeats, but one repeat
+  # should be filtered out by the metric threshold)
+
 
 
   # check for error if we use "none" with multiple functions
