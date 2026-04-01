@@ -40,16 +40,27 @@
 #' collect_class_thresh(test_ens)
 #' @export
 #' @keywords predict
+calib_class_thresh <- function(object, class_thresh,
+                               metric_thresh = NULL) {
+  UseMethod("calib_class_thresh", object = object)
+}
 
-calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
-  # check that object is a simple_ensemble
-  if (!inherits(object, "simple_ensemble")) {
-    stop("`object` should be a simple_ensemble")
-  }
+#' @rdname calib_class_thresh
+#' @export
+calib_class_thresh.default <- function(object, class_thresh,
+                                       metric_thresh = NULL) {
+  stop("no method available for this object type")
+}
+
+#' @rdname calib_class_thresh
+#' @export
+calib_class_thresh.simple_ensemble <- function(object,
+                                               class_thresh,
+                                               metric_thresh = NULL) {
 
   # check that there is no entry for this calibration
-  if (!is.null(attr(object, "class_thresholds"))) {
-    ref_calib_tb <- attr(object, "class_thresholds")
+  if (!is.null(attr(object, "class_thresholds", exact = TRUE))) {
+    ref_calib_tb <- attr(object, "class_thresholds", exact = TRUE)
     if (any(unlist(
       lapply(
         ref_calib_tb %>% dplyr::pull("metric_thresh"),
@@ -110,12 +121,49 @@ calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
   }
 
   # now store the new thresholds
-  if (is.null(attr(object, "class_thresholds"))) {
+  if (is.null(attr(object, "class_thresholds", exact = TRUE))) {
     attr(object, "class_thresholds") <- calib_tb
   } else {
     attr(object, "class_thresholds") <-
-      attr(object, "class_thresholds") %>%
+      attr(object, "class_thresholds", exact = TRUE) %>%
       dplyr::bind_rows(calib_tb)
   }
   object
 }
+
+#' @rdname calib_class_thresh
+#' @export
+calib_class_thresh.repeat_ensemble <- function(object,
+                                               class_thresh,
+                                               metric_thresh = NULL) {
+  # cycle over the repeats and calibrate each simple ensemble
+  repeat_ids <- unique(object$rep_id)
+  # if we don't have a class_thresholds_list attribute, we will create it; otherwise, we will add to it
+  if(is.null(attr(object, "class_thresholds_list", exact = TRUE))) {
+    attr(object, "class_thresholds_list") <- list()
+  }
+  for (i_rep in repeat_ids) {
+    object_rep <- get_repeat(object, i_rep)
+    # TODO this should happen in get_repeat
+    # attr(object_rep, "class_thresholds_list") <- NULL
+
+
+    object_rep <- calib_class_thresh(
+      object_rep,
+      class_thresh = class_thresh,
+      metric_thresh = metric_thresh
+    )
+    # add the calibration info to the repeat ensemble if there is an elementin
+    # the list for this repeat, we will add to it; otherwise, we will create it
+    if (is.null(attr(object, "class_thresholds_list", exact = TRUE)[[i_rep]])) {
+      attr(object, "class_thresholds_list")[[i_rep]] <-
+        attr(object_rep, "class_thresholds", exact = TRUE)
+    } else {
+      attr(object, "class_thresholds_list")[[i_rep]] <-
+        attr(object, "class_thresholds_list")[[i_rep]] %>%
+        dplyr::bind_rows(attr(object_rep, "class_thresholds", exact = TRUE))
+    }
+  }
+  object
+}
+

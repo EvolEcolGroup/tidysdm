@@ -55,7 +55,7 @@ predict.repeat_ensemble <-
     # now predict for each simple ensemble
     for (i_rep in repeat_ids) {
       object_rep <- object %>% dplyr::filter(.data$rep_id == i_rep)
-      pred_rep <- predict(
+      pred_rep <- stats::predict(
         object_rep,
         new_data = new_data,
         type = type,

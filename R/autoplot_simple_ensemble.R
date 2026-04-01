@@ -38,6 +38,10 @@
 
 autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
                                      std_errs = stats::qnorm(0.95), ...) {
+  # check that ellipses are empty
+  if (length(list(...)) > 0) {
+    warning("additional arguments ... are currently not used")
+  }
   # get metrics table
   res <- object$metrics %>% dplyr::bind_rows()
   # vector of available metrics

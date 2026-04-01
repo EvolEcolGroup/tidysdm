@@ -2,9 +2,18 @@
 % Please edit documentation in R/calib_class_thresh.R
 \name{calib_class_thresh}
 \alias{calib_class_thresh}
+\alias{calib_class_thresh.default}
+\alias{calib_class_thresh.simple_ensemble}
+\alias{calib_class_thresh.repeat_ensemble}
 \title{Calibrate class thresholds}
 \usage{
 calib_class_thresh(object, class_thresh, metric_thresh = NULL)
+
+\method{calib_class_thresh}{default}(object, class_thresh, metric_thresh = NULL)
+
+\method{calib_class_thresh}{simple_ensemble}(object, class_thresh, metric_thresh = NULL)
+
+\method{calib_class_thresh}{repeat_ensemble}(object, class_thresh, metric_thresh = NULL)
 }
 \arguments{
 \item{object}{an simple_ensemble object}

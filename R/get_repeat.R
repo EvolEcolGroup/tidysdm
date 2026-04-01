@@ -32,5 +32,12 @@ get_repeat <- function(x, i) {
   class(simple_ens)[class(simple_ens) == "repeat_ensemble"] <- "simple_ensemble"
   # TODO extract the attributes of the simple ensemble from the repeat ensemble
   # e.g. calibration info
+  # if we have a class_calibration_list, get the relevant info for this repeat
+   if (!is.null(attr(x, "class_thresholds_list", exact = TRUE))) {
+     attr(simple_ens, "class_thresholds") <-
+       attr(x, "class_thresholds_list", exact = TRUE)[[i]]
+     # and remove the list
+     attr(simple_ens, "class_thresholds_list") <- NULL
+   }
   return(simple_ens)
 }

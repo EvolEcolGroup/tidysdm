@@ -1,6 +1,9 @@
 # `tidysdm` dev
 * fix bug in predict.simple_ensemble where weights were ignored 
   for "weighted mean"
+* implement better prediction logic for `repeat_ensembles`, grouping
+  by repeat
+* implement method for `calib_class_thresh` for `repeat_ensembles`
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
