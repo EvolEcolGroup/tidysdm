@@ -9,11 +9,10 @@ lacerta <- st_as_sf(lacerta, coords = c("longitude", "latitude"))
 st_crs(lacerta) <- "+proj=longlat"
 
 
-
 # get the climate layers
 climate_present <- terra::readRDS(
   system.file("extdata/lacerta_climate_present_10m.rds",
-              package = "tidysdm"
+    package = "tidysdm"
   )
 )
 # project climate layers
@@ -22,8 +21,6 @@ iberia_proj4 <- paste0(
   "+lat_0=39.7 +datum=WGS84 +units=m +no_defs"
 )
 climate_present <- terra::project(climate_present, y = iberia_proj4)
-
-
 
 
 # Create repeats
@@ -37,9 +34,9 @@ for (i_repeat in 1:3) {
   lacerta_thin_rep <- thin_by_dist(lacerta_thin_rep, dist_min = 50000)
   # sample pseudo-absences
   lacerta_thin_rep <- sample_pseudoabs(lacerta_thin_rep,
-                                       n = 1 * nrow(lacerta_thin_rep),
-                                       raster = climate_present,
-                                       method = c("dist_min", 50000)
+    n = 1 * nrow(lacerta_thin_rep),
+    raster = climate_present,
+    method = c("dist_min", 50000)
   )
   # get climate
   lacerta_thin_rep <- lacerta_thin_rep %>%
@@ -64,13 +61,13 @@ for (i_repeat in 1:3) {
     ) %>%
     # tweak controls to store information needed later to create the ensemble
     option_add(control = control_ensemble_grid())
-  
+
   # train the model
   lacerta_thin_rep_models <-
     lacerta_thin_rep_models %>%
     workflow_map("tune_grid",
-                 resamples = lacerta_thin_rep_cv, grid = 3,
-                 metrics = sdm_metric_set(), verbose = TRUE
+      resamples = lacerta_thin_rep_cv, grid = 3,
+      metrics = sdm_metric_set(), verbose = TRUE
     )
   # make an simple ensemble and add it to the list
   ensemble_list[[i_repeat]] <- simple_ensemble() %>%
@@ -79,7 +76,6 @@ for (i_repeat in 1:3) {
 
 # Now we can create a `repeat_ensemble` from the list:
 lacerta_rep_ens <- repeat_ensemble() %>% add_repeat(ensemble_list)
-
 
 
 # # check the predictions
@@ -94,13 +90,8 @@ lacerta_rep_ens <- repeat_ensemble() %>% add_repeat(ensemble_list)
 saveRDS(lacerta_rep_ens, file = "inst/extdata/lacerta_rep_ens.rds")
 
 
-# 
+#
 # # filter the models by boyce_cont > 0.5
 # prediction_present_boyce <- predict_raster(lacerta_rep_ens, climate_present,
 #                                            metric_thresh = c("boyce_cont", 0.7)
 # )
-
-
-
-
-

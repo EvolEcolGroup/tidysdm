@@ -170,17 +170,18 @@ boyce_cont_estimator_impl <- function(truth,
 # copy of contBoyce from enmSdm
 
 contBoyce <- function(
-    pres,
-    contrast,
-    presWeight = rep(1, length(pres)),
-    contrastWeight = rep(1, length(contrast)),
-    numBins = 101,
-    binWidth = 0.1,
-    autoWindow = TRUE,
-    method = "spearman",
-    dropZeros = TRUE,
-    na.rm = FALSE,
-    ...) {
+  pres,
+  contrast,
+  presWeight = rep(1, length(pres)),
+  contrastWeight = rep(1, length(contrast)),
+  numBins = 101,
+  binWidth = 0.1,
+  autoWindow = TRUE,
+  method = "spearman",
+  dropZeros = TRUE,
+  na.rm = FALSE,
+  ...
+) {
   # if all NAs
   if (
     all(is.na(pres)) ||
@@ -209,7 +210,6 @@ contBoyce <- function(
   } else {
     1 + eps
   }
-
 
 
   windowWidth <- binWidth * (highest - lowest)

@@ -42,7 +42,5 @@ for (this_vignette_prefix in vignette_names) {
 }
 
 
-
-
 # library("devtools")
 # build_vignettes()

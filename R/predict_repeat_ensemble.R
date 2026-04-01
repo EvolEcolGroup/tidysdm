@@ -36,7 +36,15 @@
 #' @method predict repeat_ensemble
 #' @export
 #' @keywords predict
-
+#' @examples
+#' # we need a dataset to predict, we extract it from one of the models
+#' new_data_ex <- workflowsets::extract_mold(
+#'   lacerta_rep_ens$workflow[[1]]
+#' )$predictors
+#' predict(lacerta_rep_ens,
+#'   new_data = new_data_ex,
+#'   fun = c("mean", "weighted_mean", "median")
+#' )
 predict.repeat_ensemble <-
   function(object,
            new_data,
@@ -55,7 +63,6 @@ predict.repeat_ensemble <-
     class_fun <- match.arg(class_fun)
 
     # we add names of the workflows to combine with the repeat ids
-#    object$workflow_id <- paste(object$rep_id, object$wflow_id, sep = ".")
     repeat_ids <- unique(object$rep_id)
     # now predict for each simple ensemble
     for (i_rep in repeat_ids) {
@@ -76,12 +83,12 @@ predict.repeat_ensemble <-
       }
     }
     # return the individual repeat predictions if requested
-    if (by_repeat || ("none" %in% fun)){
+    if (by_repeat || ("none" %in% fun)) {
       return(pred_all)
     }
 
     # combine predictions across repeats
-      pred_rep_ensemble <- list()
+    pred_rep_ensemble <- list()
     # if we are predicting probabilities
     if (type == "prob") {
       # if we have an aggregating function
@@ -89,28 +96,34 @@ predict.repeat_ensemble <-
         # subset to columns for this function
         pred_this_fun <- pred_all %>% dplyr::select(dplyr::contains(i_fun))
         i_rep_fun <- gsub("weighted_", "", i_fun)
-        pred_rep_ensemble[[i_fun]] <- apply(pred_this_fun, 1, eval(parse(text = i_rep_fun)))
-
+        pred_rep_ensemble[[i_fun]] <- apply(pred_this_fun, 1,
+                                            eval(parse(text = i_rep_fun)))
       }
-
-    } else {# if we are predicting classes
-      # TODO we need to allow for multiple fun values here
-
-      # compute the proportion of suitable classes across repeats for each
-      # observation, and then apply the class_fun to get the final prediction
+    } else { # if we are predicting classes
       class_levels <- levels(pred_all[, 1])
-      pred_rep_ensemble <- rowSums(pred_all=="presence")/ncol(pred_all)
-      if ( class_fun == "majority") {
-        pred_rep_ensemble <- ifelse(pred_rep_ensemble > 0.5, class_levels[1],class_levels[2])
-      } else {
-        if (class_levels[2] != "presence"){
-          # flip the proportion if the "presence" class is the second level
-          pred_rep_ensemble <- 1-pred_rep_ensemble
-        }
-      }
+      # if we have an aggregating function
+      for (i_fun in fun) {
+        # subset to columns for this function
+        pred_this_fun <- pred_all %>% dplyr::select(dplyr::contains(i_fun))
+        this_pred <- rowSums(pred_this_fun == "presence") /
+          ncol(pred_this_fun)
 
+
+        # compute the proportion of suitable classes across repeats for each
+        # observation, and then apply the class_fun to get the final prediction
+        if (class_fun == "majority") {
+          this_pred <- ifelse(this_pred > 0.5,
+            class_levels[1], class_levels[2]
+          )
+        } else {
+          if (class_levels[2] != "presence") {
+            # flip the proportion if the "presence" class is the second level
+            this_pred <- 1 - this_pred
+          }
+        }
+        pred_rep_ensemble[[paste(i_fun, class_fun, sep = ".")]] <- this_pred
+      }
     }
-    # TODO think about column names if we only have one column
     pred_rep_ensemble <- data.frame(pred_rep_ensemble)
     return(pred_rep_ensemble)
-}
+  }

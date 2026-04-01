@@ -16,8 +16,9 @@
 #' @export
 
 grid_cellsize <- function(
-    data,
-    n = c(10, 10)) {
+  data,
+  n = c(10, 10)
+) {
   # TODO check that this is an sf object
   grid_box <- sf::st_bbox(data)
   if (is_longlat(data)) {

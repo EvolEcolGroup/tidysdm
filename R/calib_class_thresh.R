@@ -57,7 +57,6 @@ calib_class_thresh.default <- function(object, class_thresh,
 calib_class_thresh.simple_ensemble <- function(object,
                                                class_thresh,
                                                metric_thresh = NULL) {
-
   # check that there is no entry for this calibration
   if (!is.null(attr(object, "class_thresholds", exact = TRUE))) {
     ref_calib_tb <- attr(object, "class_thresholds", exact = TRUE)
@@ -138,8 +137,9 @@ calib_class_thresh.repeat_ensemble <- function(object,
                                                metric_thresh = NULL) {
   # cycle over the repeats and calibrate each simple ensemble
   repeat_ids <- unique(object$rep_id)
-  # if we don't have a class_thresholds_list attribute, we will create it; otherwise, we will add to it
-  if(is.null(attr(object, "class_thresholds_list", exact = TRUE))) {
+  # if we don't have a class_thresholds_list attribute, we will create it;
+  # otherwise, we will add to it
+  if (is.null(attr(object, "class_thresholds_list", exact = TRUE))) {
     attr(object, "class_thresholds_list") <- list()
   }
   for (i_rep in repeat_ids) {
@@ -162,4 +162,3 @@ calib_class_thresh.repeat_ensemble <- function(object,
   }
   object
 }
-

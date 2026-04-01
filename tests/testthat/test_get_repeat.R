@@ -1,4 +1,4 @@
-test_that("we get the correct repeat",{
+test_that("we get the correct repeat", {
   this_ens <- get_repeat(lacerta_rep_ens, i = "rep_02")
   # check that it is a simple ensemble
   expect_true(inherits(this_ens, "simple_ensemble"))

@@ -22,7 +22,7 @@ get_repeat <- function(x, i) {
   if (!inherits(x, "repeat_ensemble")) {
     stop("x must be a repeat ensemble object")
   }
-  if (is.numeric(i)){
+  if (is.numeric(i)) {
     # check that it is an integer
     if (i != as.integer(i)) {
       stop("i must be an integer")
@@ -42,11 +42,11 @@ get_repeat <- function(x, i) {
   # TODO extract the attributes of the simple ensemble from the repeat ensemble
   # e.g. calibration info
   # if we have a class_calibration_list, get the relevant info for this repeat
-   if (!is.null(attr(x, "class_thresholds_list", exact = TRUE))) {
-     attr(simple_ens, "class_thresholds") <-
-       attr(x, "class_thresholds_list", exact = TRUE)[[i]]
-     # and remove the list
-     attr(simple_ens, "class_thresholds_list") <- NULL
-   }
+  if (!is.null(attr(x, "class_thresholds_list", exact = TRUE))) {
+    attr(simple_ens, "class_thresholds") <-
+      attr(x, "class_thresholds_list", exact = TRUE)[[i]]
+    # and remove the list
+    attr(simple_ens, "class_thresholds_list") <- NULL
+  }
   return(simple_ens)
 }

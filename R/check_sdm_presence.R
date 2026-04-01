@@ -11,9 +11,10 @@
 #' @export
 
 check_sdm_presence <- function(
-    .data,
-    .col,
-    presence_level = "presence") {
+  .data,
+  .col,
+  presence_level = "presence"
+) {
   .col <- rlang::enquo(.col) %>%
     rlang::quo_get_expr() %>%
     rlang::as_string()
