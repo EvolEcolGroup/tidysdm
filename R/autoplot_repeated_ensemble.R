@@ -8,6 +8,9 @@
 #' @export
 #' @keywords ensemble
 
+# TODO we shoudl add metric and rank metric in a manner similar to what we have
+# in autoplot.simple_ensemble, but for now we just plot all metrics
+
 autoplot.repeat_ensemble <- function(object) {
   metrics <- collect_metrics(object)
 

@@ -10,7 +10,7 @@ get_repeat(x, i)
 \item{x}{a repeat ensemble object}
 
 \item{i}{index of the simple ensemble to extract, or name of the simple
-ensemble to extract}
+ensemble to extract.}
 }
 \value{
 a simple ensemble object
@@ -19,7 +19,16 @@ a simple ensemble object
 This function extracts a simple ensemble out of a repeat
 ensemble, by index or by name.
 }
+\details{
+Note that, when using a numerical index, that index refers to the
+order of the repeats for which at least one algorithm passed the appropriate
+thresholds set when creating the ensemble. For example, if "rep_02" had not
+good algorithms, the repeat ensemble would only contain labels "rep_01",
+"rep_03", etc. So, index 2 would refer to "rep_03" in this case. If you want
+to be sure to get a given repeat, it is safer to use the name of the repeat
+(e.g. "rep_03") rather than the index.
+}
 \examples{
 # extract the second simple ensemble out of the repeat ensemble
-get_repeat(lacerta_rep_ens, i = 2)
+get_repeat(lacerta_rep_ens, i = "rep_02")
 }

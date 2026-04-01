@@ -34,12 +34,15 @@ test_that("predict correctly a repeated ensemble",{
 
 
   # TODO bring this test back when thresholding is implemented for repeated
-  # ensembles make prediction by class thresholding with a metric threshold
-#  pred_class_mean <- predict(lacerta_rep_ens, new_data = new_data_ex,
-#    fun = "mean", type = "class", class_thresh = c("tss_max"))
-  # this should have 4 columns (two algorithms and three repeats, but one repeat
-  # should be filtered out by the metric threshold)
+  lacerta_rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
+                                              class_thresh = c("tss_max"))
 
+  # ensembles make prediction by class thresholding with a metric threshold
+  pred_class_mean <- predict(lacerta_rep_ens_calib, new_data = new_data_ex,
+    fun = "mean", type = "class", class_thresh = c("tss_max"))
+  # this should have 1 column
+  expect_true(ncol(pred_class_mean) == 1)
+  # TODO we need to test when we give multiple fun (currently, that is not implemented)
 
 
   # check for error if we use "none" with multiple functions

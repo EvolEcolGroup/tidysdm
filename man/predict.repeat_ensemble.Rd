@@ -9,6 +9,7 @@
   new_data,
   type = "prob",
   fun = "mean",
+  class_fun = c("majority", "prop"),
   metric_thresh = NULL,
   class_thresh = NULL,
   by_repeat = FALSE,
@@ -28,6 +29,12 @@ predict.}
 possible to combine multiple functions, except for "none". If it is set to
 "none", only the individual member predictions are returned.}
 
+\item{class_fun}{the function to use to combine class predictions across
+repeats. It can be "majority" (the class with the highest proportion across
+repeats is predicted) or "prop" (the proportion of the "presence" class
+across repeats is returned). This argument is only used if \code{type} is
+"class".}
+
 \item{metric_thresh}{a vector of length 2 giving a metric and its threshold,
 which will be used to prune which models in the ensemble will be used for
 the prediction. The 'metrics' need to have been computed when the workflow
@@ -41,9 +48,9 @@ c("sensitivity",0.8).}
 
 \item{by_repeat}{boolean defining whether individual predictions for each
 repeat should be returned (no aggregating function will be applied at the
-repeat level). The columns for
-individual members have the name of the workflow a a prefix, separated by
-"." from the usual column names of the predictions.}
+repeat level). The columns for individual members have the name of the
+workflow a a prefix, separated by "." from the usual column names of the
+predictions.}
 
 \item{...}{not used in this method.}
 }
@@ -52,9 +59,8 @@ a tibble of predictions
 }
 \description{
 Predict for a new dataset by using a repeat ensemble. Predictions from
-individual models are combined according to \code{fun}: if a
-weighted function is used (\code{weighted_mean} or \code{weighted_median}), weights are
-based on the metric used to tune models in the ensemble (see
-\code{\link{repeat_ensemble}}).
+individual models are combined according to \code{fun}: if a weighted function is
+used (\code{weighted_mean} or \code{weighted_median}), weights are based on the metric
+used to tune models in the ensemble (see \code{\link{repeat_ensemble}}).
 }
 \keyword{predict}

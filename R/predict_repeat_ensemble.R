@@ -1,10 +1,9 @@
 #' Predict for a repeat ensemble set
 #'
 #' Predict for a new dataset by using a repeat ensemble. Predictions from
-#' individual models are combined according to `fun`: if a
-#' weighted function is used (`weighted_mean` or `weighted_median`), weights are
-#' based on the metric used to tune models in the ensemble (see
-#' [`repeat_ensemble`]).
+#' individual models are combined according to `fun`: if a weighted function is
+#' used (`weighted_mean` or `weighted_median`), weights are based on the metric
+#' used to tune models in the ensemble (see [`repeat_ensemble`]).
 #' @param object an repeat_ensemble object
 #' @param new_data a data frame in which to look for variables with which to
 #'   predict.
@@ -13,6 +12,11 @@
 #'   `mean`, `median`, `weighted_mean`, `weighted_median` and `none`. It is
 #'   possible to combine multiple functions, except for "none". If it is set to
 #'   "none", only the individual member predictions are returned.
+#' @param class_fun the function to use to combine class predictions across
+#'   repeats. It can be "majority" (the class with the highest proportion across
+#'   repeats is predicted) or "prop" (the proportion of the "presence" class
+#'   across repeats is returned). This argument is only used if `type` is
+#'   "class".
 #' @param metric_thresh a vector of length 2 giving a metric and its threshold,
 #'   which will be used to prune which models in the ensemble will be used for
 #'   the prediction. The 'metrics' need to have been computed when the workflow
@@ -24,9 +28,9 @@
 #'   c("sensitivity",0.8).
 #' @param by_repeat boolean defining whether individual predictions for each
 #'   repeat should be returned (no aggregating function will be applied at the
-#'   repeat level). The columns for
-#'   individual members have the name of the workflow a a prefix, separated by
-#'   "." from the usual column names of the predictions.
+#'   repeat level). The columns for individual members have the name of the
+#'   workflow a a prefix, separated by "." from the usual column names of the
+#'   predictions.
 #' @param ... not used in this method.
 #' @returns a tibble of predictions
 #' @method predict repeat_ensemble
@@ -38,6 +42,7 @@ predict.repeat_ensemble <-
            new_data,
            type = "prob",
            fun = "mean",
+           class_fun = c("majority", "prop"),
            metric_thresh = NULL,
            class_thresh = NULL,
            by_repeat = FALSE,
@@ -47,14 +52,14 @@ predict.repeat_ensemble <-
       stop("if 'fun' has length >1, it cannot be 'none'")
     }
 
+    class_fun <- match.arg(class_fun)
 
-    # we change the names of the workflows to combine with the repeat ids
-    object$workflow_id <- paste(object$rep_id, object$wflow_id, sep = ".")
-    class(object)[1] <- "simple_ensemble"
+    # we add names of the workflows to combine with the repeat ids
+#    object$workflow_id <- paste(object$rep_id, object$wflow_id, sep = ".")
     repeat_ids <- unique(object$rep_id)
     # now predict for each simple ensemble
     for (i_rep in repeat_ids) {
-      object_rep <- object %>% dplyr::filter(.data$rep_id == i_rep)
+      object_rep <- get_repeat(object, i = i_rep)
       pred_rep <- stats::predict(
         object_rep,
         new_data = new_data,
@@ -86,21 +91,26 @@ predict.repeat_ensemble <-
         i_rep_fun <- gsub("weighted_", "", i_fun)
         pred_rep_ensemble[[i_fun]] <- apply(pred_this_fun, 1, eval(parse(text = i_rep_fun)))
 
-        # # convert to classes
-        # if (type == "class") {
-        #   pred_ensemble[[i_fun]] <- prob_to_binary(pred_ensemble[[i_fun]],
-        #                                            thresh = ref_calib_tb %>%
-        #                                              dplyr::filter(fun == i_fun) %>%
-        #                                              dplyr::pull("optim_value"),
-        #                                            class_levels = class_levels
-        #   )
-        # }
       }
-      pred_rep_ensemble <- data.frame(pred_rep_ensemble)
-    } else {
-      # if we are predicting classes, we just take the majority vote across
-      # repeats
-    }
 
-     return(pred_rep_ensemble)
+    } else {# if we are predicting classes
+      # TODO we need to allow for multiple fun values here
+
+      # compute the proportion of suitable classes across repeats for each
+      # observation, and then apply the class_fun to get the final prediction
+      class_levels <- levels(pred_all[, 1])
+      pred_rep_ensemble <- rowSums(pred_all=="presence")/ncol(pred_all)
+      if ( class_fun == "majority") {
+        pred_rep_ensemble <- ifelse(pred_rep_ensemble > 0.5, class_levels[1],class_levels[2])
+      } else {
+        if (class_levels[2] != "presence"){
+          # flip the proportion if the "presence" class is the second level
+          pred_rep_ensemble <- 1-pred_rep_ensemble
+        }
+      }
+
+    }
+    # TODO think about column names if we only have one column
+    pred_rep_ensemble <- data.frame(pred_rep_ensemble)
+    return(pred_rep_ensemble)
 }

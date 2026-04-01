@@ -144,10 +144,6 @@ calib_class_thresh.repeat_ensemble <- function(object,
   }
   for (i_rep in repeat_ids) {
     object_rep <- get_repeat(object, i_rep)
-    # TODO this should happen in get_repeat
-    # attr(object_rep, "class_thresholds_list") <- NULL
-
-
     object_rep <- calib_class_thresh(
       object_rep,
       class_thresh = class_thresh,
