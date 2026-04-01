@@ -4,12 +4,14 @@
 #'  ranked using one of the metrics.
 #'
 #' @param object A [`repeat_ensemble`] whose elements have results.
+#' @param ... Other options to pass to `autoplot()`. Currently unused.
 #' @returns A ggplot object.
 #' @export
 #' @keywords ensemble
 #' @examples
 #' autoplot(lacerta_rep_ens)
-# TODO we shoudl add metric and rank metric in a manner similar to what we have
+#'
+# TODO we should add metric and rank metric in a manner similar to what we have
 # in autoplot.simple_ensemble, but for now we just plot all metrics
 autoplot.repeat_ensemble <- function(object, ...) {
   # check that ellipse is empty

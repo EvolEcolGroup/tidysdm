@@ -63,4 +63,14 @@ individual models are combined according to \code{fun}: if a weighted function i
 used (\code{weighted_mean} or \code{weighted_median}), weights are based on the metric
 used to tune models in the ensemble (see \code{\link{repeat_ensemble}}).
 }
+\examples{
+# we need a dataset to predict, we extract it from one of the models
+new_data_ex <- workflowsets::extract_mold(
+  lacerta_rep_ens$workflow[[1]]
+)$predictors
+predict(lacerta_rep_ens,
+  new_data = new_data_ex,
+  fun = c("mean", "weighted_mean", "median")
+)
+}
 \keyword{predict}

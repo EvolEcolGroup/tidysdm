@@ -32,12 +32,17 @@
 #'  * `optim_value`: the optimal threshold for the given combination of
 #'   `class_thresh`, `metric_thresh` and `fun`
 #' @examplesIf rlang::is_installed("earth")
+#' # for a simple ensemble
 #' test_ens <- simple_ensemble() %>%
 #'   add_member(two_class_res[1:3, ], metric = "roc_auc")
 #' test_ens <- calib_class_thresh(test_ens, class_thresh = "tss_max")
 #' test_ens <- calib_class_thresh(test_ens, class_thresh = "kap_max")
 #' test_ens <- calib_class_thresh(test_ens, class_thresh = c("sens", 0.9))
 #' collect_class_thresh(test_ens)
+#' # for a repeat ensemble
+#' rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
+#'   class_thresh = "tss_max")
+#' collect_class_thresh(rep_ens_calib)
 #' @export
 #' @keywords predict
 calib_class_thresh <- function(object, class_thresh,

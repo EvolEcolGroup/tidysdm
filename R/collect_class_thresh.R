@@ -3,7 +3,8 @@
 #' Return a tibble of class thresholds, as computed by `calib_class_thresh()`.
 #' @param x A [`simple_ensemble`]
 #' @param ... Not currently used.
-#' @return A tibble.
+#' @return A tibble with class thresholds (for a `simple_ensemble`), or a list
+#' of such tibbles (for a `repeat_ensemble`).
 #' @examplesIf rlang::is_installed("earth")
 #' test_ens <- simple_ensemble() %>%
 #'   add_member(two_class_res[1:3, ], metric = "roc_auc")
@@ -31,4 +32,10 @@ collect_class_thresh.default <- function(x, ...) {
 #' @export
 collect_class_thresh.simple_ensemble <- function(x, ...) {
   attr(x, "class_thresholds")
+}
+
+# method for repeat_ensemble
+#' @export
+collect_class_thresh.repeat_ensemble <- function(x, ...) {
+  attr(x, "class_thresholds_list")
 }

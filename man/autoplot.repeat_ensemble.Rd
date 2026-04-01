@@ -4,10 +4,12 @@
 \alias{autoplot.repeat_ensemble}
 \title{Plot the results of a repeat ensemble}
 \usage{
-\method{autoplot}{repeat_ensemble}(object)
+\method{autoplot}{repeat_ensemble}(object, ...)
 }
 \arguments{
 \item{object}{A \code{\link{repeat_ensemble}} whose elements have results.}
+
+\item{...}{Other options to pass to \code{autoplot()}. Currently unused.}
 }
 \value{
 A ggplot object.
@@ -15,5 +17,9 @@ A ggplot object.
 \description{
 This \code{autoplot()} method plots performance metrics for each repeat,
 ranked using one of the metrics.
+}
+\examples{
+autoplot(lacerta_rep_ens)
+
 }
 \keyword{ensemble}
