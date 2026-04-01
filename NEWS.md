@@ -3,7 +3,8 @@
   for "weighted mean"
 * implement better prediction logic for `repeat_ensembles`, grouping
   by repeat
-* implement method for `calib_class_thresh` for `repeat_ensembles`
+* implement `calib_class_thresh` method for `repeat_ensembles`
+* implement `collect_calib_thresh` method for `repeat_ensembles`
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
