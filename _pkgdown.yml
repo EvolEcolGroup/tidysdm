@@ -22,7 +22,7 @@ reference:
     contents:
       - filter_collinear
       - plot_pres_vs_bg
-      - geom_split_violin	
+      - geom_split_violin
       - dist_pres_vs_bg
   - title: "Recipes"
     desc: "Functions for recipes with spatial SDM data (additional steps can be added with standard `recipes` functions)."
@@ -62,14 +62,16 @@ reference:
       - tss
       - prob_metrics_sf
   - title: "Ensemble"
-    desc: "Functions for creating an ensemble selecting the best set of 
+    desc: "Functions for creating an ensemble selecting the best set of
     parameters for each model."
     contents:
       - simple_ensemble
       - autoplot.simple_ensemble
+      - autoplot.repeat_ensemble
       - repeat_ensemble
       - add_member
       - add_repeat
+      - get_repeat
       - collect_metrics.simple_ensemble
       - collect_metrics.repeat_ensemble
       - control_ensemble_grid
@@ -94,8 +96,8 @@ reference:
       - "pairs,stars-method"
   - title: "Example data"
     desc: "Example datasets and simple models used in the documentation"
-    contents: 
-      - horses 
+    contents:
+      - horses
       - lacerta
       - lacertidae_background
       - lacerta_ensemble
