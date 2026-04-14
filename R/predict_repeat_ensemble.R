@@ -106,7 +106,7 @@ predict.repeat_ensemble <-
                                             eval(parse(text = i_rep_fun)))
       }
     } else { # if we are predicting classes
-      class_levels <- levels(pred_all[, 1])
+      class_levels <- levels(pred_all[[1]])
       # if we have an aggregating function
       for (i_fun in fun) {
         # subset to columns for this function
@@ -118,8 +118,9 @@ predict.repeat_ensemble <-
         # compute the proportion of suitable classes across repeats for each
         # observation, and then apply the class_fun to get the final prediction
         if (class_fun == "majority") {
-          this_pred <- ifelse(this_pred > 0.5,
-            class_levels[1], class_levels[2]
+          this_pred <- factor(
+            ifelse(this_pred > 0.5, class_levels[1], class_levels[2]),
+            levels = class_levels
           )
         } else {
           if (class_levels[2] != "presence") {
