@@ -13,14 +13,14 @@ dataset by loading the *Lacerta* dataset, and manually add an NA:
 library(tidysdm)
 #> Loading required package: tidymodels
 #> ── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──
-#> ✔ broom        1.0.12     ✔ recipes      1.3.1 
-#> ✔ dials        1.4.2      ✔ rsample      1.3.2 
-#> ✔ dplyr        1.2.0      ✔ tailor       0.1.0 
+#> ✔ broom        1.0.12     ✔ recipes      1.3.2 
+#> ✔ dials        1.4.3      ✔ rsample      1.3.2 
+#> ✔ dplyr        1.2.1      ✔ tailor       0.1.0 
 #> ✔ ggplot2      4.0.2      ✔ tidyr        1.3.2 
 #> ✔ infer        1.1.0      ✔ tune         2.0.1 
 #> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
-#> ✔ parsnip      1.4.1      ✔ workflowsets 1.1.1 
-#> ✔ purrr        1.2.1      ✔ yardstick    1.3.2
+#> ✔ parsnip      1.5.0      ✔ workflowsets 1.1.1 
+#> ✔ purrr        1.2.2      ✔ yardstick    1.4.0
 #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 #> ✖ purrr::discard() masks scales::discard()
 #> ✖ dplyr::filter()  masks stats::filter()
@@ -79,7 +79,7 @@ lacerta_models <-
 #> generated.
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (643ms)
+#> ✔ 1 of 2 resampling: default_glm (618ms)
 #> i 2 of 2 tuning:     default_maxent
 #> → A | error:   NA values in data table. Please remove them and rerun.
 #> There were issues with some computations   A: x1
@@ -89,7 +89,7 @@ lacerta_models <-
 #>                ℹ Only vectors of size 1 are recycled.
 #>                Caused by error in `vectbl_recycle_rhs_rows()`:
 #>                ! Can't recycle input of size 88 to size 87.
-#> There were issues with some computations   A: x1There were issues with some computations   A: x7   B: x6
+#> There were issues with some computations   A: x1There were issues with some computations   A: x13   B: x6
 #> Warning: All models failed. Run `show_notes(.Last.tune.result)` for more
 #> information.
 #> There were issues with some computations   A: x24   B: x6
@@ -163,7 +163,7 @@ suggested_vars <- c("bio05", "bio06", "bio13", "bio14", "bio15")
 lacerta_rec_sel <- recipe(lacerta_thin, formula = class ~ .) %>%
   step_select(all_of(suggested_vars))
 #> Warning: `step_select()` was deprecated in recipes 1.3.0.
-#> ℹ See `?select_select()` for recommended alternatives.
+#> ℹ See `?step_select()` for recommended alternatives.
 #> This warning is displayed once per session.
 #> Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
 #> generated.
@@ -298,10 +298,10 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (560ms)
+#> ✔ 1 of 2 resampling: default_glm (578ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 2 resampling: default_gam
-#> ✔ 2 of 2 resampling: default_gam (969ms)
+#> ✔ 2 of 2 resampling: default_gam (926ms)
 ```
 
 Note that the step of defining a formula is incompatible with using
@@ -379,17 +379,17 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 3 resampling: default_glm
-#> ✔ 1 of 3 resampling: default_glm (353ms)
+#> ✔ 1 of 3 resampling: default_glm (352ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 3 resampling: default_gam
 #> → A | warning: Fitting terminated with step failure - check results carefully
 #> There were issues with some computations   A: x1
 #> There were issues with some computations   A: x1
 #> 
-#> ✔ 2 of 3 resampling: default_gam (1.2s)
+#> ✔ 2 of 3 resampling: default_gam (1.1s)
 #> i 3 of 3 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 3 of 3 tuning:     default_rf (975ms)
+#> ✔ 3 of 3 tuning:     default_rf (965ms)
 ```
 
 We see that one of the folds gives us an error when using GAMs. The

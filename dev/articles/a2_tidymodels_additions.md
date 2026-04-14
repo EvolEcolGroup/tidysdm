@@ -23,14 +23,14 @@ Let’s create a factor variable with 3 levels based on altitude.
 library(tidysdm)
 #> Loading required package: tidymodels
 #> ── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──
-#> ✔ broom        1.0.12     ✔ recipes      1.3.1 
-#> ✔ dials        1.4.2      ✔ rsample      1.3.2 
-#> ✔ dplyr        1.2.0      ✔ tailor       0.1.0 
+#> ✔ broom        1.0.12     ✔ recipes      1.3.2 
+#> ✔ dials        1.4.3      ✔ rsample      1.3.2 
+#> ✔ dplyr        1.2.1      ✔ tailor       0.1.0 
 #> ✔ ggplot2      4.0.2      ✔ tidyr        1.3.2 
 #> ✔ infer        1.1.0      ✔ tune         2.0.1 
 #> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
-#> ✔ parsnip      1.4.1      ✔ workflowsets 1.1.1 
-#> ✔ purrr        1.2.1      ✔ yardstick    1.3.2
+#> ✔ parsnip      1.5.0      ✔ workflowsets 1.1.1 
+#> ✔ purrr        1.2.2      ✔ yardstick    1.4.0
 #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 #> ✖ purrr::discard() masks scales::discard()
 #> ✖ dplyr::filter()  masks stats::filter()
@@ -162,10 +162,10 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (951ms)
+#> ✔ 1 of 2 resampling: default_glm (921ms)
 #> i 2 of 2 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 2 tuning:     default_rf (2.1s)
+#> ✔ 2 of 2 tuning:     default_rf (2s)
 # fit the ensemble
 lacerta_ensemble <- simple_ensemble() %>%
   add_member(lacerta_models, metric = "boyce_cont")
@@ -226,7 +226,7 @@ climate_present$topography <- terra::classify(climate_present$topography,
   brackets = TRUE
 )
 library(terra)
-#> terra 1.9.1
+#> terra 1.9.11
 #> 
 #> Attaching package: 'terra'
 #> The following object is masked from 'package:tidyr':
@@ -305,7 +305,7 @@ explainer_lacerta_ens <- explain_tidysdm(lacerta_ensemble)
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  predict_function 
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidysdm , ver. 1.0.4.9001 , task classification (  default  ) 
+#>   -> model_info        :  package tidysdm , ver. 1.0.4.9002 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.02117606 , mean =  0.2977721 , max =  0.8709933  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -576,13 +576,13 @@ lacerta_models <-
 #> generated.
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 3 resampling: uncor_glm
-#> ✔ 1 of 3 resampling: uncor_glm (367ms)
+#> ✔ 1 of 3 resampling: uncor_glm (352ms)
 #> i 2 of 3 tuning:     all_rf
 #> ! No improvement for 10 iterations; returning current results.
-#> ✔ 2 of 3 tuning:     all_rf (17.6s)
+#> ✔ 2 of 3 tuning:     all_rf (17.3s)
 #> i 3 of 3 tuning:     uncor_svm
 #> maximum number of iterations reached 0.003456553 -0.003390584maximum number of iterations reached 0.004873408 -0.004689518maximum number of iterations reached 2.43803e-05 -2.435951e-05maximum number of iterations reached 0.003562052 -0.003477793maximum number of iterations reached 0.0002060528 -0.0002059063
-#> ✔ 3 of 3 tuning:     uncor_svm (21.8s)
+#> ✔ 3 of 3 tuning:     uncor_svm (21.5s)
 ```
 
 We can have a look at the performance of our models with:
@@ -751,7 +751,7 @@ lacerta_models <-
 #> There were issues with some computations   A: x1
 #> There were issues with some computations   A: x2
 #> 
-#> ✔ 1 of 4 resampling: default_glm (580ms)
+#> ✔ 1 of 4 resampling: default_glm (564ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> ✔ 2 of 4 tuning:     default_rf (3.7s)
@@ -759,12 +759,11 @@ lacerta_models <-
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
-#> There were issues with some computations   A: x2
 #> There were issues with some computations   A: x3
-#> There were issues with some computations   A: x5
+#> There were issues with some computations   A: x4
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 3 of 4 tuning:     default_gbm (11.3s)
+#> ✔ 3 of 4 tuning:     default_gbm (11s)
 #> i 4 of 4 tuning:     default_maxent
 #> ✔ 4 of 4 tuning:     default_maxent (2.4s)
 

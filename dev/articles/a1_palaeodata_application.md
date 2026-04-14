@@ -15,14 +15,14 @@ We first load `tidysdm`:
 library(tidysdm)
 #> Loading required package: tidymodels
 #> ── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──
-#> ✔ broom        1.0.12     ✔ recipes      1.3.1 
-#> ✔ dials        1.4.2      ✔ rsample      1.3.2 
-#> ✔ dplyr        1.2.0      ✔ tailor       0.1.0 
+#> ✔ broom        1.0.12     ✔ recipes      1.3.2 
+#> ✔ dials        1.4.3      ✔ rsample      1.3.2 
+#> ✔ dplyr        1.2.1      ✔ tailor       0.1.0 
 #> ✔ ggplot2      4.0.2      ✔ tidyr        1.3.2 
 #> ✔ infer        1.1.0      ✔ tune         2.0.1 
 #> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
-#> ✔ parsnip      1.4.1      ✔ workflowsets 1.1.1 
-#> ✔ purrr        1.2.1      ✔ yardstick    1.3.2
+#> ✔ parsnip      1.5.0      ✔ workflowsets 1.1.1 
+#> ✔ purrr        1.2.2      ✔ yardstick    1.4.0
 #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 #> ✖ purrr::discard() masks scales::discard()
 #> ✖ dplyr::filter()  masks stats::filter()
@@ -69,7 +69,7 @@ As a background to our presences, we will use the land mask for the
 present, taken from `pastclim`, and cut to cover only Europe:
 
     #> Loading required package: terra
-    #> terra 1.9.1
+    #> terra 1.9.11
     #> 
     #> Attaching package: 'terra'
     #> The following object is masked from 'package:tidyr':
@@ -323,18 +323,18 @@ horses_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (500ms)
+#> ✔ 1 of 4 resampling: default_glm (526ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 4 resampling: default_gam
-#> ✔ 2 of 4 resampling: default_gam (734ms)
+#> ✔ 2 of 4 resampling: default_gam (725ms)
 #> i 3 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 3 of 4 tuning:     default_rf (3s)
+#> ✔ 3 of 4 tuning:     default_rf (3.1s)
 #> i 4 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
-#> There were issues with some computations   A: x2
+#> There were issues with some computations   A: x3
 #> There were issues with some computations   A: x4
 #> There were issues with some computations   A: x5
 #> There were issues with some computations   A: x5
