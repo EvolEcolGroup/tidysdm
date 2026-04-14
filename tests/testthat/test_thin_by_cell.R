@@ -65,6 +65,8 @@ test_that("thin_by_cell works correctly with coords and sf", {
   new_obs_xy <- thin_by_cell(occ, r, coords = c("X", "Y"))
   expect_equal(new_obs, new_obs_xy)
   names(occ) <- c("id", "X", "Y", "geometry")
+  # again we expect no error and no warning, and the same result as before
   set.seed(123)
   new_obs_xy_rep <- thin_by_cell(occ, r, coords = c("X", "Y"))
+  expect_equal(new_obs, new_obs_xy_rep)
 })
