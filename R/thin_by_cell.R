@@ -37,7 +37,9 @@ thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE,
       "use `thin_by_cell_time()`"
     )
   }
-  if (inherits(raster, "stars")) raster <- as(raster, "SpatRaster")
+  if (inherits(raster, "stars")) {
+    raster <- as(raster, "SpatRaster")
+  }
   # add type checks for these parameters
   return_sf <- FALSE # flag whether we need to return an sf object
   if (inherits(data, "sf")) {
@@ -63,9 +65,19 @@ thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE,
     } else {
       data <- data %>% dplyr::bind_cols(sf::st_coordinates(data))
     }
+    if (!is.null(coords) && !all(c("X", "Y") %in% coords)) {
+      warning(
+        "The 'coords' argument is ignored when 'data' is an sf object, ",
+        "as the coordinates are taken from the geometry."
+      )
+    }
+    coords <- c("X", "Y") # if we have an sf object, we take the coordinates
+    # from the geometry, so we know they are in the correct projection
     return_sf <- TRUE
+  } else {
+    coords <- check_coords_names(data, coords)
   }
-  coords <- check_coords_names(data, coords)
+
   # randomise the row order, so that when we get the first instance in a cell,
   # there should be no pattern
   data <- data[sample(seq_len(nrow(data))), ]
