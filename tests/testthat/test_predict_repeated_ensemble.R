@@ -71,4 +71,24 @@ test_that("predict correctly a repeated ensemble", {
       fun = c("mean", "none")
     ), "if 'fun' has length >1, it cannot be 'none'"
   )
+  
+  # check that binary prediction works with metric_thresh set
+  # and class_fun = "majority"
+  lacerta_rep_ens_calib_thresh <- calib_class_thresh(
+    lacerta_rep_ens,
+    class_thresh = "tss_max",
+    metric_thresh = c("boyce_cont", 0.5)
+  )
+  pred_class_metric_thresh <- predict(
+    lacerta_rep_ens_calib_thresh,
+    new_data = new_data_ex,
+    fun = "median",
+    type = "class",
+    class_fun = "majority",
+    class_thresh = "tss_max",
+    metric_thresh = c("boyce_cont", 0.5)
+  )
+  # should have 1 column and be a factor with presence/background levels
+  expect_true(ncol(pred_class_metric_thresh) == 1)
+  expect_true(is.factor(pred_class_metric_thresh[[1]]))
 })
