@@ -988,7 +988,7 @@ If we'd like to binarise the predictions of repeated ensembles, we need to calib
 ```{r}
 # first we calibrate the model
 lacerta_rep_ens <- calib_class_thresh(lacerta_rep_ens,
-                              class_thresh = "tss_max"
+  class_thresh = "tss_max"
 )
 ```
 
@@ -1005,13 +1005,10 @@ prediction_binary_repens_major <- predict_raster(lacerta_rep_ens,
 )
 
 ggplot() +
-  geom_spatraster(data = prediction_binary_repens_major, aes(fill = binary_median.majority)) +
+  geom_spatraster(
+    data = prediction_binary_repens_major,
+    aes(fill = binary_median.majority)
+  ) +
   geom_sf(data = lacerta_thin %>% filter(class == "presence")) +
   scale_fill_discrete(na.value = "transparent")
 ```
-
-
-
-
-
-
