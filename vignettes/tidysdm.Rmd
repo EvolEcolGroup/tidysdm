@@ -968,18 +968,50 @@ We can summarise the goodness of fit of models for each repeat with
 `collect_metrics()`, but there is no `autoplot()` function for
 `repeated_ensemble` objects.
 
-We can then predict in the usual way. We will take the mean and median
-of all models, without filtering by performance, and plot the results:
+We can then predict in the usual way using `predict_raster`, specifying the aggregating function with the `fun` parameter. We will take the mean and median of all models (you can also use weighted alternatives), without filtering by performance, and plot the results:
 
 ```{r, fig.width=6, fig.height=4}
-lacerta_rep_ens <- predict_raster(lacerta_rep_ens, climate_present,
+lacerta_rep_ens_plot <- predict_raster(lacerta_rep_ens, climate_present,
   fun = c("mean", "median")
 )
 ggplot() +
-  geom_spatraster(data = lacerta_rep_ens, aes(fill = median)) +
+  geom_spatraster(data = lacerta_rep_ens_plot, aes(fill = median)) +
   scale_fill_terrain_c()
 ```
 
 Note that the predictions are quite similar to the ones we obtained
 before, but the predicted suitable range is somewhat larger, probably because we
 included models that are not very good (as we did not filter by performance) in the ensemble.
+
+If we'd like to binarise the predictions of repeated ensembles, we need to calibrate the threshold for each repeat separately, as the models in each repeat are different and thus the optimal threshold may differ across repeats. We can do this with `calib_class_thresh()`, which will add a new column to the `repeated_ensemble` object with the calibrated thresholds for each repeat.
+
+```{r}
+# first we calibrate the model
+lacerta_rep_ens <- calib_class_thresh(lacerta_rep_ens,
+                              class_thresh = "tss_max"
+)
+```
+
+To combine binary predictions across repeats when predicting with `predict_raster`, we can use either the majority class (the class with the highest proportion across repeats is predicted) by specifying `class_fun = "majority"` or the proportion of the "presence" class across repeats (`class_fun = "prop"`). Note that we can also filter the individual models within each repeat with `metric_thresh` (TODO make this work).
+
+```{r, fig.width=6, fig.height=4}
+# predict with the majority class across repeats
+prediction_binary_repens_major <- predict_raster(lacerta_rep_ens,
+  climate_present,
+  type = "class",
+  fun = "median",
+  class_thresh = c("tss_max"),
+  class_fun = "majority"
+)
+
+ggplot() +
+  geom_spatraster(data = prediction_binary_repens_major, aes(fill = binary_median.majority)) +
+  geom_sf(data = lacerta_thin %>% filter(class == "presence")) +
+  scale_fill_discrete(na.value = "transparent")
+```
+
+
+
+
+
+
