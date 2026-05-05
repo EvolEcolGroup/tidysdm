@@ -965,8 +965,11 @@ usethis::use_data(lacerta_rep_ens, overwrite = TRUE)
 
 
 We can summarise the goodness of fit of models for each repeat with
-`collect_metrics()`, but there is no `autoplot()` function for
-`repeated_ensemble` objects.
+`collect_metrics()` and visualise it with `autoplot()`.
+
+```{r, fig.width=6, fig.height=4}
+autoplot(lacerta_rep_ens)
+```
 
 We can then predict in the usual way using `predict_raster`, specifying the aggregating function with the `fun` parameter. We will take the mean and median of all models (you can also use weighted alternatives), without filtering by performance, and plot the results:
 
@@ -983,12 +986,13 @@ Note that the predictions are quite similar to the ones we obtained
 before, but the predicted suitable range is somewhat larger, probably because we
 included models that are not very good (as we did not filter by performance) in the ensemble.
 
-If we'd like to binarise the predictions of repeated ensembles, we need to calibrate the threshold for each repeat separately, as the models in each repeat are different and thus the optimal threshold may differ across repeats. We can do this with `calib_class_thresh()`, which will add a new column to the `repeated_ensemble` object with the calibrated thresholds for each repeat.
+If we want to convert predictions from a repeated ensemble into binary outputs, we need to calibrate the threshold for each repeat separately, as the models in each repeat are different and thus the optimal threshold may differ across repeats. We can do this with `calib_class_thresh()`, which will add a new column to the `repeated_ensemble` object with the calibrated thresholds for each repeat.
 
 ```{r}
 # first we calibrate the model
 lacerta_rep_ens <- calib_class_thresh(lacerta_rep_ens,
-  class_thresh = "tss_max"
+  class_thresh = "tss_max",
+  metric_thresh = c("boyce_cont", 0.5)
 )
 ```
 
@@ -996,19 +1000,45 @@ To combine binary predictions across repeats when predicting with `predict_raste
 
 ```{r, fig.width=6, fig.height=4}
 # predict with the majority class across repeats
-prediction_binary_repens_major <- predict_raster(lacerta_rep_ens,
+prediction_binary_repens <- predict_raster(lacerta_rep_ens,
   climate_present,
   type = "class",
   fun = "median",
   class_thresh = c("tss_max"),
-  class_fun = "majority"
+  class_fun = "majority",
+  metric_thresh = c("boyce_cont", 0.5)
 )
 
 ggplot() +
   geom_spatraster(
-    data = prediction_binary_repens_major,
+    data = prediction_binary_repens,
     aes(fill = binary_median.majority)
   ) +
   geom_sf(data = lacerta_thin %>% filter(class == "presence")) +
   scale_fill_discrete(na.value = "transparent")
 ```
+
+
+
+
+TODO: check how to visualise the contribution of individual variables in repeated ensembles. The code below uses one of the thinned datsets, but datasets differ slightly for differtent repeats. Ideally, we would deal with this for example by taking means and ranges for each repeat datasets and then processing those (aplicable for this tidymodels solution) or somehow combining the datasets for each repeat or a subset of repeats, also applicable for response curves with DALEX (TODO test this with DALEX as well and find out how it works).
+
+```{r, fig.width=6, fig.height=4}
+bio05_prof <- recipe(lacerta_thin, formula = class ~ .) %>%
+  step_profile(-bio05, profile = vars(bio05)) %>%
+  prep(training = lacerta_thin)
+
+bio05_data <- bake(bio05_prof, new_data = NULL)
+
+bio05_data <- bio05_data %>%
+  mutate(
+    pred = predict(lacerta_rep_ens, bio05_data, fun = "mean")$mean
+  )
+
+ggplot(bio05_data, aes(x = bio05, y = pred)) +
+  geom_point(alpha = 0.5, cex = 1)
+```
+
+
+
+
