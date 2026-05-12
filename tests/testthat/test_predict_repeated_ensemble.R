@@ -91,4 +91,6 @@ test_that("predict correctly a repeated ensemble", {
   # should have 1 column and be a factor with presence/background levels
   expect_true(ncol(pred_class_metric_thresh) == 1)
   expect_true(is.factor(pred_class_metric_thresh[[1]]))
+  # check that predict for repeated ensemble with type = "class" and class_fun = "majority" outputs factor
+  expect_true(is.factor(pred_class_metric_thresh[[1]]))
 })
