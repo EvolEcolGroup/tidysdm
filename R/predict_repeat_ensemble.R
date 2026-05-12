@@ -70,6 +70,10 @@ predict.repeat_ensemble <-
 
     # we add names of the workflows to combine with the repeat ids
     repeat_ids <- unique(object$rep_id)
+    
+    pred_all = NULL
+    valid_repeats = c()
+    
     # now predict for each simple ensemble
     for (i_rep in repeat_ids) {
       object_rep <- get_repeat(object, i = i_rep)
@@ -80,7 +84,9 @@ predict.repeat_ensemble <-
         attr(object_rep, "class_thresholds") <- calib_list[[i_rep]]
       }
       
-      pred_rep <- stats::predict(
+      pred_rep <- tryCatch(
+        {
+        stats::predict(
         object_rep,
         new_data = new_data,
         type = type,
@@ -88,13 +94,42 @@ predict.repeat_ensemble <-
         metric_thresh = metric_thresh,
         class_thresh = class_thresh
       )
+        },
+      error = function(e){
+        if (grepl("metric_threshold excludes all models", e$message)) {
+          warning(
+            paste(
+              "Skipping repeat", i_rep,
+              "because all models were excluded by metric_thresh"
+            )
+          )
+          return(NULL)
+        }
+        
+        stop(e)
+      }
+      )
+      
+      # skip failed repeats
+      if (is.null(pred_rep)) {
+        next
+      }
       names(pred_rep) <- paste(i_rep, names(pred_rep), sep = ".")
-      if (i_rep == repeat_ids[1]) {
+      
+      valid_repeats <- c(valid_repeats, i_rep)
+      
+      if (is.null(pred_all)) {
         pred_all <- pred_rep
       } else {
         pred_all <- pred_all %>% dplyr::bind_cols(pred_rep)
       }
     }
+    
+    # if ALL repeats failed
+    if (is.null(pred_all)) {
+      stop("All repeats were excluded by metric_thresh")
+    }
+    
     # return the individual repeat predictions if requested
     if (by_repeat || ("none" %in% fun)) {
       return(pred_all)
