@@ -964,8 +964,8 @@ usethis::use_data(lacerta_rep_ens, overwrite = TRUE)
 ```
 
 
-We can summarise the goodness of fit of models for each repeat with `autoplot()` and with
-`collect_metrics()`.
+We can summarise the goodness of fit of models for each repeat with `autoplot()` and 
+`collect_metrics()` functions.
 
 ```{r, fig.width=6, fig.height=4}
 autoplot(lacerta_rep_ens)
