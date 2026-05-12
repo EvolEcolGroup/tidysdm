@@ -26,7 +26,7 @@ test_that("calibrate class thresholds for simple_ensemble", {
   )
 })
 
-test_that("calibrate class thresholds for simple_ensemble", {
+test_that("calibrate class thresholds for repeat_ensemble", {
   # check that we have no calibration info for the lacerta_rep_ens
   expect_null(attr(lacerta_rep_ens, "class_thresholds_list"))
   # extract the last simple ensemble for later
