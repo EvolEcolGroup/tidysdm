@@ -1021,3 +1021,5 @@ ggplot() +
   geom_sf(data = lacerta_thin %>% filter(class == "presence")) +
   scale_fill_discrete(na.value = "transparent")
 ```
+
+There is currently no built-in support for variable response curves for `repeat_ensemble` objects; users can manually generate them for example by using the training data and recipe from a single repeat (similar as shown above for `simple_ensemble`), though this does not account for variation in data across repeats. A more principled solution is planned for a future release.
