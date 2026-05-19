@@ -143,7 +143,7 @@ test_that("predict correctly a repeated ensemble", {
 
 
   # TODO we need to test when we give multiple fun (currently, that is not
-  # implemented)
+  # implemented) UPDATE we mostly implemented it but check if we need to expand
 
 
   # check for error if we use "none" with multiple functions
