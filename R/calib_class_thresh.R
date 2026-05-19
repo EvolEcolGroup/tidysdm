@@ -154,7 +154,7 @@ calib_class_thresh.repeat_ensemble <- function(object,
       class_thresh = class_thresh,
       metric_thresh = metric_thresh
     )
-    # add the calibration info to the repeat ensemble if there is an elementin
+    # add the calibration info to the repeat ensemble if there is an element in
     # the list for this repeat, we will add to it; otherwise, we will create it
     if (is.null(attr(object, "class_thresholds_list", exact = TRUE)[[i_rep]])) {
       attr(object, "class_thresholds_list")[[i_rep]] <-

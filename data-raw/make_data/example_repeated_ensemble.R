@@ -1,6 +1,9 @@
 # packages
 library(sf)
-
+library(dplyr)
+library(recipes)
+library(workflowsets)
+library(tidyterra)
 
 
 # load the occurrences
@@ -78,12 +81,12 @@ for (i_repeat in 1:3) {
 lacerta_rep_ens <- repeat_ensemble() %>% add_repeat(ensemble_list)
 
 
-# # check the predictions
-# #
-# prediction_present <- predict_raster(lacerta_rep_ens, climate_present)
-# ggplot() +
-#   geom_spatraster(data = prediction_present, aes(fill = mean)) +
-#   scale_fill_terrain_c()
+# check the predictions
+#
+prediction_present <- predict_raster(object = lacerta_rep_ens, raster = climate_present, fun = c ("mean", "weighted_mean"), class_fun = c("prop"))
+ggplot() +
+  geom_spatraster(data = prediction_present, aes(fill = mean)) +
+  scale_fill_terrain_c()
 
 
 # save lacerta_rep_ens as rds to the extdata folder

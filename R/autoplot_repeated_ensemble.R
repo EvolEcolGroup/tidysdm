@@ -19,8 +19,7 @@ autoplot.repeat_ensemble <- function(object, ...) {
     warning("additional arguments ... are currently not used")
   }
   metrics <- collect_metrics(object)
-
-  metrics$rep_index <- as.numeric(sub("rep_", "", metrics$rep_id))
+  metrics$rep_index <- as.integer(sub("rep_", "", metrics$rep_id))
   metrics$.metric <- as.factor(metrics$.metric)
 
   ggplot2::ggplot(
@@ -35,6 +34,9 @@ autoplot.repeat_ensemble <- function(object, ...) {
     ggplot2::geom_line() +
     ggplot2::geom_point() +
     ggplot2::facet_wrap(~ .data$.metric, nrow = 1, scales = "free_y") +
+    ggplot2::scale_x_continuous(
+      breaks = unique(metrics$rep_index)
+    ) +
     ggplot2::theme_bw() +
     ggplot2::labs(
       title = "Repeated ensemble autoplot",

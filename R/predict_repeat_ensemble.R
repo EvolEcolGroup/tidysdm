@@ -29,7 +29,7 @@
 #' @param by_repeat boolean defining whether individual predictions for each
 #'   repeat should be returned (no aggregating function will be applied at the
 #'   repeat level). The columns for individual members have the name of the
-#'   workflow a a prefix, separated by "." from the usual column names of the
+#'   workflow as a prefix, separated by "." from the usual column names of the
 #'   predictions.
 #' @param ... not used in this method.
 #' @returns a tibble of predictions

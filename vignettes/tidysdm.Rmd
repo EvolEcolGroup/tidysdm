@@ -990,7 +990,7 @@ Note that the predictions are quite similar to the ones we obtained
 before, but the predicted suitable range is somewhat larger, probably because we
 included models that are not very good (as we did not filter by performance) in the ensemble.
 
-If we want to convert predictions from a repeated ensemble into binary outputs, we need to calibrate the threshold for each repeat separately, as the models in each repeat are different and thus the optimal threshold may differ across repeats. We can do this with `calib_class_thresh()`, which will add a new column to the `repeated_ensemble` object with the calibrated thresholds for each repeat.
+If we want to convert predictions from a repeated ensemble into binary outputs, we need to calibrate the threshold for each repeat separately, as the models in each repeat are different and thus the optimal threshold may differ across repeats. We can do this with `calib_class_thresh()`, which will add a new column to the `repeat_ensemble` object with the calibrated thresholds for each repeat.
 
 ```{r}
 # first we calibrate the model
@@ -1000,7 +1000,7 @@ lacerta_rep_ens <- calib_class_thresh(lacerta_rep_ens,
 )
 ```
 
-To combine binary predictions across repeats when predicting with `predict_raster`, we can use either the majority class (the class with the highest proportion across repeats is predicted) by specifying `class_fun = "majority"` or the proportion of the "presence" class across repeats (`class_fun = "prop"`). Note that we can also filter the individual models within each repeat with `metric_thresh` (TODO make this work).
+To combine binary predictions across repeats when predicting with `predict_raster`, we can use either the majority class (the class with the highest proportion across repeats is predicted) by specifying `class_fun = "majority"` or the proportion of the "presence" class across repeats (`class_fun = "prop"`). Note that we can also filter the individual models within each repeat with `metric_thresh`.
 
 ```{r, fig.width=6, fig.height=4}
 # predict with the majority class across repeats
