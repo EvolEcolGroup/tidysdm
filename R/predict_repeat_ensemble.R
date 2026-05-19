@@ -142,7 +142,11 @@ predict.repeat_ensemble <-
       # if we have an aggregating function
       for (i_fun in fun) {
         # subset to columns for this function
-        pred_this_fun <- pred_all %>% dplyr::select(dplyr::contains(i_fun))
+        pred_this_fun <- pred_all[
+          ,
+          endsWith(names(pred_all), paste0(".", i_fun)),
+          drop = FALSE
+        ]
         i_rep_fun <- gsub("weighted_", "", i_fun)
         pred_rep_ensemble[[i_fun]] <- apply(pred_this_fun, 1,
                                             eval(parse(text = i_rep_fun)))
@@ -152,7 +156,11 @@ predict.repeat_ensemble <-
       # if we have an aggregating function
       for (i_fun in fun) {
         # subset to columns for this function
-        pred_this_fun <- pred_all %>% dplyr::select(dplyr::contains(i_fun))
+        pred_this_fun <- pred_all[
+          ,
+          endsWith(names(pred_all), paste0(".", i_fun)),
+          drop = FALSE
+        ]
         this_pred <- rowSums(pred_this_fun == "presence") /
           ncol(pred_this_fun)
 

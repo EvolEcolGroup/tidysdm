@@ -28,16 +28,99 @@ test_that("predict correctly a repeated ensemble", {
   # now predict the normal mean and check that it differs from the weighted mean
   pred_mean <- predict(lacerta_rep_ens, new_data = new_data_ex, fun = "mean")
   expect_false(all(pred_mean == pred_wmean))
-  # now predict for both the mean, the weighted mean, and the median
+  # now predict for all aggregating functions together
   pred_multi <- predict(lacerta_rep_ens,
     new_data = new_data_ex,
-    fun = c("mean", "weighted_mean", "median")
+    fun = c("mean", "weighted_mean", "median", "weighted_median")
   )
   # this should have 3 columns (one for each function)
-  expect_true(ncol(pred_multi) == 3)
-  # TODO check that median and weighted median differ from the mean and from
-  # each other
+  expect_true(ncol(pred_multi) == 4)
 
+  
+  # each column in the multi-function output should match the corresponding
+  # single-function prediction; this checks that mean is not accidentally
+  # computed from both mean and weighted_mean columns, etc.
+  pred_mean <- predict(lacerta_rep_ens,
+                       new_data = new_data_ex,
+                       fun = "mean"
+  )
+  pred_weighted_mean <- predict(lacerta_rep_ens,
+                                new_data = new_data_ex,
+                                fun = "weighted_mean"
+  )
+  pred_median <- predict(lacerta_rep_ens,
+                         new_data = new_data_ex,
+                         fun = "median"
+  )
+  pred_weighted_median <- predict(lacerta_rep_ens,
+                                  new_data = new_data_ex,
+                                  fun = "weighted_median"
+  )
+  
+  expect_equal(pred_multi$mean, pred_mean$mean)
+  expect_equal(pred_multi$weighted_mean, pred_weighted_mean$weighted_mean)
+  expect_equal(pred_multi$median, pred_median$median)
+  expect_equal(pred_multi$weighted_median, pred_weighted_median$weighted_median)
+  
+  
+  # by_repeat should return one column per repeat for each requested function
+  pred_multi_by_repeat <- predict(lacerta_rep_ens,
+                                  new_data = new_data_ex,
+                                  fun = c("mean", "weighted_mean", "median", "weighted_median"),
+                                  by_repeat = TRUE
+  )
+  
+  expect_equal(
+    ncol(pred_multi_by_repeat),
+    length(unique(lacerta_rep_ens$rep_id)) * 4
+  )
+  
+  # check exact column matching by suffix
+  expect_true(all(endsWith(
+    names(pred_multi_by_repeat)[grepl("\\.mean$", names(pred_multi_by_repeat))],
+    ".mean"
+  )))
+  expect_true(all(endsWith(
+    names(pred_multi_by_repeat)[grepl("\\.weighted_mean$", names(pred_multi_by_repeat))],
+    ".weighted_mean"
+  )))
+  
+  # the aggregated mean should equal the row-wise mean of only the .mean columns
+  mean_cols <- pred_multi_by_repeat[
+    ,
+    endsWith(names(pred_multi_by_repeat), ".mean"),
+    drop = FALSE
+  ]
+  expect_equal(pred_multi$mean, rowMeans(mean_cols))
+  
+  # the aggregated weighted_mean should equal the row-wise mean of only the
+  # .weighted_mean columns
+  weighted_mean_cols <- pred_multi_by_repeat[
+    ,
+    endsWith(names(pred_multi_by_repeat), ".weighted_mean"),
+    drop = FALSE
+  ]
+  expect_equal(pred_multi$weighted_mean, rowMeans(weighted_mean_cols))
+  
+  # same check for median and weighted_median
+  median_cols <- pred_multi_by_repeat[
+    ,
+    endsWith(names(pred_multi_by_repeat), ".median"),
+    drop = FALSE
+  ]
+  expect_equal(pred_multi$median, apply(median_cols, 1, stats::median))
+  
+  weighted_median_cols <- pred_multi_by_repeat[
+    ,
+    endsWith(names(pred_multi_by_repeat), ".weighted_median"),
+    drop = FALSE
+  ]
+  expect_equal(
+    pred_multi$weighted_median,
+    apply(weighted_median_cols, 1, stats::median)
+  )
+  
+  
 
   # TODO bring this test back when thresholding is implemented for repeated
   lacerta_rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
