@@ -5,6 +5,7 @@
   by repeat
 * implement `calib_class_thresh` method for `repeat_ensembles`
 * implement `collect_calib_thresh` method for `repeat_ensembles`
+* resolve conflicting coords names in `thin_by_cell()`
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
