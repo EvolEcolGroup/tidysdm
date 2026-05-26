@@ -154,16 +154,13 @@ calib_class_thresh.repeat_ensemble <- function(object,
       class_thresh = class_thresh,
       metric_thresh = metric_thresh
     )
-    # add the calibration info to the repeat ensemble if there is an element in
-    # the list for this repeat, we will add to it; otherwise, we will create it
-    if (is.null(attr(object, "class_thresholds_list", exact = TRUE)[[i_rep]])) {
-      attr(object, "class_thresholds_list")[[i_rep]] <-
-        attr(object_rep, "class_thresholds", exact = TRUE)
-    } else {
-      attr(object, "class_thresholds_list")[[i_rep]] <-
-        attr(object, "class_thresholds_list")[[i_rep]] %>%
-        dplyr::bind_rows(attr(object_rep, "class_thresholds", exact = TRUE))
-    }
+    
+    # Store the updated calibration table for this repeat.
+    # Do not bind rows here: calib_class_thresh.simple_ensemble()
+    # already appends new calibrations when needed and returns unchanged
+    # thresholds when the calibration already exists.
+    attr(object, "class_thresholds_list")[[i_rep]] <-
+      attr(object_rep, "class_thresholds", exact = TRUE)
   }
   object
 }
