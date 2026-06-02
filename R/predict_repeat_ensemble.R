@@ -153,6 +153,11 @@ predict.repeat_ensemble <-
       }
     } else { # if we are predicting classes
       class_levels <- levels(pred_all[[1]])
+      # we assume that the class levels are the same across all predictions, so we can take them from the first column. We also assume that there is a "presence" class, and that all other classes are "absence" classes. We check that there is exactly one "absence" class level, and if not we throw an error.
+      absence_level <- setdiff(class_levels, "presence")
+      if (length(absence_level) != 1) {
+        stop("Expected exactly one non-'presence' class level")
+      }
       # if we have an aggregating function
       for (i_fun in fun) {
         # subset to columns for this function
@@ -165,19 +170,14 @@ predict.repeat_ensemble <-
           ncol(pred_this_fun)
 
 
-        # compute the proportion of suitable classes across repeats for each
+        # compute the proportion of suitable classes across repeats for each 
         # observation, and then apply the class_fun to get the final prediction
         if (class_fun == "majority") {
           this_pred <- factor(
-            ifelse(this_pred > 0.5, class_levels[1], class_levels[2]),
+            ifelse(this_pred > 0.5, "presence", absence_level),
             levels = class_levels
           )
-        } else {
-          if (class_levels[2] != "presence") {
-            # flip the proportion if the "presence" class is the second level
-            this_pred <- 1 - this_pred
-          }
-        }
+        } 
         pred_rep_ensemble[[paste(i_fun, class_fun, sep = ".")]] <- this_pred
       }
     }
