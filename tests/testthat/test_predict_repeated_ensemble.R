@@ -176,4 +176,54 @@ test_that("predict correctly a repeated ensemble", {
   expect_true(is.factor(pred_class_metric_thresh[[1]]))
   # check that predict for repeated ensemble with type = "class" and class_fun = "majority" outputs factor
   expect_true(is.factor(pred_class_metric_thresh[[1]]))
+  
+  
+  # check that class_fun = "prop" returns the proportion of repeats
+  # predicting "presence"
+  pred_class_by_repeat <- predict(
+    lacerta_rep_ens_calib_thresh,
+    new_data = new_data_ex,
+    fun = "median",
+    type = "class",
+    class_thresh = "tss_max",
+    metric_thresh = c("boyce_cont", 0.5),
+    by_repeat = TRUE
+  )
+  
+  manual_prop <- rowSums(pred_class_by_repeat == "presence") /
+    ncol(pred_class_by_repeat)
+  
+  pred_class_prop <- predict(
+    lacerta_rep_ens_calib_thresh,
+    new_data = new_data_ex,
+    fun = "median",
+    type = "class",
+    class_fun = "prop",
+    class_thresh = "tss_max",
+    metric_thresh = c("boyce_cont", 0.5)
+  )
+  
+  expect_equal(pred_class_prop$median.prop, manual_prop)
+  
+  # check that class_fun = "majority" maps majority presence to "presence",
+  # independently of the order of factor levels
+  pred_class_majority <- predict(
+    lacerta_rep_ens_calib_thresh,
+    new_data = new_data_ex,
+    fun = "median",
+    type = "class",
+    class_fun = "majority",
+    class_thresh = "tss_max",
+    metric_thresh = c("boyce_cont", 0.5)
+  )
+  
+  class_levels <- levels(pred_class_majority$median.majority)
+  absence_level <- setdiff(class_levels, "presence")
+  
+  manual_majority <- factor(
+    ifelse(manual_prop > 0.5, "presence", absence_level),
+    levels = class_levels
+  )
+  
+  expect_equal(pred_class_majority$median.majority, manual_majority)
 })
