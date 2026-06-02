@@ -30,7 +30,7 @@ lacerta_rep_ens <- calib_class_thresh(
 
 prediction_future_binary <- predict_raster(object = lacerta_rep_ens,
                                             raster = climate_future,
-                                            #metric_thresh = c("boyce_cont", 0.5),
+                                            metric_thresh = c("boyce_cont", 0.5),
                                             type = "class",
                                             fun = "median",
                                             class_fun = "majority",

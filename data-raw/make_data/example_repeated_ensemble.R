@@ -4,6 +4,7 @@ library(dplyr)
 library(recipes)
 library(workflowsets)
 library(tidyterra)
+library(ggplot2)
 
 
 # load the occurrences
