@@ -66,7 +66,8 @@ used to tune models in the ensemble (see \code{\link{repeat_ensemble}}).
 \examples{
 # we need a dataset to predict, we extract it from one of the models
 new_data_ex <- workflowsets::extract_mold(
-  lacerta_rep_ens$workflow[[1]])$predictors
+  lacerta_rep_ens$workflow[[1]]
+)$predictors
 ens_pred <- predict(lacerta_rep_ens,
   new_data = new_data_ex,
   fun = c("mean", "weighted_mean", "median")
@@ -74,9 +75,12 @@ ens_pred <- predict(lacerta_rep_ens,
 head(ens_pred)
 # set class thresholds for binary prediction
 lacerta_rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
-  class_thresh = c("tss_max"))
-ens_class_pred <- predict(lacerta_rep_ens_calib, new_data = new_data_ex,
-  fun = c("mean", "median"), type = "class", class_thresh = c("tss_max"))
+  class_thresh = c("tss_max")
+)
+ens_class_pred <- predict(lacerta_rep_ens_calib,
+  new_data = new_data_ex,
+  fun = c("mean", "median"), type = "class", class_thresh = c("tss_max")
+)
 head(ens_class_pred)
 }
 \keyword{predict}

@@ -36,55 +36,58 @@ test_that("predict correctly a repeated ensemble", {
   # this should have 3 columns (one for each function)
   expect_true(ncol(pred_multi) == 4)
 
-  
+
   # each column in the multi-function output should match the corresponding
   # single-function prediction; this checks that mean is not accidentally
   # computed from both mean and weighted_mean columns, etc.
   pred_mean <- predict(lacerta_rep_ens,
-                       new_data = new_data_ex,
-                       fun = "mean"
+    new_data = new_data_ex,
+    fun = "mean"
   )
   pred_weighted_mean <- predict(lacerta_rep_ens,
-                                new_data = new_data_ex,
-                                fun = "weighted_mean"
+    new_data = new_data_ex,
+    fun = "weighted_mean"
   )
   pred_median <- predict(lacerta_rep_ens,
-                         new_data = new_data_ex,
-                         fun = "median"
+    new_data = new_data_ex,
+    fun = "median"
   )
   pred_weighted_median <- predict(lacerta_rep_ens,
-                                  new_data = new_data_ex,
-                                  fun = "weighted_median"
+    new_data = new_data_ex,
+    fun = "weighted_median"
   )
-  
+
   expect_equal(pred_multi$mean, pred_mean$mean)
   expect_equal(pred_multi$weighted_mean, pred_weighted_mean$weighted_mean)
   expect_equal(pred_multi$median, pred_median$median)
   expect_equal(pred_multi$weighted_median, pred_weighted_median$weighted_median)
-  
-  
+
+
   # by_repeat should return one column per repeat for each requested function
   pred_multi_by_repeat <- predict(lacerta_rep_ens,
-                                  new_data = new_data_ex,
-                                  fun = c("mean", "weighted_mean", "median", "weighted_median"),
-                                  by_repeat = TRUE
+    new_data = new_data_ex,
+    fun = c("mean", "weighted_mean", "median", "weighted_median"),
+    by_repeat = TRUE
   )
-  
+
   expect_equal(
     ncol(pred_multi_by_repeat),
     length(unique(lacerta_rep_ens$rep_id)) * 4
   )
-  
+
   # check exact column matching by suffix
   expect_true(all(endsWith(
     names(pred_multi_by_repeat)[grepl("\\.mean$", names(pred_multi_by_repeat))],
     ".mean"
   )))
   expect_true(all(endsWith(
-    names(pred_multi_by_repeat)[grepl("\\.weighted_mean$", names(pred_multi_by_repeat))],
+    names(pred_multi_by_repeat)[grepl(
+      "\\.weighted_mean$",
+      names(pred_multi_by_repeat)
+    )],
     ".weighted_mean"
   )))
-  
+
   # the aggregated mean should equal the row-wise mean of only the .mean columns
   mean_cols <- pred_multi_by_repeat[
     ,
@@ -92,7 +95,7 @@ test_that("predict correctly a repeated ensemble", {
     drop = FALSE
   ]
   expect_equal(pred_multi$mean, rowMeans(mean_cols))
-  
+
   # the aggregated weighted_mean should equal the row-wise mean of only the
   # .weighted_mean columns
   weighted_mean_cols <- pred_multi_by_repeat[
@@ -101,7 +104,7 @@ test_that("predict correctly a repeated ensemble", {
     drop = FALSE
   ]
   expect_equal(pred_multi$weighted_mean, rowMeans(weighted_mean_cols))
-  
+
   # same check for median and weighted_median
   median_cols <- pred_multi_by_repeat[
     ,
@@ -109,7 +112,7 @@ test_that("predict correctly a repeated ensemble", {
     drop = FALSE
   ]
   expect_equal(pred_multi$median, apply(median_cols, 1, stats::median))
-  
+
   weighted_median_cols <- pred_multi_by_repeat[
     ,
     endsWith(names(pred_multi_by_repeat), ".weighted_median"),
@@ -119,8 +122,7 @@ test_that("predict correctly a repeated ensemble", {
     pred_multi$weighted_median,
     apply(weighted_median_cols, 1, stats::median)
   )
-  
-  
+
 
   # TODO bring this test back when thresholding is implemented for repeated
   lacerta_rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
@@ -154,7 +156,7 @@ test_that("predict correctly a repeated ensemble", {
       fun = c("mean", "none")
     ), "if 'fun' has length >1, it cannot be 'none'"
   )
-  
+
   # check that binary prediction works with metric_thresh set
   # and class_fun = "majority"
   lacerta_rep_ens_calib_thresh <- calib_class_thresh(
@@ -174,10 +176,11 @@ test_that("predict correctly a repeated ensemble", {
   # should have 1 column and be a factor with presence/background levels
   expect_true(ncol(pred_class_metric_thresh) == 1)
   expect_true(is.factor(pred_class_metric_thresh[[1]]))
-  # check that predict for repeated ensemble with type = "class" and class_fun = "majority" outputs factor
+  # check that predict for repeated ensemble with type = "class"
+  # and class_fun = "majority" outputs factor
   expect_true(is.factor(pred_class_metric_thresh[[1]]))
-  
-  
+
+
   # check that class_fun = "prop" returns the proportion of repeats
   # predicting "presence"
   pred_class_by_repeat <- predict(
@@ -189,10 +192,10 @@ test_that("predict correctly a repeated ensemble", {
     metric_thresh = c("boyce_cont", 0.5),
     by_repeat = TRUE
   )
-  
+
   manual_prop <- rowSums(pred_class_by_repeat == "presence") /
     ncol(pred_class_by_repeat)
-  
+
   pred_class_prop <- predict(
     lacerta_rep_ens_calib_thresh,
     new_data = new_data_ex,
@@ -202,9 +205,9 @@ test_that("predict correctly a repeated ensemble", {
     class_thresh = "tss_max",
     metric_thresh = c("boyce_cont", 0.5)
   )
-  
+
   expect_equal(pred_class_prop$median.prop, manual_prop)
-  
+
   # check that class_fun = "majority" maps majority presence to "presence",
   # independently of the order of factor levels
   pred_class_majority <- predict(
@@ -216,14 +219,14 @@ test_that("predict correctly a repeated ensemble", {
     class_thresh = "tss_max",
     metric_thresh = c("boyce_cont", 0.5)
   )
-  
+
   class_levels <- levels(pred_class_majority$median.majority)
   absence_level <- setdiff(class_levels, "presence")
-  
+
   manual_majority <- factor(
     ifelse(manual_prop > 0.5, "presence", absence_level),
     levels = class_levels
   )
-  
+
   expect_equal(pred_class_majority$median.majority, manual_majority)
 })

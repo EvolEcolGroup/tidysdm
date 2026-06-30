@@ -23,71 +23,66 @@ get_repeat <- function(x, i) {
   if (!inherits(x, "repeat_ensemble")) {
     stop("x must be a repeat ensemble object")
   }
-  
+
   # only a single repeat can be extracted at a time
   if (length(i) != 1) {
     stop("i must be of length 1")
   }
-  
+
   # store the valid repeat ids
   rep_ids <- levels(as.factor(x$rep_id))
-  
+
   # if i is numeric, interpret it as the position of the repeat
   if (is.numeric(i)) {
-    
     # reject NA, NaN and Inf values
     if (is.na(i) || !is.finite(i)) {
       stop("i must not be NA or non-finite")
     }
-    
+
     # only integer indices are allowed
     if (i != as.integer(i)) {
       stop("i must be an integer")
     }
-    
+
     # check that the index is within range
     if (i < 1 || i > length(rep_ids)) {
       stop("i is outside the range of repeats in x")
     }
-    
+
     # convert the numeric index to the corresponding repeat id
     i <- rep_ids[i]
-    
   } else if (is.character(i)) {
-    
     # reject missing character values
     if (is.na(i)) {
       stop("i must not be NA")
     }
-    
+
     # check that the repeat exists in the ensemble
     if (!i %in% rep_ids) {
       stop("i must be a valid name of a repeat in x")
     }
-    
   } else {
-    
     # only numeric or character input is supported
     stop("i must be either numeric or character")
   }
-  
+
   # extract the requested repeat
   simple_ens <- x %>%
     dplyr::filter(.data$rep_id == i)
-  
+
   # convert the class from repeat_ensemble to simple_ensemble
   class(simple_ens)[class(simple_ens) == "repeat_ensemble"] <-
     "simple_ensemble"
-  
+
   # if calibration thresholds are available, extract the relevant ones
   # for this repeat and store them as standard simple ensemble attributes
   if (!is.null(attr(x, "class_thresholds_list", exact = TRUE))) {
     attr(simple_ens, "class_thresholds") <-
       attr(x, "class_thresholds_list", exact = TRUE)[[i]]
-    
+
     # remove the repeat-level calibration list from the extracted object
     attr(simple_ens, "class_thresholds_list") <- NULL
   }
-  
+
   return(simple_ens)
 }

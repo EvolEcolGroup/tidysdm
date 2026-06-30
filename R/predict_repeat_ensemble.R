@@ -39,7 +39,8 @@
 #' @examples
 #' # we need a dataset to predict, we extract it from one of the models
 #' new_data_ex <- workflowsets::extract_mold(
-#'   lacerta_rep_ens$workflow[[1]])$predictors
+#'   lacerta_rep_ens$workflow[[1]]
+#' )$predictors
 #' ens_pred <- predict(lacerta_rep_ens,
 #'   new_data = new_data_ex,
 #'   fun = c("mean", "weighted_mean", "median")
@@ -47,9 +48,12 @@
 #' head(ens_pred)
 #' # set class thresholds for binary prediction
 #' lacerta_rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
-#'   class_thresh = c("tss_max"))
-#' ens_class_pred <- predict(lacerta_rep_ens_calib, new_data = new_data_ex,
-#'   fun = c("mean", "median"), type = "class", class_thresh = c("tss_max"))
+#'   class_thresh = c("tss_max")
+#' )
+#' ens_class_pred <- predict(lacerta_rep_ens_calib,
+#'   new_data = new_data_ex,
+#'   fun = c("mean", "median"), type = "class", class_thresh = c("tss_max")
+#' )
 #' head(ens_class_pred)
 predict.repeat_ensemble <-
   function(object,
@@ -70,75 +74,78 @@ predict.repeat_ensemble <-
 
     # we add names of the workflows to combine with the repeat ids
     repeat_ids <- unique(object$rep_id)
-    
-    pred_all = NULL
-    valid_repeats = c()
-    
+
+    pred_all <- NULL
+    valid_repeats <- c()
+
     # now predict for each simple ensemble
     for (i_rep in repeat_ids) {
       object_rep <- get_repeat(object, i = i_rep)
       calib_list <- attr(object, "class_thresholds_list", exact = TRUE)
-      
+
       # skip repeats with no calibration when predicting classes
       if (type == "class" && is.null(calib_list[[i_rep]])) {
         warning(sprintf(
-          "Skipping repeat %s: no calibration (dropped during calib_class_thresh).",
+          paste0(
+            "Skipping repeat %s: no calibration ",
+            "(dropped during calib_class_thresh)."
+          ),
           i_rep
         ))
         next
       }
-      
+
       # restore calibration attribute for this repeat
       if (!is.null(calib_list[[i_rep]])) {
         attr(object_rep, "class_thresholds") <- calib_list[[i_rep]]
       }
-      
+
       pred_rep <- tryCatch(
         {
-        stats::predict(
-        object_rep,
-        new_data = new_data,
-        type = type,
-        fun = fun,
-        metric_thresh = metric_thresh,
-        class_thresh = class_thresh
-      )
-        },
-      error = function(e){
-        if (grepl("metric_threshold excludes all models", e$message)) {
-          warning(
-            paste(
-              "Skipping repeat", i_rep,
-              "because all models were excluded by metric_thresh"
-            )
+          stats::predict(
+            object_rep,
+            new_data = new_data,
+            type = type,
+            fun = fun,
+            metric_thresh = metric_thresh,
+            class_thresh = class_thresh
           )
-          return(NULL)
+        },
+        error = function(e) {
+          if (grepl("metric_threshold excludes all models", e$message)) {
+            warning(
+              paste(
+                "Skipping repeat", i_rep,
+                "because all models were excluded by metric_thresh"
+              )
+            )
+            return(NULL)
+          }
+
+          stop(e)
         }
-        
-        stop(e)
-      }
       )
-      
+
       # skip failed repeats
       if (is.null(pred_rep)) {
         next
       }
       names(pred_rep) <- paste(i_rep, names(pred_rep), sep = ".")
-      
+
       valid_repeats <- c(valid_repeats, i_rep)
-      
+
       if (is.null(pred_all)) {
         pred_all <- pred_rep
       } else {
         pred_all <- pred_all %>% dplyr::bind_cols(pred_rep)
       }
     }
-    
+
     # if ALL repeats failed
     if (is.null(pred_all)) {
       stop("All repeats were excluded by metric_thresh")
     }
-    
+
     # return the individual repeat predictions if requested
     if (by_repeat || ("none" %in% fun)) {
       return(pred_all)
@@ -157,12 +164,18 @@ predict.repeat_ensemble <-
           drop = FALSE
         ]
         i_rep_fun <- gsub("weighted_", "", i_fun)
-        pred_rep_ensemble[[i_fun]] <- apply(pred_this_fun, 1,
-                                            eval(parse(text = i_rep_fun)))
+        pred_rep_ensemble[[i_fun]] <- apply(
+          pred_this_fun, 1,
+          eval(parse(text = i_rep_fun))
+        )
       }
     } else { # if we are predicting classes
       class_levels <- levels(pred_all[[1]])
-      # we assume that the class levels are the same across all predictions, so we can take them from the first column. We also assume that there is a "presence" class, and that all other classes are "absence" classes. We check that there is exactly one "absence" class level, and if not we throw an error.
+      # we assume that the class levels are the same across all predictions,
+      # so we can take them from the first column. We also assume that there is
+      # a "presence" class, and that all other classes are "absence" classes.
+      # We check that there is exactly one "absence" class level, and if not we
+      # throw an error.
       absence_level <- setdiff(class_levels, "presence")
       if (length(absence_level) != 1) {
         stop("Expected exactly one non-'presence' class level")
@@ -179,14 +192,14 @@ predict.repeat_ensemble <-
           ncol(pred_this_fun)
 
 
-        # compute the proportion of suitable classes across repeats for each 
+        # compute the proportion of suitable classes across repeats for each
         # observation, and then apply the class_fun to get the final prediction
         if (class_fun == "majority") {
           this_pred <- factor(
             ifelse(this_pred > 0.5, "presence", absence_level),
             levels = class_levels
           )
-        } 
+        }
         pred_rep_ensemble[[paste(i_fun, class_fun, sep = ".")]] <- this_pred
       }
     }
