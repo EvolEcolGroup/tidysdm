@@ -77,9 +77,18 @@ predict.repeat_ensemble <-
     # now predict for each simple ensemble
     for (i_rep in repeat_ids) {
       object_rep <- get_repeat(object, i = i_rep)
+      calib_list <- attr(object, "class_thresholds_list", exact = TRUE)
+      
+      # skip repeats with no calibration when predicting classes
+      if (type == "class" && is.null(calib_list[[i_rep]])) {
+        warning(sprintf(
+          "Skipping repeat %s: no calibration (dropped during calib_class_thresh).",
+          i_rep
+        ))
+        next
+      }
       
       # restore calibration attribute for this repeat
-      calib_list <- attr(object, "class_thresholds_list", exact = TRUE)
       if (!is.null(calib_list[[i_rep]])) {
         attr(object_rep, "class_thresholds") <- calib_list[[i_rep]]
       }
