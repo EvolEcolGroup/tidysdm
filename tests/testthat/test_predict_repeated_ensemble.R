@@ -124,7 +124,7 @@ test_that("predict correctly a repeated ensemble", {
   )
 
 
-  # TODO bring this test back when thresholding is implemented for repeated
+  # check thresholding for repeated ensembles
   lacerta_rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
     class_thresh = c("tss_max")
   )
@@ -137,16 +137,16 @@ test_that("predict correctly a repeated ensemble", {
   # this should have 1 column
   expect_true(ncol(pred_class_mean) == 1)
   # check with multiple fun
-  pred_class_mean <- predict(lacerta_rep_ens_calib,
+  pred_class_mean_mult <- predict(lacerta_rep_ens_calib,
     new_data = new_data_ex,
     fun = c("mean", "weighted_mean", "median"),
     type = "class", class_thresh = c("tss_max")
   )
-
-
-  # TODO we need to test when we give multiple fun (currently, that is not
-  # implemented) UPDATE we mostly implemented it but check if we need to expand
-
+  # expect mean to be the same independently if obtained by multiple fun
+  expect_equal(
+    pred_class_mean$mean.majority,
+    pred_class_mean_mult$mean.majority
+  )
 
   # check for error if we use "none" with multiple functions
   expect_error(
