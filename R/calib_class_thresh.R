@@ -140,27 +140,59 @@ calib_class_thresh.simple_ensemble <- function(object,
 calib_class_thresh.repeat_ensemble <- function(object,
                                                class_thresh,
                                                metric_thresh = NULL) {
-  # cycle over the repeats and calibrate each simple ensemble
   repeat_ids <- unique(object$rep_id)
-  # if we don't have a class_thresholds_list attribute, we will create it;
-  # otherwise, we will add to it
+  
   if (is.null(attr(object, "class_thresholds_list", exact = TRUE))) {
     attr(object, "class_thresholds_list") <- list()
   }
+  
+  skipped <- character(0)
+  
   for (i_rep in repeat_ids) {
     object_rep <- get_repeat(object, i_rep)
-    object_rep <- calib_class_thresh(
-      object_rep,
-      class_thresh = class_thresh,
-      metric_thresh = metric_thresh
+    
+    # preserve any prior calibration for this repeat so we append rather
+    # than overwrite when calib_class_thresh is called multiple times
+    prior_calib <- attr(object, "class_thresholds_list",
+                        exact = TRUE)[[i_rep]]
+    if (!is.null(prior_calib)) {
+      attr(object_rep, "class_thresholds") <- prior_calib
+    }
+    
+    result <- tryCatch(
+      calib_class_thresh(
+        object_rep,
+        class_thresh = class_thresh,
+        metric_thresh = metric_thresh
+      ),
+      error = function(e) {
+        if (grepl("metric_threshold excludes all models", e$message)) {
+          return(NULL)
+        }
+        stop(e)
+      }
     )
     
-    # Store the updated calibration table for this repeat.
-    # Do not bind rows here: calib_class_thresh.simple_ensemble()
-    # already appends new calibrations when needed and returns unchanged
-    # thresholds when the calibration already exists.
+    if (is.null(result)) {
+      skipped <- c(skipped, i_rep)
+      next
+    }
+    
     attr(object, "class_thresholds_list")[[i_rep]] <-
-      attr(object_rep, "class_thresholds", exact = TRUE)
+      attr(result, "class_thresholds", exact = TRUE)
   }
+  
+  if (length(skipped) > 0) {
+    warning(
+      "Skipped repeats with no models passing metric_thresh: ",
+      paste(skipped, collapse = ", ")
+    )
+  }
+  
+  if (length(attr(object, "class_thresholds_list", exact = TRUE)) == 0) {
+    stop("No repeats had any models passing metric_thresh; ",
+         "calibration failed for all repeats.")
+  }
+  
   object
 }
