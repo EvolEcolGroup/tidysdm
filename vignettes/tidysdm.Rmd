@@ -892,7 +892,7 @@ article.
 
 # Repeated ensembles
 
-The steps of thinning and sampling pseudo-absences can have a bit impact
+The steps of thinning and sampling pseudo-absences can have a big impact
 on the performance of SDMs. As these steps are stochastic, it is good
 practice to explore their effect by repeating them, and then creating
 ensembles of models over these repeats. In `tidysdm`, it is possible to

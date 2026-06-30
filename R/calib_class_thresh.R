@@ -141,16 +141,16 @@ calib_class_thresh.repeat_ensemble <- function(object,
                                                class_thresh,
                                                metric_thresh = NULL) {
   repeat_ids <- unique(object$rep_id)
-  
+
   if (is.null(attr(object, "class_thresholds_list", exact = TRUE))) {
     attr(object, "class_thresholds_list") <- list()
   }
-  
+
   skipped <- character(0)
-  
+
   for (i_rep in repeat_ids) {
     object_rep <- get_repeat(object, i_rep)
-    
+
     # preserve any prior calibration for this repeat so we append rather
     # than overwrite when calib_class_thresh is called multiple times
     prior_calib <- attr(object, "class_thresholds_list",
@@ -158,7 +158,7 @@ calib_class_thresh.repeat_ensemble <- function(object,
     if (!is.null(prior_calib)) {
       attr(object_rep, "class_thresholds") <- prior_calib
     }
-    
+
     result <- tryCatch(
       calib_class_thresh(
         object_rep,
@@ -172,27 +172,27 @@ calib_class_thresh.repeat_ensemble <- function(object,
         stop(e)
       }
     )
-    
+
     if (is.null(result)) {
       skipped <- c(skipped, i_rep)
       next
     }
-    
+
     attr(object, "class_thresholds_list")[[i_rep]] <-
       attr(result, "class_thresholds", exact = TRUE)
   }
-  
+
   if (length(skipped) > 0) {
     warning(
       "Skipped repeats with no models passing metric_thresh: ",
       paste(skipped, collapse = ", ")
     )
   }
-  
+
   if (length(attr(object, "class_thresholds_list", exact = TRUE)) == 0) {
     stop("No repeats had any models passing metric_thresh; ",
          "calibration failed for all repeats.")
   }
-  
+
   object
 }
