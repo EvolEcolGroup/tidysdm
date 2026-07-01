@@ -167,10 +167,10 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (907ms)
+#> ✔ 1 of 2 resampling: default_glm (1s)
 #> i 2 of 2 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 2 tuning:     default_rf (1.9s)
+#> ✔ 2 of 2 tuning:     default_rf (2.1s)
 # fit the ensemble
 lacerta_ensemble <- simple_ensemble() %>%
   add_member(lacerta_models, metric = "boyce_cont")
@@ -314,7 +314,7 @@ explainer_lacerta_ens <- explain_tidysdm(lacerta_ensemble)
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  predict_function 
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidysdm , ver. 1.0.4.9003 , task classification (  default  ) 
+#>   -> model_info        :  package tidysdm , ver. 1.0.4.9004 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.02117606 , mean =  0.2977721 , max =  0.8709933  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -594,14 +594,14 @@ lacerta_models <-
 #> generated.
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 3 resampling: uncor_glm
-#> ✔ 1 of 3 resampling: uncor_glm (339ms)
+#> ✔ 1 of 3 resampling: uncor_glm (397ms)
 #> i 2 of 3 tuning:     all_rf
 #> ! No improvement for 10 iterations; returning current results.
-#> ✔ 2 of 3 tuning:     all_rf (17.1s)
+#> ✔ 2 of 3 tuning:     all_rf (17.9s)
 #> i 3 of 3 tuning:     uncor_svm
 #> maximum number of iterations reached 0.004185637 -0.004098871
 #> ! No improvement for 10 iterations; returning current results.
-#> ✔ 3 of 3 tuning:     uncor_svm (17.9s)
+#> ✔ 3 of 3 tuning:     uncor_svm (19.1s)
 ```
 
 We can have a look at the performance of our models with:
@@ -780,10 +780,10 @@ lacerta_models <-
 #> There were issues with some computations   A: x1
 #> There were issues with some computations   A: x2
 #> 
-#> ✔ 1 of 4 resampling: default_glm (552ms)
+#> ✔ 1 of 4 resampling: default_glm (648ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 4 tuning:     default_rf (3.5s)
+#> ✔ 2 of 4 tuning:     default_rf (3.8s)
 #> i 3 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
@@ -793,9 +793,9 @@ lacerta_models <-
 #> There were issues with some computations   A: x5
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 3 of 4 tuning:     default_gbm (10.9s)
+#> ✔ 3 of 4 tuning:     default_gbm (11.6s)
 #> i 4 of 4 tuning:     default_maxent
-#> ✔ 4 of 4 tuning:     default_maxent (2.2s)
+#> ✔ 4 of 4 tuning:     default_maxent (2.4s)
 
 autoplot(lacerta_models)
 ```
