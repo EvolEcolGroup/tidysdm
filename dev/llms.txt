@@ -33,6 +33,7 @@ features, you can install the latest `dev` version of `tidysdm` from
 r-universe with:
 
 ``` r
+
 install.packages("tidysdm", repos = c("https://evolecolgroup.r-universe.dev", 
                                       "https://cloud.r-project.org"))
 ```
@@ -42,6 +43,7 @@ source directly from GitHub, but you might need to set up your
 development environment first:
 
 ``` r
+
 # install.packages("devtools") # if you haven't installed devtools yet
 devtools::install_github("EvolEcolGroup/tidysdm", ref = "dev")
 ```

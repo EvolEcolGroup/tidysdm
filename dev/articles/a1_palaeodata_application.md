@@ -12,16 +12,17 @@ be used in the present article.
 We first load `tidysdm`:
 
 ``` r
+
 library(tidysdm)
 #> Loading required package: tidymodels
-#> ── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──
-#> ✔ broom        1.0.12     ✔ recipes      1.3.2 
-#> ✔ dials        1.4.3      ✔ rsample      1.3.2 
+#> ── Attaching packages ────────────────────────────────────── tidymodels 1.5.0 ──
+#> ✔ broom        1.0.13     ✔ recipes      1.3.3 
+#> ✔ dials        1.4.4      ✔ rsample      1.3.2 
 #> ✔ dplyr        1.2.1      ✔ tailor       0.1.0 
-#> ✔ ggplot2      4.0.2      ✔ tidyr        1.3.2 
-#> ✔ infer        1.1.0      ✔ tune         2.0.1 
+#> ✔ ggplot2      4.0.3      ✔ tidyr        1.3.2 
+#> ✔ infer        1.1.0      ✔ tune         2.1.0 
 #> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
-#> ✔ parsnip      1.5.0      ✔ workflowsets 1.1.1 
+#> ✔ parsnip      1.6.0      ✔ workflowsets 1.1.1 
 #> ✔ purrr        1.2.2      ✔ yardstick    1.4.0
 #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 #> ✖ purrr::discard() masks scales::discard()
@@ -37,6 +38,7 @@ We start by loading a set of radiocarbon dates (calibrated) for horses,
 covering from 22k years ago until 8k years ago.
 
 ``` r
+
 data(horses)
 horses
 #> # A tibble: 788 × 3
@@ -59,6 +61,7 @@ We convert our dataset into an `sf` data.frame so that we can easily
 plot it (here `tidyterra` shines):
 
 ``` r
+
 library(sf)
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 horses <- st_as_sf(horses, coords = c("longitude", "latitude"))
@@ -69,7 +72,7 @@ As a background to our presences, we will use the land mask for the
 present, taken from `pastclim`, and cut to cover only Europe:
 
     #> Loading required package: terra
-    #> terra 1.9.11
+    #> terra 1.9.34
     #> 
     #> Attaching package: 'terra'
     #> The following object is masked from 'package:tidyr':
@@ -83,6 +86,7 @@ present, taken from `pastclim`, and cut to cover only Europe:
     #>     rescale
 
 ``` r
+
 library(pastclim)
 land_mask <- pastclim::get_land_mask(time_bp = 0, dataset = "Example")
 europe_poly <- vect(region_outline$Europe)
@@ -94,6 +98,7 @@ land_mask <- mask(land_mask, europe_poly)
 And use `tidyterra` to plot:
 
 ``` r
+
 library(tidyterra)
 #> 
 #> Attaching package: 'tidyterra'
@@ -111,6 +116,7 @@ We now thin our presences, so that locations are further than 100km and
 2000 years apart.
 
 ``` r
+
 set.seed(123)
 horses <- thin_by_dist_time(horses,
   dist_min = km2m(100),
@@ -125,6 +131,7 @@ nrow(horses)
 And see what we have left:
 
 ``` r
+
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
   geom_sf(data = horses, aes(col = time_bp))
@@ -141,6 +148,7 @@ datasets with `pastclim` for real analysis. As for the land mask, we
 will cut the reconstructions to cover Europe only:
 
 ``` r
+
 library(pastclim)
 climate_vars <- c("bio01", "bio10", "bio12")
 climate_full <- pastclim::region_series(
@@ -155,6 +163,7 @@ would be better if we had an equal area projection…), and remove
 locations outside the desired area (if there was any):
 
 ``` r
+
 set.seed(123)
 horses <- thin_by_cell_time(horses,
   raster = climate_full,
@@ -168,6 +177,7 @@ nrow(horses)
 Let’s see what we have left of our points:
 
 ``` r
+
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
   geom_sf(data = horses, aes(col = time_bp))
@@ -180,6 +190,7 @@ Now we sample pseudo-absences (we will constraint them to be at least
 presences
 
 ``` r
+
 set.seed(123)
 horses <- sample_pseudoabs_time(horses,
   n_per_presence = 3,
@@ -193,6 +204,7 @@ horses <- sample_pseudoabs_time(horses,
 Let’s see our presences and absences:
 
 ``` r
+
 ggplot() +
   geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
   geom_sf(data = horses, aes(col = class))
@@ -206,6 +218,7 @@ before present (where negative values represent time in the past). We
 manipulate the `sf` object accordingly:
 
 ``` r
+
 horses_df <- horses %>%
   dplyr::bind_cols(sf::st_coordinates(horses)) %>%
   mutate(time_bp = date2ybp(time_step)) %>%
@@ -232,6 +245,7 @@ note that, for `sf` objects, `geometry` is automatically ignored as a
 predictor):
 
 ``` r
+
 horses_rec <- recipe(horses, formula = class ~ .)
 horses_rec
 #> 
@@ -247,6 +261,7 @@ horses_rec
 We can quickly check that we have the variables that we want with:
 
 ``` r
+
 horses_rec$var_info
 #> # A tibble: 6 × 4
 #>   variable type      role      source  
@@ -267,6 +282,7 @@ models, `tidysdm` automatically chooses the most important parameters,
 but it is possible to fully customise model specifications.
 
 ``` r
+
 horses_models <-
   # create the workflow_set
   workflow_set(
@@ -303,6 +319,7 @@ We now want to set up a spatial block cross-validation scheme to tune
 and assess our models:
 
 ``` r
+
 library(tidysdm)
 set.seed(1005)
 horses_cv <- spatial_block_cv(horses, v = 5)
@@ -314,6 +331,7 @@ autoplot(horses_cv)
 We can now use the block CV folds to tune and assess the models:
 
 ``` r
+
 set.seed(123)
 horses_models <-
   horses_models %>%
@@ -323,13 +341,13 @@ horses_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (526ms)
+#> ✔ 1 of 4 resampling: default_glm (483ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 4 resampling: default_gam
-#> ✔ 2 of 4 resampling: default_gam (725ms)
+#> ✔ 2 of 4 resampling: default_gam (677ms)
 #> i 3 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 3 of 4 tuning:     default_rf (3.1s)
+#> ✔ 3 of 4 tuning:     default_rf (2.9s)
 #> i 4 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
@@ -339,7 +357,7 @@ horses_models <-
 #> There were issues with some computations   A: x5
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 4 of 4 tuning:     default_gbm (12.5s)
+#> ✔ 4 of 4 tuning:     default_gbm (12.1s)
 ```
 
 Note that `workflow_set` correctly detects that we have no tuning
@@ -347,6 +365,7 @@ parameters for *glm* and *gam*. We can have a look at the performance of
 our models with:
 
 ``` r
+
 autoplot(horses_models)
 ```
 
@@ -361,6 +380,7 @@ automatically fitted to the full training dataset, and so ready to make
 predictions.
 
 ``` r
+
 horses_ensemble <- simple_ensemble() %>%
   add_member(horses_models, metric = "boyce_cont")
 ```
@@ -368,6 +388,7 @@ horses_ensemble <- simple_ensemble() %>%
 And visualise it
 
 ``` r
+
 autoplot(horses_ensemble)
 ```
 
@@ -380,6 +401,7 @@ of taking the mean of the predictions from each model) for the Last
 Glacial Maximum (LGM, 21,000 years ago).
 
 ``` r
+
 climate_lgm <- pastclim::region_slice(
   time_bp = -20000,
   bio_variables = climate_vars,
@@ -391,6 +413,7 @@ climate_lgm <- pastclim::region_slice(
 And predict using the ensemble:
 
 ``` r
+
 prediction_lgm <- predict_raster(horses_ensemble, climate_lgm)
 ggplot() +
   geom_spatraster(data = prediction_lgm, aes(fill = mean)) +

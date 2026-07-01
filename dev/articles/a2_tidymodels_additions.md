@@ -20,16 +20,17 @@ binary variables that represent the levels of the factor. In
 Let’s create a factor variable with 3 levels based on altitude.
 
 ``` r
+
 library(tidysdm)
 #> Loading required package: tidymodels
-#> ── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──
-#> ✔ broom        1.0.12     ✔ recipes      1.3.2 
-#> ✔ dials        1.4.3      ✔ rsample      1.3.2 
+#> ── Attaching packages ────────────────────────────────────── tidymodels 1.5.0 ──
+#> ✔ broom        1.0.13     ✔ recipes      1.3.3 
+#> ✔ dials        1.4.4      ✔ rsample      1.3.2 
 #> ✔ dplyr        1.2.1      ✔ tailor       0.1.0 
-#> ✔ ggplot2      4.0.2      ✔ tidyr        1.3.2 
-#> ✔ infer        1.1.0      ✔ tune         2.0.1 
+#> ✔ ggplot2      4.0.3      ✔ tidyr        1.3.2 
+#> ✔ infer        1.1.0      ✔ tune         2.1.0 
 #> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
-#> ✔ parsnip      1.5.0      ✔ workflowsets 1.1.1 
+#> ✔ parsnip      1.6.0      ✔ workflowsets 1.1.1 
 #> ✔ purrr        1.2.2      ✔ yardstick    1.4.0
 #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 #> ✖ purrr::discard() masks scales::discard()
@@ -62,6 +63,7 @@ We then create the recipe by adding a step to create dummy variables for
 the `topography` variable.
 
 ``` r
+
 # subset to variable of interest
 lacerta_thin <- lacerta_thin %>% select(
   class, bio05, bio06, bio12,
@@ -87,6 +89,7 @@ lacerta_rec
 Let’s see what this does:
 
 ``` r
+
 lacerta_prep <- prep(lacerta_rec)
 #> Warning: The `strings_as_factors` argument of `prep.recipe()` is deprecated as of
 #> recipes 1.3.0.
@@ -117,6 +120,7 @@ look at the first few rows of the data to see the new variables by
 baking the recipe:
 
 ``` r
+
 lacerta_bake <- bake(lacerta_prep, new_data = lacerta_thin)
 glimpse(lacerta_bake)
 #> Rows: 448
@@ -135,6 +139,7 @@ glimpse(lacerta_bake)
 We can now run the sdm as usual:
 
 ``` r
+
 # define the models
 lacerta_models <-
   # create the workflow_set
@@ -162,10 +167,10 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (921ms)
+#> ✔ 1 of 2 resampling: default_glm (907ms)
 #> i 2 of 2 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 2 tuning:     default_rf (2s)
+#> ✔ 2 of 2 tuning:     default_rf (1.9s)
 # fit the ensemble
 lacerta_ensemble <- simple_ensemble() %>%
   add_member(lacerta_models, metric = "boyce_cont")
@@ -175,6 +180,7 @@ We can now verify that the dummy variables were used by extracting the
 model fit from one of the models in the ensemble:
 
 ``` r
+
 lacerta_ensemble$workflow[[1]] %>% extract_fit_parsnip()
 #> parsnip model object
 #> 
@@ -205,6 +211,7 @@ with those used when training the models (i.e. in the recipe with
 `step_dummy()`):
 
 ``` r
+
 climate_present <- terra::readRDS(
   system.file("extdata/lacerta_climate_present_10m.rds",
     package = "tidysdm"
@@ -226,7 +233,7 @@ climate_present$topography <- terra::classify(climate_present$topography,
   brackets = TRUE
 )
 library(terra)
-#> terra 1.9.11
+#> terra 1.9.34
 #> 
 #> Attaching package: 'terra'
 #> The following object is masked from 'package:tidyr':
@@ -272,6 +279,7 @@ on `tidysdm` ensembles.
 We will use a simple ensemble that we built in the overview vignette.
 
 ``` r
+
 library(tidysdm)
 lacerta_ensemble
 #> A simple_ensemble of models
@@ -297,6 +305,7 @@ into an explanation (following the DALEX lingo). As a first step, we use
 the custom function `explain_tidysdm` to generate our explainer:
 
 ``` r
+
 explainer_lacerta_ens <- explain_tidysdm(lacerta_ensemble)
 #> Preparation of a new explainer is initiated
 #>   -> model label       :  data.frame  (  default  )
@@ -305,7 +314,7 @@ explainer_lacerta_ens <- explain_tidysdm(lacerta_ensemble)
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  predict_function 
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidysdm , ver. 1.0.4.9002 , task classification (  default  ) 
+#>   -> model_info        :  package tidysdm , ver. 1.0.4.9003 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.02117606 , mean =  0.2977721 , max =  0.8709933  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -317,6 +326,7 @@ Now that we have our explainer, we can explore variable importance for
 the ensemble:
 
 ``` r
+
 library(DALEX)
 #> Welcome to DALEX (version: 2.5.3).
 #> Find examples and detailed introduction at: http://ema.drwhy.ai/
@@ -344,6 +354,7 @@ plot(vip_ensemble)
 Or generate partial dependency plots for a given variable (e.g. bio05):
 
 ``` r
+
 pdp_bio05 <- model_profile(explainer_lacerta_ens, N = 500, variables = "bio05")
 plot(pdp_bio05)
 ```
@@ -358,6 +369,7 @@ It is also possible to explore the individual models that make up the
 ensemble:
 
 ``` r
+
 explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
 #> Warning: Unknown or uninitialised column: `pre`.
 #> Preparation of a new explainer is initiated
@@ -367,7 +379,7 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
+#>   -> model_info        :  package tidymodels , ver. 1.5.0 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.01618118 , mean =  0.25 , max =  0.7445644  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -381,7 +393,7 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
+#>   -> model_info        :  package tidymodels , ver. 1.5.0 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0 , mean =  0.2506163 , max =  0.9258611  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -395,7 +407,7 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
+#>   -> model_info        :  package tidymodels , ver. 1.5.0 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.0002722652 , mean =  0.2500301 , max =  0.9969552  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -409,7 +421,7 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble, by_workflow = TRUE)
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
+#>   -> model_info        :  package tidymodels , ver. 1.5.0 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.06587215 , mean =  0.4404422 , max =  0.9522016  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -421,6 +433,7 @@ The resulting list can be then used to build lists of explanations,
 which can then be plotted.
 
 ``` r
+
 profile_list <- lapply(explainer_list, model_profile,
   N = 500,
   variables = "bio05"
@@ -451,6 +464,7 @@ variables.
 Load the data:
 
 ``` r
+
 library(tidysdm)
 library(sf)
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
@@ -463,6 +477,7 @@ We then create two recipes: one that keeps all variables, and another
 that removes highly correlated ones.
 
 ``` r
+
 lacerta_rec_all <- recipe(lacerta_thin, formula = class ~ .)
 lacerta_rec_uncor <- lacerta_rec_all %>%
   step_rm(all_of(c(
@@ -494,6 +509,7 @@ SVM) which does not have a wrapper in `tidysdm` for creating a model
 specification. However, we can use a standard model spec from `parsnip`:
 
 ``` r
+
 lacerta_models <-
   # create the workflow_set
   workflow_set(
@@ -539,6 +555,7 @@ the dataset. So, before tuning, we need to finalise `mtry` by informing
 the set dials with the actual data:
 
 ``` r
+
 set.seed(100)
 # create the CV folds
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 3)
@@ -560,6 +577,7 @@ lacerta_models <- lacerta_models %>%
 And now we can tune the models:
 
 ``` r
+
 set.seed(1234567)
 lacerta_models <-
   lacerta_models %>%
@@ -576,18 +594,20 @@ lacerta_models <-
 #> generated.
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 3 resampling: uncor_glm
-#> ✔ 1 of 3 resampling: uncor_glm (352ms)
+#> ✔ 1 of 3 resampling: uncor_glm (339ms)
 #> i 2 of 3 tuning:     all_rf
 #> ! No improvement for 10 iterations; returning current results.
-#> ✔ 2 of 3 tuning:     all_rf (17.3s)
+#> ✔ 2 of 3 tuning:     all_rf (17.1s)
 #> i 3 of 3 tuning:     uncor_svm
-#> maximum number of iterations reached 0.003456553 -0.003390584maximum number of iterations reached 0.004873408 -0.004689518maximum number of iterations reached 2.43803e-05 -2.435951e-05maximum number of iterations reached 0.003562052 -0.003477793maximum number of iterations reached 0.0002060528 -0.0002059063
-#> ✔ 3 of 3 tuning:     uncor_svm (21.5s)
+#> maximum number of iterations reached 0.004185637 -0.004098871
+#> ! No improvement for 10 iterations; returning current results.
+#> ✔ 3 of 3 tuning:     uncor_svm (17.9s)
 ```
 
 We can have a look at the performance of our models with:
 
 ``` r
+
 autoplot(lacerta_models)
 ```
 
@@ -619,6 +639,7 @@ overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.h
 article:
 
 ``` r
+
 library(tidysdm)
 library(sf)
 library(tidyterra)
@@ -631,6 +652,7 @@ We then use `spatial_initial_split` to do the split, using a
 `spatial_block_cv` scheme to partition the data:
 
 ``` r
+
 set.seed(1005)
 lacerta_initial <- spatial_initial_split(lacerta_thin,
   prop = 1 / 5, spatial_block_cv
@@ -643,6 +665,7 @@ autoplot(lacerta_initial)
 And check the balance of presences vs pseudoabsences:
 
 ``` r
+
 check_splits_balance(lacerta_initial, class)
 #> # A tibble: 1 × 4
 #>   presence_test background_test presence_train background_train
@@ -653,6 +676,7 @@ check_splits_balance(lacerta_initial, class)
 And confirm that we have the data correctly formatted with:
 
 ``` r
+
 lacerta_thin %>% check_sdm_presence(class)
 #> [1] TRUE
 ```
@@ -667,6 +691,7 @@ falling on the boundary of the grid cells). This is often not necessary,
 so only introduce this if you encounter an error.
 
 ``` r
+
 set.seed(1005)
 lacerta_training <- training(lacerta_initial)
 lacerta_cv <- spatial_block_cv(lacerta_training,
@@ -682,6 +707,7 @@ autoplot(lacerta_cv)
 And check the balance in the dataset:
 
 ``` r
+
 check_splits_balance(lacerta_cv, class)
 #> # A tibble: 5 × 4
 #>   presence_assessment background_assessment presence_analysis
@@ -697,6 +723,7 @@ check_splits_balance(lacerta_cv, class)
 Next, we need to set up a `recipe` to define how to handle our dataset.
 
 ``` r
+
 lacerta_rec <- recipe(lacerta_training, formula = class ~ .)
 lacerta_rec
 #> 
@@ -714,6 +741,7 @@ overview](https://evolecolgroup.github.io/tidysdm/articles/a0_tidysdm_overview.h
 article we can now build a `workflow_set` of different models:
 
 ``` r
+
 lacerta_models <-
   # create the workflow_set
   workflow_set(
@@ -738,6 +766,7 @@ lacerta_models <-
 And use the block CV folds to tune and assess the models:
 
 ``` r
+
 set.seed(1234567)
 lacerta_models <-
   lacerta_models %>%
@@ -751,21 +780,22 @@ lacerta_models <-
 #> There were issues with some computations   A: x1
 #> There were issues with some computations   A: x2
 #> 
-#> ✔ 1 of 4 resampling: default_glm (564ms)
+#> ✔ 1 of 4 resampling: default_glm (552ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 4 tuning:     default_rf (3.7s)
+#> ✔ 2 of 4 tuning:     default_rf (3.5s)
 #> i 3 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
+#> There were issues with some computations   A: x2
 #> There were issues with some computations   A: x3
-#> There were issues with some computations   A: x4
+#> There were issues with some computations   A: x5
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 3 of 4 tuning:     default_gbm (11s)
+#> ✔ 3 of 4 tuning:     default_gbm (10.9s)
 #> i 4 of 4 tuning:     default_maxent
-#> ✔ 4 of 4 tuning:     default_maxent (2.4s)
+#> ✔ 4 of 4 tuning:     default_maxent (2.2s)
 
 autoplot(lacerta_models)
 ```
@@ -776,6 +806,7 @@ And create an ensemble, selecting the best set of parameters for each
 model using Boyce continuous index as our metric:
 
 ``` r
+
 lacerta_ensemble <- simple_ensemble() %>%
   add_member(lacerta_models, metric = "boyce_cont")
 
@@ -787,6 +818,7 @@ autoplot(lacerta_ensemble)
 We can now use the ensemble to make predictions about the testing data:
 
 ``` r
+
 lacerta_testing <- testing(lacerta_initial)
 
 lacerta_test_pred <-
@@ -797,6 +829,7 @@ lacerta_test_pred <-
 And look at the goodness of fit:
 
 ``` r
+
 sdm_metric_set()(data = lacerta_test_pred, truth = class, mean)
 #> # A tibble: 3 × 3
 #>   .metric    .estimator .estimate
@@ -809,6 +842,7 @@ sdm_metric_set()(data = lacerta_test_pred, truth = class, mean)
 We can now make predictions with this ensemble using the best models.
 
 ``` r
+
 # load climate data
 climate_present <- terra::readRDS(
   system.file("extdata/lacerta_climate_present_10m.rds",
@@ -857,6 +891,7 @@ final model’s predictive performance is required. This is particularly
 important for stacked ensembles, which can be prone to overfitting.
 
 ``` r
+
 library(stacks)
 set.seed(1005)
 lacerta_stack <-
@@ -890,6 +925,7 @@ contributes to the final ensemble prediction. We can now use the
 ensemble to make predictions about the testing data:
 
 ``` r
+
 lacerta_testing <- testing(lacerta_initial)
 
 lacerta_test_pred <-
@@ -902,6 +938,7 @@ Note that `sdm_metric_set` is first invoked to generate a function (with
 empty `()`) that is then used on the data.
 
 ``` r
+
 sdm_metric_set()(data = lacerta_test_pred, truth = class, .pred_presence)
 #> # A tibble: 3 × 3
 #>   .metric    .estimator .estimate
@@ -915,6 +952,7 @@ We can now make predictions with this stacked ensemble. We start by
 extracting the climate for the variables of interest:
 
 ``` r
+
 climate_present <- terra::readRDS(
   system.file("extdata/lacerta_climate_present_10m.rds",
     package = "tidysdm"
@@ -932,6 +970,7 @@ climate_present <- terra::project(climate_present, y = iberia_proj4)
 And predict the presence of the lizard using the stacked ensemble:
 
 ``` r
+
 prediction_present <- predict_raster(lacerta_stack, climate_present,
   type = "prob"
 )

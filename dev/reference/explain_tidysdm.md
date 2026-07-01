@@ -191,7 +191,7 @@ lacerta_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble)
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  predict_function 
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidysdm , ver. 1.0.4.9002 , task classification (  default  ) 
+#>   -> model_info        :  package tidysdm , ver. 1.0.4.9003 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.02117606 , mean =  0.2977721 , max =  0.8709933  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -209,7 +209,7 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
+#>   -> model_info        :  package tidymodels , ver. 1.5.0 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.01618118 , mean =  0.25 , max =  0.7445644  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -223,7 +223,7 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
+#>   -> model_info        :  package tidymodels , ver. 1.5.0 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0 , mean =  0.2506163 , max =  0.9258611  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -237,7 +237,7 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
+#>   -> model_info        :  package tidymodels , ver. 1.5.0 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.0002722652 , mean =  0.2500301 , max =  0.9969552  
 #>   -> residual function :  difference between y and yhat (  default  )
@@ -251,7 +251,7 @@ explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
 #>   -> target variable   :  448  values 
 #>   -> predict function  :  yhat.workflow  will be used (  default  )
 #>   -> predicted values  :  Predict function column set to:  1 (  OK  )
-#>   -> model_info        :  package tidymodels , ver. 1.4.1 , task classification (  default  ) 
+#>   -> model_info        :  package tidymodels , ver. 1.5.0 , task classification (  default  ) 
 #>   -> model_info        :  type set to  classification 
 #>   -> predicted values  :  numerical, min =  0.06587215 , mean =  0.4404422 , max =  0.9522016  
 #>   -> residual function :  difference between y and yhat (  default  )

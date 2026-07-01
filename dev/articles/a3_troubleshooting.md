@@ -10,16 +10,17 @@ Several algorithms do not allow NAs. We can generate a problematic
 dataset by loading the *Lacerta* dataset, and manually add an NA:
 
 ``` r
+
 library(tidysdm)
 #> Loading required package: tidymodels
-#> ── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──
-#> ✔ broom        1.0.12     ✔ recipes      1.3.2 
-#> ✔ dials        1.4.3      ✔ rsample      1.3.2 
+#> ── Attaching packages ────────────────────────────────────── tidymodels 1.5.0 ──
+#> ✔ broom        1.0.13     ✔ recipes      1.3.3 
+#> ✔ dials        1.4.4      ✔ rsample      1.3.2 
 #> ✔ dplyr        1.2.1      ✔ tailor       0.1.0 
-#> ✔ ggplot2      4.0.2      ✔ tidyr        1.3.2 
-#> ✔ infer        1.1.0      ✔ tune         2.0.1 
+#> ✔ ggplot2      4.0.3      ✔ tidyr        1.3.2 
+#> ✔ infer        1.1.0      ✔ tune         2.1.0 
 #> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
-#> ✔ parsnip      1.5.0      ✔ workflowsets 1.1.1 
+#> ✔ parsnip      1.6.0      ✔ workflowsets 1.1.1 
 #> ✔ purrr        1.2.2      ✔ yardstick    1.4.0
 #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 #> ✖ purrr::discard() masks scales::discard()
@@ -37,6 +38,7 @@ lacerta_thin$bio05[37] <- NA
 Let us set up a recipe and fit workflow_set
 
 ``` r
+
 lacerta_rec <- recipe(lacerta_thin, formula = class ~ .) %>%
   step_rm(all_of(c(
     "bio01", "bio02", "bio03", "bio04", "bio07", "bio08",
@@ -62,6 +64,7 @@ lacerta_models <-
 ```
 
 ``` r
+
 set.seed(100)
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
 lacerta_models <-
@@ -79,7 +82,7 @@ lacerta_models <-
 #> generated.
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (618ms)
+#> ✔ 1 of 2 resampling: default_glm (589ms)
 #> i 2 of 2 tuning:     default_maxent
 #> → A | error:   NA values in data table. Please remove them and rerun.
 #> There were issues with some computations   A: x1
@@ -107,6 +110,7 @@ Prepping the recipe (which trains it on the dataset) can help diagnosing
 problems:
 
 ``` r
+
 lacerta_prep <- lacerta_rec %>% prep(lacerta_thin)
 #> Warning: The `strings_as_factors` argument of `prep.recipe()` is deprecated as of
 #> recipes 1.3.0.
@@ -156,6 +160,7 @@ than clear:
 Let’s load the data and create a recipe with `step_select`:
 
 ``` r
+
 lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
@@ -172,6 +177,7 @@ lacerta_rec_sel <- recipe(lacerta_thin, formula = class ~ .) %>%
 Now we create the workflow set and fit it:
 
 ``` r
+
 lacerta_models <-
   # create the workflow_set
   workflow_set(
@@ -201,13 +207,13 @@ lacerta_models <-
 #> → A | error:   ! `logistic_reg()` was unable to find an outcome.
 #>                ℹ Ensure that you have specified an outcome column and that it hasn't been
 #>                  removed in pre-processing.
-#> ✖ 1 of 2 resampling: default_glm failed with: Error in `$<-`(`*tmp*`, ".predictions", value = list(NULL, NULL)) :   Assigned data `purrr::map(1:nrow(return_tbl), function(x) NULL)` must becompatible with existing data.✖ Existing data has 0 rows.✖ Assigned data has 2 rows.ℹ Only vectors of size 1 are recycled.Caused by error in `vectbl_recycle_rhs_rows()`:! Can't recycle input of size 2 to size 0.
+#> ✖ 1 of 2 resampling: default_glm failed with: Error in `$<-`(`*tmp*`, "outcome_names", value = character(0)) :   Assigned data `static$y_name` must be compatible with existing data.✖ Existing data has 1 row.✖ Assigned data has 0 rows.ℹ Row updates require a list value. Do you need `list()` or `as.list()`?Caused by error in `vectbl_recycle_rhs_rows()`:! Can't recycle input of size 0 to size 1.
 #> i 2 of 2 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | error:   ! `rand_forest()` was unable to find an outcome.
 #>                ℹ Ensure that you have specified an outcome column and that it hasn't been
 #>                  removed in pre-processing.
-#> ✖ 2 of 2 tuning:     default_rf failed with: Error in `$<-`(`*tmp*`, ".predictions", value = list(NULL, NULL)) :   Assigned data `purrr::map(1:nrow(return_tbl), function(x) NULL)` must becompatible with existing data.✖ Existing data has 0 rows.✖ Assigned data has 2 rows.ℹ Only vectors of size 1 are recycled.Caused by error in `vectbl_recycle_rhs_rows()`:! Can't recycle input of size 2 to size 0.
+#> ✖ 2 of 2 tuning:     default_rf failed with: Error in `$<-`(`*tmp*`, "outcome_names", value = character(0)) :   Assigned data `static$y_name` must be compatible with existing data.✖ Existing data has 1 row.✖ Assigned data has 0 rows.ℹ Row updates require a list value. Do you need `list()` or `as.list()`?Caused by error in `vectbl_recycle_rhs_rows()`:! Can't recycle input of size 0 to size 1.
 ```
 
 The errors are not very intuitive. However, all models have failed for
@@ -222,6 +228,7 @@ predictor variables, it is hard to diagnose problems with the outcome
 variable in a recipe. Prepping will not show anything obvious:
 
 ``` r
+
 lacerta_prep_sel <- lacerta_rec_sel %>% prep(lacerta_thin)
 lacerta_prep_sel
 #> 
@@ -254,6 +261,7 @@ functions to simplify this process, assuming that the user just wants to
 fit a standard smooth to every continuous predictor.
 
 ``` r
+
 lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
@@ -288,6 +296,7 @@ lacerta_models <-
 ```
 
 ``` r
+
 set.seed(100)
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 5)
 lacerta_models <-
@@ -298,10 +307,10 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (578ms)
+#> ✔ 1 of 2 resampling: default_glm (529ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 2 resampling: default_gam
-#> ✔ 2 of 2 resampling: default_gam (926ms)
+#> ✔ 2 of 2 resampling: default_gam (914ms)
 ```
 
 Note that the step of defining a formula is incompatible with using
@@ -326,6 +335,7 @@ investigate fitting it to the specific `rsplit`.
 We generate a problematic dataset by subsampling the lacerta dataset:
 
 ``` r
+
 lacerta_thin <- readRDS(system.file("extdata/lacerta_thin_all_vars.rds",
   package = "tidysdm"
 ))
@@ -369,6 +379,7 @@ lacerta_models <-
 We then create 3 folds and attempt to fit the models:
 
 ``` r
+
 set.seed(100)
 lacerta_cv <- spatial_block_cv(lacerta_thin, v = 3)
 lacerta_models <-
@@ -379,7 +390,7 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 3 resampling: default_glm
-#> ✔ 1 of 3 resampling: default_glm (352ms)
+#> ✔ 1 of 3 resampling: default_glm (331ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 3 resampling: default_gam
 #> → A | warning: Fitting terminated with step failure - check results carefully
@@ -389,7 +400,7 @@ lacerta_models <-
 #> ✔ 2 of 3 resampling: default_gam (1.1s)
 #> i 3 of 3 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 3 of 3 tuning:     default_rf (965ms)
+#> ✔ 3 of 3 tuning:     default_rf (878ms)
 ```
 
 We see that one of the folds gives us an error when using GAMs. The
@@ -401,6 +412,7 @@ gives us an idea of where this error comes from.
 We start by extracting the results of the gam fits:
 
 ``` r
+
 gam_results <- extract_workflow_set_result(lacerta_models, id = "default_gam")
 gam_results
 #> # Resampling results
@@ -426,6 +438,7 @@ does not have zero rows). We can check that it indeed contains the error
 that we wanted:
 
 ``` r
+
 gam_results$.notes
 #> [[1]]
 #> # A tibble: 0 × 4
@@ -446,6 +459,7 @@ We can now get the problematic data split, and extract the training
 data:
 
 ``` r
+
 problem_split <- gam_results$splits[3][[1]]
 summary(training(problem_split))
 #>         class             geometry      bio01            bio02       
@@ -501,6 +515,7 @@ We can now extract the workflow and refit it to the split to confirm
 that we have isolated the problem:
 
 ``` r
+
 gam_workflow <- extract_workflow(lacerta_models, id = "default_gam")
 faulty_gam <- fit(gam_workflow, training(problem_split))
 #> Warning in newton(lsp = lsp, X = G$X, y = G$y, Eb = G$Eb, UrS = G$UrS, L = G$L,

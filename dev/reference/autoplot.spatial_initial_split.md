@@ -45,6 +45,7 @@ the convention for a standard `initial_split` object
 ## Examples
 
 ``` r
+
 set.seed(123)
 block_initial <- spatial_initial_split(boston_canopy,
   prop = 1 / 5, spatial_block_cv

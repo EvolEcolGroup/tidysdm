@@ -41,6 +41,7 @@ update the model with
 [`parsnip::model_formula`](https://parsnip.tidymodels.org/reference/model_formula.html)
 for a discussion of formulas with special terms in `tidymodels`):
 
+
     workflow_set(
       preproc = list(default = my_recipe),
       models = list(gam = sdm_spec_gam()),
