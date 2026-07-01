@@ -48,6 +48,11 @@ thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
   data <- data[sample(seq_len(nrow(data))), ]
   # create a vector of times formatted as proper dates
   time_lub <- lubridate_fun(data %>% dplyr::pull(dplyr::all_of(time_col)))
+  # give an error if some time elements are NA
+  if (any(is.na(time_lub))) {
+    stop("some values in time_col are not a data (or cannot be coerced to one)")
+  }
+
   if (!inherits(time_lub, "POSIXct")) {
     stop("time is not a date (or cannot be coerced to one)")
   }
@@ -71,6 +76,7 @@ thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
       "to set it"
     )
   }
+
   if (terra::timeInfo(raster)[1, 2] == "years") {
     time_steps <- lubridate::date_decimal(time_steps)
   }

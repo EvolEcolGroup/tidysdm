@@ -50,6 +50,18 @@ test_that("thin_by_cell_time removes the correct points", {
   # we should now have the first pair, but lose one of the last two
   expect_true(setequal(thin_100k_t$id, c(1, 2, 3, 5)))
 
+  # repeat using unusal column names for coordinates
+  locations2 <- locations %>%
+    dplyr::rename(longitude2 = lon, latitude2 = lat)
+  set.seed(123)
+  thin_100k_t2 <- thin_by_cell_time(locations2,
+    raster = grid_raster,
+    coords = c("longitude2", "latitude2"),
+    time_col = "time_bp",
+    lubridate_fun = pastclim::ybp2date
+  )
+  expect_true(setequal(thin_100k_t2$id, c(1, 2, 3, 5)))
+
   # repeat with an sf object
   set.seed(123)
   locations_sf <- sf::st_as_sf(locations, coords = c("lon", "lat")) %>%
@@ -76,6 +88,18 @@ test_that("thin_by_cell_time removes the correct points", {
       raster = grid_raster
     ),
     "sf object contained 'X' and 'Y' coordinates that did not match the sf point geometry" # nolint
+  )
+
+  # check that we provide an informative error if some times are na
+  locations_sf_na <- locations_sf
+  locations_sf_na$time_bp[1] <- NA
+  expect_error(
+    thin_by_cell_time(locations_sf_na,
+      raster = grid_raster,
+      time_col = "time_bp",
+      lubridate_fun = pastclim::ybp2date
+    ),
+    "^some values in time_col"
   )
 
   # now use a SpatRasterDataset
