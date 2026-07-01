@@ -86,7 +86,7 @@ thin_by_cell_time <- function(data, raster, coords = NULL, time_col = "time",
     data_sub <- data %>% dplyr::filter(time_indices == i_index)
     raster_sub <- raster[[i_index]]
     data_sub <- thin_by_cell(data_sub, raster_sub,
-      drop_na = drop_na, agg_fact = agg_fact
+      drop_na = drop_na, agg_fact = agg_fact, coords = coords
     )
     data_thin <- data_thin %>% dplyr::bind_rows(data_sub)
   }
