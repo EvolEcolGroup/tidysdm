@@ -1,6 +1,6 @@
 Package: tidysdm
 Title: Species Distribution Models with Tidymodels
-Version: 1.0.4.9002
+Version: 1.0.4.9003
 Authors@R: c(
     person("Michela", "Leonardi", role = "aut"),
     person("Margherita", "Colucci", role = "aut"),
