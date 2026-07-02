@@ -16,7 +16,10 @@ test_that("sample_time_uncertainty() works correctly",{
   expect_true(all(sampled_times[1:3] %in% as.Date(c("2020-01-01", "2021-01-01"))))
   expect_true(all(sampled_times[4] >= as.Date("1900-01-01") & sampled_times[4] <= as.Date("2100-12-31")))
   expect_true(all(sampled_times[5] >= as.Date("2800-01-01") & sampled_times[5] <= as.Date("3200-12-31")))
+})
 
-
-
+test_that("sample_time_uncertainty() works on complex stratigraphy",{
+  test_data <- read.csv(
+    file.path(test_path("testdata"), "times_complex_strat.csv"))
+  
 })
