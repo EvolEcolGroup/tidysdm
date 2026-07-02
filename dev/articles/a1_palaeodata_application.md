@@ -341,24 +341,23 @@ horses_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (563ms)
+#> ✔ 1 of 4 resampling: default_glm (488ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 4 resampling: default_gam
-#> ✔ 2 of 4 resampling: default_gam (808ms)
+#> ✔ 2 of 4 resampling: default_gam (680ms)
 #> i 3 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 3 of 4 tuning:     default_rf (3.2s)
+#> ✔ 3 of 4 tuning:     default_rf (2.8s)
 #> i 4 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
-#> There were issues with some computations   A: x2
 #> There were issues with some computations   A: x3
 #> There were issues with some computations   A: x4
 #> There were issues with some computations   A: x5
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 4 of 4 tuning:     default_gbm (12.6s)
+#> ✔ 4 of 4 tuning:     default_gbm (11.9s)
 ```
 
 Note that `workflow_set` correctly detects that we have no tuning

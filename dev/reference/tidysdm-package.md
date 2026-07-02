@@ -25,6 +25,8 @@ Useful links:
 
 Authors:
 
+- Andrea Manica <am315@cam.ac.uk>
+
 - Michela Leonardi
 
 - Margherita Colucci
@@ -36,3 +38,5 @@ Authors:
 Other contributors:
 
 - Ben Tupper \[contributor\]
+
+- Ondrej Pelanek \[contributor\]

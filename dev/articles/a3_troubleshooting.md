@@ -82,7 +82,7 @@ lacerta_models <-
 #> generated.
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (671ms)
+#> ✔ 1 of 2 resampling: default_glm (592ms)
 #> i 2 of 2 tuning:     default_maxent
 #> → A | error:   NA values in data table. Please remove them and rerun.
 #> There were issues with some computations   A: x1
@@ -92,7 +92,7 @@ lacerta_models <-
 #>                ℹ Only vectors of size 1 are recycled.
 #>                Caused by error in `vectbl_recycle_rhs_rows()`:
 #>                ! Can't recycle input of size 88 to size 87.
-#> There were issues with some computations   A: x1There were issues with some computations   A: x6   B: x3
+#> There were issues with some computations   A: x1There were issues with some computations   A: x15   B: x6
 #> Warning: All models failed. Run `show_notes(.Last.tune.result)` for more
 #> information.
 #> There were issues with some computations   A: x24   B: x6
@@ -307,10 +307,10 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (617ms)
+#> ✔ 1 of 2 resampling: default_glm (532ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 2 resampling: default_gam
-#> ✔ 2 of 2 resampling: default_gam (991ms)
+#> ✔ 2 of 2 resampling: default_gam (911ms)
 ```
 
 Note that the step of defining a formula is incompatible with using
@@ -390,17 +390,17 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 3 resampling: default_glm
-#> ✔ 1 of 3 resampling: default_glm (365ms)
+#> ✔ 1 of 3 resampling: default_glm (337ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 3 resampling: default_gam
 #> → A | warning: Fitting terminated with step failure - check results carefully
 #> There were issues with some computations   A: x1
 #> There were issues with some computations   A: x1
 #> 
-#> ✔ 2 of 3 resampling: default_gam (1.2s)
+#> ✔ 2 of 3 resampling: default_gam (1.1s)
 #> i 3 of 3 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 3 of 3 tuning:     default_rf (983ms)
+#> ✔ 3 of 3 tuning:     default_rf (886ms)
 ```
 
 We see that one of the folds gives us an error when using GAMs. The

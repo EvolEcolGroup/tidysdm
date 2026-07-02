@@ -36,16 +36,11 @@ data("bradypus", package = "maxnet")
 bradypus_tb <- tibble::as_tibble(bradypus) %>%
   dplyr::mutate(presence = relevel(
     factor(
-      dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
+      dplyr::recode_values(presence, 1 ~ "presence", 0 ~ "absence")
     ),
     ref = "presence"
   )) %>%
   select(-ecoreg)
-#> Warning: There was 1 warning in `dplyr::mutate()`.
-#> ℹ In argument: `presence = relevel(...)`.
-#> Caused by warning:
-#> ! `case_match()` was deprecated in dplyr 1.2.0.
-#> ℹ Please use `recode_values()` instead.
 
 bradypus_tb %>% dist_pres_vs_bg(presence)
 #> pre6190_l10 frs6190_ann tmn6190_ann pre6190_ann vap6190_ann  pre6190_l7 
