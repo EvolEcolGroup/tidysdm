@@ -20,7 +20,7 @@ filter_high_cor(x, cutoff = 0.7, verbose = FALSE, names = TRUE, to_keep = NULL)
 \method{filter_high_cor}{matrix}(x, cutoff = 0.7, verbose = FALSE, names = TRUE, to_keep = NULL)
 }
 \arguments{
-\item{x}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} object, a data.frame (with only numeric
+\item{x}{A \code{\link[terra:SpatRaster]{terra::SpatRaster}} object, a data.frame (with only numeric
 variables), or a correlation matrix}
 
 \item{cutoff}{A numeric value for the pair-wise absolute correlation cutoff}
@@ -46,7 +46,7 @@ instead
 }
 \details{
 This method finds a subset of variable such that all have a correlation below
-a certain cutoff. There are methods for \code{\link[terra:SpatRaster-class]{terra::SpatRaster}},
+a certain cutoff. There are methods for \code{\link[terra:SpatRaster]{terra::SpatRaster}},
 \code{\link{data.frame}}, and to work directly on a correlation matrix that was
 previously estimated. For \code{data.frame}, only numeric variables will be
 considered. The algorithm is based on \code{caret::findCorrelation}, using the

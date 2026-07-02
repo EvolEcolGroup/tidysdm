@@ -84,7 +84,7 @@ filter_collinear(
 )
 }
 \arguments{
-\item{x}{A \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{stars} object, a data.frame (with only
+\item{x}{A \code{\link[terra:SpatRaster]{terra::SpatRaster}} or \code{stars} object, a data.frame (with only
 numeric variables)}
 
 \item{cutoff}{A numeric value used as a threshold to remove variables. For,
@@ -112,10 +112,10 @@ this is smaller than ncell(x), a regular sample of x is used}
 
 \item{...}{additional arguments specific to a given object type}
 
-\item{exhaustive}{boolean. Used only for \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} when
+\item{exhaustive}{boolean. Used only for \code{\link[terra:SpatRaster]{terra::SpatRaster}} when
 downsampling to \code{max_cells}, if we require the \code{exhaustive} approach in
-\code{\link[terra:sample]{terra::spatSample()}}. This is only needed for rasters that are very sparse
-and not too large, see the help page of \code{\link[terra:sample]{terra::spatSample()}} for details.}
+\code{\link[terra:spatSample]{terra::spatSample()}}. This is only needed for rasters that are very sparse
+and not too large, see the help page of \code{\link[terra:spatSample]{terra::spatSample()}} for details.}
 }
 \value{
 A vector of names of columns that are below the correlation
@@ -134,8 +134,8 @@ the algorithm in \code{usdm::vifstep}), and \code{vif_cor}, a stepwise approach 
 at each step, find the pair of variables with the highest correlation above
 the cutoff and removes the one with the largest vif. such that all have a
 correlation below a certain cutoff. There are methods for
-\code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{\link{data.frame}} and \code{\link{matrix}}. For
-\code{\link[terra:SpatRaster-class]{terra::SpatRaster}} and \code{data.frame}, only numeric variables will be
+\code{\link[terra:SpatRaster]{terra::SpatRaster}}, \code{\link{data.frame}} and \code{\link{matrix}}. For
+\code{\link[terra:SpatRaster]{terra::SpatRaster}} and \code{data.frame}, only numeric variables will be
 considered.
 }
 \references{

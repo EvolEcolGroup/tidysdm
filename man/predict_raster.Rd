@@ -12,7 +12,7 @@ predict_raster(object, raster, ...)
 \arguments{
 \item{object}{the \code{tidymodels} object of interest}
 
-\item{raster}{the \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{stars} with the input data. It
+\item{raster}{the \code{\link[terra:SpatRaster]{terra::SpatRaster}} or \code{stars} with the input data. It
 has to include levels with the same names as the variables used in \code{object}}
 
 \item{...}{parameters to be passed to the standard \code{predict()} function for
@@ -27,10 +27,10 @@ in memory.}
 \item{n}{positive integer indicating how many copies the data may be in
 memory at any point in time (it defaults to 4). This is used to determine
 whether rasters can be processed in one go, or in chunks. If you get an out
-of memory error, increase \code{n}. See \code{\link[terra:readwrite]{terra::writeStart()}} for more details.}
+of memory error, increase \code{n}. See \code{\link[terra:writeStart]{terra::writeStart()}} for more details.}
 }
 \value{
-a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} (or \code{stars} if that is the input) with the
+a \code{\link[terra:SpatRaster]{terra::SpatRaster}} (or \code{stars} if that is the input) with the
 predictions
 }
 \description{

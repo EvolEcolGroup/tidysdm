@@ -19,7 +19,7 @@
 #' bradypus_tb <- tibble::as_tibble(bradypus) %>%
 #'   dplyr::mutate(presence = relevel(
 #'     factor(
-#'       dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
+#'       dplyr::recode_values(presence, 1 ~ "presence", 0 ~ "absence")
 #'     ),
 #'     ref = "presence"
 #'   )) %>%

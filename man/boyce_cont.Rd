@@ -101,8 +101,8 @@ Evaluating the ability of habitat suitability models to predict
 species presences. Ecol. Model., 199, 142-152.
 }
 \seealso{
-Other class probability metrics: 
-\code{\link{kap_max}()},
-\code{\link{tss_max}()}
+Other class probability metrics:
+\code{\link[=kap_max]{kap_max()}},
+\code{\link[=tss_max]{tss_max()}}
 }
 \concept{class probability metrics}

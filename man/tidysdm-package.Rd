@@ -24,6 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Andrea Manica \email{am315@cam.ac.uk}
   \item Michela Leonardi
   \item Margherita Colucci
   \item Andrea Vittorio Pozzi
@@ -33,6 +34,7 @@ Authors:
 Other contributors:
 \itemize{
   \item Ben Tupper [contributor]
+  \item Ondrej Pelanek [contributor]
 }
 
 }

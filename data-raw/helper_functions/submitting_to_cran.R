@@ -11,9 +11,9 @@ devtools::check(remote = TRUE, manual = TRUE)
 # grep --color='auto' -P -n "[^\x00-\x7F]" -r *
 
 # to reduce file sizes:
-#tools::resaveRdaFiles("./data")
-#source("./data-raw/helper_functions/resaveRDSfiles.R")
-#resaveRDSfiles("./inst/extdata/")
+# tools::resaveRdaFiles("./data")
+# source("./data-raw/helper_functions/resaveRDSfiles.R")
+# resaveRDSfiles("./inst/extdata/")
 
 
 source("./data-raw/helper_functions/check_returns_in_documentation.R")
@@ -30,8 +30,6 @@ source("./data-raw/helper_functions/check_returns_in_documentation.R")
 # we can remove by limiting threads
 
 
-
-
 # first check with rhub
 # git config --global credential.helper store
 usethis::create_github_token()
@@ -42,7 +40,6 @@ rhub::rhub_check()
 rhub::rhub_doctor()
 
 # answer 1,2,3,4,5
-
 
 
 # check on macos and windows via devtools

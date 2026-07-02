@@ -41,7 +41,7 @@ will be used as the layer data. A \code{function} can be created
 from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
 \item{stat}{Use to override the default connection between
-\code{\link[ggplot2:geom_violin]{ggplot2::geom_violin()}} and \code{\link[ggplot2:geom_violin]{ggplot2::stat_ydensity()}}.}
+\code{\link[ggplot2:geom_violin]{ggplot2::geom_violin()}} and \code{\link[ggplot2:stat_ydensity]{ggplot2::stat_ydensity()}}.}
 
 \item{position}{A position adjustment to use on the data for this layer. This
 can be used in various ways, including to prevent overplotting and
@@ -132,7 +132,7 @@ data("bradypus", package = "maxnet")
 bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
   dplyr::mutate(presence = relevel(
     factor(
-      dplyr::case_match(
+      dplyr::recode_values(
         presence, 1 ~ "presence",
         0 ~ "absence"
       )

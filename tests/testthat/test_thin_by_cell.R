@@ -44,8 +44,10 @@ test_that("thin_by_cell works correctly with coords and sf", {
     longitude = c(0.25, 0.75, 1.25),
     latitude = c(0.25, 0.75, 1.25)
   ) |>
-    sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326,
-                 remove = FALSE)
+    sf::st_as_sf(
+      coords = c("longitude", "latitude"), crs = 4326,
+      remove = FALSE
+    )
 
   # this should work
   set.seed(123)
