@@ -69,9 +69,8 @@ blockcv2rsample <- function(x, data) {
   }
 
   rsample::new_rset(splits,
-                    ids = paste0("Fold", seq_along(splits)),
-                    attrib = NULL,
-                    subclass = c(subclass_type, "spatial_rset", "rset")
+    ids = paste0("Fold", seq_along(splits)),
+    attrib = NULL,
+    subclass = c(subclass_type, "spatial_rset", "rset")
   )
-
 }
