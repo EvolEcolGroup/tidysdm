@@ -31,5 +31,5 @@ collect_metrics(lacerta_ensemble)
 collect_metrics(lacerta_rep_ens)
 }
 \seealso{
-\code{\link[tune:collect_predictions]{tune::collect_metrics()}}
+\code{\link[tune:collect_metrics]{tune::collect_metrics()}}
 }

@@ -19,7 +19,7 @@ clamp_predictors(x, training, .col, use_na)
 \method{clamp_predictors}{SpatRasterDataset}(x, training, .col, use_na = FALSE)
 }
 \arguments{
-\item{x}{a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}, \code{stars} or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} to
+\item{x}{a \code{\link[terra:SpatRaster]{terra::SpatRaster}}, \code{stars} or \code{\link[terra:SpatRasterDataset]{terra::SpatRasterDataset}} to
 clamp.}
 
 \item{training}{the training dataset (a \code{\link{data.frame}} or a \code{\link[sf:sf]{sf::sf}}
@@ -36,12 +36,12 @@ range.}
 \item{...}{additional arguments specific to a given object type}
 }
 \value{
-a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}} or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} clamped to
+a \code{\link[terra:SpatRaster]{terra::SpatRaster}} or \code{\link[terra:SpatRasterDataset]{terra::SpatRasterDataset}} clamped to
 the ranges in \code{training}
 }
 \description{
-This function clamps the environmental variables in a \code{\link[terra:SpatRaster-class]{terra::SpatRaster}}
-or \code{\link[terra:SpatRaster-class]{terra::SpatRasterDataset}} so that their minimum and maximum values do
+This function clamps the environmental variables in a \code{\link[terra:SpatRaster]{terra::SpatRaster}}
+or \code{\link[terra:SpatRasterDataset]{terra::SpatRasterDataset}} so that their minimum and maximum values do
 not exceed the range in the training dataset.
 }
 \keyword{extrapolation}

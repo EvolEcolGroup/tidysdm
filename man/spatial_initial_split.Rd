@@ -21,8 +21,8 @@ NULL for leave-one-out crossvalidation.}
 exception of \code{v} which is calculated internally based on \code{prop})}
 }
 \value{
-An \code{rsplit} object that can be used with the \link[rsample:initial_split]{rsample::training} and
-\link[rsample:initial_split]{rsample::testing} functions to extract the data in each split.
+An \code{rsplit} object that can be used with the \link[rsample:training]{rsample::training} and
+\link[rsample:testing]{rsample::testing} functions to extract the data in each split.
 }
 \description{
 \code{spatial_initial_split} creates a single binary split of the data into a

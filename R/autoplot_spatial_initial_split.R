@@ -36,6 +36,6 @@ autoplot.spatial_initial_split <- function(object, ..., alpha = 0.6) {
     "spatial_rsplit"
   )(object, alpha = alpha, ...)
   p$data$.class. <- p$data$.class. %>%
-    dplyr::case_match("Assessment" ~ "Testing", "Analysis" ~ "Training")
+    dplyr::recode_values("Assessment" ~ "Testing", "Analysis" ~ "Training")
   p
 }

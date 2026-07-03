@@ -31,8 +31,10 @@ test_that("we can explain tidysdm objects", {
     "type has to be classification for a tidysdm ensemble"
   )
   expect_error(
-    explain_tidysdm(tidysdm::lacerta_ensemble, type = "regression",
-                    by_workflow = TRUE),
+    explain_tidysdm(tidysdm::lacerta_ensemble,
+      type = "regression",
+      by_workflow = TRUE
+    ),
     "type has to be classification for a tidysdm ensemble"
   )
   expect_error(

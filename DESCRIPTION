@@ -1,12 +1,13 @@
 Package: tidysdm
 Title: Species Distribution Models with Tidymodels
-Version: 1.0.4.9001
+Version: 1.0.4.9005
 Authors@R: c(
     person("Michela", "Leonardi", role = "aut"),
     person("Margherita", "Colucci", role = "aut"),
     person("Andrea Vittorio", "Pozzi", role = "aut"),
     person("Eleanor M.L.","Scerri", role = "aut"),
     person("Ben","Tupper", role = "ctb"),
+    person("Ondrej","Pelanek", role = "ctb"),
     person("Andrea", "Manica", email = "am315@cam.ac.uk", role = c("aut", "cre")))
 Description: Fit species distribution models (SDMs) using the 'tidymodels' framework, 
   which provides a standardised interface to define models and process their 
@@ -23,7 +24,6 @@ URL: https://github.com/EvolEcolGroup/tidysdm,
     https://evolecolgroup.github.io/tidysdm/
 BugReports: https://github.com/EvolEcolGroup/tidysdm/issues
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Depends:
     tidymodels,
     spatialsample,
@@ -75,3 +75,4 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LazyData: true
+Config/roxygen2/version: 8.0.0

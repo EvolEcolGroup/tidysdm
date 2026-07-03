@@ -22,8 +22,8 @@ sample_background_time(
 variables. These can be defined in \code{coords}, unless they have standard
 names (see details below).}
 
-\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster}, \code{stars} or \link[terra:SpatRaster-class]{terra::SpatRasterDataset}
-from which cells will be sampled. If a \link[terra:SpatRaster-class]{terra::SpatRasterDataset}, the
+\item{raster}{the \link[terra:SpatRaster]{terra::SpatRaster}, \code{stars} or \link[terra:SpatRasterDataset]{terra::SpatRasterDataset}
+from which cells will be sampled. If a \link[terra:SpatRasterDataset]{terra::SpatRasterDataset}, the
 first dataset will be used to define which cells are valid, and which are
 NAs.}
 

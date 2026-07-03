@@ -14,7 +14,8 @@
 #' @export
 
 grid_offset <- function(
-    data) {
+  data
+) {
   # TODO check that this is an sf object
   grid_box <- sf::st_bbox(data)
   if (is_longlat(data)) {

@@ -65,7 +65,7 @@ test_that("sample_pseudoabs_time samples in the right places", {
       pts_in_polys(
         terra::vect(pa_random %>% dplyr::filter(
           time_step == as.Date("1952-01-01")
-        )), min_buffer
+        ), crs = "+proj=longlat +datum=WGS84"), min_buffer
       )
     ) == 0
   )
@@ -83,7 +83,7 @@ test_that("sample_pseudoabs_time samples in the right places", {
         terra::vect(pa_random %>%
           dplyr::filter(
             time_step == as.Date("1952-01-01")
-          )), min_buffer
+          ), crs = "+proj=longlat +datum=WGS84"), min_buffer
       )
     ) == 0
   )
@@ -100,7 +100,7 @@ test_that("sample_pseudoabs_time samples in the right places", {
         terra::vect(pa_random %>%
           dplyr::filter(
             time_step == as.Date("1952-01-01")
-          )), min_buffer
+          ), crs = "+proj=longlat +datum=WGS84"), min_buffer
       )
     ) == 0
   )
@@ -130,7 +130,7 @@ test_that("sample_pseudoabs_time samples in the right places", {
         terra::vect(pa_random %>%
           dplyr::filter(
             time_step == as.Date("1952-01-01")
-          )), min_buffer
+          ), crs = "+proj=longlat +datum=WGS84"), min_buffer
       )
     ) == 0
   )
@@ -148,7 +148,7 @@ test_that("sample_pseudoabs_time samples in the right places", {
         terra::vect(pa_random %>%
           dplyr::filter(
             time_step == as.Date("1952-01-01")
-          )), min_buffer
+          ), crs = "+proj=longlat +datum=WGS84"), min_buffer
       )
     ) == 0
   )
@@ -166,7 +166,7 @@ test_that("sample_pseudoabs_time samples in the right places", {
         terra::vect(pa_random %>%
           dplyr::filter(
             time_step == as.Date("1952-01-01")
-          )), min_buffer
+          ), crs = "+proj=longlat +datum=WGS84"), min_buffer
       )
     ) == 0
   )

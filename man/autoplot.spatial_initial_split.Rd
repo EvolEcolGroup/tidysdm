@@ -13,15 +13,15 @@ Note that only resamples made from
 this function will not work for
 resamples made with non-spatial tibbles or data.frames.}
 
-\item{...}{Options passed to \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}}.}
+\item{...}{Options passed to \code{\link[ggplot2:geom_sf]{ggplot2::geom_sf()}}.}
 
-\item{alpha}{Opacity, passed to \code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}}.
+\item{alpha}{Opacity, passed to \code{\link[ggplot2:geom_sf]{ggplot2::geom_sf()}}.
 Values of alpha range from 0 to 1, with lower values corresponding to more
 transparent colors.}
 }
 \value{
 A ggplot object with each fold assigned a color, made using
-\code{\link[ggplot2:ggsf]{ggplot2::geom_sf()}}.
+\code{\link[ggplot2:geom_sf]{ggplot2::geom_sf()}}.
 }
 \description{
 This method provides a good visualization method for a spatial

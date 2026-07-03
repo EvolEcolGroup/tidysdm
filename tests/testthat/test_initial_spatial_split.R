@@ -43,5 +43,4 @@ test_that("spatial_initial_split", {
   expect_true(inherits(lacerta_initial_loocv, "spatial_initial_split"))
   # expect that only one row is in the assessment set
   expect_equal(length(lacerta_initial_loocv$in_id), 19)
-
 })

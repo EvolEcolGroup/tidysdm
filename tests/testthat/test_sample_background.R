@@ -32,7 +32,15 @@ test_that("sample_background samples in the right places", {
     return_pres = FALSE
   )
   # we should now check that some points are outside the buffers
-  expect_true(length(pts_in_polys(terra::vect(bg_random), max_buffer)) < 25)
+  expect_true(
+    length(
+      pts_in_polys(
+        terra::vect(bg_random,
+          crs = "+proj=longlat +datum=WGS84"
+        ), max_buffer
+      )
+    ) < 25
+  )
   # some points conside with the presences
   expect_true(
     any(
@@ -53,7 +61,11 @@ test_that("sample_background samples in the right places", {
   )
   # all are within the max buffer
   expect_true(
-    length(pts_in_polys(terra::vect(bg_max), max_buffer)) == nrow(bg_max)
+    length(pts_in_polys(
+      terra::vect(bg_max,
+        crs = "+proj=longlat +datum=WGS84"
+      ), max_buffer
+    )) == nrow(bg_max)
   )
 
   # and now use the values as bias

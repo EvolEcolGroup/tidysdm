@@ -27,10 +27,10 @@ Model.
 my_spec_glm <- sdm_spec_glm()
 }
 \seealso{
-Other "sdm model specifications": 
-\code{\link{sdm_spec_boost_tree}()},
-\code{\link{sdm_spec_gam}()},
-\code{\link{sdm_spec_maxent}()},
-\code{\link{sdm_spec_rand_forest}()}
+Other "sdm model specifications":
+\code{\link[=sdm_spec_boost_tree]{sdm_spec_boost_tree()}},
+\code{\link[=sdm_spec_gam]{sdm_spec_gam()}},
+\code{\link[=sdm_spec_maxent]{sdm_spec_maxent()}},
+\code{\link[=sdm_spec_rand_forest]{sdm_spec_rand_forest()}}
 }
 \concept{"sdm model specifications"}

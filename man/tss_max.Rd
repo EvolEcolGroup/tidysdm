@@ -95,8 +95,8 @@ tss_max(two_class_example, truth, Class1)
 
 }
 \seealso{
-Other class probability metrics: 
-\code{\link{boyce_cont}()},
-\code{\link{kap_max}()}
+Other class probability metrics:
+\code{\link[=boyce_cont]{boyce_cont()}},
+\code{\link[=kap_max]{kap_max()}}
 }
 \concept{class probability metrics}
