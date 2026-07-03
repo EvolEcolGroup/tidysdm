@@ -64,6 +64,10 @@ maxnet_fit <- function(formula, data, regmult = 1.0, classes = "default",
   )
   # extract the responses
   predictors <- data[, rsample::form_pred(stats::terms(formula, data = data))]
+  # if predictors is an sf object, convert to data.frame by dropping geometry
+  if (inherits(predictors, "sf")) {
+    predictors <- sf::st_drop_geometry(predictors)
+  }
 
   maxnet_obj <- maxnet::maxnet(
     p = response,

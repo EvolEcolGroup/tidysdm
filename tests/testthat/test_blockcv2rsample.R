@@ -8,11 +8,14 @@ test_that("blockcv2rsample conversion", {
   ))
   pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845)
   pa_data$occ <- as.factor(pa_data$occ)
-  path <- system.file("extdata/au/bio_5.tif", package = "blockCV")
-  covar <- terra::rast(path)
+  # load raster data
+  path <- system.file("extdata/au/", package = "blockCV")
+  files <- list.files(path, full.names = TRUE)
+  covars <- terra::rast(files)
 
-  pa_data <- pa_data %>% select(geometry, occ) %>%
-    bind_cols(terra::extract(covar, pa_data, ID = FALSE))
+  pa_data <- pa_data %>%
+    select(geometry, occ) %>%
+    bind_cols(terra::extract(covars, pa_data, ID = FALSE))
 
   sb1 <- cv_spatial(
     x = pa_data,
@@ -28,11 +31,6 @@ test_that("blockcv2rsample conversion", {
   expect_true(inherits(sb1_rsample, "spatial_rset"))
 
 
-  # load raster data
-  path <- system.file("extdata/au/", package = "blockCV")
-  files <- list.files(path, full.names = TRUE)
-  covars <- terra::rast(files)
-  #'
   # spatial clustering
   set.seed(6)
   sc <- cv_cluster(
@@ -61,7 +59,7 @@ test_that("blockcv2rsample conversion", {
   nndm <- cv_nndm(
     x = pa_data,
     column = "occ", # optional
-    r = covar,
+    r = covars,
     size = 350000, # size in metres no matter the CRS
     num_sample = 10,
     sampling = "regular",
@@ -105,21 +103,22 @@ test_that("blockcv2rsample conversion", {
     option_add(control = control_ensemble_grid())
 
   # workflow_map with the blockcv2rsample object - cv_spatial
-example_workflow_spatial <- example_models %>%
+  example_workflow_spatial <- example_models %>%
     workflow_map("tune_grid",
-                 resamples = sb1_rsample, grid = 1,
-                 metrics = sdm_metric_set(), verbose = TRUE)
+      resamples = sb1_rsample, grid = 1,
+      metrics = sdm_metric_set(), verbose = TRUE
+    )
 
-    # class of results should include "tune_results"
-expect_true("tune_results" %in% class(example_workflow_spatial$result[[1]]))
+  # class of results should include "tune_results"
+  expect_true("tune_results" %in% class(example_workflow_spatial$result[[1]]))
 
-# workflow_map with the blockcv2rsample object - cv_cluster
-example_workflow_cluster <- example_models %>%
-  workflow_map("tune_grid",
-               resamples = sc_rsample, grid = 1,
-               metrics = sdm_metric_set(), verbose = TRUE)
+  # workflow_map with the blockcv2rsample object - cv_cluster
+  example_workflow_cluster <- example_models %>%
+    workflow_map("tune_grid",
+      resamples = sc_rsample, grid = 1,
+      metrics = sdm_metric_set(), verbose = TRUE
+    )
 
-# class of results should include "tune_results"
-expect_true("tune_results" %in% class(example_workflow_cluster$result[[1]]))
-
+  # class of results should include "tune_results"
+  expect_true("tune_results" %in% class(example_workflow_cluster$result[[1]]))
 })
