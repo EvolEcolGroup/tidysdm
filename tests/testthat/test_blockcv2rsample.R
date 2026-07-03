@@ -67,10 +67,24 @@ test_that("blockcv2rsample conversion", {
     plot = FALSE,
     report = FALSE
   )
+  nndm_rsample <- blockcv2rsample(nndm, pa_data)
+  expect_true(inherits(nndm_rsample, "spatial_rset"))
+
+  # and no a cv_buffer object
+  buffer_pa <- cv_buffer(x = pa_data,
+                         column = "occ",
+                         size = 350000, # size in metres no matter the CRS
+                         presence_bg = FALSE)
+  buffer_pa_rsample <- blockcv2rsample(buffer_pa, pa_data)
+  expect_true(inherits(buffer_pa_rsample, "spatial_rset"))
+
+  # get error if x is not a blockcv object
   expect_error(
-    blockcv2rsample(nndm, pa_data),
+    blockcv2rsample(pa_data, pa_data),
     "this function does not support this object type"
   )
+
+
   # give error for deprecated object
   pa_data_spd <- sf::as_Spatial(pa_data)
   expect_error(
