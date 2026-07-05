@@ -29,14 +29,16 @@ an `rsample` object
 
 ## Details
 
-Note that currently only objects of type `cv_spatial` and `cv_cluster`
-are supported.
+Note that currently only objects of type `cv_spatial`, `cv_cluster`,
+`cv_nndm` and `cv_buffer` are supported. The latter two are
+one-out-cross validation methods, so the resulting `rsample` object will
+have `n` splits, where `n` is the number of folds in the original
+`blockCV` object (which can be very large!).
 
 ## Examples
 
 ``` r
 library(blockCV)
-#> blockCV 3.2.0
 points <- read.csv(system.file("extdata/", "species.csv",
   package = "blockCV"
 ))
@@ -48,17 +50,19 @@ sb1 <- cv_spatial(
   size = 350000, # size of the blocks in metres
   selection = "random", # random blocks-to-fold
   iteration = 10
-) # find evenly dispersed folds
+)
 #>   |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
 #>   train_0 train_1 test_0 test_1
-#> 1     172     207     85     36
-#> 2     218     202     39     41
-#> 3     218     192     39     51
-#> 4     217     171     40     72
-#> 5     203     200     54     43
+#> 1     209     183     48     60
+#> 2     216     175     41     68
+#> 3     198     195     59     48
+#> 4     188     212     69     31
+#> 5     217     207     40     36
+
 
 sb1_rsample <- blockcv2rsample(sb1, pa_data)
 class(sb1_rsample)
-#> [1] "spatial_rset" "rset"         "tbl_df"       "tbl"          "data.frame"  
+#> [1] "cv_spatial"   "spatial_rset" "rset"         "tbl_df"       "tbl"         
+#> [6] "data.frame"  
 autoplot(sb1_rsample)
 ```

@@ -37,10 +37,10 @@ check_splits_balance(lacerta_cv, class)
 #> # A tibble: 5 × 4
 #>   presence_assessment background_assessment presence_analysis
 #>                 <int>                 <int>             <int>
-#> 1                  99                   261                13
-#> 2                  97                   279                15
-#> 3                  78                   242                34
-#> 4                  84                   278                28
-#> 5                  90                   284                22
+#> 1                  80                   262                32
+#> 2                 102                   263                10
+#> 3                  82                   277                30
+#> 4                  98                   266                14
+#> 5                  86                   276                26
 #> # ℹ 1 more variable: background_analysis <int>
 ```

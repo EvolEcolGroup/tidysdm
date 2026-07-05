@@ -201,6 +201,9 @@ Functions for splitting the data into folds (in additiona to standard
 
   Convert an object created with `blockCV` to an `rsample` object
 
+- [`blockcv2initial_split()`](https://evolecolgroup.github.io/tidysdm/dev/reference/blockcv2initial_split.md)
+  : Create an initial train/test split from a blockCV object
+
 - [`check_splits_balance()`](https://evolecolgroup.github.io/tidysdm/dev/reference/check_splits_balance.md)
   : Check the balance of presences vs pseudoabsences among splits
 
