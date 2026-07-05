@@ -58,7 +58,7 @@ blockcv2rsample <- function(x, data) {
       "convert your data to `sf` and rebuild your `blockCV` object with it"
     )
   }
-  # Build splits (common to both cv_spatial and cv_cluster)
+  # Build splits (common to both models)
   splits <- lapply(
     x$folds_list,
     function(this_fold) {

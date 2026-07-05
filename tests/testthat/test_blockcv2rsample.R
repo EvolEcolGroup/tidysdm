@@ -55,7 +55,7 @@ test_that("blockcv2rsample conversion", {
   ec_rsample <- blockcv2rsample(ec, pa_data)
   expect_true(inherits(ec_rsample, "spatial_rset"))
 
-  # give error for unsuppored mode in blockcv
+  # create an object for cv_nndm
   nndm <- cv_nndm(
     x = pa_data,
     column = "occ", # optional
@@ -70,7 +70,7 @@ test_that("blockcv2rsample conversion", {
   nndm_rsample <- blockcv2rsample(nndm, pa_data)
   expect_true(inherits(nndm_rsample, "spatial_rset"))
 
-  # and no a cv_buffer object
+  # and now for a cv_buffer object
   buffer_pa <- cv_buffer(
     x = pa_data,
     column = "occ",
