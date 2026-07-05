@@ -1,6 +1,8 @@
 # `tidysdm` dev
 * resolve conflicting coords names in `thin_by_cell()`
 * make sure that coords name is passed on by `thin_by_cell_time()`
+* extend support for all methods from `blockCV`, and allow the creation of
+  an initial split from a `blockCV` object
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

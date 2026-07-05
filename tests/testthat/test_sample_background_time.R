@@ -171,7 +171,6 @@ test_that("sample_background_time samples in the right places", {
 # nolint end
 
 
-
 test_that("sample_background_time returns the correct objects", {
   bg_dist_max <- sample_background_time(locations,
     n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
@@ -205,7 +204,6 @@ test_that("sample_background_time returns the correct objects", {
     ), "length of 'n_per_time_step' should be the same"
   )
 })
-
 
 
 # note that due to shallow copying, the following code will change the raster if

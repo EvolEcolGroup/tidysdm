@@ -45,6 +45,7 @@ Turelli
 Vittorio
 WorldClim
 YBP
+blockCV
 boyce
 cellsize
 center
@@ -104,6 +105,7 @@ pseudoabsence
 pseudoabsences
 quasiquotation
 rf
+rsample
 rsplit
 schreiberi
 sdm
