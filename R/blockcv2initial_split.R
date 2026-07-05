@@ -14,13 +14,16 @@
 #' @export
 #' @examplesIf rlang::is_installed("blockCV")
 #' library(blockCV)
-#' # import presence-absence species
-#' data points <- read.csv(system.file("extdata/", "species.csv",
-#'                         package = "blockCV"))
+#' # import presence-absence species data
+#' points <- read.csv(system.file("extdata/", "species.csv",
+#'   package = "blockCV"
+#' ))
 #' # make an sf object from data.frame
 #' pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845)
-#' sb1 <- blockCV::cv_spatial(x = pa_data, column = "occ",
-#'                            k = 5, size = 350000 )
+#' sb1 <- blockCV::cv_spatial(
+#'   x = pa_data, column = "occ",
+#'   k = 5, size = 350000
+#' )
 #'
 #' split <- blockcv2initial_split(sb1, pa_data)
 #' training(split)

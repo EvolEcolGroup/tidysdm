@@ -42,7 +42,8 @@ sb1 <- cv_spatial(
   size = 350000, # size of the blocks in metres
   selection = "random", # random blocks-to-fold
   iteration = 10
-) # find evenly dispersed folds
+)
+
 sb1_rsample <- blockcv2rsample(sb1, pa_data)
 class(sb1_rsample)
 autoplot(sb1_rsample)
