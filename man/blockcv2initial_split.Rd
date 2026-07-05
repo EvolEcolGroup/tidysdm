@@ -7,8 +7,8 @@
 blockcv2initial_split(x, data)
 }
 \arguments{
-\item{x}{A blockCV object (currently we only support class \code{cv_spatial} or
-\code{cv_cluster}).}
+\item{x}{A blockCV object (currently we only support classes \code{cv_spatial},
+\code{cv_cluster}, \code{cv_nndm} and \code{cv_buffer}).}
 
 \item{data}{The sf object used to create \code{x}.}
 }
@@ -17,23 +17,20 @@ An \code{rsplit} object that can be used with \code{\link[rsample:training]{rsam
 \code{\link[rsample:testing]{rsample::testing()}}.
 }
 \description{
-Converts a blockCV object to an rsample object and randomly selects one fold
-as the assessment (test) set, with the remaining folds used as the analysis
-(training) set.
+Converts a \code{blockCV} object to an \code{rsample} object and randomly selects one
+fold as the assessment (test) set, with the remaining folds used as the
+analysis (training) set.
 }
 \examples{
 \dontshow{if (rlang::is_installed("blockCV")) withAutoprint(\{ # examplesIf}
 library(blockCV)
-# import presence-absence species data
-points <- read.csv(system.file("extdata/", "species.csv", package = "blockCV"))
+# import presence-absence species
+data points <- read.csv(system.file("extdata/", "species.csv",
+                        package = "blockCV"))
 # make an sf object from data.frame
 pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845)
-sb1 <- blockCV::cv_spatial(
-  x = pa_data,
-  column = "occ",
-  k = 5,
-  size = 350000
-)
+sb1 <- blockCV::cv_spatial(x = pa_data, column = "occ",
+                           k = 5, size = 350000 )
 
 split <- blockcv2initial_split(sb1, pa_data)
 training(split)

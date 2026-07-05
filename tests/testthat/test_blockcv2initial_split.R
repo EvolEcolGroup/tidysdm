@@ -3,7 +3,6 @@ skip_if_not_installed("blockCV")
 suppressPackageStartupMessages(library(blockCV))
 
 test_that("blockcv2initial_split conversion", {
-
   # example data
   points <- read.csv(system.file(
     "extdata/",

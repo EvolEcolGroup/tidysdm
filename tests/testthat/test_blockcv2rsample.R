@@ -71,10 +71,12 @@ test_that("blockcv2rsample conversion", {
   expect_true(inherits(nndm_rsample, "spatial_rset"))
 
   # and no a cv_buffer object
-  buffer_pa <- cv_buffer(x = pa_data,
-                         column = "occ",
-                         size = 350000, # size in metres no matter the CRS
-                         presence_bg = FALSE)
+  buffer_pa <- cv_buffer(
+    x = pa_data,
+    column = "occ",
+    size = 350000, # size in metres no matter the CRS
+    presence_bg = FALSE
+  )
   buffer_pa_rsample <- blockcv2rsample(buffer_pa, pa_data)
   expect_true(inherits(buffer_pa_rsample, "spatial_rset"))
 

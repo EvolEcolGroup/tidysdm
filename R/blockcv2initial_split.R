@@ -1,8 +1,8 @@
 #' Create an initial train/test split from a blockCV object
 #'
-#' Converts a `blockCV` object to an `rsample` object and randomly selects one fold
-#' as the assessment (test) set, with the remaining folds used as the analysis
-#' (training) set.
+#' Converts a `blockCV` object to an `rsample` object and randomly selects one
+#' fold as the assessment (test) set, with the remaining folds used as the
+#' analysis (training) set.
 #'
 #' @param x A blockCV object (currently we only support classes `cv_spatial`,
 #'   `cv_cluster`, `cv_nndm` and `cv_buffer`).
@@ -14,16 +14,13 @@
 #' @export
 #' @examplesIf rlang::is_installed("blockCV")
 #' library(blockCV)
-#' # import presence-absence species data
-#' points <- read.csv(system.file("extdata/", "species.csv", package = "blockCV"))
+#' # import presence-absence species
+#' data points <- read.csv(system.file("extdata/", "species.csv",
+#'                         package = "blockCV"))
 #' # make an sf object from data.frame
 #' pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845)
-#' sb1 <- blockCV::cv_spatial(
-#'   x = pa_data,
-#'   column = "occ",
-#'   k = 5,
-#'   size = 350000
-#' )
+#' sb1 <- blockCV::cv_spatial(x = pa_data, column = "occ",
+#'                            k = 5, size = 350000 )
 #'
 #' split <- blockcv2initial_split(sb1, pa_data)
 #' training(split)

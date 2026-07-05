@@ -16,14 +16,23 @@
 #' @param data the `sf` object used to create `x`
 #' @returns an `rsample` object
 #' @export
-#' @examplesIf rlang::is_installed("blockCV") library(blockCV) points <-
-#'   read.csv(system.file("extdata/", "species.csv", package = "blockCV" ))
-#'   pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845) sb1 <-
-#'   cv_spatial( x = pa_data, column = "occ", # the response column to balance
-#'   the folds k = 5, # number of folds size = 350000, # size of the blocks in
-#'   metres selection = "random", # random blocks-to-fold iteration = 10 ) #
-#'   find evenly dispersed folds sb1_rsample <- blockcv2rsample(sb1, pa_data)
-#'   class(sb1_rsample) autoplot(sb1_rsample)
+#' @examplesIf rlang::is_installed("blockCV")
+#' library(blockCV)
+#' points <- read.csv(system.file("extdata/", "species.csv",
+#'   package = "blockCV"
+#' ))
+#' pa_data <- sf::st_as_sf(points, coords = c("x", "y"), crs = 7845)
+#' sb1 <- cv_spatial(
+#'   x = pa_data,
+#'   column = "occ", # the response column to balance the folds
+#'   k = 5, # number of folds
+#'   size = 350000, # size of the blocks in metres
+#'   selection = "random", # random blocks-to-fold
+#'   iteration = 10
+#' ) # find evenly dispersed folds
+#' sb1_rsample <- blockcv2rsample(sb1, pa_data)
+#' class(sb1_rsample)
+#' autoplot(sb1_rsample)
 blockcv2rsample <- function(x, data) {
   if (!requireNamespace("blockCV", quietly = TRUE)) {
     stop(
@@ -67,7 +76,7 @@ blockcv2rsample <- function(x, data) {
   # Determine subclass based on object type
   subclass_type <- if (inherits(x, "cv_spatial")) {
     "cv_spatial"
-  } else if (inherits(x, "cv_cluster")){
+  } else if (inherits(x, "cv_cluster")) {
     "cv_cluster"
   } else if (inherits(x, "cv_nndm")) {
     "cv_nndm"
