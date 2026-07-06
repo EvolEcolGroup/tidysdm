@@ -44,8 +44,8 @@ development environment first:
 
 ``` r
 
-# install.packages("devtools") # if you haven't installed devtools yet
-devtools::install_github("EvolEcolGroup/tidysdm", ref = "dev")
+# install.packages("pak") if you haven't installed pak yet
+pak::pak("EvolEcolGroup/tidysdm@dev")
 ```
 
 ## Overview of functionality
