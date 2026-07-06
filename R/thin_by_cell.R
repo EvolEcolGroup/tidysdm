@@ -63,6 +63,13 @@ thin_by_cell <- function(data, raster, coords = NULL, drop_na = TRUE,
         )
       }
     } else {
+      # if we only have either X or Y, just rename them to avoid conflicts later
+      if ("X" %in% names(data)) {
+        data <- data %>% dplyr::rename("X_original" = "X")
+      }
+      if ("Y" %in% names(data)) {
+        data <- data %>% dplyr::rename("Y_original" = "Y")
+      }
       data <- data %>% dplyr::bind_cols(sf::st_coordinates(data))
     }
     if (!is.null(coords) && !all(c("X", "Y") %in% coords)) {
