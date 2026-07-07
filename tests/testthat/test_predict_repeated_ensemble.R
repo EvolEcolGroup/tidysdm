@@ -156,6 +156,19 @@ test_that("predict correctly a repeated ensemble", {
       fun = c("mean", "none")
     ), "if 'fun' has length >1, it cannot be 'none'"
   )
+  
+  # throw an error if metric_thresh removes every model in every repeat
+  expect_error(
+    suppressWarnings(
+      predict(
+        lacerta_rep_ens,
+        new_data = new_data_ex,
+        fun = "mean",
+        metric_thresh = c("boyce_cont", 0.99)
+      )
+    ),
+    "All repeats were excluded by metric_thresh"
+  )
 
   # check that binary prediction works with metric_thresh set
   # and class_fun = "majority"
@@ -229,4 +242,52 @@ test_that("predict correctly a repeated ensemble", {
   )
 
   expect_equal(pred_class_majority$median.majority, manual_majority)
+})
+
+test_that("predict warns when repeat has no calibration for class", {
+  new_data_ex <- workflowsets::extract_mold(
+    lacerta_rep_ens$workflow[[1]]
+  )$predictors
+
+  # calibrate without metric_thresh
+  lacerta_rep_ens_calib <- calib_class_thresh(
+    lacerta_rep_ens,
+    class_thresh = c("sens", 0.9)
+  )
+
+  # manually remove one repeat's calibration to simulate it being dropped
+  rep_ids <- unique(lacerta_rep_ens_calib$rep_id)
+  attr(lacerta_rep_ens_calib, "class_thresholds_list")[[rep_ids[1]]] <- NULL
+
+  expect_warning(
+    tryCatch(
+      predict(
+        lacerta_rep_ens_calib,
+        new_data = new_data_ex,
+        type = "class",
+        fun = "mean",
+        class_thresh = c("sens", 0.9)
+      ),
+      error = function(e) NULL
+    ),
+    "Skipping repeat.*no calibration"
+  )
+})
+
+test_that("predict errors when all repeats excluded by metric_thresh", {
+  new_data_ex <- workflowsets::extract_mold(
+    lacerta_rep_ens$workflow[[1]]
+  )$predictors
+
+  expect_error(
+    suppressWarnings(
+      predict(
+        lacerta_rep_ens,
+        new_data = new_data_ex,
+        fun = "mean",
+        metric_thresh = c("boyce_cont", 0.99)
+      )
+    ),
+    "All repeats were excluded by metric_thresh"
+  )
 })
