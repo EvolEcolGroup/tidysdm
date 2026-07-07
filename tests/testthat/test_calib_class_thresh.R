@@ -67,14 +67,15 @@ test_that("calibrate class thresholds for repeat_ensemble", {
 })
 
 test_that("warns when metric_thresh excludes all models in some repeats", {
-  expect_warning(
+  expect_error(
+    suppressWarnings(
     calib_class_thresh(
       lacerta_rep_ens,
       class_thresh = c("sens", 0.9),
       metric_thresh = c("boyce_cont", 0.9)
     ),
     "Skipped repeats with no models passing metric_thresh"
-  )
+  ))
 })
 
 test_that("errors when metric_thresh excludes all models in ALL repeats", {
