@@ -24,7 +24,6 @@ test_that("repeat_ensemble predictions", {
 
   # now extract individual member predictions
   # TODO members are not recognized so test is failing
-  
   mean_pred_members <- predict(test_rep_ens,
     new_data = two_class_dat,
     members = TRUE
@@ -67,8 +66,8 @@ test_that("repeat_ensemble predictions", {
   expect_error(
     suppressWarnings(
       predict(test_rep_ens,
-              new_data = two_class_dat, fun = "mean",
-              metric_thresh = c("accuracy", 0.83)
+        new_data = two_class_dat, fun = "mean",
+        metric_thresh = c("accuracy", 0.83)
       )
     ),
     "All repeats were excluded by metric_thresh"
@@ -80,21 +79,21 @@ test_that("predict warns when repeat has no calibration for class", {
     add_member(two_class_res[1:3, ], metric = "roc_auc")
   ens_list <- list(test_ens_2, test_ens_2, test_ens_2)
   test_rep_ens <- repeat_ensemble() %>% add_repeat(ens_list)
-  
+
   # Calibrate without metric_thresh
   test_rep_ens <- calib_class_thresh(test_rep_ens,
-                                     class_thresh = c("sens", 0.9)
+    class_thresh = c("sens", 0.9)
   )
   # Manually remove one repeat's calibration to simulate it being dropped
   rep_ids <- unique(test_rep_ens$rep_id)
   attr(test_rep_ens, "class_thresholds_list")[[rep_ids[1]]] <- NULL
-  
+
   expect_warning(
     tryCatch(
       predict(test_rep_ens,
-              new_data = two_class_dat,
-              type = "class",
-              fun = "mean"
+        new_data = two_class_dat,
+        type = "class",
+        fun = "mean"
       ),
       error = function(e) NULL
     ),
@@ -110,9 +109,9 @@ test_that("predict errors when all repeats excluded by metric_thresh", {
 
   expect_error(
     predict(test_rep_ens,
-            new_data = two_class_dat,
-            fun = "mean",
-            metric_thresh = c("accuracy", 0.83)
+      new_data = two_class_dat,
+      fun = "mean",
+      metric_thresh = c("accuracy", 0.83)
     ),
     "All repeats were excluded by metric_thresh"
   )
