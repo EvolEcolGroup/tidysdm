@@ -17,3 +17,5 @@ ci_dependencies
 ^Meta$
 pkgdown/
 .lintr
+^\.positai$
+^\.claude$

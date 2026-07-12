@@ -31,6 +31,7 @@ Randin
 SDM
 SDMs
 SSP
+SVMs
 Schmiegelow
 Schoener
 Schoener's
@@ -44,6 +45,7 @@ Turelli
 Vittorio
 WorldClim
 YBP
+blockCV
 boyce
 cellsize
 center
@@ -103,6 +105,7 @@ pseudoabsence
 pseudoabsences
 quasiquotation
 rf
+rsample
 rsplit
 schreiberi
 sdm
@@ -110,7 +113,6 @@ spearman
 stackexchange
 stackoverflow
 stat's
-svm
 thres
 tibble
 tibbles

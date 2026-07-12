@@ -19,7 +19,7 @@ sample_background(
 variables. These can be defined in \code{coords}, unless they have standard
 names (see details below).}
 
-\item{raster}{the \link[terra:SpatRaster-class]{terra::SpatRaster} or \code{stars} from which cells will be
+\item{raster}{the \link[terra:SpatRaster]{terra::SpatRaster} or \code{stars} from which cells will be
 sampled (the first layer will be used to determine which cells are NAs, and
 thus can not be sampled). If sampling is "bias", then the sampling
 probability will be proportional to the values on the first layer (i.e.

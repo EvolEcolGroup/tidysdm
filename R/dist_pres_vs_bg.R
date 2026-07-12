@@ -18,7 +18,7 @@
 #' bradypus_tb <- tibble::as_tibble(bradypus) %>%
 #'   dplyr::mutate(presence = relevel(
 #'     factor(
-#'       dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
+#'       dplyr::recode_values(presence, 1 ~ "presence", 0 ~ "absence")
 #'     ),
 #'     ref = "presence"
 #'   )) %>%
@@ -29,8 +29,9 @@
 #' @export
 
 dist_pres_vs_bg <- function(
-    .data,
-    .col) {
+  .data,
+  .col
+) {
   if (requireNamespace("overlapping", quietly = TRUE)) {
     .col <- rlang::enquo(.col) %>%
       rlang::quo_get_expr() %>%

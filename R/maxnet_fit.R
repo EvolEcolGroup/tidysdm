@@ -41,7 +41,7 @@
 #' bradypus_tb <- tibble::as_tibble(bradypus) %>%
 #'   dplyr::mutate(presence = relevel(
 #'     factor(
-#'       dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
+#'       dplyr::recode_values(presence, 1 ~ "presence", 0 ~ "absence")
 #'     ),
 #'     ref = "presence"
 #'   ))
@@ -57,13 +57,17 @@ maxnet_fit <- function(formula, data, regmult = 1.0, classes = "default",
   response <- data[, form_resp(stats::terms(formula, data = data))] %>%
     dplyr::pull(1)
   resp_levels <- levels(response) # nolint (false positive claiming this variable is not used)
-  response <- dplyr::case_match(
+  response <- dplyr::recode_values(
     response,
     resp_levels[1] ~ 1,
     resp_levels[2] ~ 0
   )
   # extract the responses
   predictors <- data[, rsample::form_pred(stats::terms(formula, data = data))]
+  # if predictors is an sf object, convert to data.frame by dropping geometry
+  if (inherits(predictors, "sf")) {
+    predictors <- sf::st_drop_geometry(predictors)
+  }
 
   maxnet_obj <- maxnet::maxnet(
     p = response,

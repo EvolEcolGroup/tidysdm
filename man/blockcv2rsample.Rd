@@ -22,8 +22,11 @@ stratify the sampling to ensure that presences and absences are evenly
 distributed among the folds (see the example below).
 }
 \details{
-Note that currently only objects of type \code{cv_spatial} and \code{cv_cluster} are
-supported.
+Note that currently only objects of type \code{cv_spatial}, \code{cv_cluster},
+\code{cv_nndm} and \code{cv_buffer} are supported. The latter two are one-out-cross
+validation methods, so the resulting \code{rsample} object will have \code{n} splits,
+where \code{n} is the number of folds in the original \code{blockCV} object (which can
+be very large!).
 }
 \examples{
 \dontshow{if (rlang::is_installed("blockCV")) withAutoprint(\{ # examplesIf}
@@ -39,7 +42,8 @@ sb1 <- cv_spatial(
   size = 350000, # size of the blocks in metres
   selection = "random", # random blocks-to-fold
   iteration = 10
-) # find evenly dispersed folds
+)
+
 sb1_rsample <- blockcv2rsample(sb1, pa_data)
 class(sb1_rsample)
 autoplot(sb1_rsample)

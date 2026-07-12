@@ -27,3 +27,48 @@ test_that("thin_by_cell respects projections", {
   lacerta_thin_df <- thin_by_cell(lacerta_df, land_mask)
   expect_false(nrow(lacerta_thin_df) == nrow(lacerta_thin))
 })
+
+
+test_that("thin_by_cell works correctly with coords and sf", {
+  library(terra)
+  # Minimal raster grid
+  r <- terra::rast(
+    ncols = 2, nrows = 2, xmin = 0, xmax = 2, ymin = 0, ymax = 2,
+    crs = "EPSG:4326"
+  )
+  values(r) <- 1
+
+  # sf points that ALSO keep longitude/latitude columns
+  occ <- tibble::tibble(
+    id = 1:3,
+    longitude = c(0.25, 0.75, 1.25),
+    latitude = c(0.25, 0.75, 1.25)
+  ) |>
+    sf::st_as_sf(
+      coords = c("longitude", "latitude"), crs = 4326,
+      remove = FALSE
+    )
+
+  # this should work
+  set.seed(123)
+  new_obs <- thin_by_cell(occ, r)
+  # if we give coords, it should be ignored and we should get a warning
+  set.seed(123)
+  expect_warning(
+    new_obs_coords <- thin_by_cell(occ, r, coords = c(
+      "longitude",
+      "latitude"
+    )),
+    "The 'coords' argument is ignored when 'data' is an sf object, as"
+  )
+  expect_equal(new_obs, new_obs_coords)
+  # no warning with X and Y as coords
+  set.seed(123)
+  new_obs_xy <- thin_by_cell(occ, r, coords = c("X", "Y"))
+  expect_equal(new_obs, new_obs_xy)
+  names(occ) <- c("id", "X", "Y", "geometry")
+  # again we expect no error and no warning, and the same result as before
+  set.seed(123)
+  new_obs_xy_rep <- thin_by_cell(occ, r, coords = c("X", "Y"))
+  expect_equal(new_obs$id, new_obs_xy_rep$id)
+})

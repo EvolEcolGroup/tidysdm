@@ -8,7 +8,7 @@ plot_pres_vs_bg(.data, .col)
 }
 \arguments{
 \item{.data}{a \code{\link{data.frame}} (or derived object, such as \code{\link[tibble:tibble]{tibble::tibble}},
-or \code{\link[sf:sf]{sf::st_sf}}) with values for the bioclimate variables for presences
+or \code{\link[sf:st_sf]{sf::st_sf}}) with values for the bioclimate variables for presences
 and background}
 
 \item{.col}{the column containing the presences; it assumes presences to be
@@ -26,7 +26,7 @@ data("bradypus", package = "maxnet")
 bradypus_tb <- tibble::as_tibble(bradypus) \%>\%
   dplyr::mutate(presence = relevel(
     factor(
-      dplyr::case_match(presence, 1 ~ "presence", 0 ~ "absence")
+      dplyr::recode_values(presence, 1 ~ "presence", 0 ~ "absence")
     ),
     ref = "presence"
   )) \%>\%

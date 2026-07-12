@@ -43,10 +43,10 @@ my_gam_spec <- sdm_spec_gam()
 \seealso{
 \code{\link[parsnip:gen_additive_mod]{parsnip::gen_additive_mod()}} \code{\link[=gam_formula]{gam_formula()}}
 
-Other "sdm model specifications": 
-\code{\link{sdm_spec_boost_tree}()},
-\code{\link{sdm_spec_glm}()},
-\code{\link{sdm_spec_maxent}()},
-\code{\link{sdm_spec_rand_forest}()}
+Other "sdm model specifications":
+\code{\link[=sdm_spec_boost_tree]{sdm_spec_boost_tree()}},
+\code{\link[=sdm_spec_glm]{sdm_spec_glm()}},
+\code{\link[=sdm_spec_maxent]{sdm_spec_maxent()}},
+\code{\link[=sdm_spec_rand_forest]{sdm_spec_rand_forest()}}
 }
 \concept{"sdm model specifications"}

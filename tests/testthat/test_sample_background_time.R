@@ -70,7 +70,8 @@ test_that("sample_background_time samples in the right places", {
     length(pts_in_polys(
       terra::vect(
         bg_dist_max %>%
-          dplyr::filter(time_step == as.Date("1952-01-01"))
+          dplyr::filter(time_step == as.Date("1952-01-01")),
+        crs = "+proj=longlat +datum=WGS84"
       ), max_buffer
     )) == n_pt[3]
   )
@@ -86,7 +87,8 @@ test_that("sample_background_time samples in the right places", {
     length(pts_in_polys(
       terra::vect(
         bg_dist_max %>%
-          dplyr::filter(time_step == as.Date("1952-01-01"))
+          dplyr::filter(time_step == as.Date("1952-01-01")),
+        crs = "+proj=longlat +datum=WGS84"
       ), max_buffer
     )) == 0
   )
@@ -113,10 +115,13 @@ test_that("sample_background_time samples in the right places", {
   expect_true(
     length(
       pts_in_polys(
-        terra::vect(bg_dist_max %>%
-          dplyr::filter(
-            time_step == as.Date("1952-01-01")
-          )), max_buffer
+        terra::vect(
+          bg_dist_max %>%
+            dplyr::filter(
+              time_step == as.Date("1952-01-01")
+            ),
+          crs = "+proj=longlat +datum=WGS84"
+        ), max_buffer
       )
     ) > 0
   )
@@ -166,7 +171,6 @@ test_that("sample_background_time samples in the right places", {
 # nolint end
 
 
-
 test_that("sample_background_time returns the correct objects", {
   bg_dist_max <- sample_background_time(locations,
     n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
@@ -200,7 +204,6 @@ test_that("sample_background_time returns the correct objects", {
     ), "length of 'n_per_time_step' should be the same"
   )
 })
-
 
 
 # note that due to shallow copying, the following code will change the raster if

@@ -104,8 +104,8 @@ scaled disagreement or partial credit". \emph{Psychological Bulletin}. 70 (4):
 213-220.
 }
 \seealso{
-Other class probability metrics: 
-\code{\link{boyce_cont}()},
-\code{\link{tss_max}()}
+Other class probability metrics:
+\code{\link[=boyce_cont]{boyce_cont()}},
+\code{\link[=tss_max]{tss_max()}}
 }
 \concept{class probability metrics}

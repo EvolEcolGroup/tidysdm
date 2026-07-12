@@ -1,3 +1,6 @@
+# declare S3 class for S4 dispatch
+setOldClass("stars")
+
 #' Pairwise matrix of scatterplot for stars objects
 #'
 #' Pairs plot of attributes for `stars` objects. This is equivalent to

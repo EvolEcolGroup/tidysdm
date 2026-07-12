@@ -32,8 +32,23 @@ test_that("sample_pseudoabs samples in the right places", {
     return_pres = FALSE
   )
   # we should now check that some points are in the buffers
-  expect_true(length(pts_in_polys(terra::vect(pa_random), min_buffer)) > 0)
-  expect_true(length(pts_in_polys(terra::vect(pa_random), max_buffer)) > 0)
+  expect_true(
+    length(
+      pts_in_polys(
+        terra::vect(pa_random,
+          crs = "+proj=longlat +datum=WGS84"
+        ), min_buffer
+      )
+    ) > 0
+  )
+  expect_true(
+    length(
+      pts_in_polys(
+        terra::vect(pa_random, crs = "+proj=longlat +datum=WGS84"),
+        max_buffer
+      )
+    ) > 0
+  )
   # there should be no presences
   expect_true(unique(pa_random$class) == "pseudoabs")
 
@@ -45,7 +60,12 @@ test_that("sample_pseudoabs samples in the right places", {
     return_pres = FALSE
   )
   # none should be within the minimum buffer
-  expect_true(length(pts_in_polys(terra::vect(pa_min), min_buffer)) == 0)
+  expect_true(length(
+    pts_in_polys(
+      terra::vect(pa_min, crs = "+proj=longlat +datum=WGS84"),
+      min_buffer
+    )
+  ) == 0)
 
   # now use a maximum buffer
   set.seed(123)
@@ -57,7 +77,10 @@ test_that("sample_pseudoabs samples in the right places", {
   # all are within the max buffer
   expect_true(
     length(
-      pts_in_polys(terra::vect(pa_max), max_buffer)
+      pts_in_polys(
+        terra::vect(pa_max, crs = "+proj=longlat +datum=WGS84"),
+        max_buffer
+      )
     ) ==
       nrow(pa_max)
   )
@@ -72,12 +95,20 @@ test_that("sample_pseudoabs samples in the right places", {
   # all are within the max buffer
   expect_true(
     length(
-      pts_in_polys(terra::vect(pa_disc), max_buffer)
+      pts_in_polys(
+        terra::vect(pa_disc, crs = "+proj=longlat +datum=WGS84"),
+        max_buffer
+      )
     ) ==
       nrow(pa_disc)
   )
   # none should be within the minimum buffer
-  expect_true(length(pts_in_polys(terra::vect(pa_disc), min_buffer)) == 0)
+  expect_true(length(
+    pts_in_polys(
+      terra::vect(pa_disc, crs = "+proj=longlat +datum=WGS84"),
+      min_buffer
+    )
+  ) == 0)
 
   pa_pres <- sample_pseudoabs(locations, n = 25, raster = grid_raster)
   expect_true(all(levels(pa_pres$class) == c("presence", "pseudoabs")))
