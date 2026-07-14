@@ -84,7 +84,7 @@ lacerta_rep_ens <- repeat_ensemble() %>% add_repeat(ensemble_list)
 
 # check the predictions
 #
-prediction_present <- predict_raster(object = lacerta_rep_ens, raster = climate_present, fun = c ("mean", "weighted_mean"), class_fun = c("prop"))
+prediction_present <- predict_raster(object = lacerta_rep_ens, raster = climate_present, fun = c("mean", "weighted_mean"), class_fun = c("prop"))
 ggplot() +
   geom_spatraster(data = prediction_present, aes(fill = mean)) +
   scale_fill_terrain_c()

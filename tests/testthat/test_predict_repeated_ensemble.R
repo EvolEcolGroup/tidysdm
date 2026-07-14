@@ -156,7 +156,7 @@ test_that("predict correctly a repeated ensemble", {
       fun = c("mean", "none")
     ), "if 'fun' has length >1, it cannot be 'none'"
   )
-  
+
   # throw an error if metric_thresh removes every model in every repeat
   expect_error(
     suppressWarnings(

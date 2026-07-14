@@ -23,7 +23,6 @@ test_that("repeat_ensemble predictions", {
   expect_true(identical(mean_pred, mean_pred_string))
 
   # now extract individual member predictions
-  # TODO members are not recognized so test is failing
   mean_pred_members <- predict(test_rep_ens,
     new_data = two_class_dat,
     members = TRUE

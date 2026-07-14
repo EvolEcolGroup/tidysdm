@@ -41,7 +41,8 @@
 #' collect_class_thresh(test_ens)
 #' # for a repeat ensemble
 #' rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
-#'   class_thresh = "tss_max")
+#'   class_thresh = "tss_max"
+#' )
 #' collect_class_thresh(rep_ens_calib)
 #' @export
 #' @keywords predict
@@ -154,7 +155,8 @@ calib_class_thresh.repeat_ensemble <- function(object,
     # preserve any prior calibration for this repeat so we append rather
     # than overwrite when calib_class_thresh is called multiple times
     prior_calib <- attr(object, "class_thresholds_list",
-                        exact = TRUE)[[i_rep]]
+      exact = TRUE
+    )[[i_rep]]
     if (!is.null(prior_calib)) {
       attr(object_rep, "class_thresholds") <- prior_calib
     }
@@ -190,8 +192,10 @@ calib_class_thresh.repeat_ensemble <- function(object,
   }
 
   if (length(attr(object, "class_thresholds_list", exact = TRUE)) == 0) {
-    stop("No repeats had any models passing metric_thresh; ",
-         "calibration failed for all repeats.")
+    stop(
+      "No repeats had any models passing metric_thresh; ",
+      "calibration failed for all repeats."
+    )
   }
 
   object
