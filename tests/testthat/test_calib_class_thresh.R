@@ -26,6 +26,13 @@ test_that("calibrate class thresholds for simple_ensemble", {
   )
 })
 
+test_that("calib_class_thresh errors for non-ensemble objects", {
+  expect_error(
+    calib_class_thresh(two_class_res, class_thresh = "tss_max"),
+    "no method available for this object type"
+  )
+})
+
 test_that("calibrate class thresholds for repeat_ensemble", {
   # check that we have no calibration info for the lacerta_rep_ens
   expect_null(attr(lacerta_rep_ens, "class_thresholds_list"))
