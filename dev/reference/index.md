@@ -156,12 +156,16 @@ for each model.
   : Simple ensemble
 - [`autoplot(`*`<simple_ensemble>`*`)`](https://evolecolgroup.github.io/tidysdm/dev/reference/autoplot.simple_ensemble.md)
   : Plot the results of a simple ensemble
+- [`autoplot(`*`<repeat_ensemble>`*`)`](https://evolecolgroup.github.io/tidysdm/dev/reference/autoplot.repeat_ensemble.md)
+  : Plot the results of a repeat ensemble
 - [`repeat_ensemble()`](https://evolecolgroup.github.io/tidysdm/dev/reference/repeat_ensemble.md)
   : Repeat ensemble
 - [`add_member()`](https://evolecolgroup.github.io/tidysdm/dev/reference/add_member.md)
   : Add best member of workflow to a simple ensemble
 - [`add_repeat()`](https://evolecolgroup.github.io/tidysdm/dev/reference/add_repeat.md)
   : Add repeat(s) to a repeated ensemble
+- [`get_repeat()`](https://evolecolgroup.github.io/tidysdm/dev/reference/get_repeat.md)
+  : Extract a simple ensemble out of a repeat ensemble
 - [`collect_metrics(`*`<simple_ensemble>`*`)`](https://evolecolgroup.github.io/tidysdm/dev/reference/collect_metrics.simple_ensemble.md)
   [`collect_metrics(`*`<repeat_ensemble>`*`)`](https://evolecolgroup.github.io/tidysdm/dev/reference/collect_metrics.simple_ensemble.md)
   : Obtain and format results produced by tuning functions for ensemble

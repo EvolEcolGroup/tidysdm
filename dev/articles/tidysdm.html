@@ -640,10 +640,10 @@ hyperparameters per model; this is far too little in real life!):</p>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 4 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (479ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 4 resampling: default_glm (516ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 4 tuning:     default_rf</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize 1 unknown parameter: </span><span style="color: #0000BB;">"mtry"</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 tuning:     default_rf (2.6s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 4 tuning:     default_rf (2.5s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">Creating pre-processing data to finalize 1 unknown parameter: </span><span style="color: #0000BB;">"mtry"</span></span></span>
 <span><span class="co">#&gt; → <span style="color: #BBBB00; font-weight: bold;">A</span> | <span style="color: #BBBB00;">warning</span>: `early_stop` was reduced to 0.</span></span>
@@ -652,7 +652,7 @@ hyperparameters per model; this is far too little in real life!):</p>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x5</span></span>
 <span><span class="co">#&gt; There were issues with some computations   <span style="color: #BBBB00; font-weight: bold;">A</span>: x5</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm (8.2s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">3 of 4 tuning:     default_gbm (7.8s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">4 of 4 tuning:     default_maxent</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">4 of 4 tuning:     default_maxent (2s)</span></span></span></code></pre></div>
 <p>Note that <code>workflow_set</code> correctly detects that we have no
@@ -698,7 +698,7 @@ predictions.</p>
 <span><span class="co">#&gt;    wflow_id       .metric     mean std_err     n</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> default_glm    boyce_cont 0.443  0.089<span style="text-decoration: underline;">9</span>     5</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> default_glm    roc_auc    0.785  0.039<span style="text-decoration: underline;">1</span>     5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> default_glm    roc_auc    0.786  0.039<span style="text-decoration: underline;">2</span>     5</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> default_glm    tss_max    0.556  0.074<span style="text-decoration: underline;">5</span>     5</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> default_rf     boyce_cont 0.600  0.056<span style="text-decoration: underline;">7</span>     5</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> default_rf     roc_auc    0.805  0.044<span style="text-decoration: underline;">9</span>     5</span></span>
@@ -873,7 +873,7 @@ areas characterized by spatial extrapolation.</p>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">prediction_future</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/scale_terrain.html" class="external-link">scale_fill_terrain_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://trevorldavis.com/R/ggpattern/reference/geom-docs.html" class="external-link">geom_sf_pattern</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/ggpattern/man/geom-docs.html" class="external-link">geom_sf_pattern</a></span><span class="op">(</span></span>
 <span>    data <span class="op">=</span> <span class="va">lacerta_mess_future_subset</span>,</span>
 <span>    pattern <span class="op">=</span> <span class="st">"stripe"</span>,</span>
 <span>    fill <span class="op">=</span> <span class="st">"transparent"</span>,</span>
@@ -936,7 +936,7 @@ additions</a> article.</p>
 <div class="section level2">
 <h2 id="repeated-ensembles">Repeated ensembles<a class="anchor" aria-label="anchor" href="#repeated-ensembles"></a>
 </h2>
-<p>The steps of thinning and sampling pseudo-absences can have a bit
+<p>The steps of thinning and sampling pseudo-absences can have a big
 impact on the performance of SDMs. As these steps are stochastic, it is
 good practice to explore their effect by repeating them, and then
 creating ensembles of models over these repeats. In
@@ -996,19 +996,19 @@ pseudo-absences instead of background.</p>
 <span><span class="op">}</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (422ms)</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (2s)</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (424ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (452ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (2.1s)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (430ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (452ms)</span></span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (2s)</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (2.1s)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">i</span>  <span style="color: #000000;">No tuning parameters. `fit_resamples()` will be attempted</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">1 of 2 resampling: default_glm</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">1 of 2 resampling: default_glm (459ms)</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">i</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #000000;">2 of 2 tuning:     default_maxent (2.1s)</span></span></span></code></pre></div>
 <p>Now we can create a <code>repeat_ensemble</code> from the list:</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lacerta_rep_ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/repeat_ensemble.html">repeat_ensemble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/add_repeat.html">add_repeat</a></span><span class="op">(</span><span class="va">ensemble_list</span><span class="op">)</span></span>
@@ -1030,23 +1030,96 @@ pseudo-absences instead of background.</p>
 <span><span class="co">#&gt; Metric used to tune workflows:</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">•</span> boyce_cont</span></span></code></pre></div>
 <p>We can summarise the goodness of fit of models for each repeat with
-<code>collect_metrics()</code>, but there is no <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code>
-function for <code>repeated_ensemble</code> objects.</p>
-<p>We can then predict in the usual way. We will take the mean and
-median of all models, without filtering by performance, and plot the
-results:</p>
+<code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> and <code>collect_metrics()</code>
+functions.</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lacerta_rep_ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_rep_ens</span>, <span class="va">climate_present</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span><span class="va">lacerta_rep_ens</span><span class="op">)</span></span></code></pre></div>
+<p><img src="tidysdm_files/figure-html/unnamed-chunk-42-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lacerta_rep_ens</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">collect_metrics</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 18 × 6</span></span></span>
+<span><span class="co">#&gt;    rep_id wflow_id       .metric     mean std_err     n</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> rep_01 default_glm    boyce_cont 0.699 0.113       5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> rep_01 default_glm    roc_auc    0.960 0.012<span style="text-decoration: underline;">3</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> rep_01 default_glm    tss_max    0.859 0.042<span style="text-decoration: underline;">9</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> rep_01 default_maxent boyce_cont 0.875 0.034<span style="text-decoration: underline;">2</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> rep_01 default_maxent roc_auc    0.977 0.006<span style="text-decoration: underline;">06</span>     5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> rep_01 default_maxent tss_max    0.881 0.035<span style="text-decoration: underline;">0</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> rep_02 default_glm    boyce_cont 0.475 0.154       5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> rep_02 default_glm    roc_auc    0.906 0.048<span style="text-decoration: underline;">7</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> rep_02 default_glm    tss_max    0.799 0.068<span style="text-decoration: underline;">8</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> rep_02 default_maxent boyce_cont 0.825 0.063<span style="text-decoration: underline;">5</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> rep_02 default_maxent roc_auc    0.960 0.022<span style="text-decoration: underline;">2</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> rep_02 default_maxent tss_max    0.853 0.066<span style="text-decoration: underline;">7</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> rep_03 default_glm    boyce_cont 0.840 0.039<span style="text-decoration: underline;">5</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> rep_03 default_glm    roc_auc    0.938 0.024<span style="text-decoration: underline;">8</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> rep_03 default_glm    tss_max    0.815 0.056<span style="text-decoration: underline;">5</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> rep_03 default_maxent boyce_cont 0.765 0.101       5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">17</span> rep_03 default_maxent roc_auc    0.954 0.014<span style="text-decoration: underline;">8</span>      5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">18</span> rep_03 default_maxent tss_max    0.826 0.035<span style="text-decoration: underline;">6</span>      5</span></span></code></pre></div>
+<p>We can then predict in the usual way using
+<code>predict_raster</code>, specifying the aggregating function with
+the <code>fun</code> parameter. We will take the mean and median of all
+models (you can also use weighted alternatives), without filtering by
+performance, and plot the results:</p>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lacerta_rep_ens_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_rep_ens</span>, <span class="va">climate_present</span>,</span>
 <span>  fun <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span>, <span class="st">"median"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_rep_ens</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">median</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_rep_ens_plot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">median</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/scale_terrain.html" class="external-link">scale_fill_terrain_c</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="tidysdm_files/figure-html/unnamed-chunk-42-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="tidysdm_files/figure-html/unnamed-chunk-44-1.png" class="r-plt" alt="" width="576"></p>
 <p>Note that the predictions are quite similar to the ones we obtained
 before, but the predicted suitable range is somewhat larger, probably
 because we included models that are not very good (as we did not filter
 by performance) in the ensemble.</p>
+<p>If we want to convert predictions from a repeated ensemble into
+binary outputs, we need to calibrate the threshold for each repeat
+separately, as the models in each repeat are different and thus the
+optimal threshold may differ across repeats. We can do this with
+<code><a href="../reference/calib_class_thresh.html">calib_class_thresh()</a></code>, which will add a new column to the
+<code>repeat_ensemble</code> object with the calibrated thresholds for
+each repeat.</p>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># first we calibrate the model</span></span>
+<span><span class="va">lacerta_rep_ens</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calib_class_thresh.html">calib_class_thresh</a></span><span class="op">(</span><span class="va">lacerta_rep_ens</span>,</span>
+<span>  class_thresh <span class="op">=</span> <span class="st">"tss_max"</span>,</span>
+<span>  metric_thresh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"boyce_cont"</span>, <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>To combine binary predictions across repeats when predicting with
+<code>predict_raster</code>, we can use either the majority class (the
+class with the highest proportion across repeats is predicted) by
+specifying <code>class_fun = "majority"</code> or the proportion of the
+“presence” class across repeats (<code>class_fun = "prop"</code>). Note
+that we can also filter the individual models within each repeat with
+<code>metric_thresh</code>.</p>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># predict with the majority class across repeats</span></span>
+<span><span class="va">prediction_binary_repens</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_raster.html">predict_raster</a></span><span class="op">(</span><span class="va">lacerta_rep_ens</span>,</span>
+<span>  <span class="va">climate_present</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"class"</span>,</span>
+<span>  fun <span class="op">=</span> <span class="st">"median"</span>,</span>
+<span>  class_thresh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tss_max"</span><span class="op">)</span>,</span>
+<span>  class_fun <span class="op">=</span> <span class="st">"majority"</span>,</span>
+<span>  metric_thresh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"boyce_cont"</span>, <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://dieghernan.github.io/tidyterra/reference/geom_spatraster.html" class="external-link">geom_spatraster</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">prediction_binary_repens</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">binary_median.majority</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lacerta_thin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">class</span> <span class="op">==</span> <span class="st">"presence"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_colour_discrete.html" class="external-link">scale_fill_discrete</a></span><span class="op">(</span>na.value <span class="op">=</span> <span class="st">"transparent"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="tidysdm_files/figure-html/unnamed-chunk-46-1.png" class="r-plt" alt="" width="576"></p>
+<p>There is currently no built-in support for variable response curves
+for <code>repeat_ensemble</code> objects; users can manually generate
+them for example by using the training data and recipe from a single
+repeat (similar as shown above for <code>simple_ensemble</code>), though
+this does not account for variation in data across repeats. A more
+principled solution is planned for a future release.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -1059,7 +1132,7 @@ by performance) in the ensemble.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

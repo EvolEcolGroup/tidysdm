@@ -1,12 +1,12 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   a1_palaeodata_application: a1_palaeodata_application.html
   a2_tidymodels_additions: a2_tidymodels_additions.html
   a3_troubleshooting: a3_troubleshooting.html
   tidysdm: tidysdm.html
-last_built: 2026-07-06T08:32Z
+last_built: 2026-07-15T09:33Z
 urls:
   reference: https://evolecolgroup.github.io/tidysdm/reference
   article: https://evolecolgroup.github.io/tidysdm/articles

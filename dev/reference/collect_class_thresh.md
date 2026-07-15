@@ -22,7 +22,8 @@ collect_class_thresh(x, ...)
 
 ## Value
 
-A tibble.
+A tibble with class thresholds (for a `simple_ensemble`), or a list of
+such tibbles (for a `repeat_ensemble`).
 
 ## Examples
 
@@ -37,10 +38,10 @@ collect_class_thresh(test_ens)
 #>   <list>       <list>        <chr>                 <dbl>
 #> 1 <chr [1]>    <NULL>        mean                  0.544
 #> 2 <chr [1]>    <NULL>        median                0.545
-#> 3 <chr [1]>    <NULL>        weighted_mean         0.544
+#> 3 <chr [1]>    <NULL>        weighted_mean         0.557
 #> 4 <chr [1]>    <NULL>        weighted_median       0.447
 #> 5 <chr [1]>    <NULL>        mean                  0.544
 #> 6 <chr [1]>    <NULL>        median                0.451
-#> 7 <chr [1]>    <NULL>        weighted_mean         0.544
+#> 7 <chr [1]>    <NULL>        weighted_mean         0.557
 #> 8 <chr [1]>    <NULL>        weighted_median       0.447
 ```

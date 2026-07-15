@@ -12,6 +12,7 @@
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/news/index.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/add_member.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/add_repeat.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/autoplot.repeat_ensemble.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/autoplot.simple_ensemble.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/autoplot.spatial_initial_split.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/blockcv2initial_split.html</loc></url>
@@ -34,6 +35,7 @@
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/form_resp.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/gam_formula.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/geom_split_violin.html</loc></url>
+<url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/get_repeat.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/grid_cellsize.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/grid_offset.html</loc></url>
 <url><loc>https://evolecolgroup.github.io/tidysdm/dev/reference/horses.html</loc></url>

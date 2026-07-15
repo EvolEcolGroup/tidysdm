@@ -20,6 +20,15 @@ and `fun`, and these will be used when predicting classes with
 
 ``` r
 calib_class_thresh(object, class_thresh, metric_thresh = NULL)
+
+# Default S3 method
+calib_class_thresh(object, class_thresh, metric_thresh = NULL)
+
+# S3 method for class 'simple_ensemble'
+calib_class_thresh(object, class_thresh, metric_thresh = NULL)
+
+# S3 method for class 'repeat_ensemble'
+calib_class_thresh(object, class_thresh, metric_thresh = NULL)
 ```
 
 ## Arguments
@@ -63,6 +72,7 @@ tibble with columns:
 ## Examples
 
 ``` r
+# for a simple ensemble
 test_ens <- simple_ensemble() %>%
   add_member(two_class_res[1:3, ], metric = "roc_auc")
 test_ens <- calib_class_thresh(test_ens, class_thresh = "tss_max")
@@ -74,14 +84,45 @@ collect_class_thresh(test_ens)
 #>    <list>       <list>        <chr>                 <dbl>
 #>  1 <chr [1]>    <NULL>        mean                  0.544
 #>  2 <chr [1]>    <NULL>        median                0.545
-#>  3 <chr [1]>    <NULL>        weighted_mean         0.544
+#>  3 <chr [1]>    <NULL>        weighted_mean         0.557
 #>  4 <chr [1]>    <NULL>        weighted_median       0.447
 #>  5 <chr [1]>    <NULL>        mean                  0.544
 #>  6 <chr [1]>    <NULL>        median                0.451
-#>  7 <chr [1]>    <NULL>        weighted_mean         0.544
+#>  7 <chr [1]>    <NULL>        weighted_mean         0.557
 #>  8 <chr [1]>    <NULL>        weighted_median       0.447
 #>  9 <chr [2]>    <NULL>        mean                  0.350
 #> 10 <chr [2]>    <NULL>        median                0.351
-#> 11 <chr [2]>    <NULL>        weighted_mean         0.350
+#> 11 <chr [2]>    <NULL>        weighted_mean         0.349
 #> 12 <chr [2]>    <NULL>        weighted_median       0.310
+# for a repeat ensemble
+rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
+  class_thresh = "tss_max")
+collect_class_thresh(rep_ens_calib)
+#> $rep_01
+#> # A tibble: 4 × 4
+#>   class_thresh metric_thresh fun             optim_value
+#>   <list>       <list>        <chr>                 <dbl>
+#> 1 <chr [1]>    <NULL>        mean                  0.335
+#> 2 <chr [1]>    <NULL>        median                0.335
+#> 3 <chr [1]>    <NULL>        weighted_mean         0.333
+#> 4 <chr [1]>    <NULL>        weighted_median       0.295
+#> 
+#> $rep_02
+#> # A tibble: 4 × 4
+#>   class_thresh metric_thresh fun             optim_value
+#>   <list>       <list>        <chr>                 <dbl>
+#> 1 <chr [1]>    <NULL>        mean                  0.364
+#> 2 <chr [1]>    <NULL>        median                0.364
+#> 3 <chr [1]>    <NULL>        weighted_mean         0.371
+#> 4 <chr [1]>    <NULL>        weighted_median       0.244
+#> 
+#> $rep_03
+#> # A tibble: 4 × 4
+#>   class_thresh metric_thresh fun             optim_value
+#>   <list>       <list>        <chr>                 <dbl>
+#> 1 <chr [1]>    <NULL>        mean                  0.304
+#> 2 <chr [1]>    <NULL>        median                0.304
+#> 3 <chr [1]>    <NULL>        weighted_mean         0.299
+#> 4 <chr [1]>    <NULL>        weighted_median       0.293
+#> 
 ```

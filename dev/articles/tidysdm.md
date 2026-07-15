@@ -719,10 +719,10 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (479ms)
+#> ✔ 1 of 4 resampling: default_glm (516ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 4 tuning:     default_rf (2.6s)
+#> ✔ 2 of 4 tuning:     default_rf (2.5s)
 #> i 3 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
@@ -731,7 +731,7 @@ lacerta_models <-
 #> There were issues with some computations   A: x5
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 3 of 4 tuning:     default_gbm (8.2s)
+#> ✔ 3 of 4 tuning:     default_gbm (7.8s)
 #> i 4 of 4 tuning:     default_maxent
 #> ✔ 4 of 4 tuning:     default_maxent (2s)
 ```
@@ -794,7 +794,7 @@ lacerta_ensemble %>% collect_metrics()
 #>    wflow_id       .metric     mean std_err     n
 #>    <chr>          <chr>      <dbl>   <dbl> <int>
 #>  1 default_glm    boyce_cont 0.443  0.0899     5
-#>  2 default_glm    roc_auc    0.785  0.0391     5
+#>  2 default_glm    roc_auc    0.786  0.0392     5
 #>  3 default_glm    tss_max    0.556  0.0745     5
 #>  4 default_rf     boyce_cont 0.600  0.0567     5
 #>  5 default_rf     roc_auc    0.805  0.0449     5
@@ -1098,7 +1098,7 @@ article.
 
 ## Repeated ensembles
 
-The steps of thinning and sampling pseudo-absences can have a bit impact
+The steps of thinning and sampling pseudo-absences can have a big impact
 on the performance of SDMs. As these steps are stochastic, it is good
 practice to explore their effect by repeating them, and then creating
 ensembles of models over these repeats. In `tidysdm`, it is possible to
@@ -1159,19 +1159,19 @@ for (i_repeat in 1:3) {
 }
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (422ms)
-#> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2s)
-#> i  No tuning parameters. `fit_resamples()` will be attempted
-#> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (424ms)
+#> ✔ 1 of 2 resampling: default_glm (452ms)
 #> i 2 of 2 tuning:     default_maxent
 #> ✔ 2 of 2 tuning:     default_maxent (2.1s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (430ms)
+#> ✔ 1 of 2 resampling: default_glm (452ms)
 #> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2s)
+#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
+#> i  No tuning parameters. `fit_resamples()` will be attempted
+#> i 1 of 2 resampling: default_glm
+#> ✔ 1 of 2 resampling: default_glm (459ms)
+#> i 2 of 2 tuning:     default_maxent
+#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
 ```
 
 Now we can create a `repeat_ensemble` from the list:
@@ -1199,26 +1199,114 @@ lacerta_rep_ens
 ```
 
 We can summarise the goodness of fit of models for each repeat with
-`collect_metrics()`, but there is no
 [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
-function for `repeated_ensemble` objects.
-
-We can then predict in the usual way. We will take the mean and median
-of all models, without filtering by performance, and plot the results:
+and `collect_metrics()` functions.
 
 ``` r
 
-lacerta_rep_ens <- predict_raster(lacerta_rep_ens, climate_present,
-  fun = c("mean", "median")
-)
-ggplot() +
-  geom_spatraster(data = lacerta_rep_ens, aes(fill = median)) +
-  scale_fill_terrain_c()
+autoplot(lacerta_rep_ens)
 ```
 
 ![](tidysdm_files/figure-html/unnamed-chunk-42-1.png)
+
+``` r
+
+lacerta_rep_ens %>% collect_metrics()
+#> # A tibble: 18 × 6
+#>    rep_id wflow_id       .metric     mean std_err     n
+#>    <chr>  <chr>          <chr>      <dbl>   <dbl> <int>
+#>  1 rep_01 default_glm    boyce_cont 0.699 0.113       5
+#>  2 rep_01 default_glm    roc_auc    0.960 0.0123      5
+#>  3 rep_01 default_glm    tss_max    0.859 0.0429      5
+#>  4 rep_01 default_maxent boyce_cont 0.875 0.0342      5
+#>  5 rep_01 default_maxent roc_auc    0.977 0.00606     5
+#>  6 rep_01 default_maxent tss_max    0.881 0.0350      5
+#>  7 rep_02 default_glm    boyce_cont 0.475 0.154       5
+#>  8 rep_02 default_glm    roc_auc    0.906 0.0487      5
+#>  9 rep_02 default_glm    tss_max    0.799 0.0688      5
+#> 10 rep_02 default_maxent boyce_cont 0.825 0.0635      5
+#> 11 rep_02 default_maxent roc_auc    0.960 0.0222      5
+#> 12 rep_02 default_maxent tss_max    0.853 0.0667      5
+#> 13 rep_03 default_glm    boyce_cont 0.840 0.0395      5
+#> 14 rep_03 default_glm    roc_auc    0.938 0.0248      5
+#> 15 rep_03 default_glm    tss_max    0.815 0.0565      5
+#> 16 rep_03 default_maxent boyce_cont 0.765 0.101       5
+#> 17 rep_03 default_maxent roc_auc    0.954 0.0148      5
+#> 18 rep_03 default_maxent tss_max    0.826 0.0356      5
+```
+
+We can then predict in the usual way using `predict_raster`, specifying
+the aggregating function with the `fun` parameter. We will take the mean
+and median of all models (you can also use weighted alternatives),
+without filtering by performance, and plot the results:
+
+``` r
+
+lacerta_rep_ens_plot <- predict_raster(lacerta_rep_ens, climate_present,
+  fun = c("mean", "median")
+)
+ggplot() +
+  geom_spatraster(data = lacerta_rep_ens_plot, aes(fill = median)) +
+  scale_fill_terrain_c()
+```
+
+![](tidysdm_files/figure-html/unnamed-chunk-44-1.png)
 
 Note that the predictions are quite similar to the ones we obtained
 before, but the predicted suitable range is somewhat larger, probably
 because we included models that are not very good (as we did not filter
 by performance) in the ensemble.
+
+If we want to convert predictions from a repeated ensemble into binary
+outputs, we need to calibrate the threshold for each repeat separately,
+as the models in each repeat are different and thus the optimal
+threshold may differ across repeats. We can do this with
+[`calib_class_thresh()`](https://evolecolgroup.github.io/tidysdm/dev/reference/calib_class_thresh.md),
+which will add a new column to the `repeat_ensemble` object with the
+calibrated thresholds for each repeat.
+
+``` r
+
+# first we calibrate the model
+lacerta_rep_ens <- calib_class_thresh(lacerta_rep_ens,
+  class_thresh = "tss_max",
+  metric_thresh = c("boyce_cont", 0.5)
+)
+```
+
+To combine binary predictions across repeats when predicting with
+`predict_raster`, we can use either the majority class (the class with
+the highest proportion across repeats is predicted) by specifying
+`class_fun = "majority"` or the proportion of the “presence” class
+across repeats (`class_fun = "prop"`). Note that we can also filter the
+individual models within each repeat with `metric_thresh`.
+
+``` r
+
+# predict with the majority class across repeats
+prediction_binary_repens <- predict_raster(lacerta_rep_ens,
+  climate_present,
+  type = "class",
+  fun = "median",
+  class_thresh = c("tss_max"),
+  class_fun = "majority",
+  metric_thresh = c("boyce_cont", 0.5)
+)
+
+ggplot() +
+  geom_spatraster(
+    data = prediction_binary_repens,
+    aes(fill = binary_median.majority)
+  ) +
+  geom_sf(data = lacerta_thin %>% filter(class == "presence")) +
+  scale_fill_discrete(na.value = "transparent")
+```
+
+![](tidysdm_files/figure-html/unnamed-chunk-46-1.png)
+
+There is currently no built-in support for variable response curves for
+`repeat_ensemble` objects; users can manually generate them for example
+by using the training data and recipe from a single repeat (similar as
+shown above for `simple_ensemble`), though this does not account for
+variation in data across repeats. A more principled solution is planned
+for a future release.
