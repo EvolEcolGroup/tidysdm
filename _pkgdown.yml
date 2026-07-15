@@ -68,9 +68,11 @@ reference:
     contents:
       - simple_ensemble
       - autoplot.simple_ensemble
+      - autoplot.repeat_ensemble
       - repeat_ensemble
       - add_member
       - add_repeat
+      - get_repeat
       - collect_metrics.simple_ensemble
       - collect_metrics.repeat_ensemble
       - control_ensemble_grid

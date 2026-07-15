@@ -57,7 +57,6 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
   layer_names <- names(pred)
   rm(pred)
 
-
   # start reading the raster
   terra::readStart(raster)
   on.exit(terra::readStop(raster))
@@ -94,6 +93,8 @@ predict_raster.default <- function(object, raster, filename = "", n = 4,
     # make predictions (only if we have some values to predict)
     if (nrow(rast_sub_values) > 0) {
       pred <- stats::predict(object, rast_sub_values, ...)
+      # if predict() returns character columns, coerce to factor
+      pred[] <- lapply(pred, function(x) if (is.character(x)) factor(x) else x)
       pred_all[rast_sub_values$row, ] <- pred
     }
 

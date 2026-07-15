@@ -2,9 +2,18 @@
 % Please edit documentation in R/calib_class_thresh.R
 \name{calib_class_thresh}
 \alias{calib_class_thresh}
+\alias{calib_class_thresh.default}
+\alias{calib_class_thresh.simple_ensemble}
+\alias{calib_class_thresh.repeat_ensemble}
 \title{Calibrate class thresholds}
 \usage{
 calib_class_thresh(object, class_thresh, metric_thresh = NULL)
+
+\method{calib_class_thresh}{default}(object, class_thresh, metric_thresh = NULL)
+
+\method{calib_class_thresh}{simple_ensemble}(object, class_thresh, metric_thresh = NULL)
+
+\method{calib_class_thresh}{repeat_ensemble}(object, class_thresh, metric_thresh = NULL)
 }
 \arguments{
 \item{object}{an simple_ensemble object}
@@ -49,12 +58,17 @@ used when predicting classes with \link{predict.simple_ensemble}.
 }
 \examples{
 \dontshow{if (rlang::is_installed("earth")) withAutoprint(\{ # examplesIf}
+# for a simple ensemble
 test_ens <- simple_ensemble() \%>\%
   add_member(two_class_res[1:3, ], metric = "roc_auc")
 test_ens <- calib_class_thresh(test_ens, class_thresh = "tss_max")
 test_ens <- calib_class_thresh(test_ens, class_thresh = "kap_max")
 test_ens <- calib_class_thresh(test_ens, class_thresh = c("sens", 0.9))
 collect_class_thresh(test_ens)
+# for a repeat ensemble
+rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
+  class_thresh = "tss_max")
+collect_class_thresh(rep_ens_calib)
 \dontshow{\}) # examplesIf}
 }
 \keyword{predict}

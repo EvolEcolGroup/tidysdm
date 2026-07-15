@@ -61,12 +61,57 @@ test_that("repeat_ensemble predictions", {
     new_data = two_class_dat,
     fun = "mean", metric_thresh = c("accuracy", 0.815)
   )
-  # and throw and error if we end up without any model!
+  # and throw an error if we end up without any model!
+  expect_error(
+    suppressWarnings(
+      predict(test_rep_ens,
+        new_data = two_class_dat, fun = "mean",
+        metric_thresh = c("accuracy", 0.83)
+      )
+    ),
+    "All repeats were excluded by metric_thresh"
+  )
+})
+
+test_that("predict warns when repeat has no calibration for class", {
+  test_ens_2 <- simple_ensemble() %>%
+    add_member(two_class_res[1:3, ], metric = "roc_auc")
+  ens_list <- list(test_ens_2, test_ens_2, test_ens_2)
+  test_rep_ens <- repeat_ensemble() %>% add_repeat(ens_list)
+
+  # Calibrate without metric_thresh
+  test_rep_ens <- calib_class_thresh(test_rep_ens,
+    class_thresh = c("sens", 0.9)
+  )
+  # Manually remove one repeat's calibration to simulate it being dropped
+  rep_ids <- unique(test_rep_ens$rep_id)
+  attr(test_rep_ens, "class_thresholds_list")[[rep_ids[1]]] <- NULL
+
+  expect_warning(
+    tryCatch(
+      predict(test_rep_ens,
+        new_data = two_class_dat,
+        type = "class",
+        fun = "mean"
+      ),
+      error = function(e) NULL
+    ),
+    "Skipping repeat.*no calibration"
+  )
+})
+
+test_that("predict errors when all repeats excluded by metric_thresh", {
+  test_ens_2 <- simple_ensemble() %>%
+    add_member(two_class_res[1:3, ], metric = "roc_auc")
+  ens_list <- list(test_ens_2, test_ens_2, test_ens_2)
+  test_rep_ens <- repeat_ensemble() %>% add_repeat(ens_list)
+
   expect_error(
     predict(test_rep_ens,
-      new_data = two_class_dat, fun = "mean",
+      new_data = two_class_dat,
+      fun = "mean",
       metric_thresh = c("accuracy", 0.83)
     ),
-    "the current metric_threshold excludes all models"
+    "All repeats were excluded by metric_thresh"
   )
 })

@@ -32,24 +32,40 @@
 #'  * `optim_value`: the optimal threshold for the given combination of
 #'   `class_thresh`, `metric_thresh` and `fun`
 #' @examplesIf rlang::is_installed("earth")
+#' # for a simple ensemble
 #' test_ens <- simple_ensemble() %>%
 #'   add_member(two_class_res[1:3, ], metric = "roc_auc")
 #' test_ens <- calib_class_thresh(test_ens, class_thresh = "tss_max")
 #' test_ens <- calib_class_thresh(test_ens, class_thresh = "kap_max")
 #' test_ens <- calib_class_thresh(test_ens, class_thresh = c("sens", 0.9))
 #' collect_class_thresh(test_ens)
+#' # for a repeat ensemble
+#' rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
+#'   class_thresh = "tss_max"
+#' )
+#' collect_class_thresh(rep_ens_calib)
 #' @export
 #' @keywords predict
+calib_class_thresh <- function(object, class_thresh,
+                               metric_thresh = NULL) {
+  UseMethod("calib_class_thresh", object = object)
+}
 
-calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
-  # check that object is a simple_ensemble
-  if (!inherits(object, "simple_ensemble")) {
-    stop("`object` should be a simple_ensemble")
-  }
+#' @rdname calib_class_thresh
+#' @export
+calib_class_thresh.default <- function(object, class_thresh,
+                                       metric_thresh = NULL) {
+  stop("no method available for this object type")
+}
 
+#' @rdname calib_class_thresh
+#' @export
+calib_class_thresh.simple_ensemble <- function(object,
+                                               class_thresh,
+                                               metric_thresh = NULL) {
   # check that there is no entry for this calibration
-  if (!is.null(attr(object, "class_thresholds"))) {
-    ref_calib_tb <- attr(object, "class_thresholds")
+  if (!is.null(attr(object, "class_thresholds", exact = TRUE))) {
+    ref_calib_tb <- attr(object, "class_thresholds", exact = TRUE)
     if (any(unlist(
       lapply(
         ref_calib_tb %>% dplyr::pull("metric_thresh"),
@@ -110,12 +126,77 @@ calib_class_thresh <- function(object, class_thresh, metric_thresh = NULL) {
   }
 
   # now store the new thresholds
-  if (is.null(attr(object, "class_thresholds"))) {
+  if (is.null(attr(object, "class_thresholds", exact = TRUE))) {
     attr(object, "class_thresholds") <- calib_tb
   } else {
     attr(object, "class_thresholds") <-
-      attr(object, "class_thresholds") %>%
+      attr(object, "class_thresholds", exact = TRUE) %>%
       dplyr::bind_rows(calib_tb)
   }
+  object
+}
+
+#' @rdname calib_class_thresh
+#' @export
+calib_class_thresh.repeat_ensemble <- function(object,
+                                               class_thresh,
+                                               metric_thresh = NULL) {
+  repeat_ids <- unique(object$rep_id)
+
+  if (is.null(attr(object, "class_thresholds_list", exact = TRUE))) {
+    attr(object, "class_thresholds_list") <- list()
+  }
+
+  skipped <- character(0)
+
+  for (i_rep in repeat_ids) {
+    object_rep <- get_repeat(object, i_rep)
+
+    # preserve any prior calibration for this repeat so we append rather
+    # than overwrite when calib_class_thresh is called multiple times
+    prior_calib <- attr(object, "class_thresholds_list",
+      exact = TRUE
+    )[[i_rep]]
+    if (!is.null(prior_calib)) {
+      attr(object_rep, "class_thresholds") <- prior_calib
+    }
+
+    result <- tryCatch(
+      calib_class_thresh(
+        object_rep,
+        class_thresh = class_thresh,
+        metric_thresh = metric_thresh
+      ),
+      error = function(e) {
+        if (grepl("metric_threshold excludes all models", e$message)) {
+          return(NULL)
+        }
+        stop(e)
+      }
+    )
+
+    if (is.null(result)) {
+      skipped <- c(skipped, i_rep)
+      next
+    }
+
+    attr(object, "class_thresholds_list")[[i_rep]] <-
+      attr(result, "class_thresholds", exact = TRUE)
+  }
+
+  if (length(skipped) > 0) {
+    warning(
+      "Skipped repeats with no models passing metric_thresh: ",
+      paste(skipped, collapse = ", ")
+    )
+  }
+
+  if (length(attr(object, "class_thresholds_list", exact = TRUE)) == 0) {
+    stop(
+      "No repeats had any models passing metric_thresh; ",
+      "calibration failed for all repeats."
+    )
+  }
+
   object
 }

@@ -9,9 +9,10 @@
   new_data,
   type = "prob",
   fun = "mean",
+  class_fun = c("majority", "prop"),
   metric_thresh = NULL,
   class_thresh = NULL,
-  members = FALSE,
+  by_repeat = FALSE,
   ...
 )
 }
@@ -26,8 +27,13 @@ predict.}
 \item{fun}{string defining the aggregating function. It can take values
 \code{mean}, \code{median}, \code{weighted_mean}, \code{weighted_median} and \code{none}. It is
 possible to combine multiple functions, except for "none". If it is set to
-"none", only the individual member predictions are returned (this
-automatically sets \code{member} to TRUE)}
+"none", only the individual member predictions are returned.}
+
+\item{class_fun}{the function to use to combine class predictions across
+repeats. It can be "majority" (the class with the highest proportion across
+repeats is predicted) or "prop" (the proportion of the "presence" class
+across repeats is returned). This argument is only used if \code{type} is
+"class".}
 
 \item{metric_thresh}{a vector of length 2 giving a metric and its threshold,
 which will be used to prune which models in the ensemble will be used for
@@ -40,10 +46,11 @@ classes. It can be a number (between 0 and 1), or a character metric
 target value is passed along as a second element of a vector, e.g.
 c("sensitivity",0.8).}
 
-\item{members}{boolean defining whether individual predictions for each
-member should be added to the ensemble prediction. The columns for
-individual members have the name of the workflow a a prefix, separated by
-"." from the usual column names of the predictions.}
+\item{by_repeat}{boolean defining whether individual predictions for each
+repeat should be returned (no aggregating function will be applied at the
+repeat level). The columns for individual members have the name of the
+workflow as a prefix, separated by "." from the usual column names of the
+predictions.}
 
 \item{...}{not used in this method.}
 }
@@ -52,9 +59,28 @@ a tibble of predictions
 }
 \description{
 Predict for a new dataset by using a repeat ensemble. Predictions from
-individual models are combined according to \code{fun}: if a
-weighted function is used (\code{weighted_mean} or \code{weighted_median}), weights are
-based on the metric used to tune models in the ensemble (see
-\code{\link{repeat_ensemble}}).
+individual models are combined according to \code{fun}: if a weighted function is
+used (\code{weighted_mean} or \code{weighted_median}), weights are based on the metric
+used to tune models in the ensemble (see \code{\link{repeat_ensemble}}).
+}
+\examples{
+# we need a dataset to predict, we extract it from one of the models
+new_data_ex <- workflowsets::extract_mold(
+  lacerta_rep_ens$workflow[[1]]
+)$predictors
+ens_pred <- predict(lacerta_rep_ens,
+  new_data = new_data_ex,
+  fun = c("mean", "weighted_mean", "median")
+)
+head(ens_pred)
+# set class thresholds for binary prediction
+lacerta_rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
+  class_thresh = c("tss_max")
+)
+ens_class_pred <- predict(lacerta_rep_ens_calib,
+  new_data = new_data_ex,
+  fun = c("mean", "median"), type = "class", class_thresh = c("tss_max")
+)
+head(ens_class_pred)
 }
 \keyword{predict}

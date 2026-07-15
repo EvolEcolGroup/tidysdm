@@ -1,4 +1,10 @@
 # `tidysdm` dev
+* fix bug in predict.simple_ensemble where weights were ignored 
+  for "weighted mean"
+* implement better prediction logic for `repeat_ensembles`, grouping
+  by repeat
+* implement `calib_class_thresh` method for `repeat_ensembles`
+* implement `collect_calib_thresh` method for `repeat_ensembles`
 * resolve conflicting coords names in `thin_by_cell()`
 * make sure that coords name is passed on by `thin_by_cell_time()`
 * extend support for all methods from `blockCV`, and allow the creation of

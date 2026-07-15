@@ -892,7 +892,7 @@ article.
 
 # Repeated ensembles
 
-The steps of thinning and sampling pseudo-absences can have a bit impact
+The steps of thinning and sampling pseudo-absences can have a big impact
 on the performance of SDMs. As these steps are stochastic, it is good
 practice to explore their effect by repeating them, and then creating
 ensembles of models over these repeats. In `tidysdm`, it is possible to
@@ -964,22 +964,62 @@ usethis::use_data(lacerta_rep_ens, overwrite = TRUE)
 ```
 
 
-We can summarise the goodness of fit of models for each repeat with
-`collect_metrics()`, but there is no `autoplot()` function for
-`repeated_ensemble` objects.
-
-We can then predict in the usual way. We will take the mean and median
-of all models, without filtering by performance, and plot the results:
+We can summarise the goodness of fit of models for each repeat with `autoplot()` and 
+`collect_metrics()` functions.
 
 ```{r, fig.width=6, fig.height=4}
-lacerta_rep_ens <- predict_raster(lacerta_rep_ens, climate_present,
+autoplot(lacerta_rep_ens)
+```
+
+```{r}
+lacerta_rep_ens %>% collect_metrics()
+```
+
+We can then predict in the usual way using `predict_raster`, specifying the aggregating function with the `fun` parameter. We will take the mean and median of all models (you can also use weighted alternatives), without filtering by performance, and plot the results:
+
+```{r, fig.width=6, fig.height=4}
+lacerta_rep_ens_plot <- predict_raster(lacerta_rep_ens, climate_present,
   fun = c("mean", "median")
 )
 ggplot() +
-  geom_spatraster(data = lacerta_rep_ens, aes(fill = median)) +
+  geom_spatraster(data = lacerta_rep_ens_plot, aes(fill = median)) +
   scale_fill_terrain_c()
 ```
 
 Note that the predictions are quite similar to the ones we obtained
 before, but the predicted suitable range is somewhat larger, probably because we
 included models that are not very good (as we did not filter by performance) in the ensemble.
+
+If we want to convert predictions from a repeated ensemble into binary outputs, we need to calibrate the threshold for each repeat separately, as the models in each repeat are different and thus the optimal threshold may differ across repeats. We can do this with `calib_class_thresh()`, which will add a new column to the `repeat_ensemble` object with the calibrated thresholds for each repeat.
+
+```{r}
+# first we calibrate the model
+lacerta_rep_ens <- calib_class_thresh(lacerta_rep_ens,
+  class_thresh = "tss_max",
+  metric_thresh = c("boyce_cont", 0.5)
+)
+```
+
+To combine binary predictions across repeats when predicting with `predict_raster`, we can use either the majority class (the class with the highest proportion across repeats is predicted) by specifying `class_fun = "majority"` or the proportion of the "presence" class across repeats (`class_fun = "prop"`). Note that we can also filter the individual models within each repeat with `metric_thresh`.
+
+```{r, fig.width=6, fig.height=4}
+# predict with the majority class across repeats
+prediction_binary_repens <- predict_raster(lacerta_rep_ens,
+  climate_present,
+  type = "class",
+  fun = "median",
+  class_thresh = c("tss_max"),
+  class_fun = "majority",
+  metric_thresh = c("boyce_cont", 0.5)
+)
+
+ggplot() +
+  geom_spatraster(
+    data = prediction_binary_repens,
+    aes(fill = binary_median.majority)
+  ) +
+  geom_sf(data = lacerta_thin %>% filter(class == "presence")) +
+  scale_fill_discrete(na.value = "transparent")
+```
+
+There is currently no built-in support for variable response curves for `repeat_ensemble` objects; users can manually generate them for example by using the training data and recipe from a single repeat (similar as shown above for `simple_ensemble`), though this does not account for variation in data across repeats. A more principled solution is planned for a future release.

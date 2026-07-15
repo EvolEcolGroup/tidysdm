@@ -12,7 +12,8 @@ collect_class_thresh(x, ...)
 \item{...}{Not currently used.}
 }
 \value{
-A tibble.
+A tibble with class thresholds (for a \code{simple_ensemble}), or a list
+of such tibbles (for a \code{repeat_ensemble}).
 }
 \description{
 Return a tibble of class thresholds, as computed by \code{calib_class_thresh()}.
