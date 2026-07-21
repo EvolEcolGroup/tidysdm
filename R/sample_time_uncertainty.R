@@ -1,59 +1,60 @@
 #' Sample uncertain specimen times with graph constraints
 #'
 #' @description `sample_time_uncertainty()` samples one date-time per specimen
-#' from fixed, uniform, or truncated-normal time information. It can enforce
-#' relative older/younger constraints within groups using a graph-constrained
-#' Gibbs sampler. The Gibbs sampler is designed for constrained data because it
-#' updates each specimen from its own distribution truncated to the interval
-#' currently allowed by neighbouring specimens in the ordering graph.
+#'   from fixed, uniform, or truncated-normal time information. It can enforce
+#'   relative older/younger constraints within groups using a graph-constrained
+#'   Gibbs sampler. The Gibbs sampler is designed for constrained data because
+#'   it updates each specimen from its own distribution truncated to the
+#'   interval currently allowed by neighbouring specimens in the ordering graph.
 #'
 #' @details ## Calendar-time convention
 #'
-#' The function assumes that dates are calendar-like [`base::POSIXct`] values.
-#' Under this convention, older specimens have earlier numeric times. Therefore,
-#' if specimen `A` is younger than specimen `B`, the sampled times must satisfy:
+#'   The function assumes that dates are calendar-like [`base::POSIXct`] values.
+#'   Under this convention, older specimens have earlier numeric times.
+#'   Therefore, if specimen `A` is younger than specimen `B`, the sampled times
+#'   must satisfy:
 #'
 #' ```
 #' time[B] < time[A]
 #' ```
 #'
-#' ## Per-row time model
+#'   ## Per-row time model
 #'
-#' Each row must contain exactly one time model:
+#'   Each row must contain exactly one time model:
 #'
 #' * a fixed time in `fixed_col`;
 #' * a uniform interval in `unif_cols`, interpreted as oldest to youngest;
 #' * a truncated normal defined by `trnorm_cols`.
 #'
-#' ## Relative ordering constraints
+#'   ## Relative ordering constraints
 #'
-#' Constraints are supplied as row-wise vectors of specimen IDs:
+#'   Constraints are supplied as row-wise vectors of specimen IDs:
 #'
 #' * `older_col`: IDs of specimens older than the focal row;
 #' * `younger_col`: IDs of specimens younger than the focal row.
 #'
-#' These columns may either be list-columns of character vectors or character
-#' columns containing multiple IDs separated by `id_sep`. IDs are resolved
-#' within `group_col`, so the same `sample_id` can be reused in different
-#' groups.
+#'   These columns may either be list-columns of character vectors or character
+#'   columns containing multiple IDs separated by `id_sep`. IDs are resolved
+#'   within `group_col`, so the same `sample_id` can be reused in different
+#'   groups.
 #'
-#' Internally, the row-wise vectors are converted to a pairwise edge table with
-#' columns `group_id`, `younger_id`, and `older_id`.
+#'   Internally, the row-wise vectors are converted to a pairwise edge table
+#'   with columns `group_id`, `younger_id`, and `older_id`.
 #'
-#' ## Exclusion windows
+#'   ## Exclusion windows
 #'
-#' Optional `exclude_cols` define a forbidden interval for each row. If
-#' supplied, the sampler removes the interval `exclude_oldest <= time <=
-#' exclude_youngest` from that specimen's support (note that `exclude_oldest` is
-#' window boundary that is further from present, and `exclude_youngest` is
-#' closer to present) . This applies to fixed, uniform, and truncated-normal
-#' rows. A fixed date inside its own exclusion window is invalid.
+#'   Optional `exclude_cols` define a forbidden interval for each row. If
+#'   supplied, the sampler removes the interval `exclude_oldest <= time <=
+#'   exclude_youngest` from that specimen's support (note that `exclude_oldest`
+#'   is window boundary that is further from present, and `exclude_youngest` is
+#'   closer to present) . This applies to fixed, uniform, and truncated-normal
+#'   rows. A fixed date inside its own exclusion window is invalid.
 #'
-#' ## Sampling methods
+#'   ## Sampling methods
 #'
-#' `method = "auto"` uses independent sampling when no constraints are present
-#' and Gibbs sampling when constraints are present. No global-discard sampler is
-#' exposed because that approach scales poorly for constrained datasets.
+#'   `method = "auto"` uses independent sampling when no constraints are present
+#'   and Gibbs sampling when constraints are present. No global-discard sampler
+#'   is exposed because that approach scales poorly for constrained datasets.
 #'
 #' @param data A data frame or an `sf` object. If `sf`, geometry is dropped.
 #' @param trnorm_cols Character vector of length 2 giving mean-time and sd-time
@@ -63,7 +64,9 @@
 #' @param sd_time_units Units for numeric `sd_time`, e.g. `"days"` or `"years"`.
 #' @param unif_cols Character vector of length 2 giving the names of the columns
 #'   for the oldest (far from present) and youngest (close to present) bounds
-#'   for rows with uniform time intervals.
+#'   (in that order)
+#'   for rows with uniform time intervals. It defaults to 
+#'   `c("oldest_time", "youngest_time")`.
 #' @param fixed_col Column containing fixed times.
 #' @param lubridate_fun Function used to convert input date columns to
 #'   `POSIXct`.
@@ -74,7 +77,8 @@
 #' @param exclude_cols Optional character vector of length 2 giving the start
 #'   and end columns of a forbidden time window.
 #' @param id_sep Separator used when constraint IDs are stored as character
-#'   strings rather than list-columns.
+#'   strings rather than list-columns. It defaults to `";"` to avoid conflicts
+#'   with commas.
 #' @param method One of `"auto"`, `"gibbs"`, or `"independent"`.
 #' @param n_iter Number of Gibbs iterations.
 #' @param burnin Number of initial Gibbs iterations to discard when retaining
@@ -102,7 +106,7 @@ sample_time_uncertainty <- function(data,
                                     older_col = "older_ids",
                                     younger_col = "younger_ids",
                                     exclude_cols = c("exclude_oldest", "exclude_youngest"),
-                                    id_sep = ",",
+                                    id_sep = ";",
                                     method = c("auto", "gibbs", "independent"),
                                     n_iter = 2000,
                                     burnin = 500,

@@ -25,7 +25,8 @@ build_time_constraint_table(
 \item{younger_col}{Column containing IDs younger than the focal specimen.}
 
 \item{id_sep}{Separator used when constraint IDs are stored as character
-strings rather than list-columns.}
+strings rather than list-columns. It defaults to \code{";"} to avoid conflicts
+with commas.}
 }
 \value{
 A data frame with columns \code{group_id}, \code{younger_id}, and \code{older_id}.

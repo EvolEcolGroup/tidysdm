@@ -19,12 +19,16 @@ prepare_time_data(
 \item{trnorm_cols}{Character vector of length 2 giving mean-time and sd-time
 columns for truncated-normal rows.}
 
-\item{unif_cols}{Character vector of length 2 giving oldest and youngest
-bounds for uniform rows.}
+\item{unif_cols}{Character vector of length 2 giving the names of the columns
+for the oldest (far from present) and youngest (close to present) bounds
+(in that order)
+for rows with uniform time intervals. It defaults to
+\code{c("oldest_time", "youngest_time")}.}
 
 \item{fixed_col}{Column containing fixed times.}
 
-\item{lubridate_fun}{Function used to convert input date columns to \code{POSIXct}.}
+\item{lubridate_fun}{Function used to convert input date columns to
+\code{POSIXct}.}
 
 \item{sd_time_units}{Units for numeric \code{sd_time}, e.g. \code{"days"} or \code{"years"}.}
 }

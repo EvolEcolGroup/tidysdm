@@ -16,8 +16,8 @@ sample_time_uncertainty(
   sample_col = "sample_id",
   older_col = "older_ids",
   younger_col = "younger_ids",
-  exclude_cols = c("exclude_start", "exclude_end"),
-  id_sep = ",",
+  exclude_cols = c("exclude_oldest", "exclude_youngest"),
+  id_sep = ";",
   method = c("auto", "gibbs", "independent"),
   n_iter = 2000,
   burnin = 500,
@@ -33,17 +33,21 @@ sample_time_uncertainty(
 \item{trnorm_cols}{Character vector of length 2 giving mean-time and sd-time
 columns for truncated-normal rows.}
 
-\item{trnorm_n_sd}{Number of standard deviations defining the original support
-of truncated-normal rows.}
+\item{trnorm_n_sd}{Number of standard deviations defining the original
+support of truncated-normal rows.}
 
 \item{sd_time_units}{Units for numeric \code{sd_time}, e.g. \code{"days"} or \code{"years"}.}
 
-\item{unif_cols}{Character vector of length 2 giving oldest and youngest
-bounds for uniform rows.}
+\item{unif_cols}{Character vector of length 2 giving the names of the columns
+for the oldest (far from present) and youngest (close to present) bounds
+(in that order)
+for rows with uniform time intervals. It defaults to
+\code{c("oldest_time", "youngest_time")}.}
 
 \item{fixed_col}{Column containing fixed times.}
 
-\item{lubridate_fun}{Function used to convert input date columns to \code{POSIXct}.}
+\item{lubridate_fun}{Function used to convert input date columns to
+\code{POSIXct}.}
 
 \item{group_col}{Group/site column used to resolve specimen IDs.}
 
@@ -53,11 +57,12 @@ bounds for uniform rows.}
 
 \item{younger_col}{Column containing IDs younger than the focal specimen.}
 
-\item{exclude_cols}{Optional character vector of length 2 giving the start and
-end columns of a forbidden time window.}
+\item{exclude_cols}{Optional character vector of length 2 giving the start
+and end columns of a forbidden time window.}
 
 \item{id_sep}{Separator used when constraint IDs are stored as character
-strings rather than list-columns.}
+strings rather than list-columns. It defaults to \code{";"} to avoid conflicts
+with commas.}
 
 \item{method}{One of \code{"auto"}, \code{"gibbs"}, or \code{"independent"}.}
 
@@ -66,10 +71,10 @@ strings rather than list-columns.}
 \item{burnin}{Number of initial Gibbs iterations to discard when retaining
 draws.}
 
-\item{thin}{Retain every \code{thin}-th post-burn-in Gibbs draw if
-\code{return_draws = TRUE}.}
+\item{thin}{Retain every \code{thin}-th post-burn-in Gibbs draw if \code{return_draws = TRUE}.}
 
-\item{eps}{Strict-ordering gap in seconds used by the Gibbs conditional bounds.}
+\item{eps}{Strict-ordering gap in seconds used by the Gibbs conditional
+bounds.}
 
 \item{return_constraints}{If \code{TRUE}, return a list including the constraint
 table.}
@@ -77,23 +82,24 @@ table.}
 \item{return_draws}{If \code{TRUE}, return retained Gibbs draws in long format.}
 }
 \value{
-A named \code{POSIXct} vector unless \code{return_constraints} or \code{return_draws}
-is \code{TRUE}, in which case a list is returned.
+A named \code{POSIXct} vector unless \code{return_constraints} or
+\code{return_draws} is \code{TRUE}, in which case a list is returned.
 }
 \description{
-\code{sample_time_uncertainty()} samples one date-time per specimen from fixed,
-uniform, or truncated-normal time information. It can enforce relative
-older/younger constraints within groups using a graph-constrained Gibbs
-sampler. The Gibbs sampler is designed for constrained data because it
-updates each specimen from its own distribution truncated to the interval
-currently allowed by neighbouring specimens in the ordering graph.
+\code{sample_time_uncertainty()} samples one date-time per specimen
+from fixed, uniform, or truncated-normal time information. It can enforce
+relative older/younger constraints within groups using a graph-constrained
+Gibbs sampler. The Gibbs sampler is designed for constrained data because
+it updates each specimen from its own distribution truncated to the
+interval currently allowed by neighbouring specimens in the ordering graph.
 }
 \details{
 \subsection{Calendar-time convention}{
 
-The function assumes that dates are calendar-like \code{\link[base:POSIXct]{base::POSIXct}} values. Under
-this convention, older specimens have earlier numeric times. Therefore, if
-specimen \code{A} is younger than specimen \code{B}, the sampled times must satisfy:
+The function assumes that dates are calendar-like \code{\link[base:POSIXct]{base::POSIXct}} values.
+Under this convention, older specimens have earlier numeric times.
+Therefore, if specimen \code{A} is younger than specimen \code{B}, the sampled times
+must satisfy:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{time[B] < time[A]
 }\if{html}{\out{</div>}}
@@ -107,36 +113,36 @@ Each row must contain exactly one time model:
 \item a uniform interval in \code{unif_cols}, interpreted as oldest to youngest;
 \item a truncated normal defined by \code{trnorm_cols}.
 }
-}
 
 \subsection{Relative ordering constraints}{
 
 Constraints are supplied as row-wise vectors of specimen IDs:
-\itemize{
 \item \code{older_col}: IDs of specimens older than the focal row;
 \item \code{younger_col}: IDs of specimens younger than the focal row.
-}
 
 These columns may either be list-columns of character vectors or character
-columns containing multiple IDs separated by \code{id_sep}. IDs are resolved within
-\code{group_col}, so the same \code{sample_id} can be reused in different groups.
+columns containing multiple IDs separated by \code{id_sep}. IDs are resolved
+within \code{group_col}, so the same \code{sample_id} can be reused in different
+groups.
 
-Internally, the row-wise vectors are converted to a pairwise edge table with
-columns \code{group_id}, \code{younger_id}, and \code{older_id}.
+Internally, the row-wise vectors are converted to a pairwise edge table
+with columns \code{group_id}, \code{younger_id}, and \code{older_id}.
 }
 
 \subsection{Exclusion windows}{
 
-Optional \code{exclude_cols} define a forbidden interval for each row. If supplied,
-the sampler removes the interval \verb{exclude_start <= time <= exclude_end} from
-that specimen's support. This applies to fixed, uniform, and truncated-normal
+Optional \code{exclude_cols} define a forbidden interval for each row. If
+supplied, the sampler removes the interval \verb{exclude_oldest <= time <= exclude_youngest} from that specimen's support (note that \code{exclude_oldest}
+is window boundary that is further from present, and \code{exclude_youngest} is
+closer to present) . This applies to fixed, uniform, and truncated-normal
 rows. A fixed date inside its own exclusion window is invalid.
 }
 
 \subsection{Sampling methods}{
 
-\code{method = "auto"} uses independent sampling when no constraints are present and
-Gibbs sampling when constraints are present. No global-discard sampler is
-exposed because that approach scales poorly for constrained datasets.
+\code{method = "auto"} uses independent sampling when no constraints are present
+and Gibbs sampling when constraints are present. No global-discard sampler
+is exposed because that approach scales poorly for constrained datasets.
+}
 }
 }

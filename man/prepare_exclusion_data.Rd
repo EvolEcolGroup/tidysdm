@@ -6,20 +6,21 @@
 \usage{
 prepare_exclusion_data(
   data,
-  exclude_cols = c("exclude_start", "exclude_end"),
+  exclude_cols = c("exclude_oldest", "exclude_youngest"),
   lubridate_fun = lubridate::as_datetime
 )
 }
 \arguments{
 \item{data}{A data frame or an \code{sf} object. If \code{sf}, geometry is dropped.}
 
-\item{exclude_cols}{Optional character vector of length 2 giving the start and
-end columns of a forbidden time window.}
+\item{exclude_cols}{Optional character vector of length 2 giving the start
+and end columns of a forbidden time window.}
 
-\item{lubridate_fun}{Function used to convert input date columns to \code{POSIXct}.}
+\item{lubridate_fun}{Function used to convert input date columns to
+\code{POSIXct}.}
 }
 \value{
-\code{data} with \code{exclude_start_time} and \code{exclude_end_time}.
+\code{data} with \code{exclude_oldest_time} and \code{exclude_youngest_time}.
 }
 \description{
 Converts optional exclusion-window columns to internal POSIXct
