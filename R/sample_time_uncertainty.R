@@ -1,19 +1,17 @@
 #' Sample uncertain specimen times with graph constraints
 #'
-#' @description
-#' `sample_time_uncertainty()` samples one date-time per specimen from fixed,
-#' uniform, or truncated-normal time information. It can enforce relative
-#' older/younger constraints within groups using a graph-constrained Gibbs
-#' sampler. The Gibbs sampler is designed for constrained data because it
+#' @description `sample_time_uncertainty()` samples one date-time per specimen
+#' from fixed, uniform, or truncated-normal time information. It can enforce
+#' relative older/younger constraints within groups using a graph-constrained
+#' Gibbs sampler. The Gibbs sampler is designed for constrained data because it
 #' updates each specimen from its own distribution truncated to the interval
 #' currently allowed by neighbouring specimens in the ordering graph.
 #'
-#' @details
-#' ## Calendar-time convention
+#' @details ## Calendar-time convention
 #'
-#' The function assumes that dates are calendar-like [`base::POSIXct`] values. Under
-#' this convention, older specimens have earlier numeric times. Therefore, if
-#' specimen `A` is younger than specimen `B`, the sampled times must satisfy:
+#' The function assumes that dates are calendar-like [`base::POSIXct`] values.
+#' Under this convention, older specimens have earlier numeric times. Therefore,
+#' if specimen `A` is younger than specimen `B`, the sampled times must satisfy:
 #'
 #' ```
 #' time[B] < time[A]
@@ -35,56 +33,62 @@
 #' * `younger_col`: IDs of specimens younger than the focal row.
 #'
 #' These columns may either be list-columns of character vectors or character
-#' columns containing multiple IDs separated by `id_sep`. IDs are resolved within
-#' `group_col`, so the same `sample_id` can be reused in different groups.
+#' columns containing multiple IDs separated by `id_sep`. IDs are resolved
+#' within `group_col`, so the same `sample_id` can be reused in different
+#' groups.
 #'
 #' Internally, the row-wise vectors are converted to a pairwise edge table with
 #' columns `group_id`, `younger_id`, and `older_id`.
 #'
 #' ## Exclusion windows
 #'
-#' Optional `exclude_cols` define a forbidden interval for each row. If supplied,
-#' the sampler removes the interval `exclude_start <= time <= exclude_end` from
-#' that specimen's support. This applies to fixed, uniform, and truncated-normal
+#' Optional `exclude_cols` define a forbidden interval for each row. If
+#' supplied, the sampler removes the interval `exclude_oldest <= time <=
+#' exclude_youngest` from that specimen's support (note that `exclude_oldest` is
+#' window boundary that is further from present, and `exclude_youngest` is
+#' closer to present) . This applies to fixed, uniform, and truncated-normal
 #' rows. A fixed date inside its own exclusion window is invalid.
 #'
 #' ## Sampling methods
 #'
-#' `method = "auto"` uses independent sampling when no constraints are present and
-#' Gibbs sampling when constraints are present. No global-discard sampler is
+#' `method = "auto"` uses independent sampling when no constraints are present
+#' and Gibbs sampling when constraints are present. No global-discard sampler is
 #' exposed because that approach scales poorly for constrained datasets.
 #'
 #' @param data A data frame or an `sf` object. If `sf`, geometry is dropped.
 #' @param trnorm_cols Character vector of length 2 giving mean-time and sd-time
 #'   columns for truncated-normal rows.
-#' @param trnorm_n_sd Number of standard deviations defining the original support
-#'   of truncated-normal rows.
+#' @param trnorm_n_sd Number of standard deviations defining the original
+#'   support of truncated-normal rows.
 #' @param sd_time_units Units for numeric `sd_time`, e.g. `"days"` or `"years"`.
-#' @param unif_cols Character vector of length 2 giving oldest and youngest
-#'   bounds for uniform rows.
+#' @param unif_cols Character vector of length 2 giving the names of the columns
+#'   for the oldest (far from present) and youngest (close to present) bounds
+#'   for rows with uniform time intervals.
 #' @param fixed_col Column containing fixed times.
-#' @param lubridate_fun Function used to convert input date columns to `POSIXct`.
+#' @param lubridate_fun Function used to convert input date columns to
+#'   `POSIXct`.
 #' @param group_col Group/site column used to resolve specimen IDs.
 #' @param sample_col Specimen ID column.
 #' @param older_col Column containing IDs older than the focal specimen.
 #' @param younger_col Column containing IDs younger than the focal specimen.
-#' @param exclude_cols Optional character vector of length 2 giving the start and
-#'   end columns of a forbidden time window.
+#' @param exclude_cols Optional character vector of length 2 giving the start
+#'   and end columns of a forbidden time window.
 #' @param id_sep Separator used when constraint IDs are stored as character
 #'   strings rather than list-columns.
 #' @param method One of `"auto"`, `"gibbs"`, or `"independent"`.
 #' @param n_iter Number of Gibbs iterations.
 #' @param burnin Number of initial Gibbs iterations to discard when retaining
 #'   draws.
-#' @param thin Retain every `thin`-th post-burn-in Gibbs draw if
-#'   `return_draws = TRUE`.
-#' @param eps Strict-ordering gap in seconds used by the Gibbs conditional bounds.
+#' @param thin Retain every `thin`-th post-burn-in Gibbs draw if `return_draws =
+#'   TRUE`.
+#' @param eps Strict-ordering gap in seconds used by the Gibbs conditional
+#'   bounds.
 #' @param return_constraints If `TRUE`, return a list including the constraint
 #'   table.
 #' @param return_draws If `TRUE`, return retained Gibbs draws in long format.
 #'
-#' @return A named `POSIXct` vector unless `return_constraints` or `return_draws`
-#'   is `TRUE`, in which case a list is returned.
+#' @return A named `POSIXct` vector unless `return_constraints` or
+#'   `return_draws` is `TRUE`, in which case a list is returned.
 #' @export
 sample_time_uncertainty <- function(data,
                                     trnorm_cols = c("mean_time", "sd_time"),
@@ -97,7 +101,7 @@ sample_time_uncertainty <- function(data,
                                     sample_col = "sample_id",
                                     older_col = "older_ids",
                                     younger_col = "younger_ids",
-                                    exclude_cols = c("exclude_start", "exclude_end"),
+                                    exclude_cols = c("exclude_oldest", "exclude_youngest"),
                                     id_sep = ",",
                                     method = c("auto", "gibbs", "independent"),
                                     n_iter = 2000,
@@ -254,10 +258,10 @@ prepare_time_data <- function(data,
 #' @description Converts optional exclusion-window columns to internal POSIXct
 #' columns. If one exclusion column exists, both must exist.
 #' @inheritParams sample_time_uncertainty
-#' @return `data` with `exclude_start_time` and `exclude_end_time`.
+#' @return `data` with `exclude_oldest_time` and `exclude_youngest_time`.
 #' @export
 prepare_exclusion_data <- function(data,
-                                   exclude_cols = c("exclude_start", "exclude_end"),
+                                   exclude_cols = c("exclude_oldest", "exclude_youngest"),
                                    lubridate_fun = lubridate::as_datetime) {
   if (length(exclude_cols) != 2L) stop("`exclude_cols` must have length 2.", call. = FALSE)
   n <- nrow(data)
@@ -265,18 +269,18 @@ prepare_exclusion_data <- function(data,
   one_excl <- any(exclude_cols %in% names(data))
   start_input <- if (has_excl) data[[exclude_cols[1]]] else NULL
   end_input <- if (has_excl) data[[exclude_cols[2]]] else NULL
-  data$exclude_start_time <- as.POSIXct(rep(NA_real_, n), origin = "1970-01-01", tz = "UTC")
-  data$exclude_end_time <- as.POSIXct(rep(NA_real_, n), origin = "1970-01-01", tz = "UTC")
+  data$exclude_oldest_time <- as.POSIXct(rep(NA_real_, n), origin = "1970-01-01", tz = "UTC")
+  data$exclude_youngest_time <- as.POSIXct(rep(NA_real_, n), origin = "1970-01-01", tz = "UTC")
   if (has_excl) {
-    data$exclude_start_time <- convert_to_posixct(start_input, lubridate_fun)
-    data$exclude_end_time <- convert_to_posixct(end_input, lubridate_fun)
-    if (any(is.na(data$exclude_start_time) != is.na(data$exclude_end_time))) {
+    data$exclude_oldest_time <- convert_to_posixct(start_input, lubridate_fun)
+    data$exclude_youngest_time <- convert_to_posixct(end_input, lubridate_fun)
+    if (any(is.na(data$exclude_oldest_time) != is.na(data$exclude_youngest_time))) {
       stop("For every row with an exclusion-window start there must also be an exclusion-window end, and vice versa.", call. = FALSE)
     }
-    bad <- !is.na(data$exclude_start_time) & !is.na(data$exclude_end_time) &
-      as.numeric(data$exclude_start_time) > as.numeric(data$exclude_end_time)
-    if (any(bad)) stop("Exclusion windows must satisfy `exclude_start <= exclude_end`.", call. = FALSE)
-  } else if (one_excl || !identical(exclude_cols, c("exclude_start", "exclude_end"))) {
+    bad <- !is.na(data$exclude_oldest_time) & !is.na(data$exclude_youngest_time) &
+      as.numeric(data$exclude_oldest_time) > as.numeric(data$exclude_youngest_time)
+    if (any(bad)) stop("Exclusion windows must satisfy `exclude_oldest <= exclude_youngest`.", call. = FALSE)
+  } else if (one_excl || !identical(exclude_cols, c("exclude_oldest", "exclude_youngest"))) {
     stop("Both columns specified in `exclude_cols` must exist in `data`, or neither should be supplied.", call. = FALSE)
   }
   data
@@ -400,7 +404,7 @@ sample_times_gibbs <- function(data, constraints, sample_names, trnorm_n_sd,
   # are layered on top through bound propagation and conditional Gibbs updates.
   bounds <- compute_prior_bounds(data, trnorm_n_sd)
   graph <- build_graph_indices(sample_names, constraints)
-  prop <- propagate_bounds(bounds$lower, bounds$upper, graph, eps)
+  prop <- propagate_bounds(bounds$lower, bounds$upper, graph, eps, sample_names)
   tcur <- initialise_feasible_times(data, prop$lower, prop$upper, graph, eps)
   names(tcur) <- sample_names
   if (!check_time_constraints(lubridate::as_datetime(tcur, tz = "UTC"), constraints)) {
@@ -509,7 +513,7 @@ topo_order_old_to_young <- function(n, old_to_young) {
   out
 }
 
-propagate_bounds <- function(lower, upper, graph, eps) {
+propagate_bounds <- function(lower, upper, graph, eps, sample_names) {
   # Forward pass: if old -> young, the young lower bound must be later than the
   # old lower bound. Reverse pass: the old upper bound must be earlier than the
   # young upper bound. This catches many impossible configurations before MCMC.
@@ -520,7 +524,10 @@ propagate_bounds <- function(lower, upper, graph, eps) {
   for (v in rev(graph$topo_order)) {
     for (p in graph$young_to_old[[v]]) hi[p] <- min(hi[p], hi[v] - eps)
   }
-  if (any(lo > hi)) stop("The ordering constraints and time supports are mutually incompatible.", call. = FALSE)
+  if (any(lo > hi)) {
+    stop("The ordering constraints and time supports are mutually ",
+    "incompatible for", sample_names[lo > hi], call. = FALSE)
+  }
   list(lower = lo, upper = hi)
 }
 
@@ -533,14 +540,14 @@ initialise_feasible_times <- function(data, lower, upper, graph, eps) {
     if (!is.na(data$fixed_time[i])) {
       val <- as.numeric(data$fixed_time[i])
       if (val < lower[i] || val > upper[i]) stop("A fixed date is incompatible with the ordering constraints.", call. = FALSE)
-      if (is_excluded_value(val, data$exclude_start_time[i], data$exclude_end_time[i])) stop("A fixed date falls inside its excluded time window.", call. = FALSE)
+      if (is_excluded_value(val, data$exclude_oldest_time[i], data$exclude_youngest_time[i])) stop("A fixed date falls inside its excluded time window.", call. = FALSE)
       tcur[i] <- val
     } else {
       lo <- lower[i]
       older <- graph$older_neighbours[[i]]
       if (length(older) > 0L && any(!is.na(tcur[older]))) lo <- max(lo, tcur[older] + eps, na.rm = TRUE)
       hi <- upper[i]
-      val <- first_allowed_value(lo, hi, data$exclude_start_time[i], data$exclude_end_time[i], eps)
+      val <- first_allowed_value(lo, hi, data$exclude_oldest_time[i], data$exclude_youngest_time[i], eps)
       if (is.na(val)) stop("Could not initialise a non-excluded feasible time.", call. = FALSE)
       tcur[i] <- val
     }
@@ -557,10 +564,10 @@ sample_numeric_from_row_interval <- function(row, lower, upper) {
   if (!is.na(row$fixed_time[1])) {
     val <- as.numeric(row$fixed_time[1])
     if (val < lower || val > upper) stop("A fixed date is outside its allowed interval.", call. = FALSE)
-    if (is_excluded_value(val, row$exclude_start_time[1], row$exclude_end_time[1])) stop("A fixed date falls inside its excluded time window.", call. = FALSE)
+    if (is_excluded_value(val, row$exclude_oldest_time[1], row$exclude_youngest_time[1])) stop("A fixed date falls inside its excluded time window.", call. = FALSE)
     return(val)
   }
-  intervals <- allowed_intervals(lower, upper, row$exclude_start_time[1], row$exclude_end_time[1])
+  intervals <- allowed_intervals(lower, upper, row$exclude_oldest_time[1], row$exclude_youngest_time[1])
   if (is.null(intervals)) stop("No allowed time remains after applying constraints and exclusion window.", call. = FALSE)
   if (!is.na(row$mean_time[1]) && !is.na(row$sd_time_seconds[1])) {
     return(sample_truncnorm_from_intervals(as.numeric(row$mean_time[1]), row$sd_time_seconds[1], intervals))

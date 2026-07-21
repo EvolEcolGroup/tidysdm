@@ -131,29 +131,29 @@ test_that("prepare_time_data rejects reversed uniform bounds and missing sd unit
 test_that("prepare_exclusion_data standardises valid exclusion windows", {
   dat <- prepare_time_data(data.frame(
     fixed_time = dt("2020-01-01"),
-    exclude_start = dt("2010-01-01"),
-    exclude_end = dt("2011-01-01"),
+    exclude_oldest = dt("2010-01-01"),
+    exclude_youngest = dt("2011-01-01"),
     stringsAsFactors = FALSE
   ))
 
   out <- prepare_exclusion_data(dat)
 
-  expect_s3_class(out$exclude_start_time, "POSIXct")
-  expect_equal(as.Date(out$exclude_start_time), as.Date("2010-01-01"))
+  expect_s3_class(out$exclude_oldest_time, "POSIXct")
+  expect_equal(as.Date(out$exclude_oldest_time), as.Date("2010-01-01"))
 })
 
 test_that("prepare_exclusion_data rejects malformed exclusion windows", {
   reversed <- prepare_time_data(data.frame(
     fixed_time = dt("2020-01-01"),
-    exclude_start = dt("2021-01-01"),
-    exclude_end = dt("2020-01-01"),
+    exclude_oldest = dt("2021-01-01"),
+    exclude_youngest = dt("2020-01-01"),
     stringsAsFactors = FALSE
   ))
-  expect_error(prepare_exclusion_data(reversed), "exclude_start <= exclude_end")
+  expect_error(prepare_exclusion_data(reversed), "exclude_oldest <= exclude_youngest")
 
   one_col <- prepare_time_data(data.frame(
     fixed_time = dt("2020-01-01"),
-    exclude_start = dt("2021-01-01"),
+    exclude_oldest = dt("2021-01-01"),
     stringsAsFactors = FALSE
   ))
   expect_error(prepare_exclusion_data(one_col), "Both columns")
@@ -378,8 +378,8 @@ test_that("exclusion windows are respected by independent and Gibbs sampling", {
     sample_id = "A",
     oldest_time = dt("2000-01-01"),
     youngest_time = dt("2010-01-01"),
-    exclude_start = dt("2003-01-01"),
-    exclude_end = dt("2007-01-01"),
+    exclude_oldest = dt("2003-01-01"),
+    exclude_youngest = dt("2007-01-01"),
     stringsAsFactors = FALSE
   )
   independent_draws <- replicate(20,
@@ -394,10 +394,10 @@ test_that("exclusion windows are respected by independent and Gibbs sampling", {
     sample_id = c("A", "B"),
     oldest_time = dt(c("1900-01-01", "1850-01-01")),
     youngest_time = dt(c("2000-01-01", "1930-01-01")),
-    exclude_start = c(dt("1940-01-01"), as.POSIXct(NA,
+    exclude_oldest = c(dt("1940-01-01"), as.POSIXct(NA,
                                                    origin = "1970-01-01",
                                                    tz = "UTC")),
-    exclude_end = c(dt("1960-01-01"), as.POSIXct(NA,
+    exclude_youngest = c(dt("1960-01-01"), as.POSIXct(NA,
                                                  origin = "1970-01-01",
                                                  tz = "UTC")),
     stringsAsFactors = FALSE
@@ -414,8 +414,8 @@ test_that("fixed dates inside exclusion windows are rejected", {
     group_id = "site1",
     sample_id = "A",
     fixed_time = dt("2005-01-01"),
-    exclude_start = dt("2000-01-01"),
-    exclude_end = dt("2010-01-01"),
+    exclude_oldest = dt("2000-01-01"),
+    exclude_youngest = dt("2010-01-01"),
     stringsAsFactors = FALSE
   )
 
