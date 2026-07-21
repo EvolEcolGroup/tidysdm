@@ -11,7 +11,7 @@
 #' @details
 #' ## Calendar-time convention
 #'
-#' The function assumes that dates are calendar-like [`POSIXct`] values. Under
+#' The function assumes that dates are calendar-like [`base::POSIXct`] values. Under
 #' this convention, older specimens have earlier numeric times. Therefore, if
 #' specimen `A` is younger than specimen `B`, the sampled times must satisfy:
 #'

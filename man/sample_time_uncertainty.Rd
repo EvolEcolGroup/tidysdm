@@ -2,61 +2,141 @@
 % Please edit documentation in R/sample_time_uncertainty.R
 \name{sample_time_uncertainty}
 \alias{sample_time_uncertainty}
-\title{Sample a time when have a range or a distribution}
+\title{Sample uncertain specimen times with graph constraints}
 \usage{
 sample_time_uncertainty(
   data,
-  mean_sd_truncnorm_col = c("mean_time", "sd_time"),
+  trnorm_cols = c("mean_time", "sd_time"),
+  trnorm_n_sd = 2,
   sd_time_units = NULL,
-  min_max_unif_col = c("min_time", "max_time"),
-  fixed_time_col = "fixed_time",
-  lubridate_fun = c
+  unif_cols = c("oldest_time", "youngest_time"),
+  fixed_col = "fixed_time",
+  lubridate_fun = lubridate::as_datetime,
+  group_col = "group_id",
+  sample_col = "sample_id",
+  older_col = "older_ids",
+  younger_col = "younger_ids",
+  exclude_cols = c("exclude_start", "exclude_end"),
+  id_sep = ",",
+  method = c("auto", "gibbs", "independent"),
+  n_iter = 2000,
+  burnin = 500,
+  thin = 1,
+  eps = 1e-06,
+  return_constraints = FALSE,
+  return_draws = FALSE
 )
 }
 \arguments{
-\item{data}{An \code{\link[sf:sf]{sf::sf}} data frame, or a data frame with time information.
-If an \code{sf} object, the geometry is ignored.}
+\item{data}{A data frame or an \code{sf} object. If \code{sf}, geometry is dropped.}
 
-\item{mean_sd_truncnorm_col}{a vector of length 2 with the names of the
-columns with the mean and standard deviation of the truncated normal
-distribution to sample from. It defaults to "mean_time" and "sd_time", but
-if the column names are with different names, they can be specified here.
-The "mean_time" column should be either a lubridate object, or an object
-that can be converted to a lubridate object with \code{lubridate_fun}.}
+\item{trnorm_cols}{Character vector of length 2 giving mean-time and sd-time
+columns for truncated-normal rows.}
 
-\item{sd_time_units}{the units of the standard deviation of the truncated
-normal'   distribution (e.g. "years" or "days"). This has to be defined
-if the sd_time column exists (i.e. if some dates are being resampled from
-a truncated normal).}
+\item{trnorm_n_sd}{Number of standard deviations defining the original support
+of truncated-normal rows.}
 
-\item{min_max_unif_col}{a vector of length 2 with the names of the columns
-with the minimum and maximum values of the uniform distribution to sample
-from. It defaults to "min_time" and "max_time", but if the column names are
-different, they can be specified here. The "min_time" and "max_time"
-columns should be either lubridate objects, or objects that can be
-converted to lubridate objects with \code{lubridate_fun}.}
+\item{sd_time_units}{Units for numeric \code{sd_time}, e.g. \code{"days"} or \code{"years"}.}
 
-\item{fixed_time_col}{The name of the column with fixed times that do not
-need resampling (e.g. contemporary samples). It defaults to "fixed_time",
-but if the column name is different, it can be specified here. The
-"fixed_time" column should be either a lubridate object, or an object that
-can be converted to a lubridate object with \code{lubridate_fun}.}
+\item{unif_cols}{Character vector of length 2 giving oldest and youngest
+bounds for uniform rows.}
 
-\item{lubridate_fun}{function to convert the time columns (mean, min, max and
-fixed) into a lubridate object}
+\item{fixed_col}{Column containing fixed times.}
+
+\item{lubridate_fun}{Function used to convert input date columns to \code{POSIXct}.}
+
+\item{group_col}{Group/site column used to resolve specimen IDs.}
+
+\item{sample_col}{Specimen ID column.}
+
+\item{older_col}{Column containing IDs older than the focal specimen.}
+
+\item{younger_col}{Column containing IDs younger than the focal specimen.}
+
+\item{exclude_cols}{Optional character vector of length 2 giving the start and
+end columns of a forbidden time window.}
+
+\item{id_sep}{Separator used when constraint IDs are stored as character
+strings rather than list-columns.}
+
+\item{method}{One of \code{"auto"}, \code{"gibbs"}, or \code{"independent"}.}
+
+\item{n_iter}{Number of Gibbs iterations.}
+
+\item{burnin}{Number of initial Gibbs iterations to discard when retaining
+draws.}
+
+\item{thin}{Retain every \code{thin}-th post-burn-in Gibbs draw if
+\code{return_draws = TRUE}.}
+
+\item{eps}{Strict-ordering gap in seconds used by the Gibbs conditional bounds.}
+
+\item{return_constraints}{If \code{TRUE}, return a list including the constraint
+table.}
+
+\item{return_draws}{If \code{TRUE}, return retained Gibbs draws in long format.}
 }
 \value{
-a vector of lubridate objects with the sampled times
+A named \code{POSIXct} vector unless \code{return_constraints} or \code{return_draws}
+is \code{TRUE}, in which case a list is returned.
 }
 \description{
-The time (date) of a sample can come with uncertainty (e.g. typical of
-radiocarbon dates). This function samples a time from a distribution of
-possible times, which can be defined by a truncated normal distribution (with
-mean and sd) or a uniform distribution (with min and max). Fixed times (i.e.
-times without uncertainty) can also be included for certain samples. The
-function returns a vector of sampled times.
+\code{sample_time_uncertainty()} samples one date-time per specimen from fixed,
+uniform, or truncated-normal time information. It can enforce relative
+older/younger constraints within groups using a graph-constrained Gibbs
+sampler. The Gibbs sampler is designed for constrained data because it
+updates each specimen from its own distribution truncated to the interval
+currently allowed by neighbouring specimens in the ordering graph.
 }
 \details{
-Each sample (i.e. row) should only include one type of information,
-i.e. either the mean and sd, or the min and max, or a fixed time.
+\subsection{Calendar-time convention}{
+
+The function assumes that dates are calendar-like \code{\link[base:POSIXct]{base::POSIXct}} values. Under
+this convention, older specimens have earlier numeric times. Therefore, if
+specimen \code{A} is younger than specimen \code{B}, the sampled times must satisfy:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{time[B] < time[A]
+}\if{html}{\out{</div>}}
+}
+
+\subsection{Per-row time model}{
+
+Each row must contain exactly one time model:
+\itemize{
+\item a fixed time in \code{fixed_col};
+\item a uniform interval in \code{unif_cols}, interpreted as oldest to youngest;
+\item a truncated normal defined by \code{trnorm_cols}.
+}
+}
+
+\subsection{Relative ordering constraints}{
+
+Constraints are supplied as row-wise vectors of specimen IDs:
+\itemize{
+\item \code{older_col}: IDs of specimens older than the focal row;
+\item \code{younger_col}: IDs of specimens younger than the focal row.
+}
+
+These columns may either be list-columns of character vectors or character
+columns containing multiple IDs separated by \code{id_sep}. IDs are resolved within
+\code{group_col}, so the same \code{sample_id} can be reused in different groups.
+
+Internally, the row-wise vectors are converted to a pairwise edge table with
+columns \code{group_id}, \code{younger_id}, and \code{older_id}.
+}
+
+\subsection{Exclusion windows}{
+
+Optional \code{exclude_cols} define a forbidden interval for each row. If supplied,
+the sampler removes the interval \verb{exclude_start <= time <= exclude_end} from
+that specimen's support. This applies to fixed, uniform, and truncated-normal
+rows. A fixed date inside its own exclusion window is invalid.
+}
+
+\subsection{Sampling methods}{
+
+\code{method = "auto"} uses independent sampling when no constraints are present and
+Gibbs sampling when constraints are present. No global-discard sampler is
+exposed because that approach scales poorly for constrained datasets.
+}
 }
