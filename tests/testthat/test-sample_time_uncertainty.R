@@ -184,12 +184,12 @@ test_that("build_time_constraint_table handles list-column older and younger IDs
   expect_equal(sort_constraints(constraints), sort_constraints(expected), ignore_attr = TRUE)
 })
 
-test_that("build_time_constraint_table handles comma-separated IDs and drops duplicates", {
+test_that("build_time_constraint_table handles semicolon-separated IDs and drops duplicates", {
   dat <- data.frame(
     group_id = "site1",
     sample_id = "X",
-    older_ids = "D, E, D",
-    younger_ids = "A,B,A",
+    older_ids = "D; E; D",
+    younger_ids = "A;B;A",
     stringsAsFactors = FALSE
   )
 
@@ -203,6 +203,27 @@ test_that("build_time_constraint_table handles comma-separated IDs and drops dup
   )
 
   expect_equal(sort_constraints(constraints), sort_constraints(expected), ignore_attr = TRUE)
+})
+
+test_that("build_time_constraint_table rejects non-semicolon-separated IDs", {
+  dat <- data.frame(
+    group_id = "site1",
+    sample_id = "X",
+    older_ids = "D, E",
+    younger_ids = "A, B",
+    stringsAsFactors = FALSE
+  )
+  
+  constraints <- build_time_constraint_table(dat)
+  
+  expected <- data.frame(
+    group_id = rep("site1", 4),
+    younger_id = c("X, X, A, B"),
+    older_id = c("D, E, X, X"),
+    stringsAsFactors = FALSE
+  )
+  
+  expect_false(identical(sort_constraints(constraints), sort_constraints(expected)))
 })
 
 test_that("validate_time_constraints allows repeated IDs across groups and rejects duplicates within groups", {
