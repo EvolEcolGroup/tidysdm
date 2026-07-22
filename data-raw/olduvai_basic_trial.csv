@@ -1,10 +1,10 @@
-id,date_central,date_min,date_max,stratigraphy,resolved_unresolved,id_older,id_younger,id_contemporary
-OH 10,,,1801700,between Tuff IF and Ng'eju,resolved,"OH 16, OH 26",OH 74,OH 31
-OH 16,,1801700,,"Bed II, below Twiglet",resolved,OH 41,"OH 10, OH 31",OH 26
-OH 20,1732000,1800000,1664000,between Upper Lemuta and Ng'eju,unresolved,OH 41,OH 74,
-OH 21,,,1801700,between top Bed I and Bed I Basalt,unresolved,"OH 16, OH 26",,OH 55
-OH 26,1750850,1801700,1700000,"Bed II, below Twiglet",resolved,OH 41,"OH 10, OH 31",OH 16
-OH 31,1824850,1848000,1801700,between Tuff IF and Ng'eju,resolved,"OH 16, OH 26",OH 74,OH 10
-OH 41,1670000,1700000,1664000,between Tuff IIB and Upper Lemuta,resolved,,"OH 16, OH 26",
-OH 55,,,1801700,between top Bed I and Bed I Basalt,unresolved,"OH 16, OH 26",,OH 21
-OH 74,1824850,1848000,1801700,between Tuff IE and Tuff ID,resolved,"OH 10, OH 31",,
+id,site,date_youngest,date_oldest,id_younger_than,id_older_than
+OH 10,Olduvai Gorge,1803000,1848000,OH 16; OH 26,OH 74
+OH 16,Olduvai Gorge,1664000,1803000,OH 41,OH 10; OH 31
+OH 20,Olduvai Gorge,1664000,1803000,OH 41,OH 74
+OH 21,Olduvai Gorge,1803000,1877000,OH 16; OH 26,
+OH 26,Olduvai Gorge,1664000,1803000,OH 41,OH 10; OH 31
+OH 31,Olduvai Gorge,1803000,1848000,OH 16; OH 26,OH 74
+OH 41,Olduvai Gorge,1664000,1700000,,OH 16; OH 26
+OH 55,Olduvai Gorge,1803000,1877000,OH 16; OH 26,
+OH 74,Olduvai Gorge,1803000,1848000,OH 10; OH 31,
