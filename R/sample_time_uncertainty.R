@@ -303,7 +303,7 @@ build_time_constraint_table <- function(data,
                                         sample_col = "sample_id",
                                         older_col = "older_ids",
                                         younger_col = "younger_ids",
-                                        id_sep = ",") {
+                                        id_sep = ";") {
   has_older <- older_col %in% names(data)
   has_younger <- younger_col %in% names(data)
   empty <- data.frame(group_id = character(0), younger_id = character(0), older_id = character(0), stringsAsFactors = FALSE)
