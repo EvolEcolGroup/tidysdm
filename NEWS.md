@@ -3,6 +3,9 @@
   for "weighted mean"
 * implement better prediction logic for `repeat_ensembles`, grouping
   by repeat
+* fix bug in `predict.repeat_ensemble` where a numeric `class_thresh` (or
+  the default of 0.5) skipped repeats without calibration, even though no
+  calibration is needed for numeric thresholds
 * implement `calib_class_thresh` method for `repeat_ensembles`
 * implement `collect_calib_thresh` method for `repeat_ensembles`
 * resolve conflicting coords names in `thin_by_cell()`
