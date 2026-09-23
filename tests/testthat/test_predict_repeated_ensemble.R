@@ -291,3 +291,91 @@ test_that("predict errors when all repeats excluded by metric_thresh", {
     "All repeats were excluded by metric_thresh"
   )
 })
+
+test_that("numeric class_thresh needs no calibration", {
+  new_data_ex <- workflowsets::extract_mold(
+    lacerta_rep_ens$workflow[[1]]
+  )$predictors
+  rep_ids <- unique(lacerta_rep_ens$rep_id)
+
+  # an uncalibrated ensemble can predict classes with a numeric threshold
+  expect_no_warning(
+    pred_num <- predict(
+      lacerta_rep_ens,
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean",
+      class_thresh = 0.7
+    )
+  )
+
+  # the prediction should match a majority vote built manually from the
+  # individual repeats
+  pred_by_rep <- lapply(rep_ids, function(i) {
+    predict(
+      get_repeat(lacerta_rep_ens, i),
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean",
+      class_thresh = 0.7
+    )$mean
+  })
+  class_levels <- levels(pred_by_rep[[1]])
+  absence_level <- setdiff(class_levels, "presence")
+  prop_presence <- rowMeans(
+    sapply(pred_by_rep, function(x) x == "presence")
+  )
+  manual_majority <- factor(
+    ifelse(prop_presence > 0.5, "presence", absence_level),
+    levels = class_levels
+  )
+  expect_equal(pred_num$mean.majority, manual_majority)
+
+  # the default threshold (0.5) does not require calibration either
+  expect_no_warning(
+    suppressMessages(
+      predict(
+        lacerta_rep_ens,
+        new_data = new_data_ex,
+        type = "class",
+        fun = "mean"
+      )
+    )
+  )
+
+  # a repeat without calibration is still used when the threshold is numeric
+  lacerta_rep_ens_calib <- calib_class_thresh(
+    lacerta_rep_ens,
+    class_thresh = "tss_max"
+  )
+  attr(lacerta_rep_ens_calib, "class_thresholds_list")[[rep_ids[1]]] <- NULL
+  expect_no_warning(
+    pred_partial <- predict(
+      lacerta_rep_ens_calib,
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean",
+      class_thresh = 0.7
+    )
+  )
+  expect_equal(pred_partial$mean.majority, manual_majority)
+})
+
+test_that("uncalibrated ensemble errors clearly for a metric class_thresh", {
+  new_data_ex <- workflowsets::extract_mold(
+    lacerta_rep_ens$workflow[[1]]
+  )$predictors
+
+  expect_error(
+    suppressWarnings(
+      predict(
+        lacerta_rep_ens,
+        new_data = new_data_ex,
+        type = "class",
+        fun = "mean",
+        class_thresh = "tss_max"
+      )
+    ),
+    "use 'calib_class_thresh\\(\\)' first"
+  )
+})

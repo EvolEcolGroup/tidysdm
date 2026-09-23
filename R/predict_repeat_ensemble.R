@@ -75,16 +75,26 @@ predict.repeat_ensemble <-
     # we add names of the workflows to combine with the repeat ids
     repeat_ids <- unique(object$rep_id)
 
+    calib_list <- attr(object, "class_thresholds_list", exact = TRUE)
+    # calibration is only needed to turn probabilities into classes with a
+    # metric-based threshold; a numeric class_thresh (or the default of 0.5
+    # used when class_thresh is NULL) does not require calibration (see
+    # predict.simple_ensemble)
+    calib_needed <- type == "class" &&
+      !is.null(class_thresh) &&
+      !is.numeric(class_thresh)
+
     pred_all <- NULL
     valid_repeats <- c()
+    skipped_calib <- c()
 
     # now predict for each simple ensemble
     for (i_rep in repeat_ids) {
       object_rep <- get_repeat(object, i = i_rep)
-      calib_list <- attr(object, "class_thresholds_list", exact = TRUE)
 
-      # skip repeats with no calibration when predicting classes
-      if (type == "class" && is.null(calib_list[[i_rep]])) {
+      # skip repeats with no calibration when a calibrated threshold is needed
+      if (calib_needed && is.null(calib_list[[i_rep]])) {
+        skipped_calib <- c(skipped_calib, i_rep)
         warning(sprintf(
           paste0(
             "Skipping repeat %s: no calibration ",
@@ -143,6 +153,19 @@ predict.repeat_ensemble <-
 
     # if ALL repeats failed
     if (is.null(pred_all)) {
+      if (length(skipped_calib) == length(repeat_ids)) {
+        stop(
+          "this ensemble needs to be first calibrated before classes can ",
+          "be produced\n",
+          "use 'calib_class_thresh()' first"
+        )
+      } else if (length(skipped_calib) > 0) {
+        stop(
+          "All repeats were skipped: some have no calibration for class ",
+          "predictions (use 'calib_class_thresh()'), the others were ",
+          "excluded by metric_thresh"
+        )
+      }
       stop("All repeats were excluded by metric_thresh")
     }
 
