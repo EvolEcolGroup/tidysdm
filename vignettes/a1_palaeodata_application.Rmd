@@ -1,11 +1,14 @@
 ---
-title: "Application with palaeodata"
+title: "Application with time-scattered data"
 output: rmarkdown::html_vignette
 #output: rmarkdown::pdf_document
 vignette: >
-  %\VignetteIndexEntry{Application with palaeodata}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Application with time-scattered data}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r, include = FALSE}
@@ -19,11 +22,17 @@ RhpcBLASctl::blas_set_num_threads(2)
 RhpcBLASctl::omp_set_num_threads(2)
 ```
 
-# SDMs with tidymodels for palaeo data
+# SDMs with tidymodels for time-scattered and palaeo data
 
-In this article, we show how a Species Distribution Model can be fitted with
-`tidysdm` on time-scattered (i.e.palaeontological, archaeozoological, archaeological) data, with samples covering different time periods. We recommend users first read the "tidysdm overview" article,
-which introduces a number of functions and concepts that will be used in the present article.
+In this article, we show how a Species Distribution Model can be fitted
+with `tidysdm` on time-scattered (i.e.palaeontological,
+archaeozoological, archaeological, but also focusing on recent climate
+changes, e.g. historical specimens) data, with samples covering
+different time periods. 
+Here we show the full workflow, from preparing the data to performing ensemble modelling and projections for time-scattered occurrences. The first stages are also
+fully described in the ["tidysdm overview"
+article](https://evolecolgroup.github.io/tidysdm/dev/articles/tidysdm.html),
+which focuses on present data. @TODO update link according to dev/main
 
 We first load `tidysdm`:
 
@@ -33,24 +42,35 @@ library(tidysdm)
 
 # Preparing your data
 
-We start by loading a set of radiocarbon dates (calibrated) for horses, covering
-from 22k years ago until 8k years ago.
+We start by loading a set of georeferenced radiocarbon dates (calibrated) for horses,
+spanning from 22k years ago until 8k years ago.
 
 ```{r load_presences}
 data(horses)
 horses
 ```
 
-We convert our dataset into an `sf` data.frame so that we can easily plot it
-(here `tidyterra` shines):
+`tidysdm` works with `sf` objects to represent locations, so we will cast our
+coordinates into an `sf` object, and set its projections to standard
+'lonlat' using the proj4 string "+proj=longlat".
+We convert our dataset into an `sf` data.frame so that we can easily
+plot it (here `tidyterra` shines):
+
 ```{r}
 library(sf)
 horses <- st_as_sf(horses, coords = c("longitude", "latitude"))
 st_crs(horses) <- 4326
 ```
 
-As a background to our presences, we will use the land mask for the present,
-taken from `pastclim`, and cut to cover only Europe:
+It is usually advisable to plot the locations directly on the raster
+that will be used to extract climatic variables, to see how the
+locations fall within the discrete space of the raster. 
+We can access palaeoclimatic reconstructions through the package [`pastclim`](https://evolecolgroup.github.io/pastclim/).
+In this case, we will use its Example dataset which only includes a small number of variables and time steps (more information on datasets can be found [here](https://evolecolgroup.github.io/pastclim/articles/a1_available_datasets.html)).
+
+As a first step, we will plot our presences against the land mask for the
+present, taken from `pastclim`. We will use a polygon already included in `pastclim` to cut the map and cover only Europe:
+
 ```{r echo=FALSE, results='hide'}
 library(pastclim)
 set_data_path(on_CRAN = TRUE)
@@ -59,48 +79,76 @@ set_data_path(on_CRAN = TRUE)
 ```{r}
 library(pastclim)
 land_mask <- pastclim::get_land_mask(time_bp = 0, dataset = "Example")
+# extension for Europe from pastclim
 europe_poly <- vect(region_outline$Europe)
 crs(europe_poly) <- "lonlat"
+# crop the extent
 land_mask <- crop(land_mask, europe_poly)
+# and mask to the polygon
 land_mask <- mask(land_mask, europe_poly)
 ```
 
-And use `tidyterra` to plot:
+For plotting, we can use `tidyterra`, which easily handles `terra` rasters with `ggplot`:
+
 ```{r cast_to_sf, fig.width=6, fig.height=4}
 library(tidyterra)
 ggplot() +
-  geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
-  geom_sf(data = horses, aes(col = time_bp))
+  geom_spatraster(data = land_mask, aes(fill = land_mask_0),
+                  use_coltab = FALSE) +
+  geom_sf(data = horses, aes(col = time_bp)) +
+  scale_fill_manual(values = "cornsilk3", na.value = "transparent")
 ```
 
-We now thin our presences, so that locations are further than 100km and
-2000 years apart.
+# Map projection
+We need to make sure that all our data (points and rasters) have the same geographic coordinate reference system (CRS) by projecting them. In some of the pipeline steps (e.g. thinning data, measuring areas) using an equal area projection may make a significant difference, especially for large-scale projects.
 
-```{r thin_by_dist}
-set.seed(123)
-horses <- thin_by_dist_time(horses,
-  dist_min = km2m(100),
-  interval_min = y2d(2000),
-  time_col = "time_bp",
-  lubridate_fun = pastclim::ybp2date
-)
-nrow(horses)
+You can use the R package `crstools` (https://evolecolgroup.github.io/crstools/index.html, also available on [CRAN](https://cran.r-project.org/web/packages/crstools/index.html))
+to find an appropriate equal area [projection](https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9) for any region. 
+
+The CRS for this object in Proj4 code is:
+```{r check_crs_proj4}
+sf::st_crs(land_mask)$proj4string
 ```
 
-And see what we have left:
-```{r plot_thinned, fig.width=6, fig.height=4}
+use `suggest_crs()` to get a suggestion for an equal-area CRS for this map:
+```{r find_crs}
+library(crstools)
+land_mask_equal_area <- suggest_crs(land_mask, distortion = "equal_area")
+# keep Proj4
+europe_proj4 <- land_mask_equal_area$proj4
+```
+
+For rasters (maps), we use the `terra` function `project` to change the CRS. We pass the raster object and the proj4 string as arguments:
+
+```{r}
+land_mask_proj <- terra::project(land_mask, y = europe_proj4)
+```
+
+Now we need to project the data points to the same CRS as the raster. We will do so using the appropriate `sf` function:
+
+```{r}
+horses_proj <- st_transform(horses, europe_proj4)
+```
+
+Plotting the data, we will see that the shape of the land mask has changed following the new projection.
+
+```{r project_iberia, fig.width=6, fig.height=4}
 ggplot() +
-  geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
-  geom_sf(data = horses, aes(col = time_bp))
+  geom_spatraster(data = land_mask_proj, aes(fill = land_mask_0),
+                  use_coltab = FALSE) +
+  geom_sf(data = horses_proj, aes(col = time_bp)) +
+  guides(fill = "none") +
+  scale_fill_manual(values = "cornsilk3", na.value = "transparent")
 ```
 
-We now need a time series of palaeoclimate reconstructions. In this vignette,
-we will use the example dataset from `pastclim`. This dataset only has
-reconstructions every 5k years for the past 20k years at 1 degree resolution, 
-with 3 bioclimatic variables. It will suffice for illustrative purposes, but
-we recommend that you download higher quality datasets with `pastclim` for
-real analysis. As for the land mask, we will cut the reconstructions to cover
-Europe only:
+# Getting the climate data
+
+We now need a time series of palaeoclimate reconstructions, not just a land mask. We will use the Example dataset from `pastclim`, as mentioned before. 
+This dataset only has reconstructions every 5k years for the past 20k years at 1
+degree resolution, with 3 bioclimatic variables. It will suffice for
+illustrative purposes, but we recommend that you download higher quality
+datasets with `pastclim` for real analysis. As for the land mask, we
+will cut the reconstructions to cover Europe only:
 
 ```{r load_climate}
 library(pastclim)
@@ -112,13 +160,36 @@ climate_full <- pastclim::region_series(
 )
 ```
 
-Now we thin the observations to only keep one per cell in the raster (it would be better
-if we had an equal area projection...), and remove locations outside the
-desired area (if there was any):
+and then project:
+```{r}
+# climate_full is SpatRasterDataset, so we need to update every layer
+climate_full_proj_bio01 <- terra::project(climate_full[["bio01"]], europe_proj4)
+terra::plot(climate_full_proj_bio01)
+
+# you can do this in a loop for all the layers
+climate_full_proj <- lapply(climate_vars, function(var) {
+  terra::project(climate_full[[var]], europe_proj4)
+})
+
+climate_full_proj <- terra::sds(climate_full_proj)
+names(climate_full_proj) <- climate_vars
+```
+
+
+
+# Thinning step
+
+Often data tend to be spatially or chronologically structured, i.e. we have way more samples from specific regions and/or time periods. This could result in an imbalance that may bias our results. This can be dealt with by thinning the data. Thinning means removing points that are too close to others (either spatially or chronologically), thus avoiding oversampling (and sampling biases).
+
+There are different options for thinning your data: a) considering the resolution of the climate data (i.e. keeping one point in each cell), b) considering the distance between points (spatial and chronological). 
+
+We thin the observations to only keep one per cell in the raster, and remove
+locations outside the desired area (if there was any):
+
 ```{r thin_by_cell}
 set.seed(123)
-horses <- thin_by_cell_time(horses,
-  raster = climate_full,
+horses_thin <- thin_by_cell_time(horses_proj,
+  raster = climate_full_proj,
   time_col = "time_bp",
   lubridate_fun = pastclim::ybp2date
 )
@@ -126,77 +197,123 @@ nrow(horses)
 ```
 
 Let's see what we have left of our points:
+
 ```{r, fig.width=6, fig.height=4}
 ggplot() +
-  geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
-  geom_sf(data = horses, aes(col = time_bp))
+  geom_spatraster(data = land_mask_proj, aes(fill = land_mask_0),
+                  use_coltab = FALSE) +
+  geom_sf(data = horses_thin, aes(col = time_bp)) +
+  scale_fill_manual(values = "cornsilk3", na.value = "transparent")
 ```
 
-Now we sample pseudo-absences (we will constraint them to be at least 70km away
-from any presences), selecting three times the number of presences
+
+There are still geographic clusters of points of similar age, so we could also consider further thinning the data based on minimum distance. The following block shows how we thin our data to remove presences that are closer than 200km and less than 2000 years apart. As the units
+of our projection are m (the default for most projections), we use
+a convenient conversion function, `km2m()` to input kilometers, and a conversion for years to days (`y2d()`) to
+avoid having to write lots of zeroes:
+```{r thin_by_dist}
+set.seed(123)
+horses_dist <- thin_by_dist_time(horses_thin,
+  dist_min = km2m(200),
+  interval_min = y2d(2000),
+  time_col = "time_bp",
+  # convert time column into a lubridate object (format for date-time data)
+  lubridate_fun = pastclim::ybp2date
+)
+nrow(horses_dist)
+```
+
+And see what we have left:
+
+```{r plot_thinned, fig.width=6, fig.height=4}
+ggplot() +
+  geom_spatraster(data = land_mask_proj, aes(fill = land_mask_0),
+                  use_coltab = FALSE) +
+  geom_sf(data = horses_dist, aes(col = time_bp)) +
+  scale_fill_manual(values = "cornsilk3", na.value = "transparent")
+```
+
+
+# Sample pseudo-absences
+
+We now need to select points that represent the potential available area for the species. There are two approaches, we can either sample the background (i.e. points sampled from the whole area considered potentially including presences) with `sample_background()`, or we can generate pseudo-absences (i.e. points where the species has not been observed) with `sample_pseudoabs()`. 
+
+In this vignette, we sample pseudo-absences (we will constraint them to be at least
+70km away from any presences), selecting three times the number of
+presences.
+
 ```{r}
 set.seed(123)
-horses <- sample_pseudoabs_time(horses,
+horses_pa <- sample_pseudoabs_time(horses_dist,
   n_per_presence = 3,
-  raster = climate_full,
+  raster = climate_full_proj,
   time_col = "time_bp",
   lubridate_fun = pastclim::ybp2date,
   method = c("dist_min", km2m(70))
 )
 ```
 
-Let's see our presences and absences:
+Let's see our presences and pseudo-absences:
+
 ```{r, fig.width=6, fig.height=4}
 ggplot() +
-  geom_spatraster(data = land_mask, aes(fill = land_mask_0)) +
-  geom_sf(data = horses, aes(col = class))
+  geom_spatraster(data = land_mask_proj, aes(fill = land_mask_0),
+                  use_coltab = FALSE) +
+  geom_sf(data = horses_pa, aes(col = class)) +
+  scale_fill_manual(values = "cornsilk3", na.value = "transparent")
 ```
 
-Now let's get the climate for these location. `pastclim` requires a data frame
-with two columns
-with coordinates and a column of time in years before present (where negative
-values represent time in the past). We manipulate the `sf` object accordingly:
+Now let's get the climate for these location. `pastclim` requires a data
+frame with two columns with coordinates and a column of time in years
+before present (where negative values represent time in the past). We
+manipulate the `sf` object accordingly:
+
 ```{r climate_for_locations}
-horses_df <- horses %>%
-  dplyr::bind_cols(sf::st_coordinates(horses)) %>%
+# reformatting the object (excluding geometry column)
+horses_df <- horses_pa %>%
+  dplyr::bind_cols(sf::st_coordinates(horses_pa)) %>%
   mutate(time_bp = date2ybp(time_step)) %>%
   as.data.frame() %>%
   select(-geometry)
 # get climate
 horses_df <- location_slice_from_region_series(horses_df,
-  region_series = climate_full
+  region_series = climate_full_proj
 )
 
 # add the climate reconstructions to the sf object, and remove the time_step
 # as we don't need it for modelling
-horses <- horses %>%
+horses_climate <- horses_pa %>%
   bind_cols(horses_df[, climate_vars]) %>%
   select(-time_step)
 ```
 
+@TODO we stopped here
+
 # Fit the model by crossvalidation
 
-Next, we need to set up a `recipe` to define how to handle our dataset. We don't
-want to transform our data, so we just
-need to define the formula (*class* is the outcome,
-all other variables are predictors; note that, for `sf` objects, `geometry` is
-automatically ignored as a predictor):
+Next, we need to set up a `recipe` to define how to handle our dataset.
+We don't want to transform our data, so we just need to define the
+formula (*class* is the outcome, all other variables are predictors;
+note that, for `sf` objects, `geometry` is automatically ignored as a
+predictor):
+
 ```{r recipe}
-horses_rec <- recipe(horses, formula = class ~ .)
+horses_rec <- recipe(horses_climate, formula = class ~ .)
 horses_rec
 ```
 
 We can quickly check that we have the variables that we want with:
+
 ```{r}
 horses_rec$var_info
 ```
 
-We now build a `workflow_set` of different models, defining which 
-hyperparameters we want to tune. We will use *glm*, *gam*, *random forest* and
-*boosted trees* as
-our models, so only *random forest* and *boosted trees* have tunable hyperparameters. For the most
-commonly used models, `tidysdm` automatically chooses the most important
-parameters, but it is possible to fully customise model specifications. 
+We now build a `workflow_set` of different models, defining which
+hyperparameters we want to tune. We will use *glm*, *gam*, *random
+forest* and *boosted trees* as our models, so only *random forest* and
+*boosted trees* have tunable hyperparameters. For the most commonly used
+models, `tidysdm` automatically chooses the most important parameters,
+but it is possible to fully customise model specifications.
 
 ```{r workflow_set}
 horses_models <-
@@ -225,22 +342,23 @@ horses_models <-
   option_add(control = control_ensemble_grid())
 ```
 
-Note that *gams* are unusual, as we need to specify a formula to define to which
-variables we will fit smooths. By default, `gam_formula()` fits a smooth to every
-continuous predictor, but a custom formula can be provided instead.
+Note that *gams* are unusual, as we need to specify a formula to define
+to which variables we will fit smooths. By default, `gam_formula()` fits
+a smooth to every continuous predictor, but a custom formula can be
+provided instead.
 
-We now want to set up a spatial block cross-validation scheme to tune and assess
-our models:
+We now want to set up a spatial block cross-validation scheme to tune
+and assess our models:
 
 ```{r training_cv, fig.width=6, fig.height=4}
 library(tidysdm)
 set.seed(1005)
-horses_cv <- spatial_block_cv(horses, v = 5)
+horses_cv <- spatial_block_cv(horses_climate, v = 5)
 autoplot(horses_cv)
 ```
 
-We can now use the block CV folds to
-tune and assess the models:
+We can now use the block CV folds to tune and assess the models:
+
 ```{r tune_grid}
 set.seed(123)
 horses_models <-
@@ -251,32 +369,38 @@ horses_models <-
   )
 ```
 
-Note that `workflow_set` correctly detects that we have no tuning parameters for 
-*glm* and *gam*. We can have a look at the performance of our models with:
+Note that `workflow_set` correctly detects that we have no tuning
+parameters for *glm* and *gam*. We can have a look at the performance of
+our models with:
 
 ```{r, fig.width=6, fig.height=4}
 autoplot(horses_models)
 ```
 
-Now let's create an ensemble, selecting the best set of parameters for each model
-(this is really only relevant for the random forest, as there were not hype-parameters
-to tune for the glm and gam). We will use the Boyce continuous index as our metric
-to choose the best random forest and boosted tree. When adding members to an ensemble, they are
-automatically fitted to the full training dataset, and so ready to make predictions.
+Now let's create an ensemble, selecting the best set of parameters for
+each model (this is really only relevant for the random forest, as there
+were not hype-parameters to tune for the glm and gam). We will use the
+Boyce continuous index as our metric to choose the best random forest
+and boosted tree. When adding members to an ensemble, they are
+automatically fitted to the full training dataset, and so ready to make
+predictions.
+
 ```{r}
 horses_ensemble <- simple_ensemble() %>%
   add_member(horses_models, metric = "boyce_cont")
 ```
 
 And visualise it
+
 ```{r, fig.width=6, fig.height=4}
 autoplot(horses_ensemble)
 ```
 
 # Projecting to other times
 
-We can now make predictions with this ensemble (using the default option of taking
-the mean of the predictions from each model) for the Last Glacial Maximum (LGM, 21,000 years ago).
+We can now make predictions with this ensemble (using the default option
+of taking the mean of the predictions from each model) for the Last
+Glacial Maximum (LGM, 21,000 years ago).
 
 ```{r get_lgm}
 climate_lgm <- pastclim::region_slice(
@@ -288,6 +412,7 @@ climate_lgm <- pastclim::region_slice(
 ```
 
 And predict using the ensemble:
+
 ```{r plot_lgm, fig.width=6, fig.height=4}
 prediction_lgm <- predict_raster(horses_ensemble, climate_lgm)
 ggplot() +
