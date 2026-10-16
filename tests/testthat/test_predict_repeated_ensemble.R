@@ -244,33 +244,202 @@ test_that("predict correctly a repeated ensemble", {
   expect_equal(pred_class_majority$median.majority, manual_majority)
 })
 
-test_that("predict warns when repeat has no calibration for class", {
+test_that("predict skips repeats not calibrated because of metric_thresh", {
   new_data_ex <- workflowsets::extract_mold(
     lacerta_rep_ens$workflow[[1]]
   )$predictors
 
-  # calibrate without metric_thresh
+  # with boyce_cont > 0.85, only rep_01 has a model passing the threshold,
+  # so only rep_01 is calibrated
+  lacerta_rep_ens_calib <- suppressWarnings(calib_class_thresh(
+    lacerta_rep_ens,
+    class_thresh = c("sens", 0.9),
+    metric_thresh = c("boyce_cont", 0.85)
+  ))
+
+  # predicting with the same metric_thresh skips the other repeats
+  warns <- testthat::capture_warnings(
+    pred_class <- predict(
+      lacerta_rep_ens_calib,
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean",
+      class_thresh = c("sens", 0.9),
+      metric_thresh = c("boyce_cont", 0.85)
+    )
+  )
+  expect_length(warns, 2)
+  expect_match(warns, "Skipping repeat rep_0[23] because all models")
+  # the prediction is the one from rep_01 alone
+  pred_rep_01 <- predict(
+    get_repeat(lacerta_rep_ens_calib, "rep_01"),
+    new_data = new_data_ex,
+    type = "class",
+    fun = "mean",
+    class_thresh = c("sens", 0.9),
+    metric_thresh = c("boyce_cont", 0.85)
+  )
+  expect_equal(pred_class$mean.majority, pred_rep_01$mean)
+
+  # but the ensemble is not calibrated without metric_thresh
+  expect_error(
+    predict(
+      lacerta_rep_ens_calib,
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean",
+      class_thresh = c("sens", 0.9)
+    ),
+    "this ensemble needs to be first calibrated"
+  )
+})
+
+test_that("predict errors for a repeat missing its calibration", {
+  new_data_ex <- workflowsets::extract_mold(
+    lacerta_rep_ens$workflow[[1]]
+  )$predictors
+
   lacerta_rep_ens_calib <- calib_class_thresh(
     lacerta_rep_ens,
     class_thresh = c("sens", 0.9)
   )
+  # manually remove one repeat's calibration; this should not happen, but if
+  # it does, we should not silently drop the repeat
+  attr(lacerta_rep_ens_calib, "class_thresholds_list")[["rep_01"]] <- NULL
 
-  # manually remove one repeat's calibration to simulate it being dropped
-  rep_ids <- unique(lacerta_rep_ens_calib$rep_id)
-  attr(lacerta_rep_ens_calib, "class_thresholds_list")[[rep_ids[1]]] <- NULL
+  expect_error(
+    predict(
+      lacerta_rep_ens_calib,
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean",
+      class_thresh = c("sens", 0.9)
+    ),
+    "needs to be first calibrated"
+  )
+})
 
-  expect_warning(
-    tryCatch(
+test_that("predict errors if not calibrated for this class_thresh", {
+  new_data_ex <- workflowsets::extract_mold(
+    lacerta_rep_ens$workflow[[1]]
+  )$predictors
+
+  # uncalibrated ensemble
+  expect_error(
+    predict(
+      lacerta_rep_ens,
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean",
+      class_thresh = "tss_max"
+    ),
+    "this ensemble needs to be first calibrated"
+  )
+
+  # calibrated for a different class_thresh
+  lacerta_rep_ens_calib <- calib_class_thresh(
+    lacerta_rep_ens,
+    class_thresh = "tss_max"
+  )
+  expect_error(
+    predict(
+      lacerta_rep_ens_calib,
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean",
+      class_thresh = c("sens", 0.9)
+    ),
+    "this ensemble needs to be first calibrated"
+  )
+
+  # calibrated without metric_thresh, predicting with it
+  expect_error(
+    predict(
+      lacerta_rep_ens_calib,
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean",
+      class_thresh = "tss_max",
+      metric_thresh = c("boyce_cont", 0.5)
+    ),
+    "this ensemble needs to be first calibrated"
+  )
+})
+
+test_that("numeric class_thresh needs no calibration", {
+  new_data_ex <- workflowsets::extract_mold(
+    lacerta_rep_ens$workflow[[1]]
+  )$predictors
+  rep_ids <- unique(lacerta_rep_ens$rep_id)
+
+  # an uncalibrated ensemble can predict classes with a numeric threshold
+  expect_no_warning(
+    pred_num <- predict(
+      lacerta_rep_ens,
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean",
+      class_thresh = 0.7
+    )
+  )
+
+  # the prediction should match a majority vote built manually from the
+  # individual repeats
+  pred_by_rep <- lapply(rep_ids, function(i) {
+    predict(
+      get_repeat(lacerta_rep_ens, i),
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean",
+      class_thresh = 0.7
+    )$mean
+  })
+  class_levels <- levels(pred_by_rep[[1]])
+  absence_level <- setdiff(class_levels, "presence")
+  prop_presence <- rowMeans(
+    sapply(pred_by_rep, function(x) x == "presence")
+  )
+  manual_majority <- factor(
+    ifelse(prop_presence > 0.5, "presence", absence_level),
+    levels = class_levels
+  )
+  expect_equal(pred_num$mean.majority, manual_majority)
+
+  # the default threshold (0.5) does not require calibration either, and the
+  # message about the default is only given once
+  expect_message(
+    expect_no_warning(
       predict(
-        lacerta_rep_ens_calib,
+        lacerta_rep_ens,
         new_data = new_data_ex,
         type = "class",
-        fun = "mean",
-        class_thresh = c("sens", 0.9)
-      ),
-      error = function(e) NULL
+        fun = "mean"
+      )
     ),
-    "Skipping repeat.*no calibration"
+    "a default of 0.5 will be used"
+  )
+  msgs <- testthat::capture_messages(
+    predict(
+      lacerta_rep_ens,
+      new_data = new_data_ex,
+      type = "class",
+      fun = "mean"
+    )
+  )
+  expect_length(msgs, 1)
+})
+
+test_that("predict errors for an invalid metric_thresh", {
+  new_data_ex <- workflowsets::extract_mold(
+    lacerta_rep_ens$workflow[[1]]
+  )$predictors
+  expect_error(
+    predict(
+      lacerta_rep_ens,
+      new_data = new_data_ex,
+      metric_thresh = c("not_a_metric", 0.5)
+    ),
+    "'metric_thresh' is not among the metrics"
   )
 })
 
