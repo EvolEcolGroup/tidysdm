@@ -4,6 +4,12 @@
 #' repeat is a [`simple_ensemble`]. All repeats must contain the same members,
 #' selected using the same metric.
 #'
+#' Calibrations of class thresholds (see [calib_class_thresh()]) are not
+#' carried over when adding repeats: any calibration stored in `x` is removed
+#' (with a warning), as is any calibration of the [`simple_ensemble`] objects
+#' being added. Use [calib_class_thresh()] on the resulting [repeat_ensemble]
+#' once all repeats have been added to ensure that calibration is consistent.
+#'
 #' @param x a [repeat_ensemble] to which repeat(s) will be added
 #' @param rep a repeat, as a single [`simple_ensemble`], or a list of
 #' [`simple_ensemble`] objects
@@ -27,6 +33,17 @@ add_repeat.default <- function(x, rep, ...) {
 #' @rdname add_repeat
 #' @export
 add_repeat.simple_ensemble <- function(x, rep, ...) {
+  # drop any existing calibration, as we cannot guarantee that it would be
+  # consistent with the new repeat
+  if (!is.null(attr(x, "class_thresholds_list", exact = TRUE))) {
+    if (nrow(x) > 0) {
+      warning(
+        "adding a repeat removes the existing class threshold calibration; ",
+        "use 'calib_class_thresh()' again after adding all repeats"
+      )
+    }
+    attr(x, "class_thresholds_list") <- NULL
+  }
   # if the repeated ensemble is empty
   if (nrow(x) == 0) {
     attr(x, "best_metric") <- attr(rep, "best_metric")

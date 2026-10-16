@@ -25,7 +25,11 @@
 #'   classes. It can be a number (between 0 and 1), or a character metric
 #'   (currently "tss_max" or "sensitivity"). For sensitivity, an additional
 #'   target value is passed along as a second element of a vector, e.g.
-#'   c("sensitivity",0.8).
+#'   c("sensitivity",0.8). A numeric threshold does not require calibration;
+#'   a metric requires the ensemble to have been calibrated with
+#'   [calib_class_thresh()] for the same `class_thresh` and `metric_thresh`.
+#'   Repeats with no models passing `metric_thresh` are skipped (with a
+#'   warning).
 #' @param by_repeat boolean defining whether individual predictions for each
 #'   repeat should be returned (no aggregating function will be applied at the
 #'   repeat level). The columns for individual members have the name of the
@@ -75,61 +79,69 @@ predict.repeat_ensemble <-
     # we add names of the workflows to combine with the repeat ids
     repeat_ids <- unique(object$rep_id)
 
+    # check that metric_thresh is valid before using it to skip repeats
+    if (!is.null(metric_thresh) &&
+          !metric_thresh[1] %in% attr(object, "metrics")) {
+      stop(
+        "'metric_thresh' is not among the metrics estimated ",
+        "for this ensemble"
+      )
+    }
+
+    if (type == "class") {
+      # set the default threshold here, so that the message is only given once
+      if (is.null(class_thresh)) {
+        message("as no 'threshold' was defined, a default of 0.5 will be used")
+        class_thresh <- 0.5
+      }
+      # a metric-based threshold requires the ensemble to have been calibrated
+      # for this combination of class_thresh and metric_thresh (repeats with
+      # no models passing metric_thresh are not calibrated, but they are
+      # skipped below)
+      if (!is.numeric(class_thresh)) {
+        calib_list <- attr(object, "class_thresholds_list", exact = TRUE)
+        is_calib <- vapply(repeat_ids, function(i_rep) {
+          has_calib(calib_list[[i_rep]], class_thresh, metric_thresh)
+        }, logical(1))
+        if (!any(is_calib)) {
+          stop(
+            "this ensemble needs to be first calibrated with this combination",
+            "of class and metric thresholds before classes can ",
+            "be produced\n",
+            "use 'calib_class_thresh()' first"
+          )
+        }
+      }
+    }
+
     pred_all <- NULL
     valid_repeats <- c()
 
     # now predict for each simple ensemble
     for (i_rep in repeat_ids) {
+      # get_repeat also restores the calibration for this repeat
       object_rep <- get_repeat(object, i = i_rep)
-      calib_list <- attr(object, "class_thresholds_list", exact = TRUE)
 
-      # skip repeats with no calibration when predicting classes
-      if (type == "class" && is.null(calib_list[[i_rep]])) {
-        warning(sprintf(
-          paste0(
-            "Skipping repeat %s: no calibration ",
-            "(dropped during calib_class_thresh)."
-          ),
-          i_rep
-        ))
+      # skip repeats with no models passing metric_thresh
+      if (!passes_metric_thresh(object_rep, metric_thresh)) {
+        warning(
+          paste(
+            "Skipping repeat", i_rep,
+            "because all models were excluded by metric_thresh"
+          )
+        )
         next
       }
 
-      # restore calibration attribute for this repeat
-      if (!is.null(calib_list[[i_rep]])) {
-        attr(object_rep, "class_thresholds") <- calib_list[[i_rep]]
-      }
-
-      pred_rep <- tryCatch(
-        {
-          stats::predict(
-            object_rep,
-            new_data = new_data,
-            type = type,
-            fun = fun,
-            metric_thresh = metric_thresh,
-            class_thresh = class_thresh
-          )
-        },
-        error = function(e) {
-          if (grepl("metric_threshold excludes all models", e$message)) {
-            warning(
-              paste(
-                "Skipping repeat", i_rep,
-                "because all models were excluded by metric_thresh"
-              )
-            )
-            return(NULL)
-          }
-
-          stop(e)
-        }
+      pred_rep <- stats::predict(
+        object_rep,
+        new_data = new_data,
+        type = type,
+        fun = fun,
+        metric_thresh = metric_thresh,
+        class_thresh = class_thresh
       )
 
-      # skip failed repeats
-      if (is.null(pred_rep)) {
-        next
-      }
       names(pred_rep) <- paste(i_rep, names(pred_rep), sep = ".")
 
       valid_repeats <- c(valid_repeats, i_rep)
@@ -206,3 +218,38 @@ predict.repeat_ensemble <-
     pred_rep_ensemble <- data.frame(pred_rep_ensemble)
     return(pred_rep_ensemble)
   }
+
+#' Check whether any model in a simple ensemble passes a metric threshold
+#' @param object a [simple_ensemble]
+#' @param metric_thresh a vector of length 2 giving a metric and its threshold,
+#'   or NULL
+#' @returns TRUE if at least one model passes the threshold (or if
+#'   `metric_thresh` is NULL)
+#' @keywords internal
+#' @noRd
+passes_metric_thresh <- function(object, metric_thresh) {
+  if (is.null(metric_thresh)) {
+    return(TRUE)
+  }
+  metric_ens <- dplyr::bind_rows(object$metrics) %>%
+    dplyr::filter(.data$.metric == metric_thresh[1])
+  any(metric_ens$mean > as.numeric(metric_thresh[2]))
+}
+
+#' Check whether a calibration table has an entry for a given combination of
+#' class_thresh and metric_thresh
+#' @param calib_tb a tibble of class thresholds (or NULL)
+#' @param class_thresh the class threshold
+#' @param metric_thresh the metric threshold
+#' @returns TRUE if the table contains an entry for this combination
+#' @keywords internal
+#' @noRd
+has_calib <- function(calib_tb, class_thresh, metric_thresh) {
+  if (is.null(calib_tb)) {
+    return(FALSE)
+  }
+  any(
+    vapply(calib_tb$class_thresh, identical, logical(1), class_thresh) &
+      vapply(calib_tb$metric_thresh, identical, logical(1), metric_thresh)
+  )
+}

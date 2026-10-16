@@ -44,7 +44,11 @@ was tuned. Examples are c("accuracy",0.8) or c("boyce_cont",0.7)}
 classes. It can be a number (between 0 and 1), or a character metric
 (currently "tss_max" or "sensitivity"). For sensitivity, an additional
 target value is passed along as a second element of a vector, e.g.
-c("sensitivity",0.8).}
+c("sensitivity",0.8). A numeric threshold does not require calibration;
+a metric requires the ensemble to have been calibrated with
+\code{\link[=calib_class_thresh]{calib_class_thresh()}} for the same \code{class_thresh} and \code{metric_thresh}.
+Repeats with no models passing \code{metric_thresh} are skipped (with a
+warning).}
 
 \item{by_repeat}{boolean defining whether individual predictions for each
 repeat should be returned (no aggregating function will be applied at the
