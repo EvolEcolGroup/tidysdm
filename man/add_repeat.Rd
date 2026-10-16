@@ -36,6 +36,6 @@ Calibrations of class thresholds (see \code{\link[=calib_class_thresh]{calib_cla
 carried over when adding repeats: any calibration stored in \code{x} is removed
 (with a warning), as is any calibration of the \code{\link{simple_ensemble}} objects
 being added. Use \code{\link[=calib_class_thresh]{calib_class_thresh()}} on the resulting \link{repeat_ensemble}
-once all repeats have been added.
+once all repeats have been added to ensure that calibration is consistent.
 }
 \keyword{ensemble}

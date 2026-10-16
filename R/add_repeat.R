@@ -8,7 +8,7 @@
 #' carried over when adding repeats: any calibration stored in `x` is removed
 #' (with a warning), as is any calibration of the [`simple_ensemble`] objects
 #' being added. Use [calib_class_thresh()] on the resulting [repeat_ensemble]
-#' once all repeats have been added.
+#' once all repeats have been added to ensure that calibration is consistent.
 #'
 #' @param x a [repeat_ensemble] to which repeat(s) will be added
 #' @param rep a repeat, as a single [`simple_ensemble`], or a list of
