@@ -53,3 +53,61 @@ test_that("add_repeat to empty repeat ensemble", {
     "rep_03"
   )))
 })
+
+test_that("add_repeat drops existing class threshold calibration", {
+  rep_1 <- get_repeat(lacerta_rep_ens, "rep_01")
+  rep_2 <- get_repeat(lacerta_rep_ens, "rep_02")
+  rep_3 <- get_repeat(lacerta_rep_ens, "rep_03")
+
+  # adding to an uncalibrated ensemble does not warn
+  expect_no_warning(
+    test_rep_ens <- repeat_ensemble() %>% add_repeat(list(rep_1, rep_2))
+  )
+  test_rep_ens <- calib_class_thresh(test_rep_ens, class_thresh = "tss_max")
+  expect_false(is.null(attr(test_rep_ens, "class_thresholds_list")))
+
+  # adding a repeat removes the calibration
+  expect_warning(
+    test_rep_ens_3 <- test_rep_ens %>% add_repeat(rep_3),
+    "removes the existing class threshold calibration"
+  )
+  expect_null(attr(test_rep_ens_3, "class_thresholds_list"))
+  expect_true(setequal(
+    unique(test_rep_ens_3$rep_id),
+    c("rep_01", "rep_02", "rep_03")
+  ))
+
+  # the same applies if the repeat being added is itself calibrated
+  rep_3_calib <- calib_class_thresh(rep_3, class_thresh = "tss_max")
+  expect_warning(
+    test_rep_ens_3 <- test_rep_ens %>% add_repeat(rep_3_calib),
+    "removes the existing class threshold calibration"
+  )
+  expect_null(attr(test_rep_ens_3, "class_thresholds_list"))
+
+  # a list of repeats only warns once
+  expect_warning(
+    test_rep_ens_4 <- test_rep_ens %>% add_repeat(list(rep_3, rep_3)),
+    "removes the existing class threshold calibration"
+  )
+  expect_null(attr(test_rep_ens_4, "class_thresholds_list"))
+
+  # calibrations of the simple ensembles being added are not carried over
+  test_rep_ens_calib <- repeat_ensemble() %>%
+    add_repeat(list(
+      calib_class_thresh(rep_1, class_thresh = "tss_max"),
+      rep_3_calib
+    ))
+  expect_null(attr(test_rep_ens_calib, "class_thresholds_list"))
+
+  # a reused rep_id after filtering does not inherit a stale calibration
+  calib_rep_ens <- calib_class_thresh(lacerta_rep_ens, class_thresh = "tss_max")
+  calib_rep_ens <- dplyr::filter(calib_rep_ens, rep_id != "rep_03")
+  expect_warning(
+    calib_rep_ens <- calib_rep_ens %>% add_repeat(rep_2),
+    "removes the existing class threshold calibration"
+  )
+  expect_true("rep_03" %in% calib_rep_ens$rep_id)
+  expect_null(attr(calib_rep_ens, "class_thresholds_list"))
+  expect_null(attr(get_repeat(calib_rep_ens, "rep_03"), "class_thresholds"))
+})

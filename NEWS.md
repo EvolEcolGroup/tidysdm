@@ -4,6 +4,10 @@
 * implement better prediction logic for `repeat_ensembles`, grouping
   by repeat
 * implement `calib_class_thresh` method for `repeat_ensembles`
+* `add_repeat()` now removes any class threshold calibration from the
+  `repeat_ensemble` (with a warning), as it might be inconsistent with the
+  added repeats; previously, the new repeats were left uncalibrated, and
+  a reused `rep_id` could inherit a stale calibration
 * implement `collect_calib_thresh` method for `repeat_ensembles`
 * resolve conflicting coords names in `thin_by_cell()`
 * make sure that coords name is passed on by `thin_by_cell_time()`

@@ -31,4 +31,11 @@ This function adds repeat(s) to a \code{\link{repeat_ensemble}} object, where ea
 repeat is a \code{\link{simple_ensemble}}. All repeats must contain the same members,
 selected using the same metric.
 }
+\details{
+Calibrations of class thresholds (see \code{\link[=calib_class_thresh]{calib_class_thresh()}}) are not
+carried over when adding repeats: any calibration stored in \code{x} is removed
+(with a warning), as is any calibration of the \code{\link{simple_ensemble}} objects
+being added. Use \code{\link[=calib_class_thresh]{calib_class_thresh()}} on the resulting \link{repeat_ensemble}
+once all repeats have been added.
+}
 \keyword{ensemble}
