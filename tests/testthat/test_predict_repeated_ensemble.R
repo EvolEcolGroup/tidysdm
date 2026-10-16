@@ -292,7 +292,8 @@ test_that("predict skips repeats not calibrated because of metric_thresh", {
     ),
     "this ensemble needs to be first calibrated"
   )
-  # we can fix it if we calibrate with the same class_thresh but without metric_thresh
+  # we can fix it if we calibrate with the same class_thresh but without
+  # metric_thresh
   lacerta_rep_ens_calib <- suppressWarnings(calib_class_thresh(
     lacerta_rep_ens_calib,
     class_thresh = c("sens", 0.9)
@@ -304,7 +305,7 @@ test_that("predict skips repeats not calibrated because of metric_thresh", {
     fun = "mean",
     class_thresh = c("sens", 0.9)
   )
-  expect_equal(nrow(unique(preds)),2)
+  expect_equal(nrow(unique(preds)), 2)
 
 })
 

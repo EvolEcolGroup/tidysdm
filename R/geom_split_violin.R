@@ -108,7 +108,7 @@ GeomSplitViolin <- ggplot2::ggproto( # nolint
       newdata$x + nudge
     )
 
-    if (length(draw_quantiles) > 0 & !scales::zero_range(range(data$y))) {
+    if (length(draw_quantiles) > 0 && !scales::zero_range(range(data$y))) {
       stopifnot(all(draw_quantiles >= 0), all(draw_quantiles <= 1))
 
       quantiles <- ggplot2:::create_quantile_segment_frame(
