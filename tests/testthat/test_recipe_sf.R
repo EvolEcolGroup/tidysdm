@@ -28,21 +28,26 @@ test_that("sdm_recipe_sf", {
     recipe(lacerta_xy, formula = class ~ .),
     "sf object"
   )
-  # check prep methods
-  # @TODO expect warning from soft deprecation (to be removed when
-  # warnings are gone)
-  expect_warning(
+  # check prep methods (with no deprecation warning for strings_as_factors,
+  # which should only be passed on to prep.recipe if given by the user)
+  rlang::local_options(lifecycle_verbosity = "warning")
+  expect_no_warning(
     lacerta_rec_prep <- prep(lacerta_rec)
   )
   expect_true(recipes::fully_trained(lacerta_rec_prep))
   expect_false(recipes::fully_trained(lacerta_rec))
   # work if we pass an sf object
-  # @TODO expect warning from soft deprecation (to be removed when
-  # warnings are gone)
-  expect_warning(
+  expect_no_warning(
     lacerta_rec_prep <- prep(lacerta_rec, training = lacerta_thin)
   )
   expect_true(recipes::fully_trained(lacerta_rec_prep))
+  expect_true(inherits(lacerta_rec_prep, "spatial_recipe"))
+  # and if we pass training by position
+  lacerta_rec_prep_pos <- prep(lacerta_rec, lacerta_thin)
+  expect_identical(
+    bake(lacerta_rec_prep_pos, new_data = NULL),
+    bake(lacerta_rec_prep, new_data = NULL)
+  )
   # verbose is passed on to prep.recipe
   suppressWarnings(expect_output(
     prep(lacerta_rec %>% step_normalize(all_numeric_predictors()),
@@ -67,6 +72,16 @@ test_that("sdm_recipe_sf", {
   expect_true(all(c("X", "Y") %in% names(baked_no_xy)))
   # X should just be a dummy variable
   expect_true(all(is.na(baked_no_xy$X)))
+  # new_data can be given by position
+  expect_identical(
+    bake(lacerta_rec_prep, lacerta_thin),
+    bake(lacerta_rec_prep, new_data = lacerta_thin)
+  )
+  # and we can still select columns
+  expect_identical(
+    names(bake(lacerta_rec_prep, lacerta_thin, class, bio05)),
+    c("class", "bio05")
+  )
 })
 
 test_that("sdm_recipe_sf works with a geometry named differently", {

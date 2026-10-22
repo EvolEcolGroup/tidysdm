@@ -95,6 +95,10 @@
   exactly `n`
 * the `verbose` argument of `prep()` is now passed on for `spatial_recipe`
   objects (it was always set to `FALSE`)
+* fix `bake()` and `prep()` for `spatial_recipe` objects when `new_data` (or
+  `training`) is given by position (e.g. `bake(rec, data)`, which failed with
+  "Can't select columns with `new_data`"), and avoid the deprecation warning
+  for `strings_as_factors` from `recipes` >= 1.3.0
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

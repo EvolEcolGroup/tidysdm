@@ -24,14 +24,14 @@ prep.spatial_recipe <- function(x, training = NULL,
     if (!all(c("X", "Y") %in% names(training))) {
       training <- training %>% dplyr::mutate(X = NA_real_, Y = NA_real_)
     }
+    training <- sf::st_drop_geometry(training)
   }
-  NextMethod(
-    generic = "prep",
-    x = x, training = sf::st_drop_geometry(training),
-    fresh = fresh, verbose = verbose,
-    retain = retain, log_changes = log_changes,
-    strings_as_factors = strings_as_factors, ...
-  )
+  # NextMethod() passes on the arguments as they were given by the user, with
+  # the updated value of training. Passing arguments explicitly would add them
+  # to the call rather than replacing those given by position (which would
+  # then end up in the wrong argument), and would always pass
+  # strings_as_factors, which is deprecated in prep.recipe()
+  NextMethod()
 }
 
 #' @export
@@ -56,10 +56,10 @@ bake.spatial_recipe <- function(object, new_data, ..., composition = "tibble") {
     if (!all(c("X", "Y") %in% names(new_data))) {
       new_data <- new_data %>% dplyr::mutate(X = NA_real_, Y = NA_real_)
     }
+    new_data <- sf::st_drop_geometry(new_data)
   }
-  NextMethod(
-    generic = "bake", object = object,
-    new_data = sf::st_drop_geometry(new_data), ...,
-    composition = composition
-  )
+  # NextMethod() passes on the arguments as they were given by the user, with
+  # the updated value of new_data (see prep.spatial_recipe() for why we do not
+  # pass arguments explicitly)
+  NextMethod()
 }
