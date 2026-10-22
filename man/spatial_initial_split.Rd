@@ -9,11 +9,13 @@ spatial_initial_split(data, prop, strategy, ...)
 \arguments{
 \item{data}{A dataset (data.frame or tibble)}
 
-\item{prop}{The proportion of data to be retained for modelling/analysis.
-This parameter is used to define the appropriate number of partitions for
-the selected \code{strategy}. For example, if \code{prop = 0.2}, then 5 partitions
-will be created and one of these will be used as the testing set. Set to
-NULL for leave-one-out crossvalidation.}
+\item{prop}{The (approximate) proportion of data to be used for testing
+(note that this differs from \code{\link[rsample:initial_split]{rsample::initial_split()}}, where \code{prop} is
+the proportion of data used for training). This parameter is used to
+define the appropriate number of partitions for the selected \code{strategy}.
+For example, if \code{prop = 0.2}, then 5 partitions will be created and one of
+these will be used as the testing set (leaving 80\% of the data for
+training). Set to NULL for leave-one-out crossvalidation.}
 
 \item{strategy}{A sampling strategy from \code{spatialsample}}
 

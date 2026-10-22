@@ -5,11 +5,13 @@
 #' are available; a random split from that strategy will be used to generate the
 #' initial split.
 #' @param data A dataset (data.frame or tibble)
-#' @param prop The proportion of data to be retained for modelling/analysis.
-#'   This parameter is used to define the appropriate number of partitions for
-#'   the selected `strategy`. For example, if `prop = 0.2`, then 5 partitions
-#'   will be created and one of these will be used as the testing set. Set to
-#'   NULL for leave-one-out crossvalidation.
+#' @param prop The (approximate) proportion of data to be used for testing
+#'   (note that this differs from [rsample::initial_split()], where `prop` is
+#'   the proportion of data used for training). This parameter is used to
+#'   define the appropriate number of partitions for the selected `strategy`.
+#'   For example, if `prop = 0.2`, then 5 partitions will be created and one of
+#'   these will be used as the testing set (leaving 80% of the data for
+#'   training). Set to NULL for leave-one-out crossvalidation.
 #' @param strategy A sampling strategy from `spatialsample`
 #' @param ... parameters to be passed to the `strategy` function (with the
 #' exception of `v` which is calculated internally based on `prop`)
