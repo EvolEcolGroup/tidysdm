@@ -26,13 +26,15 @@
 
 
 spatial_initial_split <- function(data, prop, strategy, ...) {
-  # check that strategy is a spatialsample function
-  if (!exists(
-    deparse(substitute(strategy)),
-    where = "package:spatialsample",
-    mode = "function"
-  )) {
-    stop(deparse(substitute(strategy)), " is not a function in spatialsample")
+  # check that strategy is a spatialsample function (we check the
+  # environment of the function, so that it can also be given as
+  # spatialsample::spatial_block_cv)
+  strategy_name <- deparse(substitute(strategy))
+  strategy <- tryCatch(strategy, error = function(e) NULL)
+  is_spatialsample_fun <- is.function(strategy) &&
+    identical(environment(strategy), asNamespace("spatialsample"))
+  if (!is_spatialsample_fun) {
+    stop(strategy_name, " is not a function in spatialsample")
   }
 
   if (is.null(prop)) {

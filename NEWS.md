@@ -88,6 +88,8 @@
   `thin_by_cell_time()`) for rasters with a single time step
 * fix `thin_by_dist_time()` when times are within a day of 1970-01-01, for
   which time intervals were computed in seconds rather than days
+* `spatial_initial_split()` now accepts a `strategy` given with its namespace
+  (e.g. `spatialsample::spatial_block_cv`)
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

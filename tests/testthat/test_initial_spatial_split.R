@@ -19,12 +19,25 @@ test_that("spatial_initial_split", {
   # vdiffr::expect_doppelganger("Autoplot of initial spatial split", lacerta_initial_autoplot)
   # nolint end
 
+  # we can also give the strategy with the namespace
+  set.seed(1005)
+  lacerta_initial_ns <- spatial_initial_split(lacerta_thin,
+    prop = 1 / 5, spatialsample::spatial_block_cv
+  )
+  expect_identical(lacerta_initial_ns$in_id, lacerta_initial$in_id)
+
   # check error if we give incorrect strategy
   expect_error(
     spatial_initial_split(lacerta_thin,
       prop = 1 / 5, spatial_block_cv2
     ),
     "spatial_block_cv2 is not a function in spatialsample"
+  )
+  expect_error(
+    spatial_initial_split(lacerta_thin,
+      prop = 1 / 5, rsample::vfold_cv
+    ),
+    "rsample::vfold_cv is not a function in spatialsample"
   )
   # check error for proportion out of bounds
   expect_error(
