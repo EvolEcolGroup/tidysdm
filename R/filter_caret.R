@@ -65,10 +65,13 @@ filter_cor_caret <- function(x,
     x <- x[
       !var_names %in%
         names(which(max_cor_vs_keep > cutoff)),
-      !var_names %in% names(which(max_cor_vs_keep > cutoff))
+      !var_names %in% names(which(max_cor_vs_keep > cutoff)),
+      drop = FALSE
     ]
     x <-
-      x[!dimnames(x)[[1]] %in% to_keep, !dimnames(x)[[1]] %in% to_keep]
+      x[!dimnames(x)[[1]] %in% to_keep, !dimnames(x)[[1]] %in% to_keep,
+        drop = FALSE
+      ]
   }
   filter_output <- filter_caret_algorithm(
     x = x,
@@ -91,6 +94,13 @@ filter_caret_algorithm <-
            verbose = FALSE) {
     var_num <- dim(x)[1]
     var_names <- dimnames(x)[[1]]
+
+    # with fewer than two variables, there is nothing to filter
+    if (var_num < 2) {
+      passed_filter <- as.character(var_names)
+      attr(passed_filter, "to_remove") <- character(0)
+      return(passed_filter)
+    }
 
     x <- abs(x)
 

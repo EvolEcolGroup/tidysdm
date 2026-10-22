@@ -32,6 +32,10 @@
   assessment sets (and for the training and testing sets of an initial split)
 * fix the `to_remove` attribute returned by `filter_collinear()` with
   `names = FALSE`, which listed the indices of all variables
+* fix errors in `filter_collinear()` when only one variable is left to
+  evaluate (e.g. when removing one of two collinear variables, or after
+  removing the variables correlated with those in `to_keep`), or when all
+  variables are in `to_keep`
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

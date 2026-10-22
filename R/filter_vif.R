@@ -12,11 +12,15 @@ filter_vif_step <- function(x, cutoff = 10, verbose = FALSE, to_keep = NULL,
   # remove the variable with the largest vif, one at a time
   while (TRUE) {
     i_cols <- (seq_len(ncol(x)))[!colnames(x) %in% to_keep]
+    # break if all the variables left are in to_keep
+    if (length(i_cols) == 0) {
+      break
+    }
     vif_vector <- vif_fast(x, cols = i_cols)
     if (max(vif_vector) >= cutoff) {
       target_var <- names(vif_vector)[which.max(vif_vector)]
       vars_to_remove <- c(vars_to_remove, target_var)
-      x <- x[, -which(colnames(x) == target_var)]
+      x <- x[, -which(colnames(x) == target_var), drop = FALSE]
     } else {
       break
     }
@@ -62,7 +66,7 @@ filter_vif_cor <- function(x, cutoff = 10, verbose = FALSE,
   vars_to_remove <- c()
   # work down the highest correlations above cutoff
   while (TRUE) {
-    if (x_cor$cor[1] > cutoff) {
+    if (nrow(x_cor) > 0 && x_cor$cor[1] > cutoff) {
       # target variables to consider
       target_vars <- c(x_cor$row[1], x_cor$col[1])
       target_vars <- target_vars[!target_vars %in% to_keep]
@@ -77,7 +81,7 @@ filter_vif_cor <- function(x, cutoff = 10, verbose = FALSE,
       # choose vars with larger vif
       x_cor <- x_cor %>% dplyr::filter(!(col == target_var | row == target_var))
       vars_to_remove <- c(vars_to_remove, target_var)
-      x <- x[, -which(colnames(x) == target_var)]
+      x <- x[, -which(colnames(x) == target_var), drop = FALSE]
     } else {
       break
     }
@@ -112,7 +116,7 @@ vif_fast <- function(data_mat, cols = NULL) {
   var_names <- colnames(data_mat)
   data_mat <- cbind(data_mat, 1) ## convert to a design matrix with an intercept
   vif_one_col <- function(i_col, data_mat) {
-    this_resid <- stats::.lm.fit(data_mat[, -i_col],
+    this_resid <- stats::.lm.fit(data_mat[, -i_col, drop = FALSE],
       y = data_mat[, i_col]
     )$residuals
     return(1 / (sum(this_resid^2) /

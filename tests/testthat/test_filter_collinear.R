@@ -143,3 +143,41 @@ test_that("filter collinear variables with vif_cor", {
     )
   )
 })
+
+test_that("filter_collinear copes with only one variable left to test", {
+  set.seed(123)
+  a <- stats::rnorm(100)
+  x <- cbind(
+    a = a,
+    b = a + stats::rnorm(100, sd = 0.1),
+    c = stats::rnorm(100)
+  )
+  # two highly collinear variables, one of which gets removed
+  for (this_method in c("cor_caret", "vif_step", "vif_cor")) {
+    # verbose output is printed, so we capture it
+    suppressMessages(utils::capture.output(
+      vars_kept <- filter_collinear(x[, c("a", "b")],
+        method = this_method,
+        verbose = TRUE
+      )
+    ))
+    expect_length(vars_kept, 1)
+    expect_length(attr(vars_kept, "to_remove"), 1)
+  }
+  # keeping one variable, removing the variable correlated with it leaves
+  # a single variable to test
+  for (this_method in c("cor_caret", "vif_step", "vif_cor")) {
+    vars_kept <- filter_collinear(x, method = this_method, to_keep = "a")
+    expect_identical(sort(as.vector(vars_kept)), c("a", "c"))
+  }
+  vars_kept <- filter_collinear(x[, c("a", "c")], to_keep = "a")
+  expect_identical(sort(as.vector(vars_kept)), c("a", "c"))
+  # keeping all variables
+  for (this_method in c("cor_caret", "vif_step", "vif_cor")) {
+    vars_kept <- filter_collinear(x[, c("a", "c")],
+      method = this_method,
+      to_keep = c("a", "c")
+    )
+    expect_identical(sort(as.vector(vars_kept)), c("a", "c"))
+  }
+})
