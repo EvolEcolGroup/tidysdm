@@ -5,7 +5,7 @@
 \alias{lacerta}
 \title{Coordinates of presences for Iberian emerald lizard}
 \format{
-An \code{tibble} with 1,297 rows and 3 variables:
+A \code{tibble} with 1,268 rows and 3 variables:
 \describe{
 \item{ID}{ids from GBIF}
 \item{latitude}{latitudes in degrees}

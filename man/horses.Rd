@@ -5,7 +5,7 @@
 \alias{horses}
 \title{Coordinates of radiocarbon dates for horses}
 \format{
-An \code{tibble} with 1,297 rows and 3 variables:
+A \code{tibble} with 788 rows and 3 variables:
 \describe{
 \item{latitude}{latitudes in degrees}
 \item{longitude}{longitudes in degrees}

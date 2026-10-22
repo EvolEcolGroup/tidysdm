@@ -3,7 +3,7 @@
 #' Coordinates for presences of *Lacerta schreiberi*. The variables are as
 #' follows:
 #'
-#' @format An `tibble` with 1,297 rows and 3 variables:
+#' @format A `tibble` with 1,268 rows and 3 variables:
 #' \describe{
 #'   \item{ID}{ids from GBIF}
 #'   \item{latitude}{latitudes in degrees}
@@ -15,7 +15,7 @@
 #'
 #' Coordinates for presences of horses from 22k to 8k YBP.
 #'
-#' @format An `tibble` with 1,297 rows and 3 variables:
+#' @format A `tibble` with 788 rows and 3 variables:
 #' \describe{
 #'   \item{latitude}{latitudes in degrees}
 #'   \item{longitude}{longitudes in degrees}
@@ -40,9 +40,9 @@
 #' Coordinates of presences for lacertidae in the Iberian peninsula
 #'
 #' Coordinates for presences of lacertidae, used as background for the
-#' [`lacerta`] dataset.. The variables are as follows:
+#' [`lacerta`] dataset. The variables are as follows:
 #'
-#' @format An `tibble` with 1,297 rows and 3 variables:
+#' @format A `tibble` with 34,677 rows and 3 variables:
 #' \describe{
 #'   \item{ID}{ids from GBIF}
 #'   \item{latitude}{latitudes in degrees}

@@ -5,7 +5,7 @@
 \alias{lacertidae_background}
 \title{Coordinates of presences for lacertidae in the Iberian peninsula}
 \format{
-An \code{tibble} with 1,297 rows and 3 variables:
+A \code{tibble} with 34,677 rows and 3 variables:
 \describe{
 \item{ID}{ids from GBIF}
 \item{latitude}{latitudes in degrees}
@@ -17,6 +17,6 @@ lacertidae_background
 }
 \description{
 Coordinates for presences of lacertidae, used as background for the
-\code{\link{lacerta}} dataset.. The variables are as follows:
+\code{\link{lacerta}} dataset. The variables are as follows:
 }
 \keyword{datasets}
