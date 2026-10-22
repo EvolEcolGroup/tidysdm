@@ -22,6 +22,9 @@
 * fix `explain_tidysdm()` passing the response to DALEX as 1/2 rather than
   1 (presence) / 0 (absence); this corrupted the default loss used by
   `DALEX::model_parts()` (variable importance) and `DALEX::model_performance()`
+* fix labels of explainers created by `explain_tidysdm()` with
+  `by_workflow = TRUE` for `repeat_ensemble` objects, which now include the
+  repeat id
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

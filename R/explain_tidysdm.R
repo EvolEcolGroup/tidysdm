@@ -181,7 +181,7 @@ explain_tidysdm.repeat_ensemble <- function(
   by_workflow = FALSE
 ) {
   # we change the names of the workflows to combine with the repeat ids
-  model$workflow_id <- paste(model$rep_id, model$wflow_id, sep = ".")
+  model$wflow_id <- paste(model$rep_id, model$wflow_id, sep = ".")
   class(model)[1] <- "simple_ensemble"
   explain_tidysdm(
     model = model,

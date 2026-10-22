@@ -166,3 +166,18 @@ test_that("explain_tidysdm codes the response as 1 for presences", {
   )
   expect_identical(explainer_list_y[[1]]$y, as.numeric(truth == "presence"))
 })
+
+test_that("explain_tidysdm by workflow labels repeats uniquely", {
+  skip_if_not_installed("DALEXtra")
+  lacerta_rep <- repeat_ensemble() %>%
+    add_repeat(list(tidysdm::lacerta_ensemble, tidysdm::lacerta_ensemble))
+  explainer_list <- explain_tidysdm(lacerta_rep,
+    by_workflow = TRUE, verbose = FALSE
+  )
+  expect_length(explainer_list, nrow(lacerta_rep))
+  explainer_labels <- vapply(explainer_list, function(x) x$label, character(1))
+  expect_identical(
+    explainer_labels,
+    paste(lacerta_rep$rep_id, lacerta_rep$wflow_id, sep = ".")
+  )
+})
