@@ -67,6 +67,10 @@
   returned multiple values (and thus a malformed prediction) when two values
   were equally close to half of the cumulative weight, and differed from the
   median when all weights were equal
+* `add_repeat()` now checks that the repeat being added has the same set of
+  metrics as the `repeat_ensemble` (previously, only metrics that were all
+  different were caught, and the same metrics in a different order gave an
+  error)
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

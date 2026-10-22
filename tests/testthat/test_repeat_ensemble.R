@@ -44,6 +44,24 @@ test_that("add_repeat to empty repeat ensemble", {
     test_rep_ens %>% add_repeat(test_ens_2),
     "the metrics "
   )
+  # also if only some of the metrics differ
+  test_ens_2 <- test_ens_1
+  attr(test_ens_2, "metrics") <- c(attr(test_ens_1, "metrics")[1], "blah")
+  expect_error(
+    test_rep_ens %>% add_repeat(test_ens_2),
+    "the metrics "
+  )
+  # or if the repeat has an additional metric
+  test_ens_2 <- test_ens_1
+  attr(test_ens_2, "metrics") <- c(attr(test_ens_1, "metrics"), "blah")
+  expect_error(
+    test_rep_ens %>% add_repeat(test_ens_2),
+    "the metrics "
+  )
+  # but the order of the metrics does not matter
+  test_ens_2 <- test_ens_1
+  attr(test_ens_2, "metrics") <- rev(attr(test_ens_1, "metrics"))
+  expect_no_error(test_rep_ens %>% add_repeat(test_ens_2))
   # now make a list
   ens_list <- list(test_ens_1, test_ens_1, test_ens_1)
   test_rep_ens <- repeat_ensemble() %>% add_repeat(ens_list)

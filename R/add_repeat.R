@@ -58,7 +58,7 @@ add_repeat.simple_ensemble <- function(x, rep, ...) {
         "from the repeat being added"
       )
     }
-    if (all(attr(x, "metrics") != attr(rep, "metrics"))) {
+    if (!setequal(attr(x, "metrics"), attr(rep, "metrics"))) {
       stop(
         "the metrics in the repeated ensemble differ from ",
         "the repeat being added"
