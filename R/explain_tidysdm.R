@@ -348,7 +348,7 @@ explain_simple_ens_by_wkflow <- function(
   explainer_list <- list()
   for (i in seq_len(nrow(model))) {
     if (is.null(data)) {
-      if (is.null(model$pre$actions$recipe$recipe$steps)) {
+      if (is.null(model$workflow[[i]]$pre$actions$recipe$recipe$steps)) {
         data_train <- workflowsets::extract_mold(model$workflow[[i]])$predictors
       } else {
         stop(

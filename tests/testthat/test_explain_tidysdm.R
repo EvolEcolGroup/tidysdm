@@ -105,6 +105,18 @@ test_that("explain_tidysdm works correctly with recipes with steps", {
   expect_no_error(
     explain_tidysdm(lacerta_ensemble, data = lacerta_thin, verbose = FALSE)
   )
+  # same checks when explaining by workflow
+  skip_if_not_installed("DALEXtra")
+  expect_error(
+    explain_tidysdm(lacerta_ensemble, by_workflow = TRUE),
+    "your recipe contains steps"
+  )
+  expect_no_error(
+    explain_tidysdm(lacerta_ensemble,
+      data = lacerta_thin, by_workflow = TRUE,
+      verbose = FALSE
+    )
+  )
 })
 
 test_that("explain_tidysdm works with response provided directly", {

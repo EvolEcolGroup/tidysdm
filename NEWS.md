@@ -25,6 +25,9 @@
 * fix labels of explainers created by `explain_tidysdm()` with
   `by_workflow = TRUE` for `repeat_ensemble` objects, which now include the
   repeat id
+* `explain_tidysdm()` with `by_workflow = TRUE` now correctly detects recipes
+  with steps (and asks for `data` to be provided), as it already did for the
+  whole ensemble
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
