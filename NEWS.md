@@ -90,6 +90,9 @@
   which time intervals were computed in seconds rather than days
 * `spatial_initial_split()` now accepts a `strategy` given with its namespace
   (e.g. `spatialsample::spatial_block_cv`)
+* `sample_background()` and `sample_pseudoabs()` no longer warn that there are
+  fewer available cells than requested when the number of available cells is
+  exactly `n`
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

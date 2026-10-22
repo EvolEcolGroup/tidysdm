@@ -141,7 +141,7 @@ sample_pseudoabs <- function(data, raster, n, coords = NULL,
   cell_id <- terra::cells(sampling_raster)
   if (length(cell_id) > n) {
     cell_id <- sample(x = cell_id, size = n)
-  } else {
+  } else if (length(cell_id) < n) {
     warning(
       "There are fewer available cells for raster '",
       terra::time(sampling_raster), "' (", nrow(xy_pres),

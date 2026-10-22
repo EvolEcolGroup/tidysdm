@@ -108,7 +108,7 @@ sample_background <- function(data, raster, n, coords = NULL,
   }
   if (length(cell_id) > n) {
     cell_id <- sample(x = cell_id, size = n, prob = bias, replace = FALSE)
-  } else {
+  } else if (length(cell_id) < n) {
     warning(
       "There are fewer available cells for raster '",
       terra::time(sampling_raster), "' (", nrow(xy_pres),

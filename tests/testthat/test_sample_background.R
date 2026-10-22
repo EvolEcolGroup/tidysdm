@@ -133,6 +133,13 @@ test_that("handling of data frames and sf objects", {
     "There are fewer available cells for raster 'NA' (3 presences) than the requested 100 background points. Only 55 will be returned.", # nolint
     fixed = TRUE
   )
+  # no warning if we request exactly the number of available cells
+  expect_no_warning(
+    bg_all <- sample_background(locations_sf,
+      raster = grid_raster, n = 55
+    )
+  )
+  expect_identical(sum(bg_all$class == "background"), 55L)
   locations_sf <- locations_sf %>% dplyr::bind_cols(sf::st_coordinates(.))
   expect_no_error(sample_background(locations_sf,
     coords = c("X", "Y"),
