@@ -82,8 +82,8 @@
   "geometry"
 * consistent handling of the time axis of `stars` objects in
   `sample_background_time()` (which previously lost the time axis unless
-  times were POSIXct), `sample_pseudoabs_time()` and `thin_by_cell_time()`
-  (which previously failed if times were POSIXct or Date)
+  times were `POSIXct`), `sample_pseudoabs_time()` and `thin_by_cell_time()`
+  (which previously failed if times were `POSIXct` or `Date`)
 * fix the `*_time()` functions (e.g. `sample_pseudoabs_time()` and
   `thin_by_cell_time()`) for rasters with a single time step
 * fix `thin_by_dist_time()` when times are within a day of 1970-01-01, for
