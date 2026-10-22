@@ -74,6 +74,9 @@
 * class predictions from `predict.repeat_ensemble()` now treat the first level
   of the response as the presence class (as for `simple_ensemble`), rather
   than requiring it to be called "presence"
+* `check_sdm_presence()` now evaluates `presence_level` as a normal argument,
+  so that it can be passed as a variable (previously the name of the variable
+  was used as the level)
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

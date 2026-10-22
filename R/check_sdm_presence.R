@@ -18,10 +18,9 @@ check_sdm_presence <- function(
   .col <- rlang::enquo(.col) %>%
     rlang::quo_get_expr() %>%
     rlang::as_string()
-  presence_level <- rlang::enquo(presence_level) %>%
-    rlang::quo_get_expr() %>%
-    rlang::as_string()
-  browser
+  if (!rlang::is_string(presence_level)) {
+    stop("presence_level should be a single string")
+  }
   # extract the column if .data is a dataframe
   if (inherits(.data, "data.frame")) {
     x <- .data %>% dplyr::pull(.col)

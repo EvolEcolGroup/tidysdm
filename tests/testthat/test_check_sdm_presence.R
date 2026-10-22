@@ -20,4 +20,18 @@ test_that("check_sdm_presence gives correct errors", {
   )
   # test when we use the column directly
   check_sdm_presence(two_class_dat$Class, presence_level = "Class1")
+  # presence_level can be stored in a variable
+  this_level <- "Class1"
+  expect_true(
+    two_class_dat %>% check_sdm_presence(Class, presence_level = this_level)
+  )
+  this_level <- "Class2"
+  expect_error(
+    two_class_dat %>% check_sdm_presence(Class, presence_level = this_level),
+    "level Class2 is not the first"
+  )
+  expect_error(
+    two_class_dat %>% check_sdm_presence(Class, presence_level = 1),
+    "presence_level should be a single string"
+  )
 })
