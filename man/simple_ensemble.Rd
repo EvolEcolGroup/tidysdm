@@ -8,7 +8,7 @@ simple_ensemble(...)
 }
 \arguments{
 \item{...}{not used, this function just creates an empty \code{simple_ensemble}
-object. Members are added with \code{add_best_candidates()}}
+object. Members are added with \code{\link[=add_member]{add_member()}}}
 }
 \value{
 an empty \code{simple_ensemble}. This is a tibble with columns:

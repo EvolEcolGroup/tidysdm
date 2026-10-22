@@ -8,7 +8,7 @@
 #' estimated during the cross-validation process.
 #'
 #' @param ... not used, this function just creates an empty `repeat_ensemble`
-#'   object. Members are added with `add_best_candidates()`
+#'   object. Repeats are added with [add_repeat()]
 #' @returns an empty `repeat_ensemble`
 #' @export
 
@@ -41,7 +41,7 @@ print.repeat_ensemble <- function(x, ...) {
     rlang::inform(c("\nAvailable metrics:", attr(x, "metrics")))
     rlang::inform(c("\nMetric used to tune workflows:", attr(x, "best_metric")))
   } else {
-    rlang::inform("\nThis object is empty; add models with `add_repeats()`")
+    rlang::inform("\nThis object is empty; add repeats with `add_repeat()`")
   }
 }
 

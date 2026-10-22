@@ -8,7 +8,7 @@ repeat_ensemble(...)
 }
 \arguments{
 \item{...}{not used, this function just creates an empty \code{repeat_ensemble}
-object. Members are added with \code{add_best_candidates()}}
+object. Repeats are added with \code{\link[=add_repeat]{add_repeat()}}}
 }
 \value{
 an empty \code{repeat_ensemble}

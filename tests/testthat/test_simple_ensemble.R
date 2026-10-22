@@ -95,3 +95,8 @@ test_that("autoplot ranks the best workflow first", {
   expect_false(is.unsorted(rank_data$mean))
   expect_identical(rank_data$mean[1], min(rank_data$mean))
 })
+
+test_that("printing an empty ensemble refers to existing functions", {
+  expect_message(print(simple_ensemble()), "add_member()", fixed = TRUE)
+  expect_message(print(repeat_ensemble()), "add_repeat()", fixed = TRUE)
+})

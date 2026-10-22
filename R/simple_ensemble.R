@@ -9,7 +9,7 @@
 #' to the full training dataset before making predictions.
 #'
 #' @param ... not used, this function just creates an empty `simple_ensemble`
-#'   object. Members are added with `add_best_candidates()`
+#'   object. Members are added with [add_member()]
 #' @returns an empty `simple_ensemble`. This is a tibble with columns:
 #' * `wflow_id`: the name of the workflows for which the best model was
 #'   chosen
@@ -43,7 +43,7 @@ print.simple_ensemble <- function(x, ...) {
     rlang::inform(c("\nAvailable metrics:", attr(x, "metrics")))
     rlang::inform(c("\nMetric used to tune workflows:", attr(x, "best_metric")))
   } else {
-    rlang::inform("\nThis object is empty; add models with `add_members()`")
+    rlang::inform("\nThis object is empty; add models with `add_member()`")
   }
 }
 
