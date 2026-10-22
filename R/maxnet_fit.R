@@ -53,8 +53,11 @@
 maxnet_fit <- function(formula, data, regmult = 1.0, classes = "default",
                        regfun = maxnet::maxnet.default.regularization,
                        addsamplestobackground = TRUE, ...) {
-  # extract the response and turn it into a numeric vector
-  response <- data[, form_resp(stats::terms(formula, data = data))] %>%
+  # extract the response and turn it into a numeric vector (drop = FALSE
+  # ensures that we get a data.frame also when data is a plain data.frame)
+  response <- data[, form_resp(stats::terms(formula, data = data)),
+    drop = FALSE
+  ] %>%
     dplyr::pull(1)
   resp_levels <- levels(response) # nolint (false positive claiming this variable is not used)
   response <- dplyr::recode_values(
@@ -63,7 +66,9 @@ maxnet_fit <- function(formula, data, regmult = 1.0, classes = "default",
     resp_levels[2] ~ 0
   )
   # extract the responses
-  predictors <- data[, rsample::form_pred(stats::terms(formula, data = data))]
+  predictors <- data[, rsample::form_pred(stats::terms(formula, data = data)),
+    drop = FALSE
+  ]
   # if predictors is an sf object, convert to data.frame by dropping geometry
   if (inherits(predictors, "sf")) {
     predictors <- sf::st_drop_geometry(predictors)
