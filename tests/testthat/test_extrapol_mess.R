@@ -120,3 +120,34 @@ test_that("mess_predictor works on SpatRasterDatasets", {
     "The rasters in `SpatRasterDataset` "
   )
 })
+
+test_that("extrapol_mess matches training variables to layers by name", {
+  x <- terra::rast(nrows = 2, ncols = 2, nlyrs = 2, vals = c(1:4, 101:104))
+  names(x) <- c("a", "b")
+  training <- data.frame(a = c(2, 3), b = c(102, 103))
+  expected_mess <- c(-100, 100, 0, -100)
+  expect_equal(
+    as.vector(terra::values(extrapol_mess(x, training))),
+    expected_mess
+  )
+  # same result if the training columns are in a different order
+  expect_equal(
+    as.vector(terra::values(extrapol_mess(x, training[, c("b", "a")]))),
+    expected_mess
+  )
+  # and for the data.frame method
+  x_df <- as.data.frame(terra::values(x))
+  expect_equal(extrapol_mess(x_df, training)$mess, expected_mess)
+  expect_equal(
+    extrapol_mess(x_df, training[, c("b", "a")])$mess,
+    expected_mess
+  )
+  # which also works with tibbles
+  expect_equal(
+    extrapol_mess(
+      tibble::as_tibble(x_df),
+      tibble::as_tibble(training[, c("b", "a")])
+    )$mess,
+    expected_mess
+  )
+})

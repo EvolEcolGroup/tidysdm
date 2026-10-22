@@ -69,6 +69,8 @@ extrapol_mess.SpatRaster <- function(x, training, .col, filename = "", ...) {
   if (!setequal(names(training), names(x))) {
     stop("`x` and `training` should contain the same variables")
   }
+  # variables are matched by position below, so we use the order of the layers
+  training <- as.data.frame(training)[, names(x), drop = FALSE]
 
   training <- stats::na.omit(training)
   if (nrow(training) < 2) {
@@ -122,11 +124,16 @@ extrapol_mess.data.frame <- function(x, training, .col, ...) {
   }
   # remove locations in training if they are present
   training <- training %>% sf::st_drop_geometry()
-  x <- x %>% sf::st_drop_geometry()
+  # use plain data.frames, so that subsetting columns returns vectors
+  x <- x %>%
+    sf::st_drop_geometry() %>%
+    as.data.frame()
   # check that all variables are present in the raster
   if (!setequal(names(training), names(x))) {
     stop("`x` and `training` should contain the same variables")
   }
+  # variables are matched by position below, so we use the order of x
+  training <- as.data.frame(training)[, names(x), drop = FALSE]
 
   training <- stats::na.omit(training)
   if (nrow(training) < 2) {

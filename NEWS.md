@@ -45,6 +45,9 @@
   the columns of `training` were in a different order from the layers of `x`,
   or if `x` had additional layers; layers (or datasets of a
   `SpatRasterDataset`) that are not in `training` are now left unchanged
+* fix `extrapol_mess()`, which matched the columns of `training` to the layers
+  of `x` (or the columns of a `data.frame`) by position rather than by name;
+  the `data.frame` method now also works with tibbles
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
