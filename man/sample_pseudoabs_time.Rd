@@ -88,7 +88,7 @@ from presences.
 }
 }
 \details{
-#' @details Note that the time axis of the raster should be in \code{POSIXct} or
-\code{Date} format, or use `tstep="years"'. See \code{\link[terra:time]{terra::time()}} for details on how
+Note that the time axis of the raster should be in \code{POSIXct} or
+\code{Date} format, or use \code{tstep="years"}. See \code{\link[terra:time]{terra::time()}} for details on how
 to set the time axis.
 }

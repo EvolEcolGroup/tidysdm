@@ -51,7 +51,7 @@ object}
 tibble}
 
 \item{time_buffer}{the buffer on the time axis around presences that defines
-their effect when sampling background with method 'max_dist'. If set to
+their effect when sampling background with method 'dist_max'. If set to
 zero, presences have an effect only on the time step to which they are
 assigned in \code{raster}; if a positive value, it defines the number of days
 before and after the date provided in the \code{time} column for which the
@@ -79,12 +79,12 @@ that are in multiple buffers are not oversampled. This is also referred to as
 "thickening".
 \item 'bias': background points are sampled according to a surface representing
 the biased sampling effort. Note that the surface for each time step is
-normalised to sum to 1;use \code{n_per_time_step} to affect sampling effort within
-each time step.
+normalised to sum to 1; use \code{n_per_time_step} to affect sampling effort
+within each time step.
 }
 }
 \details{
 Note that the time axis of the raster should be in \code{POSIXct} or
-\code{Date} format, or use `tstep="years"'. See \code{\link[terra:time]{terra::time()}} for details on
+\code{Date} format, or use \code{tstep="years"}. See \code{\link[terra:time]{terra::time()}} for details on
 how to set the time axis.
 }

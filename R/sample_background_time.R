@@ -13,11 +13,11 @@
 #' "thickening".
 #' * 'bias': background points are sampled according to a surface representing
 #' the biased sampling effort. Note that the surface for each time step is
-#' normalised to sum to 1;use `n_per_time_step` to affect sampling effort within
-#' each time step.
+#' normalised to sum to 1; use `n_per_time_step` to affect sampling effort
+#' within each time step.
 #'
 #' @details Note that the time axis of the raster should be in `POSIXct` or
-#'   `Date` format, or use `tstep="years"'. See [terra::time()] for details on
+#'   `Date` format, or use `tstep="years"`. See [terra::time()] for details on
 #'   how to set the time axis.
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate
 #'   variables. These can be defined in `coords`, unless they have standard
@@ -43,7 +43,7 @@
 #' @param return_pres return presences together with background in a single
 #'   tibble
 #' @param time_buffer the buffer on the time axis around presences that defines
-#'   their effect when sampling background with method 'max_dist'. If set to
+#'   their effect when sampling background with method 'dist_max'. If set to
 #'   zero, presences have an effect only on the time step to which they are
 #'   assigned in `raster`; if a positive value, it defines the number of days
 #'   before and after the date provided in the `time` column for which the

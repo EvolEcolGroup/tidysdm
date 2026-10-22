@@ -20,8 +20,8 @@
 #' with the two values of 'dist_disc' defining the minimum and maximum distance
 #' from presences.
 #'
-#' #' @details Note that the time axis of the raster should be in `POSIXct` or
-#' `Date` format, or use `tstep="years"'. See [terra::time()] for details on how
+#' @details Note that the time axis of the raster should be in `POSIXct` or
+#' `Date` format, or use `tstep="years"`. See [terra::time()] for details on how
 #' to set the time axis.
 #' @param data An [`sf::sf`] data frame, or a data frame with coordinate
 #'   variables. These can be defined in `coords`, unless they have standard
