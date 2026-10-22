@@ -62,9 +62,16 @@ clamp_predictors.SpatRaster <- function(x, training, .col, use_na = FALSE) {
   training <- stats::na.omit(training)
   # subset to the variables in training
   extremes <- apply(training, 2, range, na.rm = TRUE)
+  # terra::clamp applies the limits by layer order, so we match them to the
+  # layers of x by name (layers that are not in training are not clamped)
+  lower <- rep(-Inf, terra::nlyr(x))
+  upper <- rep(Inf, terra::nlyr(x))
+  layer_index <- match(colnames(extremes), names(x))
+  lower[layer_index] <- extremes[1, ]
+  upper[layer_index] <- extremes[2, ]
   x <- terra::clamp(x,
-    lower = extremes[1, ],
-    upper = extremes[2, ],
+    lower = lower,
+    upper = upper,
     values = !use_na
   )
   return(x)
@@ -104,7 +111,8 @@ clamp_predictors.SpatRasterDataset <- function(x,
   x <- as.list(x)
   names(x) <- dataset_names
   # end of hack
-  for (i_name in names(x)) {
+  # only clamp the datasets that are present in training
+  for (i_name in intersect(names(x), colnames(extremes))) {
     x[[i_name]] <- terra::clamp(x[[i_name]],
       lower = extremes[1, i_name],
       upper = extremes[2, i_name],

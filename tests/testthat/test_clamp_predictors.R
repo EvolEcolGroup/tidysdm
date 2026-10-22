@@ -164,3 +164,59 @@ test_that("clamping_predictor works on SpatRasterDatasets", {
     "`x` is missing the following variables"
   )
 })
+
+test_that("clamp_predictors matches training variables to layers by name", {
+  x <- terra::rast(
+    nrows = 2, ncols = 2, nlyrs = 3,
+    vals = c(1:4, 101:104, 51:54)
+  )
+  names(x) <- c("a", "b", "c")
+  # training columns in a different order from the layers, and no "c"
+  training <- data.frame(b = c(102, 103), a = c(2, 3))
+  x_clamped <- clamp_predictors(x, training)
+  expect_equal(
+    as.vector(terra::values(x_clamped[["a"]])),
+    c(2, 2, 3, 3)
+  )
+  expect_equal(
+    as.vector(terra::values(x_clamped[["b"]])),
+    c(102, 102, 103, 103)
+  )
+  # layers that are not in training are left untouched
+  expect_equal(
+    as.vector(terra::values(x_clamped[["c"]])),
+    as.vector(terra::values(x[["c"]]))
+  )
+  # and the same when setting values outside the range to NA
+  x_clamped <- clamp_predictors(x, training, use_na = TRUE)
+  expect_equal(
+    as.vector(terra::values(x_clamped[["a"]])),
+    c(NA, 2, 3, NA)
+  )
+  expect_equal(
+    as.vector(terra::values(x_clamped[["c"]])),
+    as.vector(terra::values(x[["c"]]))
+  )
+})
+
+test_that("clamp_predictors only clamps datasets present in training", {
+  x <- terra::rast(
+    nrows = 2, ncols = 2, nlyrs = 3,
+    vals = c(1:4, 101:104, 51:54)
+  )
+  names(x) <- c("a", "b", "c")
+  x_sds <- terra::sds(x[["a"]], x[["b"]], x[["c"]])
+  names(x_sds) <- c("a", "b", "c")
+  training <- data.frame(b = c(102, 103), a = c(2, 3))
+  x_clamped <- clamp_predictors(x_sds, training)
+  expect_true(inherits(x_clamped, "SpatRasterDataset"))
+  expect_equal(as.vector(terra::values(x_clamped[["a"]])), c(2, 2, 3, 3))
+  expect_equal(
+    as.vector(terra::values(x_clamped[["b"]])),
+    c(102, 102, 103, 103)
+  )
+  expect_equal(
+    as.vector(terra::values(x_clamped[["c"]])),
+    as.vector(terra::values(x[["c"]]))
+  )
+})

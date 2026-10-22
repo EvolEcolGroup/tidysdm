@@ -40,6 +40,11 @@
   in `to_keep` is missing (previously only if all of them were), and checks
   the absolute correlation among the variables in `to_keep`, so that strong
   negative correlations are also caught
+* fix `clamp_predictors()` for `SpatRaster` objects, which applied the limits
+  from `training` by position rather than by name, giving wrong results if
+  the columns of `training` were in a different order from the layers of `x`,
+  or if `x` had additional layers; layers (or datasets of a
+  `SpatRasterDataset`) that are not in `training` are now left unchanged
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
