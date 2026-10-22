@@ -8,7 +8,10 @@
 #' By default, the response variable is extracted form the ensemble object. Note
 #' that, if the response variable is passed directly, `y` should be a factor
 #' with presence as a reference level. To check that `y` is formatted correctly,
-#' use [check_sdm_presence()]. For this reason, `predict_function_target_column`
+#' use [check_sdm_presence()]. The response is passed to DALEX as a numeric
+#' vector, with 1 for presences and 0 for absences (or background), as expected
+#' by the DALEX loss functions for classification (e.g. for computing variable
+#' importance). For this reason, `predict_function_target_column`
 #' uses by default the first column of the prediction output, which is assumed
 #' to be the presence class.
 #' @param model object - a model to be explained
@@ -17,8 +20,9 @@
 #'   Data should be passed without a target column (this shall be provided as
 #'   the \code{y} argument). NOTE: If the target variable is present in the
 #'   \code{data}, some of the functionalities may not work properly.
-#' @param y numeric vector with outputs/scores. If provided, then it shall have
-#'   the same size as \code{data}
+#' @param y a factor with the response, with presences as the reference level
+#'   (it will be converted to 1 for presences and 0 for absences). If provided,
+#'   then it shall have the same size as \code{data}
 #' @param predict_function function that takes two arguments: model and new data
 #'   and returns a numeric vector with predictions.   By default it is
 #'   \code{yhat}.
@@ -226,13 +230,12 @@ explain_simple_ensemble <- function(
     }
   }
   if (is.null(y)) {
-    y <-
-      as.numeric(
-        workflowsets::extract_mold(
-          model$workflow[[1]]
-        )$outcomes %>%
-          dplyr::pull()
-      )
+    y <- presence_to_binary(
+      workflowsets::extract_mold(
+        model$workflow[[1]]
+      )$outcomes %>%
+        dplyr::pull()
+    )
   } else {
     # ideally we would use check_sdm_presence to make sure that the response
     # variable is properly formatted (and not just a factor) the error message
@@ -241,7 +244,7 @@ explain_simple_ensemble <- function(
     if (!is.factor(y)) {
       stop("y should be a factor with presences as reference levels")
     } else {
-      y <- as.numeric(y)
+      y <- presence_to_binary(y)
     }
   }
   if (is.null(predict_function)) {
@@ -357,11 +360,12 @@ explain_simple_ens_by_wkflow <- function(
       data_train <- data
     }
     if (is.null(y)) {
-      data_response <-
-        (as.numeric(
-          workflowsets::extract_mold(model$workflow[[i]])$outcomes %>%
-            dplyr::pull()
-        ))
+      data_response <- presence_to_binary(
+        workflowsets::extract_mold(model$workflow[[i]])$outcomes %>%
+          dplyr::pull()
+      )
+    } else if (is.factor(y)) {
+      data_response <- presence_to_binary(y)
     } else {
       data_response <- y
     }
@@ -390,4 +394,11 @@ explain_simple_ens_by_wkflow <- function(
       )
   }
   return(explainer_list)
+}
+
+# convert a response factor into the numeric 0/1 vector expected by DALEX,
+# where 1 is the presence (the first level of the factor) and 0 is used for
+# absences or background points
+presence_to_binary <- function(x) {
+  as.numeric(x == levels(x)[1])
 }

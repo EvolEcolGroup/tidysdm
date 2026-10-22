@@ -139,3 +139,30 @@ test_that("explain_tidysdm works with response provided directly", {
     "y should be a factor with presences"
   )
 })
+
+test_that("explain_tidysdm codes the response as 1 for presences", {
+  truth <- workflows::extract_mold(
+    tidysdm::lacerta_ensemble$workflow[[1]]
+  )$outcomes[[1]]
+  test_explainer <- explain_tidysdm(tidysdm::lacerta_ensemble,
+    verbose = FALSE
+  )
+  expect_identical(sort(unique(test_explainer$y)), c(0, 1))
+  expect_identical(test_explainer$y, as.numeric(truth == "presence"))
+  # the DALEX loss used for variable importance should then match the AUC
+  # computed by yardstick
+  expect_equal(
+    DALEX::loss_one_minus_auc(test_explainer$y, test_explainer$y_hat),
+    1 - yardstick::roc_auc_vec(truth, test_explainer$y_hat)
+  )
+  # same coding when we explain by workflow
+  skip_if_not_installed("DALEXtra")
+  explainer_list <- explain_tidysdm(tidysdm::lacerta_ensemble,
+    by_workflow = TRUE, verbose = FALSE
+  )
+  expect_identical(explainer_list[[1]]$y, as.numeric(truth == "presence"))
+  explainer_list_y <- explain_tidysdm(tidysdm::lacerta_ensemble,
+    y = truth, by_workflow = TRUE, verbose = FALSE
+  )
+  expect_identical(explainer_list_y[[1]]$y, as.numeric(truth == "presence"))
+})

@@ -84,8 +84,9 @@ Data should be passed without a target column (this shall be provided as
 the \code{y} argument). NOTE: If the target variable is present in the
 \code{data}, some of the functionalities may not work properly.}
 
-\item{y}{numeric vector with outputs/scores. If provided, then it shall have
-the same size as \code{data}}
+\item{y}{a factor with the response, with presences as the reference level
+(it will be converted to 1 for presences and 0 for absences). If provided,
+then it shall have the same size as \code{data}}
 
 \item{predict_function}{function that takes two arguments: model and new data
 and returns a numeric vector with predictions.   By default it is
@@ -143,7 +144,10 @@ create explanations of the model.
 By default, the response variable is extracted form the ensemble object. Note
 that, if the response variable is passed directly, \code{y} should be a factor
 with presence as a reference level. To check that \code{y} is formatted correctly,
-use \code{\link[=check_sdm_presence]{check_sdm_presence()}}. For this reason, \code{predict_function_target_column}
+use \code{\link[=check_sdm_presence]{check_sdm_presence()}}. The response is passed to DALEX as a numeric
+vector, with 1 for presences and 0 for absences (or background), as expected
+by the DALEX loss functions for classification (e.g. for computing variable
+importance). For this reason, \code{predict_function_target_column}
 uses by default the first column of the prediction output, which is assumed
 to be the presence class.
 }

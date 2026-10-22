@@ -19,6 +19,9 @@
 * make sure that coords name is passed on by `thin_by_cell_time()`
 * extend support for all methods from `blockCV`, and allow the creation of
   an initial split from a `blockCV` object
+* fix `explain_tidysdm()` passing the response to DALEX as 1/2 rather than
+  1 (presence) / 0 (absence); this corrupted the default loss used by
+  `DALEX::model_parts()` (variable importance) and `DALEX::model_performance()`
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
