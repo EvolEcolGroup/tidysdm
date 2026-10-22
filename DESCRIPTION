@@ -31,7 +31,7 @@ Depends:
 Imports:
     DALEX,
     dials,
-    dplyr,
+    dplyr (>= 1.2.0),
     ggplot2,
     lubridate,
     maxnet,
