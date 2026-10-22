@@ -14,9 +14,9 @@
 #'   "none", only the individual member predictions are returned.
 #' @param class_fun the function to use to combine class predictions across
 #'   repeats. It can be "majority" (the class with the highest proportion across
-#'   repeats is predicted) or "prop" (the proportion of the "presence" class
-#'   across repeats is returned). This argument is only used if `type` is
-#'   "class".
+#'   repeats is predicted) or "prop" (the proportion of the presence class,
+#'   i.e. the first level of the response, across repeats is returned). This
+#'   argument is only used if `type` is "class".
 #' @param metric_thresh a vector of length 2 giving a metric and its threshold,
 #'   which will be used to prune which models in the ensemble will be used for
 #'   the prediction. The 'metrics' need to have been computed when the workflow
@@ -184,14 +184,14 @@ predict.repeat_ensemble <-
     } else { # if we are predicting classes
       class_levels <- levels(pred_all[[1]])
       # we assume that the class levels are the same across all predictions,
-      # so we can take them from the first column. We also assume that there is
-      # a "presence" class, and that all other classes are "absence" classes.
-      # We check that there is exactly one "absence" class level, and if not we
-      # throw an error.
-      absence_level <- setdiff(class_levels, "presence")
-      if (length(absence_level) != 1) {
-        stop("Expected exactly one non-'presence' class level")
+      # so we can take them from the first column. As for simple ensembles,
+      # the presence class is the first level, and the absence class the
+      # second one.
+      if (length(class_levels) != 2) {
+        stop("Expected exactly two class levels")
       }
+      presence_level <- class_levels[1]
+      absence_level <- class_levels[2]
       # if we have an aggregating function
       for (i_fun in fun) {
         # subset to columns for this function
@@ -200,7 +200,7 @@ predict.repeat_ensemble <-
           endsWith(names(pred_all), paste0(".", i_fun)),
           drop = FALSE
         ]
-        this_pred <- rowSums(pred_this_fun == "presence") /
+        this_pred <- rowSums(pred_this_fun == presence_level) /
           ncol(pred_this_fun)
 
 
@@ -208,7 +208,7 @@ predict.repeat_ensemble <-
         # observation, and then apply the class_fun to get the final prediction
         if (class_fun == "majority") {
           this_pred <- factor(
-            ifelse(this_pred > 0.5, "presence", absence_level),
+            ifelse(this_pred > 0.5, presence_level, absence_level),
             levels = class_levels
           )
         }

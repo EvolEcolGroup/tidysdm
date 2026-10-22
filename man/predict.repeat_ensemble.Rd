@@ -31,9 +31,9 @@ possible to combine multiple functions, except for "none". If it is set to
 
 \item{class_fun}{the function to use to combine class predictions across
 repeats. It can be "majority" (the class with the highest proportion across
-repeats is predicted) or "prop" (the proportion of the "presence" class
-across repeats is returned). This argument is only used if \code{type} is
-"class".}
+repeats is predicted) or "prop" (the proportion of the presence class,
+i.e. the first level of the response, across repeats is returned). This
+argument is only used if \code{type} is "class".}
 
 \item{metric_thresh}{a vector of length 2 giving a metric and its threshold,
 which will be used to prune which models in the ensemble will be used for

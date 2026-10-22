@@ -475,3 +475,32 @@ test_that("predict errors when all repeats excluded by metric_thresh", {
     "All repeats were excluded by metric_thresh"
   )
 })
+
+test_that("class predictions use the first level as presence", {
+  # two_class_res uses levels Class1 and Class2, rather than "presence"
+  test_ens <- simple_ensemble() %>%
+    add_member(two_class_res[1:3, ], metric = "roc_auc")
+  test_rep_ens <- repeat_ensemble() %>%
+    add_repeat(list(test_ens, test_ens))
+  new_data <- workflows::extract_mold(test_ens$workflow[[1]])$predictors
+  pred_class <- predict(test_rep_ens,
+    new_data = new_data,
+    type = "class", class_thresh = 0.5
+  )
+  # the repeats are identical, so we should get the same as the simple
+  # ensemble
+  pred_simple <- predict(test_ens,
+    new_data = new_data,
+    type = "class", class_thresh = 0.5
+  )
+  expect_identical(levels(pred_class$mean.majority), c("Class1", "Class2"))
+  expect_identical(pred_class$mean.majority, pred_simple$mean)
+  pred_prop <- predict(test_rep_ens,
+    new_data = new_data,
+    type = "class", class_thresh = 0.5, class_fun = "prop"
+  )
+  expect_identical(
+    pred_prop$mean.prop,
+    as.numeric(pred_simple$mean == "Class1")
+  )
+})

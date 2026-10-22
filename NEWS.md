@@ -71,6 +71,9 @@
   metrics as the `repeat_ensemble` (previously, only metrics that were all
   different were caught, and the same metrics in a different order gave an
   error)
+* class predictions from `predict.repeat_ensemble()` now treat the first level
+  of the response as the presence class (as for `simple_ensemble`), rather
+  than requiring it to be called "presence"
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
