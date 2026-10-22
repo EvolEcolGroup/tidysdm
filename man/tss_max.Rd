@@ -82,7 +82,7 @@ same as the number of groups.
 The True Skills Statistic, which is defined as
 }
 \details{
-\emph{sensitivity}+\emph{specificity} +1
+\emph{sensitivity} + \emph{specificity} - 1
 
 This function calibrates the probability threshold to classify presences to
 maximise the TSS.

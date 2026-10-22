@@ -2,7 +2,7 @@
 #'
 #' The True Skills Statistic, which is defined as
 #'
-#' *sensitivity*+*specificity* +1
+#' *sensitivity* + *specificity* - 1
 #'
 #' This function is a wrapper around [yardstick::j_index()], another name for
 #' the same quantity. Note that this function takes the classes as predicted by

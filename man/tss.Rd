@@ -61,7 +61,7 @@ same as the number of groups.
 The True Skills Statistic, which is defined as
 }
 \details{
-\emph{sensitivity}+\emph{specificity} +1
+\emph{sensitivity} + \emph{specificity} - 1
 
 This function is a wrapper around \code{\link[yardstick:j_index]{yardstick::j_index()}}, another name for
 the same quantity. Note that this function takes the classes as predicted by

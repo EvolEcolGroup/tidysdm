@@ -2,7 +2,7 @@
 #'
 #' The True Skills Statistic, which is defined as
 #'
-#' *sensitivity*+*specificity* +1
+#' *sensitivity* + *specificity* - 1
 #'
 #' This function calibrates the probability threshold to classify presences to
 #' maximise the TSS.
