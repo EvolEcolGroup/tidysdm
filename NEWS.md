@@ -102,6 +102,9 @@
 * require `dplyr` >= 1.2.0, which provides `dplyr::recode_values()` (used by
   `maxnet_fit()` and `autoplot()` for spatial initial splits)
 * improve the formatting of several error and warning messages
+* `dist_pres_vs_bg()` and `plot_pres_vs_bg()` now only use numeric variables
+  (as intended), rather than failing if other columns (e.g. factors or ids)
+  are present
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

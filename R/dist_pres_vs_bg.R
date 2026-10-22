@@ -9,6 +9,7 @@
 #'
 #' @param .data a `data.frame` (or derived object, such as `tibble`, or `sf`)
 #'   with values for the bioclimate variables for presences and background
+#'   (only numeric variables are used)
 #' @param .col the column containing the presences; it assumes presences to be
 #'   the first level of this factor
 #' @returns a name vector of distances
@@ -40,7 +41,8 @@ dist_pres_vs_bg <- function(
       .data <- .data %>% sf::st_drop_geometry()
     }
     # subset to only columns which are numeric and check for NAs
-    num_vars <- names(.data)[!names(.data) %in% .col]
+    num_vars <- names(.data)[vapply(.data, is.numeric, logical(1))]
+    num_vars <- num_vars[!num_vars %in% .col]
     if (any(is.na(.data[num_vars]))) {
       stop("NAs in the dataframe")
     }

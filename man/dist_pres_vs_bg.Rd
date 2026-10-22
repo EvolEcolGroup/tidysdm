@@ -9,7 +9,8 @@ dist_pres_vs_bg(.data, .col)
 }
 \arguments{
 \item{.data}{a \code{data.frame} (or derived object, such as \code{tibble}, or \code{sf})
-with values for the bioclimate variables for presences and background}
+with values for the bioclimate variables for presences and background
+(only numeric variables are used)}
 
 \item{.col}{the column containing the presences; it assumes presences to be
 the first level of this factor}

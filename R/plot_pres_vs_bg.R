@@ -5,7 +5,7 @@
 #'
 #' @param .data a [`data.frame`] (or derived object, such as [`tibble::tibble`],
 #'   or [`sf::st_sf`]) with values for the bioclimate variables for presences
-#'   and background
+#'   and background (only numeric variables are plotted)
 #' @param .col the column containing the presences; it assumes presences to be
 #'   the first level of this factor
 #' @returns a `patchwork` composite plot
@@ -34,7 +34,8 @@ plot_pres_vs_bg <- function(
     .data <- .data %>% sf::st_drop_geometry()
   }
   # subset to only columns which are numeric
-  num_vars <- names(.data)[!names(.data) %in% .col]
+  num_vars <- names(.data)[vapply(.data, is.numeric, logical(1))]
+  num_vars <- num_vars[!num_vars %in% .col]
   plot_list <- list()
   for (i_var in num_vars) {
     p <- ggplot2::ggplot(data = .data, ggplot2::aes(
