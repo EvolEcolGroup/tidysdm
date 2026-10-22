@@ -210,7 +210,7 @@ filter_collinear.matrix <- function(x,
 
   # check that to_keep is valid
   if (!is.null(to_keep)) {
-    if (!any(to_keep %in% colnames(x))) {
+    if (!all(to_keep %in% colnames(x))) {
       stop("to_keep includes variables that are not present in x")
     }
   }

@@ -32,9 +32,25 @@ test_that("filter collinear variables with cor_caret", {
     filter_collinear(lacerta_thin, to_keep = "blah"),
     "to_keep includes variables that are not present in x"
   )
+  # also if only some of the variables are missing
+  for (this_method in c("cor_caret", "vif_step", "vif_cor")) {
+    expect_error(
+      filter_collinear(lacerta_thin,
+        to_keep = c("bio01", "blah"),
+        method = this_method
+      ),
+      "to_keep includes variables that are not present in x"
+    )
+  }
   # error if forced variables are too correlated
   expect_error(
     filter_collinear(lacerta_thin, to_keep = c("bio01", "bio06")),
+    "some variables in"
+  )
+  # also if they are negatively correlated
+  lacerta_neg <- lacerta_thin %>% dplyr::mutate(bio06 = -bio06)
+  expect_error(
+    filter_collinear(lacerta_neg, to_keep = c("bio01", "bio06")),
     "some variables in"
   )
   # keep variables in if they are reasonable

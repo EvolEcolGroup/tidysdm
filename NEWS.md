@@ -36,6 +36,10 @@
   evaluate (e.g. when removing one of two collinear variables, or after
   removing the variables correlated with those in `to_keep`), or when all
   variables are in `to_keep`
+* `filter_collinear()` now gives an informative error if any of the variables
+  in `to_keep` is missing (previously only if all of them were), and checks
+  the absolute correlation among the variables in `to_keep`, so that strong
+  negative correlations are also caught
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
