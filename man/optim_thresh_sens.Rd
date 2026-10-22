@@ -18,6 +18,7 @@ the probability threshold for the event
 }
 \description{
 This is an internal function returns the threshold to turn probabilities into
-binary classes for a given target sensitivity
+binary classes for a given target sensitivity, i.e. the highest threshold
+for which the sensitivity is at least equal to the target.
 }
 \keyword{internal}

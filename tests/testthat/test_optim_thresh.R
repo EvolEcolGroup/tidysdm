@@ -42,3 +42,33 @@ test_that("optim_thresh gives an error for invalid metrics", {
     "event_level should be either"
   )
 })
+
+test_that("optim_thresh achieves the target sensitivity", {
+  truth <- factor(c(rep("presence", 10), rep("absence", 10)),
+    levels = c("presence", "absence")
+  )
+  estimate <- c(seq(0.55, 1, length.out = 10), seq(0, 0.45, length.out = 10))
+  presences <- estimate[truth == "presence"]
+  for (sens_target in c(0, 0.05, 0.1, 0.5, 0.85, 0.9, 0.95, 1)) {
+    this_thresh <- optim_thresh(truth, estimate,
+      metric = c("sensitivity", sens_target)
+    )
+    # the target sensitivity is achieved
+    expect_gte(mean(presences >= this_thresh), sens_target)
+    # and it would not be with any higher threshold (thresholds are rounded
+    # to 8 digits)
+    higher_thresh <- estimate[estimate > this_thresh + 1e-8]
+    for (i_thresh in higher_thresh) {
+      expect_lt(mean(presences >= i_thresh), sens_target)
+    }
+  }
+  # with very low targets, the threshold is the highest presence
+  expect_identical(
+    optim_thresh(truth, estimate, metric = c("sens", 0.05)),
+    max(presences)
+  )
+  expect_error(
+    optim_thresh(truth, estimate, metric = c("sens", 1.5)),
+    "should be a number between 0 and 1"
+  )
+})

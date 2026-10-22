@@ -29,7 +29,8 @@ the probability threshold for the event
 \description{
 This function returns the threshold to turn probabilities into binary classes
 whilst optimising a given metric. Currently available for \code{\link{tss_max}},
-\code{\link{kap_max}} and \code{sensitivity} (for which a target sensitivity is required).
+\code{\link{kap_max}} and \code{sensitivity} (for which a target sensitivity is required;
+the highest threshold that achieves at least that sensitivity is returned).
 }
 \examples{
 optim_thresh(two_class_example$truth, two_class_example$Class1,

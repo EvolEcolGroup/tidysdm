@@ -58,6 +58,11 @@
   metric was ranked first, i.e. the worst one for metrics such as AUC)
 * `optim_thresh()` (and thus `calib_class_thresh()`) now gives an error for an
   invalid `metric`, rather than returning the string "invalid metric"
+* fix the threshold for a target sensitivity (e.g. `class_thresh =
+  c("sensitivity", 0.9)`), which could give a sensitivity below the target,
+  and returned the lowest possible threshold (i.e. a sensitivity of 1) for
+  targets below the minimum achievable sensitivity; the highest threshold
+  that achieves at least the target sensitivity is now used
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

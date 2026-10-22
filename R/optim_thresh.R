@@ -2,7 +2,8 @@
 #'
 #' This function returns the threshold to turn probabilities into binary classes
 #' whilst optimising a given metric. Currently available for [`tss_max`],
-#' [`kap_max`] and `sensitivity` (for which a target sensitivity is required).
+#' [`kap_max`] and `sensitivity` (for which a target sensitivity is required;
+#' the highest threshold that achieves at least that sensitivity is returned).
 #' @param truth The column identifier for the true class results (that is a
 #'   factor). This should be an unquoted column name although this argument is
 #'   passed by expression and supports quasiquotation (you can unquote column
@@ -61,16 +62,22 @@ optim_thresh <- function(truth, estimate, metric, event_level = "first") {
 #' Find threshold that gives a target sensitivity
 #'
 #' This is an internal function returns the threshold to turn probabilities into
-#' binary classes for a given target sensitivity
+#' binary classes for a given target sensitivity, i.e. the highest threshold
+#' for which the sensitivity is at least equal to the target.
 #' @param presences Probabilities for presences.
 #' @param absences Provabilities for absences
 #' @param sens_target the target sensitivity
 #' @returns the probability threshold for the event
 #' @keywords internal
 optim_thresh_sens <- function(presences, absences, sens_target) {
+  if (is.na(sens_target) || sens_target < 0 || sens_target > 1) {
+    stop("the target sensitivity should be a number between 0 and 1")
+  }
   conf_matrix_df <- conf_matrix_df(presences, absences)
   sens <- (conf_matrix_df$tp / (conf_matrix_df$tp + conf_matrix_df$fn))
-  return(conf_matrix_df$thresh[which.min(sens > sens_target)])
+  # sensitivity decreases as the threshold increases, so we take the highest
+  # threshold that still achieves the target sensitivity
+  return(max(conf_matrix_df$thresh[sens >= sens_target]))
 }
 
 #' Find threshold that maximises TSS
