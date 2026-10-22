@@ -1,7 +1,8 @@
 #' Create a formula for gam
 #'
 #' This function takes the formula from a recipe, and turns numeric predictors
-#' into smooths with a given k. This formula can be passed to a workflow or
+#' into smooths with a given k (other predictors, such as factors, are included
+#' as linear terms). This formula can be passed to a workflow or
 #' workflow set when fitting a gam.
 #' @param object a [recipes::recipe], already trained
 #' @param k the *k* value for the smooth
@@ -22,17 +23,21 @@ gam_formula <- function(object, k = 10) {
       lapply(predictors_type, function(table) match("numeric", table))
     )
   )]
-  if (length(predictors_numeric) > 1) {
-    rhs <- paste0("s(", predictors, ", k = ", k, ")", collapse = " + ")
+  if (length(predictors_numeric) > 0) {
+    rhs <- paste0(
+      "s(", predictors_numeric, ", k = ", k, ")",
+      collapse = " + "
+    )
   } else {
     stop(
       "there are no numeric predictors; a gam does not really ",
       "make much sense..."
     )
   }
+  # other predictors are added as linear terms
   predictors_factor <- predictors[!predictors %in% predictors_numeric]
   if (length(predictors_factor)) {
-    rhs <- paste(rhs, predictors_factor, collapse = "+")
+    rhs <- paste(c(rhs, predictors_factor), collapse = " + ")
   }
   stats::formula(paste(form_resp(base_formula), "~", rhs))
 }
