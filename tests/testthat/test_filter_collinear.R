@@ -13,6 +13,18 @@ test_that("filter collinear variables with cor_caret", {
   )
   %in% vars_to_keep))
   expect_true(all(is.numeric(filter_collinear(lacerta_thin, names = FALSE))))
+  # indices should be consistent with the names
+  set.seed(123)
+  vars_to_keep_ids <- filter_collinear(lacerta_thin, names = FALSE)
+  var_names <- lacerta_thin %>%
+    sf::st_drop_geometry() %>%
+    dplyr::select(dplyr::where(is.numeric)) %>%
+    names()
+  expect_identical(var_names[vars_to_keep_ids], as.vector(vars_to_keep))
+  expect_identical(
+    var_names[attr(vars_to_keep_ids, "to_remove")],
+    attr(vars_to_keep, "to_remove")
+  )
   verbose_test <- suppressMessages(filter_collinear(lacerta_thin,
     verbose = TRUE
   ))

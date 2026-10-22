@@ -30,6 +30,8 @@
   whole ensemble
 * fix `check_splits_balance()`, which swapped the counts for the analysis and
   assessment sets (and for the training and testing sets of an initial split)
+* fix the `to_remove` attribute returned by `filter_collinear()` with
+  `names = FALSE`, which listed the indices of all variables
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
