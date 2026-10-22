@@ -11,6 +11,19 @@ test_that("check_split_balance correctly summarises splits", {
   initial_table <- check_splits_balance(lacerta_initial, class)
   expect_true(all(dim(initial_table) == c(1, 4)))
   expect_true(names(initial_table[1]) == "presence_test")
+  # the counts should match the labels
+  expect_identical(
+    unlist(initial_table[c("presence_test", "background_test")],
+      use.names = FALSE
+    ),
+    as.vector(table(testing(lacerta_initial)$class))
+  )
+  expect_identical(
+    unlist(initial_table[c("presence_train", "background_train")],
+      use.names = FALSE
+    ),
+    as.vector(table(training(lacerta_initial)$class))
+  )
   # check error if we give non existing column
   expect_error(
     check_splits_balance(lacerta_initial, blah),
@@ -28,6 +41,21 @@ test_that("check_split_balance correctly summarises splits", {
   cv_table <- check_splits_balance(lacerta_cv, class)
   expect_true(all(dim(cv_table) == c(5, 4)))
   expect_true(names(cv_table[1]) == "presence_assessment")
+  # the counts should match the labels
+  for (i in seq_len(nrow(lacerta_cv))) {
+    expect_identical(
+      unlist(cv_table[i, c("presence_assessment", "background_assessment")],
+        use.names = FALSE
+      ),
+      as.vector(table(assessment(lacerta_cv$splits[[i]])$class))
+    )
+    expect_identical(
+      unlist(cv_table[i, c("presence_analysis", "background_analysis")],
+        use.names = FALSE
+      ),
+      as.vector(table(analysis(lacerta_cv$splits[[i]])$class))
+    )
+  }
   # check error if we give non existing column
   expect_error(
     check_splits_balance(lacerta_cv, blah),

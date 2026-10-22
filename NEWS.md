@@ -28,6 +28,8 @@
 * `explain_tidysdm()` with `by_workflow = TRUE` now correctly detects recipes
   with steps (and asks for `data` to be provided), as it already did for the
   whole ensemble
+* fix `check_splits_balance()`, which swapped the counts for the analysis and
+  assessment sets (and for the training and testing sets of an initial split)
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

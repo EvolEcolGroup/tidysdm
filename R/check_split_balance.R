@@ -23,29 +23,32 @@ check_splits_balance <- function(splits, .col) {
     if (!(.col %in% names(splits$splits[[1]]$data))) {
       stop(".col should be a column in the data used to generate the splits")
     }
-    training_list <- lapply(splits$splits, function(x) {
+    analysis_list <- lapply(splits$splits, function(x) {
       table(
-        rsample::training(x) %>%
+        rsample::analysis(x) %>%
           sf::st_drop_geometry() %>%
           dplyr::pull(.col)
       )
     })
-    training_df <- do.call("rbind", training_list)
-    testing_list <- lapply(splits$splits, function(x) {
+    analysis_df <- do.call("rbind", analysis_list)
+    assessment_list <- lapply(splits$splits, function(x) {
       table(
-        rsample::testing(x) %>%
+        rsample::assessment(x) %>%
           sf::st_drop_geometry() %>%
           dplyr::pull(.col)
       )
     })
-    testing_df <- do.call("rbind", testing_list)
-    dimnames(testing_df)[[2]] <- paste0(dimnames(testing_df)[[2]], "_analysis")
-    dimnames(training_df)[[2]] <- paste0(
-      dimnames(training_df)[[2]],
+    assessment_df <- do.call("rbind", assessment_list)
+    dimnames(analysis_df)[[2]] <- paste0(
+      dimnames(analysis_df)[[2]],
+      "_analysis"
+    )
+    dimnames(assessment_df)[[2]] <- paste0(
+      dimnames(assessment_df)[[2]],
       "_assessment"
     )
 
-    balance_df <- dplyr::bind_cols(training_df, testing_df)
+    balance_df <- dplyr::bind_cols(assessment_df, analysis_df)
   } else if (inherits(splits, "rsplit")) {
     if (!(.col %in% names(splits$data))) {
       stop(".col should be a column in the data used to generate the splits")
@@ -61,7 +64,7 @@ check_splits_balance <- function(splits, .col) {
         dplyr::pull(.col)
     )
     # coerce to a df with only one row
-    balance_df <- as.data.frame(matrix(c(training_df, testing_df), nrow = 1))
+    balance_df <- as.data.frame(matrix(c(testing_df, training_df), nrow = 1))
     names(balance_df) <- c(
       paste0(names(testing_df), "_test"),
       paste0(names(training_df), "_train")
