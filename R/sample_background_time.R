@@ -172,10 +172,9 @@ sample_background_time <- function(data, raster,
   }
   if (return_pres) {
     if (inherits(data, "sf")) {
-      presences <- sf::st_set_geometry(
-        data.frame(geometry = data$geometry),
-        data$geometry
-      )
+      # use the geometry column name of the sampled points ("geometry"),
+      # whatever the name of the geometry column in data
+      presences <- sf::st_sf(geometry = sf::st_geometry(data))
     } else {
       presences <- data[, names(background[1:2])]
     }

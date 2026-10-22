@@ -182,6 +182,27 @@ test_that("sample_pseudoabs_time samples in the right places", {
   )
   expect_true(table(pa_random$class)[1] == 4)
   expect_true(table(pa_random$class)[2] == n_pt * table(pa_random$class)[1])
+
+  # works with sf objects, whatever the name of their geometry column
+  locations_sf <- sf::st_as_sf(locations,
+    coords = c("lon", "lat"),
+    crs = "EPSG:4326"
+  )
+  locations_sf_geom <- sf::st_set_geometry(locations_sf, "geom")
+  for (this_sf in list(locations_sf, locations_sf_geom)) {
+    pa_sf <- sample_pseudoabs_time(this_sf,
+      n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+      method = c("dist_min", buf_dist),
+      return_pres = TRUE
+    )
+    expect_true(inherits(pa_sf, "sf"))
+    expect_true(table(pa_sf$class)[1] == 4)
+    expect_true(table(pa_sf$class)[2] == n_pt * table(pa_sf$class)[1])
+    expect_identical(
+      sf::st_coordinates(pa_sf %>% dplyr::filter(class == "presence")),
+      sf::st_coordinates(locations_sf)
+    )
+  }
 })
 
 test_that("sample_pseudoabs_time works with stars", {

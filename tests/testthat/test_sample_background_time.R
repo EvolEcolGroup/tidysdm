@@ -194,6 +194,20 @@ test_that("sample_background_time returns the correct objects", {
   # this should be a sf with presences
   expect_true(inherits(bg_dist_max, "sf"))
   expect_true(all(levels(bg_dist_max$class) == c("presence", "background")))
+  # the name of the geometry column should not matter
+  locations_sf_geom <- sf::st_set_geometry(locations_sf, "geom")
+  set.seed(123)
+  bg_dist_max_geom <- sample_background_time(locations_sf_geom,
+    n = n_pt, raster = grid_raster, lubridate_fun = pastclim::ybp2date,
+    method = c("dist_max", buf_dist),
+    return_pres = TRUE
+  )
+  expect_true(inherits(bg_dist_max_geom, "sf"))
+  expect_identical(table(bg_dist_max_geom$class), table(bg_dist_max$class))
+  expect_identical(
+    sf::st_coordinates(bg_dist_max_geom %>% dplyr::filter(class == "presence")),
+    sf::st_coordinates(locations_sf)
+  )
 
   # test error with incorrect n_per_time_step
   expect_error(

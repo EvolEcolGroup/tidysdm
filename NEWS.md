@@ -77,6 +77,9 @@
 * `check_sdm_presence()` now evaluates `presence_level` as a normal argument,
   so that it can be passed as a variable (previously the name of the variable
   was used as the level)
+* fix `sample_background_time()` and `sample_pseudoabs_time()` with
+  `return_pres = TRUE` for `sf` objects whose geometry column is not called
+  "geometry"
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
