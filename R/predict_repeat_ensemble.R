@@ -105,7 +105,7 @@ predict.repeat_ensemble <-
         }, logical(1))
         if (!any(is_calib)) {
           stop(
-            "this ensemble needs to be first calibrated with this combination",
+            "this ensemble needs to be first calibrated with this combination ",
             "of class and metric thresholds before classes can ",
             "be produced\n",
             "use 'calib_class_thresh()' first"

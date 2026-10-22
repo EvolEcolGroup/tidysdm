@@ -49,7 +49,8 @@ blockcv2rsample <- function(x, data) {
   ))) {
     stop(
       "this function does not support this object type\n",
-      "only objects of class cv_spatial or cv_cluster are supported."
+      "only objects of class cv_spatial, cv_cluster, cv_nndm or cv_buffer ",
+      "are supported."
     )
   }
   if (inherits(data, "SpatialPointsDataFrame")) {

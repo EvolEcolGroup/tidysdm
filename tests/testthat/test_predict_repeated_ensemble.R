@@ -348,7 +348,7 @@ test_that("predict errors if not calibrated for this class_thresh", {
       fun = "mean",
       class_thresh = "tss_max"
     ),
-    "this ensemble needs to be first calibrated"
+    "calibrated with this combination of class and metric thresholds"
   )
 
   # calibrated for a different class_thresh

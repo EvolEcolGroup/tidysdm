@@ -215,7 +215,7 @@ test_that("sample_background_time returns the correct objects", {
       n = c(10, 20), raster = grid_raster, lubridate_fun = pastclim::ybp2date,
       method = c("dist_max", buf_dist),
       return_pres = TRUE
-    ), "length of 'n_per_time_step' should be the same"
+    ), "length of 'n_per_time_step' should be the same as the number of layers"
   )
 })
 

@@ -14,6 +14,11 @@ test_that("out_of_range_warning catches extreme values", {
     out_of_range_warning(times = times, time_steps = time_steps),
     "^Some dates are out of the range"
   )
+  # the problematic dates are listed
+  expect_warning(
+    out_of_range_warning(times = c(-5, 20, 1000), time_steps = time_steps),
+    "problematic dates are:\n-5, 1000$"
+  )
   # with a single time step, there is no range to check
   expect_null(out_of_range_warning(times = times, time_steps = 10))
 })

@@ -56,7 +56,7 @@ clamp_predictors.SpatRaster <- function(x, training, .col, use_na = FALSE) {
     stop(
       "`x` is missing the following variables (which are ",
       "present in `training`): ",
-      paste(names(training)[!names(training) %in% names(x)])
+      paste(names(training)[!names(training) %in% names(x)], collapse = ", ")
     )
   }
   training <- stats::na.omit(training)
@@ -96,10 +96,10 @@ clamp_predictors.SpatRasterDataset <- function(x,
 
   # check that all variables are present in the raster
   if (!all(names(training) %in% names(x))) {
-    stop("`x` is missing the following variables (which are ",
+    stop(
+      "`x` is missing the following variables (which are ",
       "present in `training`): ",
-      paste(names(training)[!names(training) %in% terra::varnames(x)]),
-      sep = ","
+      paste(names(training)[!names(training) %in% names(x)], collapse = ", ")
     )
   }
   training <- stats::na.omit(training)

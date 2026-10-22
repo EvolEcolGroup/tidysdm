@@ -101,6 +101,7 @@
   for `strings_as_factors` from `recipes` >= 1.3.0
 * require `dplyr` >= 1.2.0, which provides `dplyr::recode_values()` (used by
   `maxnet_fit()` and `autoplot()` for spatial initial splits)
+* improve the formatting of several error and warning messages
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

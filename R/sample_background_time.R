@@ -90,7 +90,7 @@ sample_background_time <- function(data, raster,
 
   if (length(n_per_time_step) != terra::nlyr(raster)) {
     stop(
-      "length of 'n_per_time_step' should be the same as the number",
+      "length of 'n_per_time_step' should be the same as the number ",
       "of layers in 'raster'"
     )
   }

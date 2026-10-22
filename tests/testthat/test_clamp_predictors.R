@@ -41,6 +41,11 @@ test_that("clamping_predictor works on SpatRasters", {
     clamp_predictors(climate_sub, training = lacerta_env),
     "`x` is missing the following"
   )
+  expect_error(
+    clamp_predictors(climate_sub, training = lacerta_env),
+    "present in `training`): bio06, bio15",
+    fixed = TRUE
+  )
   # error for missing class
   expect_error(
     clamp_predictors(lacerta_env, lacerta_env),
@@ -152,7 +157,7 @@ test_that("clamping_predictor works on SpatRasterDatasets", {
   climate_sub <- climate_full[[c("bio01", "bio10")]]
   expect_error(
     clamp_predictors(climate_sub, training = horses_env),
-    "`x` is missing the following"
+    "present in `training`): bio12$"
   )
   # now add a class column
   horses_env$class <- "presence"

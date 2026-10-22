@@ -47,7 +47,12 @@ out_of_range_warning <- function(times, time_steps) {
       "Some dates are out of the range of the available time series.\n",
       "They will be assigned to the most extreme time point available, but\n",
       "this might not make sense. The potentially problematic dates are:\n",
-      times[which((times < range_minmax[1]) | (times > range_minmax[2]))]
+      paste(
+        as.character(
+          times[(times < range_minmax[1]) | (times > range_minmax[2])]
+        ),
+        collapse = ", "
+      )
     )
   }
 }

@@ -85,6 +85,10 @@ test_that("blockcv2rsample conversion", {
     blockcv2rsample(pa_data, pa_data),
     "this function does not support this object type"
   )
+  expect_error(
+    blockcv2rsample(pa_data, pa_data),
+    "cv_spatial, cv_cluster, cv_nndm or cv_buffer are supported"
+  )
 
 
   # give error for deprecated object
