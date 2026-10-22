@@ -63,6 +63,10 @@
   and returned the lowest possible threshold (i.e. a sensitivity of 1) for
   targets below the minimum achievable sensitivity; the highest threshold
   that achieves at least the target sensitivity is now used
+* fix the `weighted_median` used to combine predictions in ensembles, which
+  returned multiple values (and thus a malformed prediction) when two values
+  were equally close to half of the cumulative weight, and differed from the
+  median when all weights were equal
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

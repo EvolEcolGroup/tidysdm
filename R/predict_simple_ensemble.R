@@ -212,11 +212,7 @@ predict.simple_ensemble <-
     }
 
     weighted_median <- function(x, w = metric_ens) { # nolint
-      w <- w[order(x)]
-      x <- x[order(x)]
-      prob <- cumsum(w) / sum(w)
-      ps <- which(abs(prob - .5) == min(abs(prob - .5)))
-      return(x[ps])
+      weighted_median_vec(x, w)
     }
 
     # if we have an aggregating function
@@ -255,6 +251,30 @@ predict.simple_ensemble <-
     return(pred_ensemble)
   }
 
+
+#' Weighted median
+#'
+#' The weighted median is the smallest value for which the cumulative weight
+#' is at least half of the total weight. If the cumulative weight is exactly
+#' half of the total for a value, the mean of that value and the next one is
+#' returned, so that with equal weights the result is the same as
+#' [stats::median()].
+#' @param x a vector of values
+#' @param w a vector of weights (of the same length as `x`)
+#' @returns the weighted median
+#' @keywords internal
+#' @noRd
+weighted_median_vec <- function(x, w) {
+  w <- w[order(x)]
+  x <- x[order(x)]
+  prob <- cumsum(w) / sum(w)
+  tol <- sqrt(.Machine$double.eps)
+  ps <- which(prob >= 0.5 - tol)[1]
+  if (abs(prob[ps] - 0.5) < tol && ps < length(x)) {
+    return(mean(x[c(ps, ps + 1)]))
+  }
+  x[ps]
+}
 
 #' simple function to convert probability to binary classes
 #' @param x a vector of probabilities

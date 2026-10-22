@@ -128,3 +128,36 @@ test_that("simple_ensemble prediction errors", {
   # expect no error if new_data is null
   expect_no_error(predict(test_ens, new_data = NULL))
 })
+
+test_that("weighted_median_vec computes the weighted median", {
+  # equal weights give the same result as the median
+  expect_identical(weighted_median_vec(c(3, 1, 2), rep(1, 3)), 2)
+  expect_identical(weighted_median_vec(c(4, 1, 3, 2), rep(0.7, 4)), 2.5)
+  expect_identical(weighted_median_vec(c(0.2, 0.6), c(0.8, 0.8)), 0.4)
+  # a heavy weight pulls the median towards its value
+  expect_identical(weighted_median_vec(c(1, 2, 3), c(1, 1, 5)), 3)
+  expect_identical(weighted_median_vec(c(1, 2, 3), c(5, 1, 1)), 1)
+  # ties in the cumulative weights give a single value
+  expect_identical(weighted_median_vec(c(1, 2, 3), c(1, 2, 1)), 2)
+  expect_length(weighted_median_vec(c(1, 2, 3, 4), c(1, 1, 1, 1)), 1)
+})
+
+test_that("predict with weighted_median returns one value per location", {
+  test_ens <- simple_ensemble() %>%
+    add_member(two_class_res[1:3, ], metric = "roc_auc")
+  # set the metrics so that cumulative weights are tied
+  test_ens$metrics <- mapply(function(x, w) {
+    x$mean[x$.metric == "roc_auc"] <- w
+    x
+  }, test_ens$metrics, c(0.25, 0.5, 0.25), SIMPLIFY = FALSE)
+  pred <- predict(test_ens, fun = c("median", "weighted_median"))
+  expect_identical(names(pred), c("median", "weighted_median"))
+  expect_true(all(is.finite(pred$weighted_median)))
+  # with equal weights, the weighted median is the median
+  test_ens$metrics <- lapply(test_ens$metrics, function(x) {
+    x$mean[x$.metric == "roc_auc"] <- 0.8
+    x
+  })
+  pred <- predict(test_ens[1:2, ], fun = c("median", "weighted_median"))
+  expect_equal(pred$weighted_median, pred$median)
+})
