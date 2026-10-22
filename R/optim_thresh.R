@@ -43,18 +43,17 @@ optim_thresh <- function(truth, estimate, metric, event_level = "first") {
   presences <- estimate[truth == pres_level]
   absences <- estimate[truth == absence_level]
 
-  if (length(metric) == 2) {
-    if (metric[1] %in% c("sensitivity", "sens")) {
-      optim_thresh_sens(presences, absences, as.numeric(metric[2]))
-    } else {
-      "invalid metric"
-    }
-  } else if (metric == "tss_max") {
+  if (length(metric) == 2 && metric[1] %in% c("sensitivity", "sens")) {
+    optim_thresh_sens(presences, absences, as.numeric(metric[2]))
+  } else if (identical(metric, "tss_max")) {
     optim_thresh_tss_max(presences, absences)
-  } else if (metric == "kap_max") {
+  } else if (identical(metric, "kap_max")) {
     optim_thresh_kap_max(presences, absences)
   } else {
-    "invalid metric"
+    stop(
+      "invalid metric: `metric` should be one of 'tss_max', 'kap_max', ",
+      "or 'sensitivity' with a target value (e.g. c('sensitivity', 0.8))"
+    )
   }
 }
 

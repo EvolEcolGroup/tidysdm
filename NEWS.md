@@ -56,6 +56,8 @@
 * `autoplot()` for `simple_ensemble` now gives rank 1 to the best workflow,
   as documented (previously the workflow with the lowest value of the
   metric was ranked first, i.e. the worst one for metrics such as AUC)
+* `optim_thresh()` (and thus `calib_class_thresh()`) now gives an error for an
+  invalid `metric`, rather than returning the string "invalid metric"
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
