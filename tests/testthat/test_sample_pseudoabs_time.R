@@ -293,3 +293,15 @@ test_that("sample_pseudoabs_time works with stars with POSIXct times", {
   )
   expect_identical(pa_stars, pa_raster)
 })
+
+test_that("sample_pseudoabs_time works with a single time step", {
+  this_raster <- terra::deepcopy(grid_raster[[1]])
+  pastclim::time_bp(this_raster) <- 2
+  set.seed(123)
+  pa_single <- sample_pseudoabs_time(locations[1:2, ],
+    n = n_pt, raster = this_raster,
+    lubridate_fun = pastclim::ybp2date,
+    return_pres = FALSE
+  )
+  expect_identical(nrow(pa_single), as.integer(2 * n_pt))
+})

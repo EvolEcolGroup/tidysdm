@@ -14,4 +14,6 @@ test_that("out_of_range_warning catches extreme values", {
     out_of_range_warning(times = times, time_steps = time_steps),
     "^Some dates are out of the range"
   )
+  # with a single time step, there is no range to check
+  expect_null(out_of_range_warning(times = times, time_steps = 10))
 })

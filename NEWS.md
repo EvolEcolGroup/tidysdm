@@ -84,6 +84,8 @@
   `sample_background_time()` (which previously lost the time axis unless
   times were POSIXct), `sample_pseudoabs_time()` and `thin_by_cell_time()`
   (which previously failed if times were POSIXct or Date)
+* fix the `*_time()` functions (e.g. `sample_pseudoabs_time()` and
+  `thin_by_cell_time()`) for rasters with a single time step
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

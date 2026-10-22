@@ -8,6 +8,11 @@
 #' @keywords internal
 
 out_of_range_warning <- function(times, time_steps) {
+  # with a single time step, there is no step to define a range, and all
+  # times will be assigned to that time step
+  if (length(time_steps) < 2) {
+    return(NULL)
+  }
   time_steps_ordered <- sort(time_steps)
   # create a range minimum maximum, which is the min and max values plus half
   # of the step to the next value within the range
