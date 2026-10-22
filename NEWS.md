@@ -80,6 +80,10 @@
 * fix `sample_background_time()` and `sample_pseudoabs_time()` with
   `return_pres = TRUE` for `sf` objects whose geometry column is not called
   "geometry"
+* consistent handling of the time axis of `stars` objects in
+  `sample_background_time()` (which previously lost the time axis unless
+  times were POSIXct), `sample_pseudoabs_time()` and `thin_by_cell_time()`
+  (which previously failed if times were POSIXct or Date)
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 

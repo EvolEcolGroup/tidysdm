@@ -260,3 +260,36 @@ test_that("sample_background_time treats time correctly", {
     ), "the units of the time axis of the raster are not defined"
   )
 })
+
+test_that("sample_background_time works with stars", {
+  # use a copy of the raster, as the time axis might have been changed above
+  this_raster <- terra::deepcopy(grid_raster)
+  pastclim::time_bp(this_raster) <- 0:4
+  grid_stars <- stars::st_as_stars(this_raster, as_attributes = FALSE)
+  d <- stars::st_dimensions(grid_stars)
+  d$time$refsys <- terra::timeInfo(this_raster)$step[1]
+  stars::st_dimensions(grid_stars) <- d
+  set.seed(123)
+  bg_stars <- sample_background_time(locations,
+    n = n_pt, raster = grid_stars, lubridate_fun = pastclim::ybp2date,
+    method = c("dist_max", buf_dist),
+    return_pres = FALSE
+  )
+  set.seed(123)
+  bg_raster <- sample_background_time(locations,
+    n = n_pt, raster = this_raster, lubridate_fun = pastclim::ybp2date,
+    method = c("dist_max", buf_dist),
+    return_pres = FALSE
+  )
+  expect_identical(bg_stars, bg_raster)
+  # stars with POSIXct times
+  terra::time(this_raster) <- lubridate::date_decimal(terra::time(this_raster))
+  grid_stars <- stars::st_as_stars(this_raster, as_attributes = FALSE)
+  set.seed(123)
+  bg_stars <- sample_background_time(locations,
+    n = n_pt, raster = grid_stars, lubridate_fun = pastclim::ybp2date,
+    method = c("dist_max", buf_dist),
+    return_pres = FALSE
+  )
+  expect_true(all(n_pt[3:5] == table(bg_stars$time_step)))
+})

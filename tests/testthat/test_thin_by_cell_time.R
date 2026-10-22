@@ -135,3 +135,17 @@ test_that("thin_by_cell_time works with stars", {
 # polys(terra::as.polygons(grid_raster))
 # points(vect(locations), col="red", cex=2)
 # nolint end
+
+test_that("thin_by_cell_time works with stars with POSIXct times", {
+  this_raster <- terra::deepcopy(grid_raster)
+  pastclim::time_bp(this_raster) <- c(0, -10)
+  terra::time(this_raster) <- lubridate::date_decimal(terra::time(this_raster))
+  grid_stars <- stars::st_as_stars(this_raster, as_attributes = FALSE)
+  set.seed(123)
+  thin_stars <- thin_by_cell_time(locations,
+    raster = grid_stars,
+    time_col = "time_bp",
+    lubridate_fun = pastclim::ybp2date
+  )
+  expect_true(setequal(thin_stars$id, c(1, 2, 4)))
+})

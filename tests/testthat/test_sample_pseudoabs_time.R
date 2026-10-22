@@ -271,3 +271,25 @@ test_that("sample_pseudoabs_time treats time correctly", {
     ), "the units of the time axis of the raster are not defined"
   )
 })
+
+test_that("sample_pseudoabs_time works with stars with POSIXct times", {
+  this_raster <- terra::deepcopy(grid_raster)
+  pastclim::time_bp(this_raster) <- 0:4
+  terra::time(this_raster) <- lubridate::date_decimal(terra::time(this_raster))
+  grid_stars <- stars::st_as_stars(this_raster, as_attributes = FALSE)
+  set.seed(123)
+  pa_stars <- sample_pseudoabs_time(locations,
+    n = n_pt, raster = grid_stars,
+    lubridate_fun = pastclim::ybp2date,
+    method = c("dist_min", buf_dist),
+    return_pres = FALSE
+  )
+  set.seed(123)
+  pa_raster <- sample_pseudoabs_time(locations,
+    n = n_pt, raster = this_raster,
+    lubridate_fun = pastclim::ybp2date,
+    method = c("dist_min", buf_dist),
+    return_pres = FALSE
+  )
+  expect_identical(pa_stars, pa_raster)
+})

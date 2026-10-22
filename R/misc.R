@@ -22,3 +22,23 @@ expand_grid <- function(grid_box, expansion = 0.00001) {
   grid_box[4] <- grid_box[4] + abs(grid_box[4] * expansion)
   grid_box
 }
+
+# convert a stars object with a time dimension into a SpatRaster, preserving
+# the time information. Times stored as POSIXct or Date are kept as they are;
+# for other times (e.g. years), the refsys of the time dimension of the stars
+# object should give the time step used by terra (e.g. "years")
+stars_to_spatraster_time <- function(x) {
+  x_dims <- stars::st_dimensions(x)
+  raster <- as(x, "SpatRaster")
+  terra_tsteps <- c("seconds", "days", "months", "years", "yearmonths")
+  if ("time" %in% names(x_dims)) {
+    time_steps <- stars::st_get_dimension_values(x, "time")
+    time_refsys <- x_dims$time$refsys
+    if (inherits(time_steps, c("POSIXct", "Date"))) {
+      terra::time(raster) <- time_steps
+    } else if (isTRUE(time_refsys %in% terra_tsteps)) {
+      terra::time(raster, tstep = time_refsys) <- time_steps
+    }
+  }
+  raster
+}

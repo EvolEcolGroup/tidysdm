@@ -86,7 +86,7 @@ sample_background_time <- function(data, raster,
     raster <- raster[[1]]
   }
 
-  if (inherits(raster, "stars")) raster <- as(raster, "SpatRaster")
+  if (inherits(raster, "stars")) raster <- stars_to_spatraster_time(raster)
 
   if (length(n_per_time_step) != terra::nlyr(raster)) {
     stop(
