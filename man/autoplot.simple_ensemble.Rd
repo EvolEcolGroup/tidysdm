@@ -16,8 +16,8 @@
 \item{object}{A \code{\link{simple_ensemble}} whose elements have results.}
 
 \item{rank_metric}{A character string for which metric should be used to rank
-the results. If none is given, the first metric in the metric set is used
-(after filtering by the \code{metric} option).}
+the results. If none is given, the metric used to create the
+\code{\link{simple_ensemble}} is used.}
 
 \item{metric}{A character vector for which metrics (apart from \code{rank_metric})
 to be included in the visualization. If NULL (the default), all available
@@ -48,7 +48,7 @@ provided; otherwise the metric used to create the \code{\link{simple_ensemble}} 
 be used).
 
 If multiple resamples are used, confidence bounds are shown for each result
-(95\% confidence, by default).
+(90\% confidence, by default).
 }
 \examples{
 \dontshow{if (rlang::is_installed("earth")) withAutoprint(\{ # examplesIf}

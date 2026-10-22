@@ -5,8 +5,8 @@
 #'
 #' @param object A [`simple_ensemble`] whose elements have results.
 #' @param rank_metric A character string for which metric should be used to rank
-#' the results. If none is given, the first metric in the metric set is used
-#' (after filtering by the `metric` option).
+#' the results. If none is given, the metric used to create the
+#' [`simple_ensemble`] is used.
 #' @param metric A character vector for which metrics (apart from `rank_metric`)
 #' to be included in the visualization. If NULL (the default), all available
 #' metrics will be plotted
@@ -26,7 +26,7 @@
 #' be used).
 #'
 #' If multiple resamples are used, confidence bounds are shown for each result
-#' (95% confidence, by default).
+#' (90% confidence, by default).
 #' @returns A ggplot object.
 #' @examplesIf rlang::is_installed("earth")
 #' # we use the two_class_example from `workflowsets`
@@ -68,10 +68,14 @@ autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
   } else {
     rank_metric <- attr(object, "best_metric")
   }
-  # rank models by the metric of choice
+  # rank models by the metric of choice (a rank of one being the best)
   res_rank_metric <- res %>%
-    dplyr::filter(.data$.metric == rank_metric) %>%
-    dplyr::arrange(mean)
+    dplyr::filter(.data$.metric == rank_metric)
+  if (metric_direction(rank_metric) == "minimize") {
+    res_rank_metric <- res_rank_metric %>% dplyr::arrange(mean)
+  } else {
+    res_rank_metric <- res_rank_metric %>% dplyr::arrange(dplyr::desc(mean))
+  }
 
   res$rank <- seq_len(nrow(res_rank_metric))[match(
     res$wflow_id,
@@ -120,4 +124,20 @@ autoplot.simple_ensemble <- function(object, rank_metric = NULL, metric = NULL,
   }
 
   p
+}
+
+# get the direction ("maximize" or "minimize") of a metric from its name, by
+# looking for the metric function in tidysdm and yardstick; if the metric is
+# not found, we assume that it should be maximised (as for most SDM metrics)
+metric_direction <- function(metric_name) {
+  for (pkg in c("tidysdm", "yardstick")) {
+    pkg_ns <- asNamespace(pkg)
+    if (exists(metric_name, envir = pkg_ns, inherits = FALSE)) {
+      direction <- attr(get(metric_name, envir = pkg_ns), "direction")
+      if (!is.null(direction)) {
+        return(direction)
+      }
+    }
+  }
+  "maximize"
 }

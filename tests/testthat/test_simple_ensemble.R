@@ -69,3 +69,29 @@ test_that("add_member to empty simple ensemble", {
       add_member(two_class_res[1:3, ], metric = "boyce_cont")
   )
 })
+
+test_that("autoplot ranks the best workflow first", {
+  test_ens <- simple_ensemble() %>%
+    add_member(two_class_res, metric = "roc_auc")
+  p <- autoplot(test_ens)
+  rank_data <- p$data %>%
+    dplyr::filter(.data$.metric == "roc_auc") %>%
+    dplyr::arrange(.data$rank)
+  # roc_auc should be maximised, so the best model has the highest value
+  expect_identical(rank_data$rank, seq_len(nrow(test_ens)))
+  expect_false(is.unsorted(rev(rank_data$mean)))
+  expect_identical(rank_data$mean[1], max(rank_data$mean))
+  # for a metric that should be minimised, the best model has the lowest value
+  test_ens_min <- test_ens
+  test_ens_min$metrics <- lapply(test_ens_min$metrics, function(x) {
+    x$.metric[x$.metric == "accuracy"] <- "mn_log_loss"
+    x
+  })
+  attr(test_ens_min, "metrics") <- c("mn_log_loss", "roc_auc")
+  p <- autoplot(test_ens_min, rank_metric = "mn_log_loss")
+  rank_data <- p$data %>%
+    dplyr::filter(.data$.metric == "mn_log_loss") %>%
+    dplyr::arrange(.data$rank)
+  expect_false(is.unsorted(rank_data$mean))
+  expect_identical(rank_data$mean[1], min(rank_data$mean))
+})
