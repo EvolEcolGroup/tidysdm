@@ -43,6 +43,16 @@ test_that("sdm_recipe_sf", {
     lacerta_rec_prep <- prep(lacerta_rec, training = lacerta_thin)
   )
   expect_true(recipes::fully_trained(lacerta_rec_prep))
+  # verbose is passed on to prep.recipe
+  suppressWarnings(expect_output(
+    prep(lacerta_rec %>% step_normalize(all_numeric_predictors()),
+      verbose = TRUE
+    ),
+    "step normalize"
+  ))
+  suppressWarnings(expect_silent(
+    prep(lacerta_rec %>% step_normalize(all_numeric_predictors()))
+  ))
 
   ## now bake
   expect_true(

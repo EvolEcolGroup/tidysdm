@@ -28,7 +28,7 @@ prep.spatial_recipe <- function(x, training = NULL,
   NextMethod(
     generic = "prep",
     x = x, training = sf::st_drop_geometry(training),
-    fresh = fresh, verbose = FALSE,
+    fresh = fresh, verbose = verbose,
     retain = retain, log_changes = log_changes,
     strings_as_factors = strings_as_factors, ...
   )

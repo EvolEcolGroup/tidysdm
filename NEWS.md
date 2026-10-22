@@ -93,6 +93,8 @@
 * `sample_background()` and `sample_pseudoabs()` no longer warn that there are
   fewer available cells than requested when the number of available cells is
   exactly `n`
+* the `verbose` argument of `prep()` is now passed on for `spatial_recipe`
+  objects (it was always set to `FALSE`)
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
