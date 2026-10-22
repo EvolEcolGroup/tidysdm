@@ -105,3 +105,22 @@ test_that("thin_by_dist_time respects the projection", {
   # expect this to be identical to the great circle method
   expect_equal(horses_thin_gc$time_bp, horses_thin_gc_ll$time_bp)
 })
+
+test_that("thin_by_dist_time measures intervals in days", {
+  # two points close in space, half a day apart; the second pair is close in
+  # space but 2.5 days apart
+  locs <- data.frame(
+    lon = c(0, 0.001, 10, 10.001),
+    lat = c(0, 0, 0, 0),
+    time = lubridate::as_datetime(c(
+      "1970-01-01 00:00:00", "1970-01-01 12:00:00",
+      "1980-01-01 00:00:00", "1980-01-03 12:00:00"
+    ))
+  )
+  set.seed(123)
+  locs_thin <- thin_by_dist_time(locs, dist_min = 1000, interval_min = 1)
+  # the first two are within 1 day of each other, so only one is kept
+  expect_identical(nrow(locs_thin), 3L)
+  expect_identical(sum(locs_thin$lon < 1), 1L)
+  expect_true(all(c(10, 10.001) %in% locs_thin$lon))
+})

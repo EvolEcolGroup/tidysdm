@@ -70,7 +70,11 @@ thin_by_dist_time <- function(data, dist_min, interval_min, coords = NULL,
   if (!inherits(time_lub, "POSIXct")) {
     stop("time is not a date (or cannot be coerced to one)")
   }
-  time_in_days <- as.numeric(time_lub - lubridate::origin)
+  # set the units explicitly, as the automatic units of a difftime depend on
+  # the values (e.g. seconds for times close to the origin)
+  time_in_days <- as.numeric(
+    difftime(time_lub, lubridate::origin, units = "days")
+  )
   # compute an interval matrix (analogous to the dist_mat, but for time)
   interval_mat <- as.matrix(stats::dist(time_in_days,
     diag = TRUE,

@@ -86,6 +86,8 @@
   (which previously failed if times were POSIXct or Date)
 * fix the `*_time()` functions (e.g. `sample_pseudoabs_time()` and
   `thin_by_cell_time()`) for rasters with a single time step
+* fix `thin_by_dist_time()` when times are within a day of 1970-01-01, for
+  which time intervals were computed in seconds rather than days
 
 # `tidysdm` 1.0.4
 * improve documentation of `calib_class_threshold` and implement 
