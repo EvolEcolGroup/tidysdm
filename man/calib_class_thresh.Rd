@@ -67,7 +67,8 @@ test_ens <- calib_class_thresh(test_ens, class_thresh = c("sens", 0.9))
 collect_class_thresh(test_ens)
 # for a repeat ensemble
 rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
-  class_thresh = "tss_max")
+  class_thresh = "tss_max"
+)
 collect_class_thresh(rep_ens_calib)
 \dontshow{\}) # examplesIf}
 }

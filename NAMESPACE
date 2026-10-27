@@ -139,6 +139,8 @@ importFrom(DALEX,model_info)
 importFrom(dplyr,"%>%")
 importFrom(ggplot2,autoplot)
 importFrom(graphics,text)
-importFrom(rlang,":=")
-importFrom(rlang,.data)
+importFrom(rlang,
+  ":=",
+  .data
+)
 importFrom(tune,collect_metrics)
