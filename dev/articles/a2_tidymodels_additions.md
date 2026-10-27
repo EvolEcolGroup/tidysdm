@@ -24,13 +24,13 @@ Let’s create a factor variable with 3 levels based on altitude.
 library(tidysdm)
 #> Loading required package: tidymodels
 #> ── Attaching packages ────────────────────────────────────── tidymodels 1.5.0 ──
-#> ✔ broom        1.0.13     ✔ recipes      1.3.3 
+#> ✔ broom        1.0.13     ✔ recipes      1.4.0 
 #> ✔ dials        1.4.4      ✔ rsample      1.3.2 
 #> ✔ dplyr        1.2.1      ✔ tailor       0.1.0 
 #> ✔ ggplot2      4.0.3      ✔ tidyr        1.3.2 
 #> ✔ infer        1.1.0      ✔ tune         2.1.0 
-#> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
-#> ✔ parsnip      1.6.0      ✔ workflowsets 1.1.1 
+#> ✔ modeldata    1.6.0      ✔ workflows    1.3.0 
+#> ✔ parsnip      1.6.1      ✔ workflowsets 1.1.1 
 #> ✔ purrr        1.2.2      ✔ yardstick    1.4.0
 #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 #> ✖ purrr::discard() masks scales::discard()
@@ -167,10 +167,10 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (877ms)
+#> ✔ 1 of 2 resampling: default_glm (842ms)
 #> i 2 of 2 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 2 tuning:     default_rf (1.9s)
+#> ✔ 2 of 2 tuning:     default_rf (1.8s)
 # fit the ensemble
 lacerta_ensemble <- simple_ensemble() %>%
   add_member(lacerta_models, metric = "boyce_cont")
@@ -233,7 +233,7 @@ climate_present$topography <- terra::classify(climate_present$topography,
   brackets = TRUE
 )
 library(terra)
-#> terra 1.9.34
+#> terra 1.9.50
 #> 
 #> Attaching package: 'terra'
 #> The following object is masked from 'package:tidyr':
@@ -328,7 +328,7 @@ the ensemble:
 ``` r
 
 library(DALEX)
-#> Welcome to DALEX (version: 2.5.3).
+#> Welcome to DALEX (version: 2.5.4).
 #> Find examples and detailed introduction at: http://ema.drwhy.ai/
 #> Additional features will be available after installation of: ggpubr.
 #> Use 'install_dependencies()' to get all suggested dependencies
@@ -594,14 +594,14 @@ lacerta_models <-
 #> generated.
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 3 resampling: uncor_glm
-#> ✔ 1 of 3 resampling: uncor_glm (331ms)
+#> ✔ 1 of 3 resampling: uncor_glm (298ms)
 #> i 2 of 3 tuning:     all_rf
 #> ! No improvement for 10 iterations; returning current results.
 #> ✔ 2 of 3 tuning:     all_rf (15.7s)
 #> i 3 of 3 tuning:     uncor_svm
 #> maximum number of iterations reached 0.004185637 -0.004098871
 #> ! No improvement for 10 iterations; returning current results.
-#> ✔ 3 of 3 tuning:     uncor_svm (16.6s)
+#> ✔ 3 of 3 tuning:     uncor_svm (16.9s)
 ```
 
 We can have a look at the performance of our models with:
@@ -780,20 +780,20 @@ lacerta_models <-
 #> There were issues with some computations   A: x1
 #> There were issues with some computations   A: x2
 #> 
-#> ✔ 1 of 4 resampling: default_glm (529ms)
+#> ✔ 1 of 4 resampling: default_glm (502ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 4 tuning:     default_rf (3.4s)
+#> ✔ 2 of 4 tuning:     default_rf (3.3s)
 #> i 3 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
 #> There were issues with some computations   A: x2
-#> There were issues with some computations   A: x3
+#> There were issues with some computations   A: x4
 #> There were issues with some computations   A: x5
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 3 of 4 tuning:     default_gbm (10.6s)
+#> ✔ 3 of 4 tuning:     default_gbm (11.2s)
 #> i 4 of 4 tuning:     default_maxent
 #> ✔ 4 of 4 tuning:     default_maxent (2.2s)
 

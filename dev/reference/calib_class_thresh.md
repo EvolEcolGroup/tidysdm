@@ -96,7 +96,8 @@ collect_class_thresh(test_ens)
 #> 12 <chr [2]>    <NULL>        weighted_median       0.310
 # for a repeat ensemble
 rep_ens_calib <- calib_class_thresh(lacerta_rep_ens,
-  class_thresh = "tss_max")
+  class_thresh = "tss_max"
+)
 collect_class_thresh(rep_ens_calib)
 #> $rep_01
 #> # A tibble: 4 × 4

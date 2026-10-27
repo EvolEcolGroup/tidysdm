@@ -100,21 +100,13 @@ be very large!).</p>
 <span class="r-in"><span>  selection <span class="op">=</span> <span class="st">"random"</span>, <span class="co"># random blocks-to-fold</span></span></span>
 <span class="r-in"><span>  iteration <span class="op">=</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   train_0 train_1 test_0 test_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     209     183     48     60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     216     175     41     68</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     198     195     59     48</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     188     212     69     31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     217     207     40     36</span>
-<span class="r-plt img"><img src="blockcv2rsample-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">sb1_rsample</span> <span class="op">&lt;-</span> <span class="fu">blockcv2rsample</span><span class="op">(</span><span class="va">sb1</span>, <span class="va">pa_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">sb1_rsample</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "cv_spatial"   "spatial_rset" "rset"         "tbl_df"       "tbl"         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [6] "data.frame"  </span>
 <span class="r-in"><span><span class="fu">autoplot</span><span class="op">(</span><span class="va">sb1_rsample</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="blockcv2rsample-2.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="blockcv2rsample-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

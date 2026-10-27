@@ -60,5 +60,8 @@ names(s) <- c("elevation", "inverse", "sqrt")
 terra::pairs(s)
 
 s_stars <- stars::st_as_stars(s, as_attributes = TRUE)
+#> Registered S3 method overwritten by 'stars':
+#>   method                  from
+#>   st_interpolate_aw.stars sf  
 pairs(s_stars)
 ```

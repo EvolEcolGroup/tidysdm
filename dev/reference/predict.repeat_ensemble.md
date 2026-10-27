@@ -65,7 +65,12 @@ predict(
   can be a number (between 0 and 1), or a character metric (currently
   "tss_max" or "sensitivity"). For sensitivity, an additional target
   value is passed along as a second element of a vector, e.g.
-  c("sensitivity",0.8).
+  c("sensitivity",0.8). A numeric threshold does not require
+  calibration; a metric requires the ensemble to have been calibrated
+  with
+  [`calib_class_thresh()`](https://evolecolgroup.github.io/tidysdm/dev/reference/calib_class_thresh.md)
+  for the same `class_thresh` and `metric_thresh`. Repeats with no
+  models passing `metric_thresh` are skipped (with a warning).
 
 - by_repeat:
 

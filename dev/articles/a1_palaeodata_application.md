@@ -16,13 +16,13 @@ We first load `tidysdm`:
 library(tidysdm)
 #> Loading required package: tidymodels
 #> ── Attaching packages ────────────────────────────────────── tidymodels 1.5.0 ──
-#> ✔ broom        1.0.13     ✔ recipes      1.3.3 
+#> ✔ broom        1.0.13     ✔ recipes      1.4.0 
 #> ✔ dials        1.4.4      ✔ rsample      1.3.2 
 #> ✔ dplyr        1.2.1      ✔ tailor       0.1.0 
 #> ✔ ggplot2      4.0.3      ✔ tidyr        1.3.2 
 #> ✔ infer        1.1.0      ✔ tune         2.1.0 
-#> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
-#> ✔ parsnip      1.6.0      ✔ workflowsets 1.1.1 
+#> ✔ modeldata    1.6.0      ✔ workflows    1.3.0 
+#> ✔ parsnip      1.6.1      ✔ workflowsets 1.1.1 
 #> ✔ purrr        1.2.2      ✔ yardstick    1.4.0
 #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 #> ✖ purrr::discard() masks scales::discard()
@@ -72,7 +72,7 @@ As a background to our presences, we will use the land mask for the
 present, taken from `pastclim`, and cut to cover only Europe:
 
     #> Loading required package: terra
-    #> terra 1.9.34
+    #> terra 1.9.50
     #> 
     #> Attaching package: 'terra'
     #> The following object is masked from 'package:tidyr':
@@ -341,10 +341,10 @@ horses_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (474ms)
+#> ✔ 1 of 4 resampling: default_glm (430ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 4 resampling: default_gam
-#> ✔ 2 of 4 resampling: default_gam (747ms)
+#> ✔ 2 of 4 resampling: default_gam (648ms)
 #> i 3 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> ✔ 3 of 4 tuning:     default_rf (2.8s)
@@ -354,10 +354,10 @@ horses_models <-
 #> There were issues with some computations   A: x1
 #> There were issues with some computations   A: x2
 #> There were issues with some computations   A: x3
-#> There were issues with some computations   A: x5
+#> There were issues with some computations   A: x4
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 4 of 4 tuning:     default_gbm (11.3s)
+#> ✔ 4 of 4 tuning:     default_gbm (11.6s)
 ```
 
 Note that `workflow_set` correctly detects that we have no tuning

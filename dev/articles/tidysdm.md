@@ -29,13 +29,13 @@ associated packages necessary to fit models:
 library(tidysdm)
 #> Loading required package: tidymodels
 #> ── Attaching packages ────────────────────────────────────── tidymodels 1.5.0 ──
-#> ✔ broom        1.0.13     ✔ recipes      1.3.3 
+#> ✔ broom        1.0.13     ✔ recipes      1.4.0 
 #> ✔ dials        1.4.4      ✔ rsample      1.3.2 
 #> ✔ dplyr        1.2.1      ✔ tailor       0.1.0 
 #> ✔ ggplot2      4.0.3      ✔ tidyr        1.3.2 
 #> ✔ infer        1.1.0      ✔ tune         2.1.0 
-#> ✔ modeldata    1.5.1      ✔ workflows    1.3.0 
-#> ✔ parsnip      1.6.0      ✔ workflowsets 1.1.1 
+#> ✔ modeldata    1.6.0      ✔ workflows    1.3.0 
+#> ✔ parsnip      1.6.1      ✔ workflowsets 1.1.1 
 #> ✔ purrr        1.2.2      ✔ yardstick    1.4.0
 #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 #> ✖ purrr::discard() masks scales::discard()
@@ -151,7 +151,7 @@ land_mask <- mask(land_mask, iberia_poly)
 ```
 
     #> Loading required package: terra
-    #> terra 1.9.34
+    #> terra 1.9.50
     #> 
     #> Attaching package: 'terra'
     #> The following object is masked from 'package:tidyr':
@@ -719,7 +719,7 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (516ms)
+#> ✔ 1 of 4 resampling: default_glm (435ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> ✔ 2 of 4 tuning:     default_rf (2.5s)
@@ -731,7 +731,7 @@ lacerta_models <-
 #> There were issues with some computations   A: x5
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 3 of 4 tuning:     default_gbm (7.8s)
+#> ✔ 3 of 4 tuning:     default_gbm (8.3s)
 #> i 4 of 4 tuning:     default_maxent
 #> ✔ 4 of 4 tuning:     default_maxent (2s)
 ```
@@ -794,7 +794,7 @@ lacerta_ensemble %>% collect_metrics()
 #>    wflow_id       .metric     mean std_err     n
 #>    <chr>          <chr>      <dbl>   <dbl> <int>
 #>  1 default_glm    boyce_cont 0.443  0.0899     5
-#>  2 default_glm    roc_auc    0.786  0.0392     5
+#>  2 default_glm    roc_auc    0.785  0.0391     5
 #>  3 default_glm    tss_max    0.556  0.0745     5
 #>  4 default_rf     boyce_cont 0.600  0.0567     5
 #>  5 default_rf     roc_auc    0.805  0.0449     5
@@ -1159,19 +1159,19 @@ for (i_repeat in 1:3) {
 }
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (452ms)
+#> ✔ 1 of 2 resampling: default_glm (405ms)
 #> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
+#> ✔ 2 of 2 tuning:     default_maxent (2s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (452ms)
+#> ✔ 1 of 2 resampling: default_glm (411ms)
 #> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
+#> ✔ 2 of 2 tuning:     default_maxent (2s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (459ms)
+#> ✔ 1 of 2 resampling: default_glm (415ms)
 #> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
+#> ✔ 2 of 2 tuning:     default_maxent (2s)
 ```
 
 Now we can create a `repeat_ensemble` from the list:

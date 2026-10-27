@@ -47,3 +47,17 @@ add_repeat(x, rep, ...)
 a
 [repeat_ensemble](https://evolecolgroup.github.io/tidysdm/dev/reference/repeat_ensemble.md)
 with additional repeat(s)
+
+## Details
+
+Calibrations of class thresholds (see
+[`calib_class_thresh()`](https://evolecolgroup.github.io/tidysdm/dev/reference/calib_class_thresh.md))
+are not carried over when adding repeats: any calibration stored in `x`
+is removed (with a warning), as is any calibration of the
+[`simple_ensemble`](https://evolecolgroup.github.io/tidysdm/dev/reference/simple_ensemble.md)
+objects being added. Use
+[`calib_class_thresh()`](https://evolecolgroup.github.io/tidysdm/dev/reference/calib_class_thresh.md)
+on the resulting
+[repeat_ensemble](https://evolecolgroup.github.io/tidysdm/dev/reference/repeat_ensemble.md)
+once all repeats have been added to ensure that calibration is
+consistent.
