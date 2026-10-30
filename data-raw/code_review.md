@@ -267,13 +267,14 @@ testthat::test_file("tests/testthat/test_<name>.R")
   - *Problem:* `difftime` chooses its units automatically, giving seconds
     near 1970-01-01, while `interval_min` is in days.
   - *Test:* points half a day apart near the origin are thinned.
-- [ ] **#23 Low: [`df0d7d5`](https://github.com/EvolEcolGroup/tidysdm/commit/df0d7d57da09bbfcf499a52007b2f088af2e985c) Accept namespaced strategies in `spatial_initial_split()`**
+- [X] TODO **#23 Low: [`df0d7d5`](https://github.com/EvolEcolGroup/tidysdm/commit/df0d7d57da09bbfcf499a52007b2f088af2e985c) Accept namespaced strategies in `spatial_initial_split()`**
   - *Problem:* `spatialsample::spatial_block_cv` was rejected as "not a
     function in spatialsample".
   - *Fix:* checks that the function belongs to the spatialsample
     namespace.
   - *Test:* a namespaced strategy gives the same split; a non-spatialsample
     function still gives an error.
+  - *Comment:* it might not be necessary. MC, EK, JH, GTM, OP, ZSR
 - [ ] **#24 Low: [`ea21b72`](https://github.com/EvolEcolGroup/tidysdm/commit/ea21b7213564223fc21f602aabefff20ef271627) Only warn about too few cells when there are fewer than `n`**
   - *Problem:* `sample_background()` and `sample_pseudoabs()` warned even
     when exactly `n` cells were available.
