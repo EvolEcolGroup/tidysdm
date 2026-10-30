@@ -75,7 +75,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Model explanation (DALEX)
 
-- [ ] **#1 High: [`ccb8bf4`](https://github.com/EvolEcolGroup/tidysdm/commit/ccb8bf4fbadf83fa615dc966f517d785d13a27ba) Fix response coding in `explain_tidysdm()`**
+- [X] MC TODO **#1 High: [`ccb8bf4`](https://github.com/EvolEcolGroup/tidysdm/commit/ccb8bf4fbadf83fa615dc966f517d785d13a27ba) Fix response coding in `explain_tidysdm()`**
   - *Problem:* the response was passed to DALEX as `as.numeric(factor)`,
     giving 1 for presence and 2 for absence. DALEX expects 0/1. As a
     result, `model_performance()` reported an AUC of 0.57 for
@@ -85,21 +85,32 @@ testthat::test_file("tests/testthat/test_<name>.R")
     0 otherwise, both for the whole ensemble and with `by_workflow = TRUE`.
   - *Test:* `test_explain_tidysdm.R` checks that `y` is 0/1 and that the
     DALEX loss matches `yardstick::roc_auc`.
-- [ ] **#2 Medium: [`c26bb06`](https://github.com/EvolEcolGroup/tidysdm/commit/c26bb06db69d3a0e7e96bd9c750350fe7c863810) Fix workflow labels when explaining repeat ensembles**
+  - *Comment:* if DALEX expects 0/1 then accept the fix. For model_parts() it says: 
+    “By default it is 1-AUC for classification, cross entropy for multilabel classification and RMSE for regression.”
+    In explain_tidymodels() the argument predict_function_target_column says 
+    "Character or numeric containing either column name or column number in the 
+    model prediction object of the class that should be considered as positive 
+    (i.e. the class that is associated with probability 1)."
+- [X] MC **#2 Medium: [`c26bb06`](https://github.com/EvolEcolGroup/tidysdm/commit/c26bb06db69d3a0e7e96bd9c750350fe7c863810) Fix workflow labels when explaining repeat ensembles**
   - *Problem:* the method assigned to a new column `workflow_id` instead
     of `wflow_id`, so with `by_workflow = TRUE` the explainers for
     different repeats had identical labels.
   - *Test:* labels are checked to be `rep_id.wflow_id`.
-- [ ] **#3 Medium: [`f6164a9`](https://github.com/EvolEcolGroup/tidysdm/commit/f6164a92cdc751afe24573ae9d0f3775d76568bf) Detect recipe steps when explaining by workflow**
+  - *Comment:* It seems that only the original $wflow_id is used, 
+    so the new variable that was created was actually never used
+- [X] MC **#3 Medium: [`f6164a9`](https://github.com/EvolEcolGroup/tidysdm/commit/f6164a92cdc751afe24573ae9d0f3775d76568bf) Detect recipe steps when explaining by workflow**
   - *Problem:* the check for recipe steps looked at `model$pre`, which does
     not exist on an ensemble. It never fired and raised an "Unknown column"
     warning.
   - *Test:* with `by_workflow = TRUE`, a recipe with steps gives an error,
     and passing `data` works.
+  - *Comment:* The function tried to access `model$pre$actions$recipe$recipe$steps` 
+    but `model$pre` is NULL so it fails without error. 
+    This fix also avoids using pre-processed data for recipes - this bug might have had some impact on results
 
 ### Data splitting
 
-- [ ] **#4 High: [`3afee81`](https://github.com/EvolEcolGroup/tidysdm/commit/3afee815291d4f2b9208e464d6a2f2d6196ab640) Fix swapped counts in `check_splits_balance()`**
+- [X] MC TODO **#4 High: [`3afee81`](https://github.com/EvolEcolGroup/tidysdm/commit/3afee815291d4f2b9208e464d6a2f2d6196ab640) Fix swapped counts in `check_splits_balance()`**
   - *Problem:* for an `rset`, the analysis counts were labelled
     `_assessment` and vice versa. For an initial split, the training counts
     were in the `_test` columns.
@@ -107,7 +118,10 @@ testthat::test_file("tests/testthat/test_<name>.R")
     match their labels.
   - *Test:* each cell is compared to `table()` of
     `analysis()`/`assessment()` (or `training()`/`testing()`).
-
+  - *Comment:* not a labelling issue but it actually inverts results. 
+    Could add an additional check for labels, as the new test checks only counts observations in each class,
+    an additional check on levels to be sure it is comparing presence_test to presence and not just to the first level available
+  
 ### Variable selection (`filter_collinear()`)
 
 - [ ] **#5 Medium: [`7ea1097`](https://github.com/EvolEcolGroup/tidysdm/commit/7ea1097b59f768a41ab9c6035e012b7013a06b4e) Fix `to_remove` indices with `names = FALSE`**
@@ -133,7 +147,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Extrapolation
 
-- [ ] **#8 High: [`d8d3211`](https://github.com/EvolEcolGroup/tidysdm/commit/d8d32115754b6d771f7a4ee5a7caebfb8bf6d76d) Match training variables to layers by name in `clamp_predictors()`**
+- [ ] MC TODO **#8 High: [`d8d3211`](https://github.com/EvolEcolGroup/tidysdm/commit/d8d32115754b6d771f7a4ee5a7caebfb8bf6d76d) Match training variables to layers by name in `clamp_predictors()`**
   - *Problem:* `terra::clamp()` applies its limits by layer order, but the
     limits were computed in the column order of `training`. Columns in a
     different order, or extra layers in the raster, were clamped with the
@@ -143,6 +157,12 @@ testthat::test_file("tests/testthat/test_<name>.R")
     in `training` are left unchanged.
   - *Test:* uses a toy raster with swapped training columns and an extra
     layer, with `use_na = TRUE/FALSE`, plus a `SpatRasterDataset`.
+  - *Comment:* Accept, but double check range of acceptable values. The error is 
+    not informative (either prints `"invalid metric"` or 
+    `Error in if (metric == "tss_max") { : the condition has length > 1`), but 
+    the issue might arise in analysis downstream if the error "invalid metrics"" is taken as an output.
+    Now the tests ensure that there is an error.
+    Do line 7&8 of `test_optim_thresh.R` need also to check values (do we have a range of acceptable values)?
 - [ ] **#9 High: [`eb005ab`](https://github.com/EvolEcolGroup/tidysdm/commit/eb005abb00754fc3e9935b6e0d7d397c10d17a3e) Match training variables by name in `extrapol_mess()`**
   - *Problem:* the method only checked `setequal()` on the names, then
     paired columns by position, so a different column order gave wrong
@@ -198,12 +218,17 @@ testthat::test_file("tests/testthat/test_<name>.R")
     now lives in the internal helper `weighted_median_vec()`.
   - *Test:* covers the helper directly, and `predict()` with tied weights
     and with equal weights.
-- [ ] **#16 Medium: [`bb2d6eb`](https://github.com/EvolEcolGroup/tidysdm/commit/bb2d6eba095c8354d5f82a5855fcd4cdc7be0265) Compare metric sets properly in `add_repeat()`**
+- [X] MC **#16 Medium: [`bb2d6eb`](https://github.com/EvolEcolGroup/tidysdm/commit/bb2d6eba095c8354d5f82a5855fcd4cdc7be0265) Compare metric sets properly in `add_repeat()`**
   - *Problem:* `all(x != y)` let partially different metrics through and
     rejected the same metrics in a different order.
   - *Fix:* uses `setequal()`.
   - *Test:* covers a partial difference, an extra metric and a different
     order.
+  - *Comment:* before fix, it seems that the script compared the two metric 
+    vectors element by element (with `!=` and `all() `) this returns `TRUE` only 
+    when every corresponding element is different, which is wrong. 
+    This would impact downstream analysis, but it might be an edge case.
+    Could add check that the metrics are still correct?
 - [ ] **#17 Medium: [`77634af`](https://github.com/EvolEcolGroup/tidysdm/commit/77634af638b658d282264f8f1233a43502da839a) Use the first level as presence in repeat ensemble class predictions**
   - *Problem:* combining classes across repeats required a level literally
     called `"presence"`. `predict.simple_ensemble()` uses the first level
