@@ -229,16 +229,23 @@ testthat::test_file("tests/testthat/test_<name>.R")
     when every corresponding element is different, which is wrong. 
     This would impact downstream analysis, but it might be an edge case.
     Could add check that the metrics are still correct?
-- [ ] **#17 Medium: [`77634af`](https://github.com/EvolEcolGroup/tidysdm/commit/77634af638b658d282264f8f1233a43502da839a) Use the first level as presence in repeat ensemble class predictions**
+- [X] MC **#17 Medium: [`77634af`](https://github.com/EvolEcolGroup/tidysdm/commit/77634af638b658d282264f8f1233a43502da839a) Use the first level as presence in repeat ensemble class predictions**
   - *Problem:* combining classes across repeats required a level literally
     called `"presence"`. `predict.simple_ensemble()` uses the first level
     instead.
   - *Test:* a repeat ensemble built from `two_class_res` (levels
     `Class1`/`Class2`), with `majority` and `prop`.
+  - *Comment:* This update will use first factor level as presence. This matches
+     simple ensemble and the class level described (presence should be first level).
+     The previous script was looking for a level called "presence" - originally this 
+     should be correct (is there any case where level is not called "presence"?),
+     but now `check_sdm_presence()` checks that the first level is the presence level, 
+     accepting different names.
+     
 
 ### Data preparation and sampling
 
-- [ ] **#18 Medium: [`5b699dc`](https://github.com/EvolEcolGroup/tidysdm/commit/5b699dcd8669d5e3395f28c9c7e3c245a02f513e) Evaluate `presence_level` normally in `check_sdm_presence()`**
+- [X] MC **#18 Medium: [`5b699dc`](https://github.com/EvolEcolGroup/tidysdm/commit/5b699dcd8669d5e3395f28c9c7e3c245a02f513e) Evaluate `presence_level` normally in `check_sdm_presence()`**
   - *Problem:* `presence_level = my_var` checked for a level called
     `"my_var"`. A stray `browser` was also left in the function body.
   - *Test:* covers `presence_level` passed as a variable, and a non-string
