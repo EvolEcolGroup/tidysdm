@@ -29,24 +29,27 @@ if (create_sample_data) {
 
 # SDMs with `tidymodels`
 
-Species Distribution Modelling relies on several algorithms, many of
-which have a number of hyperparameters that require turning. The
-`tidymodels` universe includes a number of packages specifically design
-to fit, tune and validate models. The advantage of `tidymodels` is that
+Species Distribution Modelling (SDM) is a framework that allows us to reconstruct
+the potential distribution of a species based on their occurrences and 
+environmental variables of interest. Pipelines normally rely on several 
+algorithms, many of which have a number of hyperparameters that require tuning. The
+[`tidymodels`](https://www.tidymodels.org/) universe includes packages specifically designed
+to fit, tune and validate models. The advantage of using `tidymodels` is that
 the models syntax and the results returned to the users are
 standardised, thus providing a coherent interface to modelling. Given
 the variety of models required for SDM, `tidymodels` is an ideal
 framework. `tidysdm` provides a number of wrappers and specialised
 functions to facilitate the fitting of SDM with `tidymodels`.
 
-This article provides an overview of the how `tidysdm` facilitates
+This article provides an overview of the how `tidysdm` facilitates the
 fitting SDMs. Further articles, detailing how to use the package for
-palaeodata, fitting more complex models and how to troubleshoot models
-can be found on the [`tidisdm`
-website](https://evolecolgroup.github.io/tidysdm/). As `tidysdm` relies
+time-scattered (including archaeological and palaeontological) data, 
+fitting more complex models and how to troubleshoot models
+can be found on the 
+[`tidysdm` website](https://evolecolgroup.github.io/tidysdm/). As `tidysdm` relies
 on `tidymodels`, users are advised to familiarise themselves with the
-introductory tutorials on the [`tidymodels`
-website](https://www.tidymodels.org/start/).
+introductory tutorials on the 
+[`tidymodels` website](https://www.tidymodels.org/start/).
 
 When we load `tidysdm`, it automatically loads `tidymodels` and all
 associated packages necessary to fit models:
@@ -57,8 +60,8 @@ library(tidysdm)
 
 ### Accessing the data for this vignette: how to use `rgbif`
 
-We start by reading in a set of presences for a species of lizard that
-inhabits the Iberian peninsula, *Lacerta schreiberi*. This data is taken
+We start by reading in a set of presences for a species of lizard found in
+the Iberian peninsula, *Lacerta schreiberi*. This data is taken
 from GBIF Occurrence Download (6 July 2023)
 <https://doi.org/10.15468/dl.srq3b3>. The dataset is already included in
 the `tidysdm` package:
@@ -69,8 +72,9 @@ head(lacerta)
 ```
 
 Alternatively, we can easily access and manipulate this dataset using
-`rbgif`. Note that the data from GBIF often requires some level of cleaning. Here
-we will use a simple cleaning function from the `CoordinateCleaner`; in general,
+[`rbgif`](https://cran.r-project.org/package=rgbif). Note that the data 
+from GBIF often requires some level of cleaning. Here
+we will use a simple cleaning function from the package [`CoordinateCleaner`](https://CRAN.R-project.org/package=CoordinateCleaner); in general,
 we recommend to inspect the data that are flagged as problematic, rather than
 just accepting them as we do here:
 
@@ -101,8 +105,11 @@ usethis::use_data(lacerta, overwrite = TRUE)
 
 # Preparing your data
 
-First, let us visualise our presences by plotting on a map. `tidysdm`
-works with `sf` objects to represent locations, so we will cast our
+First, let us visualise our presences by plotting them on a map. `tidysdm`
+works with the package [`sf`](https://cran.r-project.org/package=sf) 
+to represent locations, and 
+[`terra`](https://cran.r-project.org/package=terra) for maps/areas.
+Because we here are dealing with points, we will cast our
 coordinates into an `sf` object, and set its projections to standard
 'lonlat' using the proj4 string "+proj=longlat".
 
@@ -116,10 +123,11 @@ It is usually advisable to plot the locations directly on the raster
 that will be used to extract climatic variables, to see how the
 locations fall within the discrete space of the raster. For this
 vignette, we will use WorldClim as our source of climatic information.
-We will access the WorldClim data via the library `pastclim`; even
-though this library, as the name suggests, is mostly designed to handle
+We will access the WorldClim data via the library 
+[`pastclim`](https://CRAN.R-project.org/package=pastclim); even
+though this package, as the name suggests, is mostly designed to handle
 palaeoclimatic reconstructions, it also provides convenient functions to
-access present day reconstructions and future projections. `pastclim`
+access present-day climate and future projections. `pastclim`
 has a handy function to get the land mask for the available datasets,
 which we can use as background for our locations. We will cut the raster
 to the Iberian peninsula, where our lizard lives. 
@@ -170,8 +178,10 @@ land_mask <- terra::readRDS(system.file("extdata/lacerta_land_mask.rds",
 ))
 ```
 
-For plotting, we will take advantage of `tidyterra`, which makes
-handling of `terra` rasters with `ggplot` a breeze.
+For plotting, we will take advantage of 
+[`tidyterra`](https://CRAN.R-project.org/package=tidyterra), which makes
+handling of `terra` rasters with 
+[`ggplot`](https://cran.r-project.org/package=ggplot2) a breeze.
 
 ```{r, fig.width=6, fig.height=4}
 library(tidyterra)
@@ -188,12 +198,17 @@ ggplot() +
 
 # Map projection
 
-Before we start thinning the data we need to make sure that all our data (points and rasters) have the same geographic coordinate reference system (CRS) by projecting them. In some of the pipeline steps (e.g. thinning data, measuring areas) using an equal area projection may make a significant difference, especially for large-scale projects.
+Before the next steps we need to make sure that all our data (points and rasters) have the same geographic coordinate reference system (CRS) by projecting them. In some of the pipeline steps (e.g. thinning data, measuring areas) using an equal area projection may make a significant difference, especially for large-scale projects.
 
-You can use the R package `crstools` (https://evolecolgroup.github.io/crstools/index.html, also available on [CRAN](https://cran.r-project.org/web/packages/crstools/index.html))
-to find an appropriate equal area [projection](https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9) for any region. 
+You can use the R package 
+[`crstools`](https://evolecolgroup.github.io/crstools/index.html), 
+(also available on 
+[CRAN](https://cran.r-project.org/web/packages/crstools/index.html))
+to find an appropriate equal area 
+[projection](https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9) 
+for any region. 
 
-Let us check the CRS for this object in WKT format:
+Let us check the CRS for this object in well-known text (WKT) format:
 ```{r check_crs_wkt}
 sf::st_crs(land_mask)
 ```
@@ -202,7 +217,8 @@ and in Proj4 code:
 sf::st_crs(land_mask)$proj4string
 ```
 
-use `suggest_crs()` to get a suggestion for an equal-area CRS for this map:
+you can use `suggest_crs()` to get a suggestion for an equal-area CRS for this 
+map:
 ```{r find_crs}
 library(crstools)
 land_mask_equal_area <- suggest_crs(land_mask, distortion = "equal_area")
@@ -210,7 +226,7 @@ land_mask_equal_area <- suggest_crs(land_mask, distortion = "equal_area")
 iberia_proj4 <- land_mask_equal_area$proj4
 ```
 
-For rasters (maps), we use the `terra` function `project` to change the CRS. We pass the raster object and the proj4 string as arguments:
+For rasters (maps), we use the `terra` function `project()` to change the CRS. We pass the raster object and the proj4 string as arguments:
 
 ```{r}
 land_mask_proj <- terra::project(land_mask, y = iberia_proj4)
@@ -236,10 +252,13 @@ ggplot() +
 ```
 
 
-# Thinning step
+# Thinning
 
-Now, we thin the observations to have one per cell in the raster (given
-our project, each cell is approximately the same size):
+The next step is thinning, i.e. removing points that are too close to each 
+other. This is important to avoid over-representing certain areas, which can 
+bias the model. We will first thin the observations to have one per cell in 
+the raster (given our project, each cell is approximately the same size).
+
 
 ```{r thin_by_cell}
 set.seed(1234567)
@@ -264,9 +283,9 @@ ggplot() +
   scale_fill_manual(values = "cornsilk3", na.value = "transparent")
 ```
 
-Now, we thin further to remove points that are closer than 20km. As the units
-of our projection are m (the default for most projections), we use a
-a convenient conversion function, `km2m()`, to
+Now, we thin further to remove points that are closer than 20km. Because 
+the projected CRS uses metres as its unit, we convert 20 km into metres 
+using a convenient conversion function, `km2m()`, to
 avoid having to write lots of zeroes:
 
 ```{r thin_by_dist}
@@ -288,18 +307,25 @@ ggplot() +
   scale_fill_manual(values = "cornsilk3", na.value = "transparent")
 ```
 
-We now need to select points that represent the potential available area
-for the species. There are two approaches, we can either sample the
-background with `sample_background()`, or we can generate
-pseudo-absences with `sample_pseudoabs()`. In this example, we will
-sample the background; more specifically, we will attempt to account for
-potential sampling biases by using a target group approach, where
-presences from other species within the same taxonomic group are used to
-condition the sampling of the background, providing information on
-differential sampling of different areas within the region of interest.
+# Background selection
 
-We will start by downloading records from 8 genera of *Lacertidae*,
-covering the same geographic region of the Iberian peninsula from GBIF
+We now need to select points that represent the potential available area
+for the species. In `tidysdm` this can be done using two approaches. 
+We can either sample the full 
+background (i.e. the whole available area, potentially including locations 
+where the species has been observed) with 
+`sample_background()`. The other option is to generate pseudo-absences (i.e. 
+locations where the species is likely to be absent) with 
+`sample_pseudoabs()`. In this example, we will
+sample the background. Because there is a sampling bias, we will 
+use a target group approach. In this, observations in the area from other 
+species within the same taxonomic group are used to
+condition the sampling of the background: regions where more occurrences have
+been found will be sampled more likely, and regions with few or no occurrences
+will be sampled less likely.
+
+We will start by downloading from GBIF records from 8 genera of *Lacertidae*,
+covering the same geographic region (the Iberian peninsula)
 <https://doi.org/10.15468/dl.53js5z>:
 
 ```{r download_background, eval=FALSE}
@@ -316,7 +342,9 @@ lacertidae_background <- backg_distrib %>%
   rename(ID = gbifID, latitude = decimalLatitude, longitude = decimalLongitude)
 ```
 
-In this case as well, we need to use the appropriate projection (the same defined before) for the background. If the projections do not correspond the analyses will stop giving an error message. 
+In this case as well, we need to use the appropriate projection (the same 
+defined before) for the background. If the projections do not correspond, 
+the analyses will stop giving an error message. 
 
 ```{r projection_background, eval=FALSE}
 # convert to an sf object
@@ -344,7 +372,8 @@ lacertidae_background_proj <- st_transform(lacertidae_background_sf,
 
 We need to convert these observations into a raster whose values are the
 number of records (which will be later used to determine how likely each
-cell is to be used as a background point). We will also mask the resulting background raster to match the land mask of interest.
+cell is to be used as a background point). We will also mask each non-land cell 
+in the resulting background raster to match the land mask of interest.
 
 ```{r background_to_raster, fig.width=6, fig.height=4}
 lacertidae_background_raster <- rasterize(lacertidae_background_proj,
@@ -390,10 +419,13 @@ ggplot() +
   scale_fill_manual(values = "cornsilk3", na.value = "transparent")
 ```
 
-We can use `pastclim` to download the WorldClim dataset (we'll use the 10 arc-minute
-resolution) and extract the bioclimatic
-variables that are available (but you do not have to use `pastclim`, you could 
-use any raster dataset you have access to, loading it directly with `terra`).
+# Climatic variables
+
+Next, we download the climatic predictors that will be used to fit the SDM. 
+We can use `pastclim` to download the WorldClim dataset (we will use the 
+10 arc-minute resolution) and extract the bioclimatic
+variables that are available. Note that you do not have to use `pastclim`, you could 
+use any raster dataset you have access to, loading it directly with `terra`.
 
 ```{r load_climate, eval=download_data}
 download_dataset("WorldClim_2.1_10m")
@@ -427,10 +459,10 @@ Note that the dataset covers the
 period 1970-2000, so `pastclim` dates it as 1985 (the midpoint). We have also cropped
 it directly to the Iberian peninsula.
 
-Note that, in this vignette, we focus on continuous variables; most machine learning algorithms
+Note also that, in this vignette, we focus on continuous variables; most machine-learning algorithms
 do not natively cope with multi-level factors, but it is possible to use `recipes::step_dummy()`
 to generate dummy variables from factors. A worked example can be found in the
-[article on additional features of tidymodels with tidysdm](https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html).
+[article on additional features of `tidymodels` with `tidysdm`](https://evolecolgroup.github.io/tidysdm/articles/a2_tidymodels_additions.html).
 
 And now we project the climate variables in the same way as we did for all previous
 spatial data:
@@ -450,7 +482,7 @@ lacerta_climate <- lacerta_bg %>%
 terra::saveRDS(lacerta_climate, "../inst/extdata/lacerta_thin_all_vars.rds")
 ```
 
-Before going forward with the analysis, we should make  sure that there
+Before going forward with the analysis, we should make sure that there
 are no missing values in the climate that we extracted:
 
 ```{r}
@@ -463,26 +495,29 @@ to go back to the climate raster and homogenise the NAs
 across layers (i.e. variables). This can be achieved either by 
 setting the same cells to NA in all layers (including the land mask
 that we used to thin the data), or by interpolating the layers with less
-information to fill the gaps (e.g. cloud cover in some remote sensed data).
-interpolate the missing
+information to fill the gaps (e.g. cloud cover in some remote sensed data) 
+based on the values of neighbouring cells.
 
 Based on this paper (<https://doi.org/10.1007/s10531-010-9865-2>), we
 are interested in these variables: "bio06", "bio05", "bio13", "bio14", "bio15".
-We can visualise the differences between presences and the background using violin plots:
+We can visualise the differences between the variable values in locations with 
+presences and the whole background using violin plots:
 
 ```{r fig.height=11, fig.width=7}
 lacerta_climate %>% plot_pres_vs_bg(class)
 ```
-We can see that all the variables of interest do seem to have a different distribution
-between presences and the background. We can formally quantify the mismatch between the two 
-by computing the overlap:
+
+We can see that all the variables of interest do seem to have a different 
+distribution between presences and the background, which suggest they are likely 
+to have an effect on the species' distribution. We can formally quantify 
+the mismatch between the two by computing the overlap:
 
 ```{r}
 lacerta_climate %>% dist_pres_vs_bg(class)
 ```
 
-Again, we can see that the variables of interest seem good candidates with a clear
-signal. Let us then focus on those variables:
+Again, we can see that the variables of interest seem good candidates with a 
+clear signal. Let us then focus on those variables:
 
 ```{r climate_variables}
 suggested_vars <- c("bio06", "bio05", "bio13", "bio14", "bio15")
@@ -510,10 +545,11 @@ vars_uncor <- filter_collinear(climate_present_suggested,
 vars_uncor
 ```
 
-So, removing bio14 leaves us with a set of uncorrelated variables. Note that
-`filter_collinear` has other methods based on variable inflation that would also
-be worth exploring. For this example, we will remove bio14 and work with the remaining
-variables.
+So, removing bio14 leaves us with a set of variables with pairwise correlation
+below our chosen threshold. Note that `filter_collinear` includes other methods 
+based on variable inflation that would also be worth exploring in a real 
+research project. For this simplified example, we will remove bio14 and work 
+with the remaining variables.
 
 ```{r}
 lacerta_vars <- lacerta_climate %>% select(all_of(c(vars_uncor, "class")))
@@ -523,7 +559,9 @@ names(climate_present_vars) # variables retained in the end
 
 # Fit the model by cross-validation
 
-Next, we need to set up a `recipe` to define how to handle our dataset.
+Next, because we are working within the `tidymodels` framework, we need 
+to set up a `recipe` to define how to handle our dataset, which we will do 
+with the [`recipes`](https://cran.r-project.org/package=recipes) package.
 We don't want to do anything to our data in terms of transformations, so
 we just need to define the formula (*class* is the `outcome`, all other
 variables are `predictors`; note that, for `sf` objects, `geometry` is
@@ -535,20 +573,26 @@ lacerta_rec <- recipe(lacerta_vars, formula = class ~ .)
 lacerta_rec
 ```
 
-Note that `step_` functions from `recipes` that filter data rows (e.g `step_naomit()`)
-can be problematic (see the relevant section from the man page for [`step_naomit()`](https://recipes.tidymodels.org/reference/step_naomit.html#row-filtering)). We would recommend that you filter your data before setting
+Note that `step_` functions from `recipes` that filter data rows (e.g 
+`step_naomit()` to remove `NA`s) can be problematic (see the relevant 
+section from the man page for 
+[`step_naomit()`](https://recipes.tidymodels.org/reference/step_naomit.html#row-filtering)). 
+We recommend that you filter your data before setting
 up the recipe, rather than attempting to use steps in the recipe.
 
 In classification models for `tidymodels`, the assumption is that the
 level of interest for the response (in our case, presences) is the
 reference level. We can confirm that we have the data correctly
-formatted with:
+formatted with `check_sdm_presence()`, which will return `TRUE` if the data is 
+formatted correctly.
 
 ```{r}
 lacerta_vars %>% check_sdm_presence(class)
 ```
 
-We now build a `workflow_set` of different models, defining which
+Now, based on the `tidymodels` framework, we need to define the models we 
+want to fit. For this, we will use the package [workflowsets](https://workflowsets.tidymodels.org/reference/workflow_set.html)
+build a `workflow_set` of different models. The aim is to define which
 hyperparameters we want to tune. We will use *glm*, *random forest*,
 *boosted_trees* and *maxent* as our models (for more details on how to
 use `workflow_set`s, see [this
@@ -589,7 +633,7 @@ use the `spatial_block_cv` function from the package `spatialsample`.
 `spatialsample` offers a number of sampling approaches for spatial data;
 it is also possible to convert objects created with `blockCV` (which
 offers further features for spatial sampling, such as stratified
-sampling) into an `rsample` object suitable to `tisysdm` with the
+sampling) into an `rsample` object suitable to `tidysdm` with the
 function `blockcv2rsample`.
 
 ```{r training_cv, fig.width=6, fig.height=4}
@@ -984,8 +1028,6 @@ for (i_repeat in 1:3) {
     add_member(lacerta_thin_rep_models, metric = "boyce_cont")
 }
 ```
-
-
 
 Now we can create a `repeat_ensemble` from the list:
 
