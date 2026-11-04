@@ -22,17 +22,36 @@ RhpcBLASctl::blas_set_num_threads(2)
 RhpcBLASctl::omp_set_num_threads(2)
 ```
 
-# SDMs with tidymodels for time-scattered and palaeo data
+# SDMs with `tidymodels` for time-scattered and palaeo data
 
 In this article, we show how a Species Distribution Model can be fitted
-with `tidysdm` on time-scattered (i.e.palaeontological,
-archaeozoological, archaeological, but also focusing on recent climate
-changes, e.g. historical specimens) data, with samples covering
-different time periods. 
-Here we show the full workflow, from preparing the data to performing ensemble modelling and projections for time-scattered occurrences. The first stages are also
-fully described in the ["tidysdm overview"
-article](https://evolecolgroup.github.io/tidysdm/dev/articles/tidysdm.html),
-which focuses on present data. @TODO update link according to dev/main
+with `tidysdm` on time-scattered data, with samples covering
+different time periods (e.g. palaeontological,
+archaeozoological, archaeological data, but also focusing on recent climate
+changes, e.g. historical specimens). 
+
+`tidysdm` uses the `tidymodels` framework, specifically designed
+to fit, tune and validate models. The advantage is that
+the syntax and the results returned to the users are standardised, providing a 
+coherent interface to modelling. It aldo allows to flawlessy integrate 
+any function included in any other package in the `tidymodels` ecosystem, 
+giving direct access to a wide variety of tools without the need to explicitly 
+integrate them within the `tidysdm` package itself.
+
+Users new the `tidymodels` framework may find a few unfamiliar steps, such as 
+creating a `recipe` or a `workflow_set`. Introductory tutorials on these topics 
+can be found on the [`tidymodels` website](https://www.tidymodels.org/start/).
+
+When dealing with geographic data, `tidysdm`
+works with the package [`sf`](https://cran.r-project.org/package=sf) 
+to represent locations, and 
+[`terra`](https://cran.r-project.org/package=terra) for maps/areas, so the 
+methods used in the vignette follow this convention.
+
+Here we show a full `tidysdm` workflow, from preparing the data to performing ensemble
+modelling and projections for time-scattered occurrences. The first stages are 
+also fully described in the ["tidysdm overview" article](https://evolecolgroup.github.io/tidysdm/articles/tidysdm.html),
+which focuses on present-day data. 
 
 We first load `tidysdm`:
 
@@ -50,45 +69,53 @@ data(horses)
 horses
 ```
 
-`tidysdm` works with `sf` objects to represent locations, so we will cast our
-coordinates into an `sf` object, and set its projections to standard
-'lonlat' using the proj4 string "+proj=longlat".
-We convert our dataset into an `sf` data.frame so that we can easily
-plot it (here `tidyterra` shines):
+As already mentioned, `tidysdm` works with `sf` objects to represent locations, so we will cast our
+coordinates into an `sf` object, assign the standard WGS84 (longitude/latitude) 
+geographic coordinate reference system (EPSG:4326).
+
 
 ```{r}
 library(sf)
-horses <- st_as_sf(horses, coords = c("longitude", "latitude"))
-st_crs(horses) <- 4326
+horses_sf <- st_as_sf(horses, coords = c("longitude", "latitude"))
+st_crs(horses_sf) <- 4326
 ```
 
 It is usually advisable to plot the locations directly on the raster
-that will be used to extract climatic variables, to see how the
-locations fall within the discrete space of the raster. 
+that will be used to extract climatic variables, to see how they 
+fall within the area considered. 
 We can access palaeoclimatic reconstructions through the package [`pastclim`](https://evolecolgroup.github.io/pastclim/).
-In this case, we will use its Example dataset which only includes a small number of variables and time steps (more information on datasets can be found [here](https://evolecolgroup.github.io/pastclim/articles/a1_available_datasets.html)).
+In this case, we will use its [`Example` dataset](https://evolecolgroup.github.io/pastclim/reference/Example.html) 
+which only includes a small number of variables and time steps 
+(all other available datasets can be found [here](https://evolecolgroup.github.io/pastclim/articles/a1_available_datasets.html)).
 
 As a first step, we will plot our presences against the land mask for the
-present, taken from `pastclim`. We will use a polygon already included in `pastclim` to cut the map and cover only Europe:
+present, taken from `pastclim`. We will use a polygon already included in 
+the package itself to cut the map and cover only Europe:
 
 ```{r echo=FALSE, results='hide'}
 library(pastclim)
 set_data_path(on_CRAN = TRUE)
 ```
 
+For rasters (maps), we use the `terra` function `project` to change the CRS. 
+We pass the raster object and the proj4 string as arguments:
 ```{r}
 library(pastclim)
 land_mask <- pastclim::get_land_mask(time_bp = 0, dataset = "Example")
 # extension for Europe from pastclim
 europe_poly <- vect(region_outline$Europe)
-crs(europe_poly) <- "lonlat"
+# terra object. "lonlat" for terra is the same as "4326" used above with sf
+crs(europe_poly) <- "lonlat" 
 # crop the extent
 land_mask <- crop(land_mask, europe_poly)
 # and mask to the polygon
 land_mask <- mask(land_mask, europe_poly)
 ```
 
-For plotting, we can use `tidyterra`, which easily handles `terra` rasters with `ggplot`:
+We can now easily plot it with 
+[`tidyterra`](https://CRAN.R-project.org/package=tidyterra), the best 
+package to handle `terra` rasters with 
+[`ggplot`](https://cran.r-project.org/package=ggplot2):
 
 ```{r cast_to_sf, fig.width=6, fig.height=4}
 library(tidyterra)
@@ -102,15 +129,21 @@ ggplot() +
 # Map projection
 We need to make sure that all our data (points and rasters) have the same geographic coordinate reference system (CRS) by projecting them. In some of the pipeline steps (e.g. thinning data, measuring areas) using an equal area projection may make a significant difference, especially for large-scale projects.
 
-You can use the R package `crstools` (https://evolecolgroup.github.io/crstools/index.html, also available on [CRAN](https://cran.r-project.org/web/packages/crstools/index.html))
-to find an appropriate equal area [projection](https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9) for any region. 
+You can use the R package 
+[`crstools`](https://evolecolgroup.github.io/crstools/index.html), 
+(also available on 
+[CRAN](https://cran.r-project.org/web/packages/crstools/index.html))
+to find an appropriate equal area 
+[projection](https://link.springer.com/chapter/10.1007/978-3-319-51835-0_9) 
+for any region. 
 
-The CRS for this object in Proj4 code is:
+The CRS for the land mask in Proj4 code is:
 ```{r check_crs_proj4}
 sf::st_crs(land_mask)$proj4string
 ```
 
-use `suggest_crs()` to get a suggestion for an equal-area CRS for this map:
+We can use `suggest_crs()` from `crstools` to get a suggestion for an 
+equal-area CRS for this map:
 ```{r find_crs}
 library(crstools)
 land_mask_equal_area <- suggest_crs(land_mask, distortion = "equal_area")
@@ -118,7 +151,7 @@ land_mask_equal_area <- suggest_crs(land_mask, distortion = "equal_area")
 europe_proj4 <- land_mask_equal_area$proj4
 ```
 
-For rasters (maps), we use the `terra` function `project` to change the CRS. We pass the raster object and the proj4 string as arguments:
+Again, for rasters (maps), we use the `terra` function `project` to change the CRS. We pass the raster object and the proj4 string as arguments:
 
 ```{r}
 land_mask_proj <- terra::project(land_mask, y = europe_proj4)
@@ -127,7 +160,7 @@ land_mask_proj <- terra::project(land_mask, y = europe_proj4)
 Now we need to project the data points to the same CRS as the raster. We will do so using the appropriate `sf` function:
 
 ```{r}
-horses_proj <- st_transform(horses, europe_proj4)
+horses_proj <- st_transform(horses_sf, europe_proj4)
 ```
 
 Plotting the data, we will see that the shape of the land mask has changed following the new projection.
@@ -143,7 +176,8 @@ ggplot() +
 
 # Getting the climate data
 
-We now need a time series of palaeoclimate reconstructions, not just a land mask. We will use the Example dataset from `pastclim`, as mentioned before. 
+We now need a time series of palaeoclimate reconstructions, not just a land mask. 
+Asmetnioned, we will use the `Example` dataset from `pastclim`. 
 This dataset only has reconstructions every 5k years for the past 20k years at 1
 degree resolution, with 3 bioclimatic variables. It will suffice for
 illustrative purposes, but we recommend that you download higher quality
@@ -161,6 +195,7 @@ climate_full <- pastclim::region_series(
 ```
 
 and then project:
+
 ```{r}
 # climate_full is SpatRasterDataset, so we need to update every layer
 climate_full_proj_bio01 <- terra::project(climate_full[["bio01"]], europe_proj4)
@@ -176,12 +211,17 @@ names(climate_full_proj) <- climate_vars
 ```
 
 
-
 # Thinning step
 
-Often data tend to be spatially or chronologically structured, i.e. we have way more samples from specific regions and/or time periods. This could result in an imbalance that may bias our results. This can be dealt with by thinning the data. Thinning means removing points that are too close to others (either spatially or chronologically), thus avoiding oversampling (and sampling biases).
+Often data tend to be spatially or chronologically structured, i.e. we have way 
+more samples from specific regions and/or time periods. This could result in an 
+imbalance that may bias our results. This can be dealt with by thinning the 
+data. Thinning means removing points that are too close to others (either 
+spatially or chronologically), thus avoiding oversampling (and sampling biases).
 
-There are different options for thinning your data: a) considering the resolution of the climate data (i.e. keeping one point in each cell), b) considering the distance between points (spatial and chronological). 
+There are different options for thinning your data: a) considering the 
+resolution of the climate data (i.e. keeping one point in each cell), b) 
+considering the distance between points (spatial and chronological). 
 
 We thin the observations to only keep one per cell in the raster, and remove
 locations outside the desired area (if there was any):
@@ -275,23 +315,33 @@ horses_df <- horses_pa %>%
   mutate(time_bp = date2ybp(time_step)) %>%
   as.data.frame() %>%
   select(-geometry)
+
 # get climate
-horses_df <- location_slice_from_region_series(horses_df,
+horses_climate <- location_slice_from_region_series(horses_df,
   region_series = climate_full_proj
 )
 
 # add the climate reconstructions to the sf object, and remove the time_step
 # as we don't need it for modelling
 horses_climate <- horses_pa %>%
-  bind_cols(horses_df[, climate_vars]) %>%
+  bind_cols(horses_climate[, climate_vars]) %>%
   select(-time_step)
 ```
 
-@TODO we stopped here
+# Fit the model by cross-validation
 
-# Fit the model by crossvalidation
 
-Next, we need to set up a `recipe` to define how to handle our dataset.
+Next, because we are working within the `tidymodels` framework, we need 
+to set up a `recipe` to define how to handle our dataset, which we will do 
+with the [`recipes`](https://cran.r-project.org/package=recipes) package.
+
+As mentioned in the [tidysdm overview](), `step_` functions from `recipes` that filter data rows (e.g 
+`step_naomit()` to remove `NA`s) can be problematic (see the relevant 
+section from the man page for 
+[`step_naomit()`](https://recipes.tidymodels.org/reference/step_naomit.html#row-filtering)). 
+We recommend that you filter your data before setting
+up the recipe, rather than attempting to use steps in the recipe.
+
 We don't want to transform our data, so we just need to define the
 formula (*class* is the outcome, all other variables are predictors;
 note that, for `sf` objects, `geometry` is automatically ignored as a
@@ -315,6 +365,7 @@ forest* and *boosted trees* as our models, so only *random forest* and
 models, `tidysdm` automatically chooses the most important parameters,
 but it is possible to fully customise model specifications.
 
+@TODO we stopped here
 ```{r workflow_set}
 horses_models <-
   # create the workflow_set

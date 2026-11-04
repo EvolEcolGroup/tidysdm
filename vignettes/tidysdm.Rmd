@@ -628,7 +628,7 @@ lacerta_models <-
 ```
 
 We now want to set up a spatial block cross-validation scheme to tune
-and assess our models. We will split the data by creating 3 folds. We
+and assess our models. We will split the data by creating 5 folds. We
 use the `spatial_block_cv` function from the package `spatialsample`.
 `spatialsample` offers a number of sampling approaches for spatial data;
 it is also possible to convert objects created with `blockCV` (which
@@ -670,9 +670,11 @@ models with:
 autoplot(lacerta_models)
 ```
 
+# Ensemble
+
 Now let's create an ensemble, selecting the best set of parameters for
 each model (this is really only relevant for the ML algorithms, as there
-were not hype-parameters to tune for the *glm*). We will use
+were not hyperparameters to tune for the *glm*). We will use
 the Boyce continuous index as our metric to choose the best random
 forest and boosted tree. When adding members to an ensemble, they are
 automatically fitted to the full training dataset, and so ready to make
@@ -688,7 +690,7 @@ lacerta_ensemble
 usethis::use_data(lacerta_ensemble, overwrite = TRUE)
 ```
 
-And visualise it
+We can visualise the ensemble performance with:
 
 ```{r autoplot_ens, fig.width=7, fig.height=4}
 autoplot(lacerta_ensemble)
@@ -852,8 +854,9 @@ which lie outside the range of conditions covered by the calibration dataset.
 This phenomenon can lead to misinterpretation of the SDM outcomes due to 
 spatial extrapolation.
 
-`tidysdm` offers a couple of approaches to deal with this problem. The simplest one is that we can clamp the environmental variables to stay within the limits observed
-in the calibration set:
+`tidysdm` offers a couple of approaches to deal with this problem. The simplest 
+approach is to clamp predictor values so that they remain within the range 
+observed in the calibration data.
 
 ```{r, fig.width=6, fig.height=4}
 climate_future_clamped <- clamp_predictors(climate_future_proj,
@@ -872,7 +875,9 @@ ggplot() +
 The predictions seem to have changed very little.
 
 An alternative is to allow values to exceed the ranges of the calibration set,
-but compute the Multivariate environmental similarity surfaces (MESS) (Elith et al. 2010) to highlight areas where extrapolation occurs and thus visualise the prediction's uncertainty.
+but compute the Multivariate environmental similarity surfaces (MESS) (Elith 
+et al. 2010) to highlight areas where extrapolation occurs and thus visualise 
+the prediction's uncertainty.
 
 We estimate the MESS for the same future time slice used above:
 
@@ -894,7 +899,8 @@ this plot, we can see that the area of extrapolation is where the model already
 predicted a suitability of zero. This explains why clamping did little to our
 predictions.
 
-We can now overlay MESS values with current prediction to visualize areas characterized by spatial extrapolation. 
+We can now overlay MESS values with current prediction to visualise areas 
+characterised by spatial extrapolation. 
 
 ```{r, fig.width=6, fig.height=4}
 # subset mess
@@ -962,7 +968,7 @@ ggplot(bio05_data, aes(x = bio05, y = pred)) +
 ```
 
 It is also possible to use
-[DALEX](https://modeloriented.github.io/DALEX/),to explore `tidysdm`
+[DALEX](https://modeloriented.github.io/DALEX/) to explore `tidysdm`
 models; see more details in the [tidymodels
 additions](https://evolecolgroup.github.io/tidysdm/dev/articles/a2_tidymodels_additions.html)
 article.
@@ -1023,7 +1029,7 @@ for (i_repeat in 1:3) {
       resamples = lacerta_thin_rep_cv, grid = 3,
       metrics = sdm_metric_set(), verbose = TRUE
     )
-  # make an simple ensemble and add it to the list
+  # make a simple ensemble and add it to the list
   ensemble_list[[i_repeat]] <- simple_ensemble() %>%
     add_member(lacerta_thin_rep_models, metric = "boyce_cont")
 }
@@ -1041,8 +1047,8 @@ usethis::use_data(lacerta_rep_ens, overwrite = TRUE)
 ```
 
 
-We can summarise the goodness of fit of models for each repeat with `autoplot()` and 
-`collect_metrics()` functions.
+We can summarise model performance across repeats using `autoplot()` and 
+`collect_metrics()`.
 
 ```{r, fig.width=6, fig.height=4}
 autoplot(lacerta_rep_ens)
@@ -1052,7 +1058,10 @@ autoplot(lacerta_rep_ens)
 lacerta_rep_ens %>% collect_metrics()
 ```
 
-We can then predict in the usual way using `predict_raster`, specifying the aggregating function with the `fun` parameter. We will take the mean and median of all models (you can also use weighted alternatives), without filtering by performance, and plot the results:
+We can then predict in the usual way using `predict_raster`, specifying the 
+aggregating function with the `fun` parameter. We will take the mean and median 
+of all models (you can also use weighted alternatives), without filtering by 
+performance, and plot the results:
 
 ```{r, fig.width=6, fig.height=4}
 lacerta_rep_ens_plot <- predict_raster(lacerta_rep_ens, climate_present_vars,
