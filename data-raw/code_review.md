@@ -124,10 +124,12 @@ testthat::test_file("tests/testthat/test_<name>.R")
   
 ### Variable selection (`filter_collinear()`)
 
-- [ ] **#5 Medium: [`7ea1097`](https://github.com/EvolEcolGroup/tidysdm/commit/7ea1097b59f768a41ab9c6035e012b7013a06b4e) Fix `to_remove` indices with `names = FALSE`**
+- [X] ML,MC,GTM,OP **#5 Medium: [`7ea1097`](https://github.com/EvolEcolGroup/tidysdm/commit/7ea1097b59f768a41ab9c6035e012b7013a06b4e) Fix `to_remove` indices with `names = FALSE`**
   - *Problem:* the `to_remove` attribute listed every variable.
   - *Test:* the indices of kept and removed variables are checked against
     the variable names.
+  - *Comment:* accept. Before the fix, the code compared character variable names 
+     against numerical indices, so none of the names matched.
 - [ ] **#6 Medium: [`ae9ef6d`](https://github.com/EvolEcolGroup/tidysdm/commit/ae9ef6dee616ea4fa0967bdc4994f6e83caf7d21) Fix `filter_collinear()` when a single variable is left**
   - *Problem:* matrices were subset without `drop = FALSE`, which caused
     three different crashes:
@@ -136,7 +138,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
     - `cor_caret` when `to_keep` left fewer than two other variables
   - *Test:* each of the 3 methods is run with 2 collinear variables, with
     `to_keep` leaving 1 variable, and with all variables in `to_keep`.
-- [ ] **#7 Medium: [`624386b`](https://github.com/EvolEcolGroup/tidysdm/commit/624386b63a9aa959e02afd0af71e528079af35c9) Validate `to_keep` properly**
+- [X] MC **#7 Medium: [`624386b`](https://github.com/EvolEcolGroup/tidysdm/commit/624386b63a9aa959e02afd0af71e528079af35c9) Validate `to_keep` properly**
   - *Problem:* there were two errors in the validation:
     - `any()` was used instead of `all()`, so a typo in one of several
       names was not caught
