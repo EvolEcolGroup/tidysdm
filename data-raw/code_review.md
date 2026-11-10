@@ -130,7 +130,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
     the variable names.
   - *Comment:* accept. Before the fix, the code compared character variable names 
      against numerical indices, so none of the names matched.
-- [ ] **#6 Medium: [`ae9ef6d`](https://github.com/EvolEcolGroup/tidysdm/commit/ae9ef6dee616ea4fa0967bdc4994f6e83caf7d21) Fix `filter_collinear()` when a single variable is left**
+- [X] MC **#6 Medium: [`ae9ef6d`](https://github.com/EvolEcolGroup/tidysdm/commit/ae9ef6dee616ea4fa0967bdc4994f6e83caf7d21) Fix `filter_collinear()` when a single variable is left**
   - *Problem:* matrices were subset without `drop = FALSE`, which caused
     three different crashes:
     - `vif_step` when removing one of two collinear variables
@@ -138,6 +138,9 @@ testthat::test_file("tests/testthat/test_<name>.R")
     - `cor_caret` when `to_keep` left fewer than two other variables
   - *Test:* each of the 3 methods is run with 2 collinear variables, with
     `to_keep` leaving 1 variable, and with all variables in `to_keep`.
+  - *Comment:* This fix first avoids that matrix becomes a vector (by using 
+    `drop = FALSE`), while the function expects a matrix. It covers edge cases
+    where only one variable is left, or where `to_keep` leaves only one variable.
 - [X] MC **#7 Medium: [`624386b`](https://github.com/EvolEcolGroup/tidysdm/commit/624386b63a9aa959e02afd0af71e528079af35c9) Validate `to_keep` properly**
   - *Problem:* there were two errors in the validation:
     - `any()` was used instead of `all()`, so a typo in one of several
@@ -174,11 +177,12 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Model specification and fitting
 
-- [ ] **#10 Medium: [`e388971`](https://github.com/EvolEcolGroup/tidysdm/commit/e388971ef9c0043a93953ae832fac837d392fec4) Fix `maxnet_fit()` for plain data.frames**
+- [X] MC TODO **#10 Medium: [`e388971`](https://github.com/EvolEcolGroup/tidysdm/commit/e388971ef9c0043a93953ae832fac837d392fec4) Fix `maxnet_fit()` for plain data.frames**
   - *Problem:* `data[, col] %>% pull()` fails on a `data.frame`, which
     broke `maxent() %>% fit(..., data = <data.frame>)`.
   - *Test:* fitting on a `data.frame` gives the same result as fitting on
     a tibble, and `parsnip::fit()` works.
+  - *Comment:* are line 59-61 necessary if the output is a vector?
 - [ ] **#11 Medium: [`e25d440`](https://github.com/EvolEcolGroup/tidysdm/commit/e25d4402d33149aa0c9e302ccecd42d023753b79) Fix `gam_formula()` with factors or a single numeric predictor**
   - *Problem:* three bugs:
     - factors were wrapped in `s()`
