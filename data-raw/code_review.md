@@ -168,7 +168,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
     the issue might arise in analysis downstream if the error "invalid metrics"" is taken as an output.
     Now the tests ensure that there is an error.
     Do line 7&8 of `test_optim_thresh.R` need also to check values (do we have a range of acceptable values)?
-- [ ] **#9 High: [`eb005ab`](https://github.com/EvolEcolGroup/tidysdm/commit/eb005abb00754fc3e9935b6e0d7d397c10d17a3e) Match training variables by name in `extrapol_mess()`**
+- [X] MC,AP,EC,EK,JH **#9 High: [`eb005ab`](https://github.com/EvolEcolGroup/tidysdm/commit/eb005abb00754fc3e9935b6e0d7d397c10d17a3e) Match training variables by name in `extrapol_mess()`**
   - *Problem:* the method only checked `setequal()` on the names, then
     paired columns by position, so a different column order gave wrong
     MESS scores. The `data.frame` method also failed on tibbles.
@@ -183,7 +183,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
   - *Test:* fitting on a `data.frame` gives the same result as fitting on
     a tibble, and `parsnip::fit()` works.
   - *Comment:* are line 59-61 necessary if the output is a vector?
-- [ ] **#11 Medium: [`e25d440`](https://github.com/EvolEcolGroup/tidysdm/commit/e25d4402d33149aa0c9e302ccecd42d023753b79) Fix `gam_formula()` with factors or a single numeric predictor**
+- [X] MC,AP,EC,EK,JH **#11 Medium: [`e25d440`](https://github.com/EvolEcolGroup/tidysdm/commit/e25d4402d33149aa0c9e302ccecd42d023753b79) Fix `gam_formula()` with factors or a single numeric predictor**
   - *Problem:* three bugs:
     - factors were wrapped in `s()`
     - the factor terms were pasted into a malformed formula
