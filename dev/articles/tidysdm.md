@@ -108,7 +108,7 @@ coordinates into an `sf` object, and set its projections to standard
 ``` r
 
 library(sf)
-#> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
+#> Linking to GEOS 3.14.1, GDAL 3.12.2, PROJ 9.7.1; sf_use_s2() is TRUE
 lacerta <- st_as_sf(lacerta, coords = c("longitude", "latitude"))
 st_crs(lacerta) <- "+proj=longlat"
 ```
@@ -719,7 +719,7 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (435ms)
+#> ✔ 1 of 4 resampling: default_glm (454ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> ✔ 2 of 4 tuning:     default_rf (2.5s)
@@ -794,7 +794,7 @@ lacerta_ensemble %>% collect_metrics()
 #>    wflow_id       .metric     mean std_err     n
 #>    <chr>          <chr>      <dbl>   <dbl> <int>
 #>  1 default_glm    boyce_cont 0.443  0.0899     5
-#>  2 default_glm    roc_auc    0.785  0.0391     5
+#>  2 default_glm    roc_auc    0.786  0.0392     5
 #>  3 default_glm    tss_max    0.556  0.0745     5
 #>  4 default_rf     boyce_cont 0.600  0.0567     5
 #>  5 default_rf     roc_auc    0.805  0.0449     5
@@ -1159,17 +1159,17 @@ for (i_repeat in 1:3) {
 }
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (405ms)
+#> ✔ 1 of 2 resampling: default_glm (426ms)
 #> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2s)
+#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (411ms)
+#> ✔ 1 of 2 resampling: default_glm (433ms)
 #> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2s)
+#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (415ms)
+#> ✔ 1 of 2 resampling: default_glm (436ms)
 #> i 2 of 2 tuning:     default_maxent
 #> ✔ 2 of 2 tuning:     default_maxent (2s)
 ```

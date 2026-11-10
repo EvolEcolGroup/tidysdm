@@ -63,7 +63,7 @@ plot it (here `tidyterra` shines):
 ``` r
 
 library(sf)
-#> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
+#> Linking to GEOS 3.14.1, GDAL 3.12.2, PROJ 9.7.1; sf_use_s2() is TRUE
 horses <- st_as_sf(horses, coords = c("longitude", "latitude"))
 st_crs(horses) <- 4326
 ```
@@ -341,10 +341,10 @@ horses_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (430ms)
+#> ✔ 1 of 4 resampling: default_glm (491ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 4 resampling: default_gam
-#> ✔ 2 of 4 resampling: default_gam (648ms)
+#> ✔ 2 of 4 resampling: default_gam (665ms)
 #> i 3 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> ✔ 3 of 4 tuning:     default_rf (2.8s)
@@ -352,12 +352,12 @@ horses_models <-
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
-#> There were issues with some computations   A: x2
 #> There were issues with some computations   A: x3
 #> There were issues with some computations   A: x4
 #> There were issues with some computations   A: x5
+#> There were issues with some computations   A: x5
 #> 
-#> ✔ 4 of 4 tuning:     default_gbm (11.6s)
+#> ✔ 4 of 4 tuning:     default_gbm (11.8s)
 ```
 
 Note that `workflow_set` correctly detects that we have no tuning
