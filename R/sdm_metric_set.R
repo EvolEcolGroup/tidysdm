@@ -4,6 +4,9 @@
 #' [yardstick::roc_auc()] and [tss_max()], the most commonly used metrics for
 #' SDM.
 #'
+#' [boyce_cont()] is used with its default settings; see its help page for how
+#' to build a metric set with a different `min_windows`.
+#'
 #' @param ... additional metrics to be added to the
 #' [`yardstick::metric_set`]. See the help to [yardstick::metric_set()] for
 #' constraints on the type of metrics that can be mixed.

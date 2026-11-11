@@ -19,6 +19,10 @@ This function returns a \link[yardstick:metric_set]{yardstick::metric_set} that 
 \code{\link[yardstick:roc_auc]{yardstick::roc_auc()}} and \code{\link[=tss_max]{tss_max()}}, the most commonly used metrics for
 SDM.
 }
+\details{
+\code{\link[=boyce_cont]{boyce_cont()}} is used with its default settings; see its help page for how
+to build a metric set with a different \code{min_windows}.
+}
 \examples{
 sdm_metric_set()
 sdm_metric_set(accuracy)

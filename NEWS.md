@@ -1,4 +1,11 @@
 # `tidysdm` dev
+* `boyce_cont()` gains a `min_windows` argument (default 3): if fewer distinct
+  windows are left, it now returns `NA` with a warning, rather than a
+  meaningless value (with two windows, the index was always 1 or -1, however
+  weak the predictions). This only changes results where fewer than 3 distinct
+  windows were left; set `min_windows = 2` for the previous behaviour. With a
+  single window left, the new warning replaces the uninformative "the standard
+  deviation is zero" (#95, #111)
 * fix bug in predict.simple_ensemble where weights were ignored 
   for "weighted mean"
 * implement better prediction logic for `repeat_ensembles`, grouping
