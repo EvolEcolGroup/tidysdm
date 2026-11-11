@@ -233,7 +233,9 @@ passes_metric_thresh <- function(object, metric_thresh) {
   }
   metric_ens <- dplyr::bind_rows(object$metrics) %>%
     dplyr::filter(.data$.metric == metric_thresh[1])
-  any(metric_ens$mean > as.numeric(metric_thresh[2]))
+  # a model with a missing metric (e.g. a boyce_cont that was NA in all folds)
+  # does not pass the threshold
+  any(metric_ens$mean > as.numeric(metric_thresh[2]), na.rm = TRUE)
 }
 
 #' Check whether a calibration table has an entry for a given combination of

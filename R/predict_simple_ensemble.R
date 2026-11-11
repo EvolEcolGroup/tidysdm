@@ -188,12 +188,13 @@ predict.simple_ensemble <-
       metric_ens <-
         dplyr::bind_rows(object$metrics) %>%
         dplyr::filter(.data$.metric == metric_thresh[1])
-      # subset the data.frame
-      pred_list <-
-        pred_list[, metric_ens$mean > as.numeric(metric_thresh[2])]
-      metric_ens <- metric_ens$mean[
+      # models passing the threshold; a model with a missing metric (e.g. a
+      # boyce_cont that was NA in all folds) fails it
+      pass_thresh <- !is.na(metric_ens$mean) &
         metric_ens$mean > as.numeric(metric_thresh[2])
-      ]
+      # subset the data.frame
+      pred_list <- pred_list[, pass_thresh]
+      metric_ens <- metric_ens$mean[pass_thresh]
       if (length(pred_list) == 0) {
         stop("the current metric_threshold excludes all models")
       }

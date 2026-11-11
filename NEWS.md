@@ -6,6 +6,9 @@
   windows were left; set `min_windows = 2` for the previous behaviour. With a
   single window left, the new warning replaces the uninformative "the standard
   deviation is zero" (#95, #111)
+* `predict()` for `simple_ensemble` and `repeat_ensemble` objects no longer
+  fails with `metric_thresh` if a model has a missing value for that metric
+  (e.g. `boyce_cont` was `NA` in all folds); such models now fail the threshold
 * fix bug in predict.simple_ensemble where weights were ignored 
   for "weighted mean"
 * implement better prediction logic for `repeat_ensembles`, grouping
