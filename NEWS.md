@@ -9,6 +9,10 @@
 * `predict()` for `simple_ensemble` and `repeat_ensemble` objects no longer
   fails with `metric_thresh` if a model has a missing value for that metric
   (e.g. `boyce_cont` was `NA` in all folds); such models now fail the threshold
+* `predict()` for `simple_ensemble` objects now only predicts with the models
+  that pass `metric_thresh`, rather than predicting with all models and then
+  discarding some: this saves time (e.g. in `predict_raster()`), and a model
+  excluded by the threshold can no longer make the prediction fail
 * fix bug in predict.simple_ensemble where weights were ignored 
   for "weighted mean"
 * implement better prediction logic for `repeat_ensembles`, grouping

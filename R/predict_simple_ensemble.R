@@ -162,21 +162,9 @@ predict.simple_ensemble <-
       new_data <- workflowsets::extract_mold(object$workflow[[1]])$predictors
     }
 
-    # create list of predictions
-    pred_list <-
-      lapply(object$workflow,
-        stats::predict,
-        new_data = new_data,
-        type = "prob"
-      )
-    names(pred_list) <- object$wflow_id
-    # turn it into a data.frame
-    pred_list <- dplyr::bind_cols(data.frame(pred_list)) %>% tibble::as_tibble()
-    # remove every other column (so that we the probability for presences)
-    pred_list <- pred_list[, seq(1, ncol(pred_list), by = 2)]
-
     # filter models if we have a metric_thresh (and create weights based on this
-    # metric)
+    # metric); this is done before predicting, so that we only predict with the
+    # models that pass the threshold
     if (!is.null(metric_thresh)) {
       if (!metric_thresh[1] %in% attr(object, "metrics")) {
         stop(
@@ -192,13 +180,14 @@ predict.simple_ensemble <-
       # boyce_cont that was NA in all folds) fails it
       pass_thresh <- !is.na(metric_ens$mean) &
         metric_ens$mean > as.numeric(metric_thresh[2])
-      # subset the data.frame
-      pred_list <- pred_list[, pass_thresh]
-      metric_ens <- metric_ens$mean[pass_thresh]
-      if (length(pred_list) == 0) {
+      if (!any(pass_thresh)) {
         stop("the current metric_threshold excludes all models")
       }
+      # weights for the models that pass the threshold
+      metric_ens <- metric_ens$mean[pass_thresh]
     } else {
+      # all models are used
+      pass_thresh <- rep(TRUE, nrow(object))
       # we create weights based on the best_metric used to choose models in
       # workflows
       metric_ens <-
@@ -206,6 +195,19 @@ predict.simple_ensemble <-
         dplyr::filter(.data$.metric == attr(object, "best_metric")) %>%
         dplyr::pull(mean)
     }
+
+    # create list of predictions (only for the models passing the threshold)
+    pred_list <-
+      lapply(object$workflow[pass_thresh],
+        stats::predict,
+        new_data = new_data,
+        type = "prob"
+      )
+    names(pred_list) <- object$wflow_id[pass_thresh]
+    # turn it into a data.frame
+    pred_list <- dplyr::bind_cols(data.frame(pred_list)) %>% tibble::as_tibble()
+    # remove every other column (so that we the probability for presences)
+    pred_list <- pred_list[, seq(1, ncol(pred_list), by = 2)]
 
     # define the weighted functions
     weighted_mean <- function(x, w = metric_ens) { # nolint

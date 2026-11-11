@@ -149,6 +149,26 @@ test_that("metric_thresh drops models with a missing metric", {
   )
 })
 
+test_that("models failing metric_thresh are not used to predict", {
+  test_ens <- simple_ensemble() %>% add_member(two_class_res[1:3, ],
+    metric = "roc_auc"
+  )
+  # the third model fails the threshold, and it cannot predict (here, its
+  # workflow is broken; in practice, it might need a predictor that is missing
+  # from new_data)
+  test_ens$metrics[[3]]$mean[test_ens$metrics[[3]]$.metric == "roc_auc"] <-
+    NaN
+  test_ens$workflow[[3]] <- "not a workflow"
+  # without a threshold, prediction fails
+  expect_error(predict(test_ens, new_data = two_class_dat, fun = "none"))
+  # with a threshold, the third model is not used to predict
+  pred_thresh <- predict(test_ens,
+    new_data = two_class_dat,
+    fun = "none", metric_thresh = c("roc_auc", 0.5)
+  )
+  expect_identical(ncol(pred_thresh), 2L)
+})
+
 
 test_that("simple_ensemble prediction errors", {
   ## now add some models (the first 3) using default metric
