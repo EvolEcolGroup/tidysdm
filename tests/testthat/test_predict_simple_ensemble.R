@@ -110,6 +110,65 @@ test_that("simple_ensemble predictions", {
   )
 })
 
+test_that("metric_thresh drops models with a missing metric", {
+  test_ens <- simple_ensemble() %>% add_member(two_class_res[1:3, ],
+    metric = "roc_auc"
+  )
+  # set the roc_auc of the first model to NaN (as tune gives when a metric is
+  # NA in all folds, e.g. boyce_cont with too few windows)
+  test_ens$metrics[[1]]$mean[test_ens$metrics[[1]]$.metric == "roc_auc"] <-
+    NaN
+  # the first model fails the threshold, the other two pass it
+  pred_thresh <- predict(test_ens,
+    new_data = two_class_dat,
+    fun = "none", metric_thresh = c("roc_auc", 0.5)
+  )
+  expect_identical(ncol(pred_thresh), 2L)
+  # weighted mean uses the weights of the two models that pass
+  expect_no_error(
+    pred_w <- predict(test_ens,
+      new_data = two_class_dat,
+      fun = "weighted_mean", metric_thresh = c("roc_auc", 0.5)
+    )
+  )
+  expect_false(anyNA(pred_w))
+  # repeat_ensembles check whether any model passes the threshold
+  expect_true(passes_metric_thresh(test_ens, c("roc_auc", 0.5)))
+  # with all models missing, none passes it
+  for (i in seq_along(test_ens$metrics)) {
+    test_ens$metrics[[i]]$mean[test_ens$metrics[[i]]$.metric == "roc_auc"] <-
+      NaN
+  }
+  expect_false(passes_metric_thresh(test_ens, c("roc_auc", 0.5)))
+  expect_error(
+    predict(test_ens,
+      new_data = two_class_dat,
+      fun = "mean", metric_thresh = c("roc_auc", 0.5)
+    ),
+    "the current metric_threshold excludes all models"
+  )
+})
+
+test_that("models failing metric_thresh are not used to predict", {
+  test_ens <- simple_ensemble() %>% add_member(two_class_res[1:3, ],
+    metric = "roc_auc"
+  )
+  # the third model fails the threshold, and it cannot predict (here, its
+  # workflow is broken; in practice, it might need a predictor that is missing
+  # from new_data)
+  test_ens$metrics[[3]]$mean[test_ens$metrics[[3]]$.metric == "roc_auc"] <-
+    NaN
+  test_ens$workflow[[3]] <- "not a workflow"
+  # without a threshold, prediction fails
+  expect_error(predict(test_ens, new_data = two_class_dat, fun = "none"))
+  # with a threshold, the third model is not used to predict
+  pred_thresh <- predict(test_ens,
+    new_data = two_class_dat,
+    fun = "none", metric_thresh = c("roc_auc", 0.5)
+  )
+  expect_identical(ncol(pred_thresh), 2L)
+})
+
 
 test_that("simple_ensemble prediction errors", {
   ## now add some models (the first 3) using default metric

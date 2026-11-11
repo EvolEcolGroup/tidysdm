@@ -1,12 +1,40 @@
 #' Boyce continuous index (BCI)
 #'
-#' This function the Boyce Continuous Index, a measure of model accuracy
-#' appropriate for Species Distribution Models with presence only data (i.e.
-#' using pseudoabsences or background). The algorithm used here comes from the
-#' package `enmSdm`, and uses multiple overlapping windows.
+#' This function computes the Boyce Continuous Index, a measure of model
+#' accuracy appropriate for Species Distribution Models with presence only data
+#' (i.e. using pseudoabsences or background). The algorithm used here comes from
+#' the package `enmSdm`, and uses multiple overlapping windows.
 #'
 #' There is no multiclass version of this function, it only operates on binary
 #' predictions (e.g. presences and absences in SDMs).
+#'
+#' @details The range of predictions is covered by 101 overlapping windows,
+#'   each spanning a tenth of that range. For each window, the proportion of
+#'   presences that fall in it (predicted, P) is divided by the proportion of
+#'   background points that fall in it (expected, E), and the index is the
+#'   Spearman correlation between the P/E ratio and the mean prediction of the
+#'   window. Windows without presences are dropped.
+#'
+#'   If predictions take only a few distinct values, only a few windows are
+#'   left, and the correlation is not informative: with two windows, it is
+#'   always 1 or -1, however weakly the predictions separate presences from
+#'   background. `boyce_cont()` therefore returns `NA` (with a warning) if fewer
+#'   than `min_windows` distinct windows are left. Windows that contain the same
+#'   set of predictions count only once: since windows overlap, three distinct
+#'   prediction values can fill 13 windows, but they count as 3. Set
+#'   `min_windows = 2` to get the behaviour of `tidysdm` 1.0.4 and earlier.
+#'
+#'   To change `min_windows` within a [yardstick::metric_set()] (e.g. when
+#'   tuning models), use [yardstick::metric_tweak()], which keeps the name of
+#'   the metric (so that it can still be used by, e.g., `metric_thresh` in
+#'   [predict.simple_ensemble()]):
+#'   ```
+#'   boyce_cont_10 <- yardstick::metric_tweak("boyce_cont", boyce_cont,
+#'     min_windows = 10)
+#'   my_metrics <- yardstick::metric_set(boyce_cont_10, roc_auc, tss_max)
+#'   ```
+#'   Note that [sdm_metric_set()] cannot be used for this, as it already
+#'   includes [boyce_cont()].
 #'
 #' @param data Either a data.frame containing the columns specified by the truth
 #'   and estimate arguments, or a table/matrix where the true class results
@@ -41,6 +69,10 @@
 #'   corresponding to the "relevant" class. Otherwise, a matrix with as many
 #'   columns as factor levels of truth. It is assumed that these are in the same
 #'   order as the levels of truth.
+#' @param min_windows The minimum number of distinct windows (see details)
+#'   needed to compute the index; if fewer windows are left, `NA` is returned
+#'   with a warning. It must be a whole number between 2 and 101 (the number of
+#'   windows). Defaults to 3.
 #' @returns A tibble with columns .metric, .estimator, and .estimate and 1 row
 #'   of values. For grouped data frames, the number of rows returned will be the
 #'   same as the number of groups.
@@ -56,6 +88,16 @@
 #'
 #' @examples
 #' boyce_cont(two_class_example, truth, Class1)
+#'
+#' # require at least 10 distinct windows
+#' boyce_cont(two_class_example, truth, Class1, min_windows = 10)
+#'
+#' # use it in a metric set
+#' boyce_cont_10 <- yardstick::metric_tweak("boyce_cont", boyce_cont,
+#'   min_windows = 10
+#' )
+#' my_metrics <- yardstick::metric_set(boyce_cont_10, roc_auc, tss_max)
+#' my_metrics(two_class_example, truth, Class1)
 #'
 #' @export
 #'
@@ -75,7 +117,8 @@ boyce_cont.data.frame <- function(data,
                                   estimator = NULL,
                                   na_rm = TRUE,
                                   event_level = "first",
-                                  case_weights = NULL) {
+                                  case_weights = NULL,
+                                  min_windows = 3) {
   yardstick::prob_metric_summarizer(
     name = "boyce_cont",
     fn = boyce_cont_vec,
@@ -85,7 +128,9 @@ boyce_cont.data.frame <- function(data,
     estimator = estimator,
     na_rm = na_rm,
     case_weights = !!rlang::enquo(case_weights),
-    event_level = event_level
+    event_level = event_level,
+    # pass min_windows on to boyce_cont_vec
+    fn_options = list(min_windows = min_windows)
   )
 }
 
@@ -106,8 +151,21 @@ boyce_cont_vec <- function(truth,
                            na_rm = TRUE,
                            event_level = "first",
                            case_weights = NULL,
+                           min_windows = 3,
                            ...) {
   abort_if_class_pred(truth)
+
+  # min_windows must be a single whole number between 2 (the minimum for a
+  # correlation) and 101 (the number of windows used by contBoyce)
+  valid_min_windows <- is.numeric(min_windows) &&
+    length(min_windows) == 1 &&
+    !is.na(min_windows) &&
+    min_windows == round(min_windows) &&
+    min_windows >= 2 &&
+    min_windows <= 101
+  if (!valid_min_windows) {
+    stop("`min_windows` must be a single whole number between 2 and 101")
+  }
 
   estimator <- yardstick::finalize_estimator(truth, estimator, "boyce_cont")
 
@@ -128,7 +186,8 @@ boyce_cont_vec <- function(truth,
     estimate = estimate,
     estimator = estimator,
     event_level = event_level,
-    case_weights = case_weights
+    case_weights = case_weights,
+    min_windows = min_windows
   )
 }
 
@@ -136,7 +195,8 @@ boyce_cont_estimator_impl <- function(truth,
                                       estimate,
                                       estimator,
                                       event_level,
-                                      case_weights) {
+                                      case_weights,
+                                      min_windows) {
   if (!identical(estimator, "binary")) {
     stop(
       "boyce_cont is only available for binary classes; multiclass ",
@@ -162,12 +222,14 @@ boyce_cont_estimator_impl <- function(truth,
   }
   contBoyce(
     pres = pres, contrast = contrast,
-    presWeight = presWeight, contrastWeight = contrastWeight
+    presWeight = presWeight, contrastWeight = contrastWeight,
+    min_windows = min_windows
   )
 }
 
 
-# copy of contBoyce from enmSdm
+# copy of contBoyce from enmSdm, with the addition of min_windows (which is not
+# in the enmSdm original)
 
 contBoyce <- function(
   pres,
@@ -180,6 +242,7 @@ contBoyce <- function(
   method = "spearman",
   dropZeros = TRUE,
   na.rm = FALSE,
+  min_windows = 3,
   ...
 ) {
   # if all NAs
@@ -287,6 +350,36 @@ contBoyce <- function(
 
   # remove NAs
   na_in_either <- (is.na(meanPred) | is.na(PE))
+
+  # tidysdm addition (not in enmSdm): count the distinct windows left, and
+  # return NA if there are fewer than min_windows, as the correlation is not
+  # informative with so few windows (with 2 windows, it is always 1 or -1).
+  # Windows overlap, so several windows can contain the same set of
+  # predictions (e.g. 3 distinct prediction values can fill 13 windows); such
+  # windows count only once. As each window is an interval, the set of
+  # predictions it contains is defined by the first and last distinct
+  # prediction value that it covers.
+  pred_values <- sort(unique(c(pres, contrast)))
+  # index of the first value >= lows (i.e. one more than the number of values
+  # below lows)
+  first_value <- findInterval(lows, pred_values, left.open = TRUE) + 1
+  # index of the last value < highs
+  last_value <- findInterval(highs, pred_values, left.open = TRUE)
+  # number of distinct windows among those left
+  n_windows <- length(unique(
+    paste(first_value, last_value)[!na_in_either]
+  ))
+  if (n_windows < min_windows) {
+    warning(
+      "boyce_cont: only ", n_windows, " distinct window(s) with presences ",
+      "left, fewer than `min_windows` (", min_windows, "); returning NA. ",
+      "The predictions take too few distinct values for the Boyce index ",
+      "to be informative.",
+      call. = FALSE
+    )
+    return(NA_real_)
+  }
+
   meanPred <- meanPred[!na_in_either]
   PE <- PE[!na_in_either]
 
