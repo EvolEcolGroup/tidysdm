@@ -194,7 +194,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Ensembles: plotting, thresholds and prediction
 
-- [ ] **#12 Medium: [`66d2153`](https://github.com/EvolEcolGroup/tidysdm/commit/66d215312b5f959596c58bab4f49ed18cf949c85) Rank the best workflow first in `autoplot.simple_ensemble()`**
+- [X] TODO MC,EC,AP **#12 Medium: [`66d2153`](https://github.com/EvolEcolGroup/tidysdm/commit/66d215312b5f959596c58bab4f49ed18cf949c85) Rank the best workflow first in `autoplot.simple_ensemble()`**
   - *Problem:* the metric was sorted in increasing order, so the *worst*
     model got rank 1 for AUC, Boyce and TSS. The docs also said 95% where
     the bounds are 90% (`qnorm(0.95)`).
@@ -202,12 +202,17 @@ testthat::test_file("tests/testthat/test_<name>.R")
     function.
   - *Test:* rank order is checked for a maximised metric (`roc_auc`) and a
     minimised one (`mn_log_loss`).
-- [ ] **#13 Medium: [`5a095f1`](https://github.com/EvolEcolGroup/tidysdm/commit/5a095f19bc16c1bf1df1778b11c3a6a8ca1ce887) Error on invalid metrics in `optim_thresh()`**
+  - *Comment:* New small function `metric_direction` added at the end of the script.
+    With this fix,if there are unknown/custom metrics they will still default to "maximize" only.
+    qnorm(0.95)?
+- [X] MC **#13 Medium: [`5a095f1`](https://github.com/EvolEcolGroup/tidysdm/commit/5a095f19bc16c1bf1df1778b11c3a6a8ca1ce887) Error on invalid metrics in `optim_thresh()`**
   - *Problem:* the function returned the *string* `"invalid metric"` as
     the threshold.
   - *Test:* new `test_optim_thresh.R` covers valid metrics and invalid
     ones.
-- [ ] **#14 High: [`1a0e339`](https://github.com/EvolEcolGroup/tidysdm/commit/1a0e339b843e5f01cdede6f1c8a6139b087ef5e2) Fix threshold for a target sensitivity**
+  - *Comment:* The first test might not be very strong/necessary: do we expect treshold to be 
+    in a specific range or just `is.numeric`?
+- [X] MC **#14 High: [`1a0e339`](https://github.com/EvolEcolGroup/tidysdm/commit/1a0e339b843e5f01cdede6f1c8a6139b087ef5e2) Fix threshold for a target sensitivity**
   - *Problem:* `which.min(sens > target)` gave a sensitivity below the
     target (e.g. 0.8 for a target of 0.85). If every threshold exceeded the
     target, it returned the *lowest* threshold, giving a sensitivity of 1.
