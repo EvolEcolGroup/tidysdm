@@ -75,7 +75,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Model explanation (DALEX)
 
-- [X] MC TODO **#1 High: [`ccb8bf4`](https://github.com/EvolEcolGroup/tidysdm/commit/ccb8bf4fbadf83fa615dc966f517d785d13a27ba) Fix response coding in `explain_tidysdm()`**
+- [ ] MC TODO **#1 High: [`ccb8bf4`](https://github.com/EvolEcolGroup/tidysdm/commit/ccb8bf4fbadf83fa615dc966f517d785d13a27ba) Fix response coding in `explain_tidysdm()`**
   - *Problem:* the response was passed to DALEX as `as.numeric(factor)`,
     giving 1 for presence and 2 for absence. DALEX expects 0/1. As a
     result, `model_performance()` reported an AUC of 0.57 for
@@ -110,7 +110,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Data splitting
 
-- [X] MC TODO **#4 High: [`3afee81`](https://github.com/EvolEcolGroup/tidysdm/commit/3afee815291d4f2b9208e464d6a2f2d6196ab640) Fix swapped counts in `check_splits_balance()`**
+- [ ] MC TODO **#4 High: [`3afee81`](https://github.com/EvolEcolGroup/tidysdm/commit/3afee815291d4f2b9208e464d6a2f2d6196ab640) Fix swapped counts in `check_splits_balance()`**
   - *Problem:* for an `rset`, the analysis counts were labelled
     `_assessment` and vice versa. For an initial split, the training counts
     were in the `_test` columns.
@@ -177,7 +177,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Model specification and fitting
 
-- [X] MC TODO **#10 Medium: [`e388971`](https://github.com/EvolEcolGroup/tidysdm/commit/e388971ef9c0043a93953ae832fac837d392fec4) Fix `maxnet_fit()` for plain data.frames**
+- [ ] MC TODO **#10 Medium: [`e388971`](https://github.com/EvolEcolGroup/tidysdm/commit/e388971ef9c0043a93953ae832fac837d392fec4) Fix `maxnet_fit()` for plain data.frames**
   - *Problem:* `data[, col] %>% pull()` fails on a `data.frame`, which
     broke `maxent() %>% fit(..., data = <data.frame>)`.
   - *Test:* fitting on a `data.frame` gives the same result as fitting on
@@ -194,7 +194,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Ensembles: plotting, thresholds and prediction
 
-- [X] TODO MC,EC,AP **#12 Medium: [`66d2153`](https://github.com/EvolEcolGroup/tidysdm/commit/66d215312b5f959596c58bab4f49ed18cf949c85) Rank the best workflow first in `autoplot.simple_ensemble()`**
+- [ ] TODO MC,EC,AP **#12 Medium: [`66d2153`](https://github.com/EvolEcolGroup/tidysdm/commit/66d215312b5f959596c58bab4f49ed18cf949c85) Rank the best workflow first in `autoplot.simple_ensemble()`**
   - *Problem:* the metric was sorted in increasing order, so the *worst*
     model got rank 1 for AUC, Boyce and TSS. The docs also said 95% where
     the bounds are 90% (`qnorm(0.95)`).
@@ -220,7 +220,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
     target. A target outside 0 to 1 gives an error.
   - *Test:* for a range of targets, the target is met and no higher
     threshold meets it.
-- [ ] **#15 High: [`225aa02`](https://github.com/EvolEcolGroup/tidysdm/commit/225aa02e0a64cd2b8813296c4a50ebbcb992039d) Fix weighted median for ensemble predictions**
+- [x] **#15 High: [`225aa02`](https://github.com/EvolEcolGroup/tidysdm/commit/225aa02e0a64cd2b8813296c4a50ebbcb992039d) Fix weighted median for ensemble predictions**
   - *Problem:* tied cumulative weights (e.g. 1, 2, 1) returned two values,
     so `predict()` returned one column per location. With equal weights it
     did not match the median.

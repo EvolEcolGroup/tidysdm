@@ -212,7 +212,8 @@ predict.simple_ensemble <-
     }
 
     weighted_median <- function(x, w = metric_ens) { # nolint
-      weighted_median_vec(x, w)
+      # use our internal function to get weighted medians
+      weighted_median_vec(x = x, w = w)
     }
 
     # if we have an aggregating function
