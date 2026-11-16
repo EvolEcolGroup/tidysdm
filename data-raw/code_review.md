@@ -205,7 +205,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
   - *Comment:* New small function `metric_direction` added at the end of the script.
     With this fix,if there are unknown/custom metrics they will still default to "maximize" only.
     qnorm(0.95)?
-- [X] MC **#13 Medium: [`5a095f1`](https://github.com/EvolEcolGroup/tidysdm/commit/5a095f19bc16c1bf1df1778b11c3a6a8ca1ce887) Error on invalid metrics in `optim_thresh()`**
+- [ ] TODO MC **#13 Medium: [`5a095f1`](https://github.com/EvolEcolGroup/tidysdm/commit/5a095f19bc16c1bf1df1778b11c3a6a8ca1ce887) Error on invalid metrics in `optim_thresh()`**
   - *Problem:* the function returned the *string* `"invalid metric"` as
     the threshold.
   - *Test:* new `test_optim_thresh.R` covers valid metrics and invalid
@@ -261,13 +261,13 @@ testthat::test_file("tests/testthat/test_<name>.R")
     `"my_var"`. A stray `browser` was also left in the function body.
   - *Test:* covers `presence_level` passed as a variable, and a non-string
     `presence_level`.
-- [ ] **#19 Medium: [`00d211a`](https://github.com/EvolEcolGroup/tidysdm/commit/00d211a5f97dac62020b46b550e74674094e5651) Support any geometry column name in the time samplers**
+- [X] MC **#19 Medium: [`00d211a`](https://github.com/EvolEcolGroup/tidysdm/commit/00d211a5f97dac62020b46b550e74674094e5651) Support any geometry column name in the time samplers**
   - *Problem:* with `return_pres = TRUE`, the code used `data$geometry`,
     which is `NULL` when the geometry column is named e.g. `geom` (as
     after `sf::st_read()` on a GeoPackage).
   - *Test:* `sample_background_time()` and `sample_pseudoabs_time()` on an
     `sf` with a `geom` column.
-- [ ] **#20 Medium: [`651f388`](https://github.com/EvolEcolGroup/tidysdm/commit/651f38840e882749e34279c9de3e3c0279505fa1) Handle the time axis of `stars` objects consistently**
+- [ ] TODO **#20 Medium: [`651f388`](https://github.com/EvolEcolGroup/tidysdm/commit/651f38840e882749e34279c9de3e3c0279505fa1) Handle the time axis of `stars` objects consistently**
   - *Problem:* the three functions converted `stars` objects differently:
     - `sample_background_time()` lost "years" time axes
     - `sample_pseudoabs_time()` and `thin_by_cell_time()` failed with
@@ -276,12 +276,15 @@ testthat::test_file("tests/testthat/test_<name>.R")
     `R/misc.R`.
   - *Test:* `stars` with a "years" time axis for
     `sample_background_time()`, and with POSIXct times for all three.
-- [ ] **#21 Medium: [`1c26776`](https://github.com/EvolEcolGroup/tidysdm/commit/1c2677689232cd150e928d648685051958d5e174) Fix `out_of_range_warning()` for a single time step**
+- [ ] TODO MC **#21 Medium: [`1c26776`](https://github.com/EvolEcolGroup/tidysdm/commit/1c2677689232cd150e928d648685051958d5e174) Fix `out_of_range_warning()` for a single time step**
   - *Problem:* the range had an NA bound, so every `*_time()` function
     failed on single-layer rasters.
   - *Test:* covers the unit, and `sample_pseudoabs_time()` with a single
     time step.
-- [ ] **#22 Medium: [`3feb609`](https://github.com/EvolEcolGroup/tidysdm/commit/3feb609c6fb93117c3ad956429853c5e97855eba) Compute time intervals in days in `thin_by_dist_time()`**
+  - *Comment:*: is this an edge case as you would not use *_time for only one 
+    time step? Also, it has no natural yardstick for deciding when a date is 
+    (too) far from the raster’s time, would the wrong date be accpted?
+- [X] MC **#22 Medium: [`3feb609`](https://github.com/EvolEcolGroup/tidysdm/commit/3feb609c6fb93117c3ad956429853c5e97855eba) Compute time intervals in days in `thin_by_dist_time()`**
   - *Problem:* `difftime` chooses its units automatically, giving seconds
     near 1970-01-01, while `interval_min` is in days.
   - *Test:* points half a day apart near the origin are thinned.
