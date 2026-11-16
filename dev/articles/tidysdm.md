@@ -30,9 +30,9 @@ library(tidysdm)
 #> Loading required package: tidymodels
 #> ── Attaching packages ────────────────────────────────────── tidymodels 1.5.0 ──
 #> ✔ broom        1.0.13     ✔ recipes      1.4.0 
-#> ✔ dials        1.4.4      ✔ rsample      1.3.2 
+#> ✔ dials        1.4.5      ✔ rsample      1.3.2 
 #> ✔ dplyr        1.2.1      ✔ tailor       0.1.0 
-#> ✔ ggplot2      4.0.3      ✔ tidyr        1.3.2 
+#> ✔ ggplot2      4.0.4      ✔ tidyr        1.3.2 
 #> ✔ infer        1.1.0      ✔ tune         2.1.0 
 #> ✔ modeldata    1.6.0      ✔ workflows    1.3.0 
 #> ✔ parsnip      1.6.1      ✔ workflowsets 1.1.1 
@@ -719,7 +719,7 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (454ms)
+#> ✔ 1 of 4 resampling: default_glm (452ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> ✔ 2 of 4 tuning:     default_rf (2.5s)
@@ -731,9 +731,9 @@ lacerta_models <-
 #> There were issues with some computations   A: x5
 #> There were issues with some computations   A: x5
 #> 
-#> ✔ 3 of 4 tuning:     default_gbm (8.3s)
+#> ✔ 3 of 4 tuning:     default_gbm (8.4s)
 #> i 4 of 4 tuning:     default_maxent
-#> ✔ 4 of 4 tuning:     default_maxent (2s)
+#> ✔ 4 of 4 tuning:     default_maxent (2.1s)
 ```
 
 Note that `workflow_set` correctly detects that we have no tuning
@@ -1159,19 +1159,19 @@ for (i_repeat in 1:3) {
 }
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (426ms)
+#> ✔ 1 of 2 resampling: default_glm (415ms)
 #> i 2 of 2 tuning:     default_maxent
 #> ✔ 2 of 2 tuning:     default_maxent (2.1s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (433ms)
+#> ✔ 1 of 2 resampling: default_glm (418ms)
 #> i 2 of 2 tuning:     default_maxent
 #> ✔ 2 of 2 tuning:     default_maxent (2.1s)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (436ms)
+#> ✔ 1 of 2 resampling: default_glm (418ms)
 #> i 2 of 2 tuning:     default_maxent
-#> ✔ 2 of 2 tuning:     default_maxent (2s)
+#> ✔ 2 of 2 tuning:     default_maxent (2.1s)
 ```
 
 Now we can create a `repeat_ensemble` from the list:

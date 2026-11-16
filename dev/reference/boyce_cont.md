@@ -1,9 +1,9 @@
 # Boyce continuous index (BCI)
 
-This function the Boyce Continuous Index, a measure of model accuracy
-appropriate for Species Distribution Models with presence only data
-(i.e. using pseudoabsences or background). The algorithm used here comes
-from the package `enmSdm`, and uses multiple overlapping windows.
+This function computes the Boyce Continuous Index, a measure of model
+accuracy appropriate for Species Distribution Models with presence only
+data (i.e. using pseudoabsences or background). The algorithm used here
+comes from the package `enmSdm`, and uses multiple overlapping windows.
 
 ## Usage
 
@@ -18,7 +18,8 @@ boyce_cont(
   estimator = NULL,
   na_rm = TRUE,
   event_level = "first",
-  case_weights = NULL
+  case_weights = NULL,
+  min_windows = 3
 )
 
 # S3 method for class 'sf'
@@ -31,6 +32,7 @@ boyce_cont_vec(
   na_rm = TRUE,
   event_level = "first",
   case_weights = NULL,
+  min_windows = 3,
   ...
 )
 ```
@@ -87,6 +89,13 @@ boyce_cont_vec(
   unquoted column name that evaluates to a numeric column in data. For
   \_vec() functions, a numeric vector.
 
+- min_windows:
+
+  The minimum number of distinct windows (see details) needed to compute
+  the index; if fewer windows are left, `NA` is returned with a warning.
+  It must be a whole number between 2 and 101 (the number of windows).
+  Defaults to 3.
+
 - estimate:
 
   If truth is binary, a numeric vector of class probabilities
@@ -104,6 +113,39 @@ same as the number of groups.
 
 There is no multiclass version of this function, it only operates on
 binary predictions (e.g. presences and absences in SDMs).
+
+The range of predictions is covered by 101 overlapping windows, each
+spanning a tenth of that range. For each window, the proportion of
+presences that fall in it (predicted, P) is divided by the proportion of
+background points that fall in it (expected, E), and the index is the
+Spearman correlation between the P/E ratio and the mean prediction of
+the window. Windows without presences are dropped.
+
+If predictions take only a few distinct values, only a few windows are
+left, and the correlation is not informative: with two windows, it is
+always 1 or -1, however weakly the predictions separate presences from
+background. `boyce_cont()` therefore returns `NA` (with a warning) if
+fewer than `min_windows` distinct windows are left. Windows that contain
+the same set of predictions count only once: since windows overlap,
+three distinct prediction values can fill 13 windows, but they count as
+3. Set `min_windows = 2` to get the behaviour of `tidysdm` 1.0.4 and
+earlier.
+
+To change `min_windows` within a
+[`yardstick::metric_set()`](https://yardstick.tidymodels.org/reference/metric_set.html)
+(e.g. when tuning models), use
+[`yardstick::metric_tweak()`](https://yardstick.tidymodels.org/reference/metric_tweak.html),
+which keeps the name of the metric (so that it can still be used by,
+e.g., `metric_thresh` in
+[`predict.simple_ensemble()`](https://evolecolgroup.github.io/tidysdm/dev/reference/predict.simple_ensemble.md)):
+
+    boyce_cont_10 <- yardstick::metric_tweak("boyce_cont", boyce_cont,
+      min_windows = 10)
+    my_metrics <- yardstick::metric_set(boyce_cont_10, roc_auc, tss_max)
+
+Note that
+[`sdm_metric_set()`](https://evolecolgroup.github.io/tidysdm/dev/reference/sdm_metric_set.md)
+cannot be used for this, as it already includes `boyce_cont()`.
 
 ## References
 
@@ -128,4 +170,24 @@ boyce_cont(two_class_example, truth, Class1)
 #>   .metric    .estimator .estimate
 #>   <chr>      <chr>          <dbl>
 #> 1 boyce_cont binary         0.805
+
+# require at least 10 distinct windows
+boyce_cont(two_class_example, truth, Class1, min_windows = 10)
+#> # A tibble: 1 × 3
+#>   .metric    .estimator .estimate
+#>   <chr>      <chr>          <dbl>
+#> 1 boyce_cont binary         0.805
+
+# use it in a metric set
+boyce_cont_10 <- yardstick::metric_tweak("boyce_cont", boyce_cont,
+  min_windows = 10
+)
+my_metrics <- yardstick::metric_set(boyce_cont_10, roc_auc, tss_max)
+my_metrics(two_class_example, truth, Class1)
+#> # A tibble: 3 × 3
+#>   .metric    .estimator .estimate
+#>   <chr>      <chr>          <dbl>
+#> 1 boyce_cont binary         0.805
+#> 2 roc_auc    binary         0.939
+#> 3 tss_max    binary         0.728
 ```

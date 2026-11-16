@@ -31,6 +31,12 @@ a
 [`yardstick::metric_set`](https://yardstick.tidymodels.org/reference/metric_set.html)
 object.
 
+## Details
+
+[`boyce_cont()`](https://evolecolgroup.github.io/tidysdm/dev/reference/boyce_cont.md)
+is used with its default settings; see its help page for how to build a
+metric set with a different `min_windows`.
+
 ## Examples
 
 ``` r

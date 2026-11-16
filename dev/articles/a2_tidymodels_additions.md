@@ -25,9 +25,9 @@ library(tidysdm)
 #> Loading required package: tidymodels
 #> ── Attaching packages ────────────────────────────────────── tidymodels 1.5.0 ──
 #> ✔ broom        1.0.13     ✔ recipes      1.4.0 
-#> ✔ dials        1.4.4      ✔ rsample      1.3.2 
+#> ✔ dials        1.4.5      ✔ rsample      1.3.2 
 #> ✔ dplyr        1.2.1      ✔ tailor       0.1.0 
-#> ✔ ggplot2      4.0.3      ✔ tidyr        1.3.2 
+#> ✔ ggplot2      4.0.4      ✔ tidyr        1.3.2 
 #> ✔ infer        1.1.0      ✔ tune         2.1.0 
 #> ✔ modeldata    1.6.0      ✔ workflows    1.3.0 
 #> ✔ parsnip      1.6.1      ✔ workflowsets 1.1.1 
@@ -167,10 +167,10 @@ lacerta_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 2 resampling: default_glm
-#> ✔ 1 of 2 resampling: default_glm (875ms)
+#> ✔ 1 of 2 resampling: default_glm (858ms)
 #> i 2 of 2 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 2 tuning:     default_rf (1.8s)
+#> ✔ 2 of 2 tuning:     default_rf (1.9s)
 # fit the ensemble
 lacerta_ensemble <- simple_ensemble() %>%
   add_member(lacerta_models, metric = "boyce_cont")
@@ -594,14 +594,14 @@ lacerta_models <-
 #> generated.
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 3 resampling: uncor_glm
-#> ✔ 1 of 3 resampling: uncor_glm (313ms)
+#> ✔ 1 of 3 resampling: uncor_glm (316ms)
 #> i 2 of 3 tuning:     all_rf
 #> ! No improvement for 10 iterations; returning current results.
-#> ✔ 2 of 3 tuning:     all_rf (15.9s)
+#> ✔ 2 of 3 tuning:     all_rf (15.7s)
 #> i 3 of 3 tuning:     uncor_svm
 #> maximum number of iterations reached 0.004185637 -0.004098871
 #> ! No improvement for 10 iterations; returning current results.
-#> ✔ 3 of 3 tuning:     uncor_svm (17.1s)
+#> ✔ 3 of 3 tuning:     uncor_svm (16.9s)
 ```
 
 We can have a look at the performance of our models with:
@@ -780,18 +780,19 @@ lacerta_models <-
 #> There were issues with some computations   A: x1
 #> There were issues with some computations   A: x2
 #> 
-#> ✔ 1 of 4 resampling: default_glm (511ms)
+#> ✔ 1 of 4 resampling: default_glm (510ms)
 #> i 2 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 2 of 4 tuning:     default_rf (3.4s)
+#> ✔ 2 of 4 tuning:     default_rf (3.3s)
 #> i 3 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
-#> There were issues with some computations   A: x2
+#> There were issues with some computations   A: x3
 #> There were issues with some computations   A: x4
 #> There were issues with some computations   A: x5
-#> There were issues with some computations   A: x5
+#> → B | warning: boyce_cont: only 2 distinct window(s) with presences left, fewer than `min_windows` (3); returning NA. The predictions take too few distinct values for the Boyce index to be informative.
+#> There were issues with some computations   A: x5There were issues with some computations   A: x6   B: x1
 #> 
 #> ✔ 3 of 4 tuning:     default_gbm (11s)
 #> i 4 of 4 tuning:     default_maxent
