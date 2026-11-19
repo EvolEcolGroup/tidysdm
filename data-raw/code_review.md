@@ -75,7 +75,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Model explanation (DALEX)
 
-- [ ] MC TODO **#1 High: [`ccb8bf4`](https://github.com/EvolEcolGroup/tidysdm/commit/ccb8bf4fbadf83fa615dc966f517d785d13a27ba) Fix response coding in `explain_tidysdm()`**
+- [X] MC **#1 High: [`ccb8bf4`](https://github.com/EvolEcolGroup/tidysdm/commit/ccb8bf4fbadf83fa615dc966f517d785d13a27ba) Fix response coding in `explain_tidysdm()`**
   - *Problem:* the response was passed to DALEX as `as.numeric(factor)`,
     giving 1 for presence and 2 for absence. DALEX expects 0/1. As a
     result, `model_performance()` reported an AUC of 0.57 for
@@ -110,7 +110,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Data splitting
 
-- [ ] MC TODO **#4 High: [`3afee81`](https://github.com/EvolEcolGroup/tidysdm/commit/3afee815291d4f2b9208e464d6a2f2d6196ab640) Fix swapped counts in `check_splits_balance()`**
+- [ ] TODO MC **#4 High: [`3afee81`](https://github.com/EvolEcolGroup/tidysdm/commit/3afee815291d4f2b9208e464d6a2f2d6196ab640) Fix swapped counts in `check_splits_balance()`**
   - *Problem:* for an `rset`, the analysis counts were labelled
     `_assessment` and vice versa. For an initial split, the training counts
     were in the `_test` columns.
@@ -152,7 +152,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Extrapolation
 
-- [ ] MC TODO **#8 High: [`d8d3211`](https://github.com/EvolEcolGroup/tidysdm/commit/d8d32115754b6d771f7a4ee5a7caebfb8bf6d76d) Match training variables to layers by name in `clamp_predictors()`**
+- [ ] TODO MC **#8 High: [`d8d3211`](https://github.com/EvolEcolGroup/tidysdm/commit/d8d32115754b6d771f7a4ee5a7caebfb8bf6d76d) Match training variables to layers by name in `clamp_predictors()`**
   - *Problem:* `terra::clamp()` applies its limits by layer order, but the
     limits were computed in the column order of `training`. Columns in a
     different order, or extra layers in the raster, were clamped with the
@@ -177,7 +177,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Model specification and fitting
 
-- [ ] MC TODO **#10 Medium: [`e388971`](https://github.com/EvolEcolGroup/tidysdm/commit/e388971ef9c0043a93953ae832fac837d392fec4) Fix `maxnet_fit()` for plain data.frames**
+- [ ] TODO MC **#10 Medium: [`e388971`](https://github.com/EvolEcolGroup/tidysdm/commit/e388971ef9c0043a93953ae832fac837d392fec4) Fix `maxnet_fit()` for plain data.frames**
   - *Problem:* `data[, col] %>% pull()` fails on a `data.frame`, which
     broke `maxent() %>% fit(..., data = <data.frame>)`.
   - *Test:* fitting on a `data.frame` gives the same result as fitting on
@@ -288,7 +288,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
   - *Problem:* `difftime` chooses its units automatically, giving seconds
     near 1970-01-01, while `interval_min` is in days.
   - *Test:* points half a day apart near the origin are thinned.
-- [X] TODO **#23 Low: [`df0d7d5`](https://github.com/EvolEcolGroup/tidysdm/commit/df0d7d57da09bbfcf499a52007b2f088af2e985c) Accept namespaced strategies in `spatial_initial_split()`**
+- [ ] TODO **#23 Low: [`df0d7d5`](https://github.com/EvolEcolGroup/tidysdm/commit/df0d7d57da09bbfcf499a52007b2f088af2e985c) Accept namespaced strategies in `spatial_initial_split()`**
   - *Problem:* `spatialsample::spatial_block_cv` was rejected as "not a
     function in spatialsample".
   - *Fix:* checks that the function belongs to the spatialsample
@@ -296,11 +296,11 @@ testthat::test_file("tests/testthat/test_<name>.R")
   - *Test:* a namespaced strategy gives the same split; a non-spatialsample
     function still gives an error.
   - *Comment:* it might not be necessary. MC, EK, JH, GTM, OP, ZSR
-- [ ] **#24 Low: [`ea21b72`](https://github.com/EvolEcolGroup/tidysdm/commit/ea21b7213564223fc21f602aabefff20ef271627) Only warn about too few cells when there are fewer than `n`**
+- [X] MC **#24 Low: [`ea21b72`](https://github.com/EvolEcolGroup/tidysdm/commit/ea21b7213564223fc21f602aabefff20ef271627) Only warn about too few cells when there are fewer than `n`**
   - *Problem:* `sample_background()` and `sample_pseudoabs()` warned even
     when exactly `n` cells were available.
   - *Test:* no warning when `n` equals the number of available cells.
-- [ ] **#34 Medium: [`a80e55b`](https://github.com/EvolEcolGroup/tidysdm/commit/a80e55b843d5c2ba30a9cf963e3f37989106e7ce) Only use numeric variables in `dist_pres_vs_bg()` and `plot_pres_vs_bg()`**
+- [X] MC **#34 Medium: [`a80e55b`](https://github.com/EvolEcolGroup/tidysdm/commit/a80e55b843d5c2ba30a9cf963e3f37989106e7ce) Only use numeric variables in `dist_pres_vs_bg()` and `plot_pres_vs_bg()`**
   - *Problem:* the code comment said it subset to numeric columns, but it
     used every column, so factor or id columns made `dist_pres_vs_bg()`
     fail.
@@ -308,10 +308,10 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Recipes
 
-- [ ] **#25 Low: [`f7280b3`](https://github.com/EvolEcolGroup/tidysdm/commit/f7280b301772d0d13ba5e2fc0c57b0ffec26546b) Pass `verbose` on in `prep.spatial_recipe()`**
+- [X] MC **#25 Low: [`f7280b3`](https://github.com/EvolEcolGroup/tidysdm/commit/f7280b301772d0d13ba5e2fc0c57b0ffec26546b) Pass `verbose` on in `prep.spatial_recipe()`**
   - *Problem:* `verbose` was hard-coded to `FALSE`.
   - *Test:* `expect_output()` with `verbose = TRUE`.
-- [ ] **#26 High: [`d6bf76b`](https://github.com/EvolEcolGroup/tidysdm/commit/d6bf76be84b7059793f4be71e47166c0c04307c0) Fix positional arguments in `prep()` and `bake()` for spatial recipes**
+- [ ] TODO **#26 High: [`d6bf76b`](https://github.com/EvolEcolGroup/tidysdm/commit/d6bf76be84b7059793f4be71e47166c0c04307c0) Fix positional arguments in `prep()` and `bake()` for spatial recipes**
   - *Problem:* `NextMethod()` was called with arguments re-named
     explicitly. That *appends* to the original call rather than replacing
     positional arguments, which caused three problems:
@@ -328,26 +328,26 @@ testthat::test_file("tests/testthat/test_<name>.R")
 
 ### Packaging
 
-- [ ] **#27 Medium: [`ddc47ab`](https://github.com/EvolEcolGroup/tidysdm/commit/ddc47ab59e40e55bd3fe8421836d8f87ccbde6dc) Require `dplyr (>= 1.2.0)`**
+- [X] MC **#27 Medium: [`ddc47ab`](https://github.com/EvolEcolGroup/tidysdm/commit/ddc47ab59e40e55bd3fe8421836d8f87ccbde6dc) Require `dplyr (>= 1.2.0)`**
   - `dplyr::recode_values()`, which `maxnet_fit()`, `autoplot()` and the
     examples use, was introduced in dplyr 1.2.0.
-- [ ] **#35 Docs: [`d7d77f7`](https://github.com/EvolEcolGroup/tidysdm/commit/d7d77f71e4dd4a8ca0569e3797ed8460f92826e5) Format code in a NEWS entry**
+- [X] MC **#35 Docs: [`d7d77f7`](https://github.com/EvolEcolGroup/tidysdm/commit/d7d77f71e4dd4a8ca0569e3797ed8460f92826e5) Format code in a NEWS entry**
   - Adds backticks, which also avoids a spelling note.
-- [ ] **#36 Docs: [`31e7b86`](https://github.com/EvolEcolGroup/tidysdm/commit/31e7b867917b1609ea809e0940ebc2d32ee01575) Add `WGS` to the spelling wordlist**
+- [X] MC **#36 Docs: [`31e7b86`](https://github.com/EvolEcolGroup/tidysdm/commit/31e7b867917b1609ea809e0940ebc2d32ee01575) Add `WGS` to the spelling wordlist**
   - Pre-existing spelling note for "WGS84".
 
 ### Documentation and messages
 
-- [ ] **#28 Docs: [`8ae49f4`](https://github.com/EvolEcolGroup/tidysdm/commit/8ae49f491b1445ec2447ece73d542aa0be59a653) Fix the TSS formula in the documentation**
+- [X] MC **#28 Docs: [`8ae49f4`](https://github.com/EvolEcolGroup/tidysdm/commit/8ae49f491b1445ec2447ece73d542aa0be59a653) Fix the TSS formula in the documentation**
   - The formula read "sensitivity + specificity + 1"; it is "- 1".
-- [ ] **#29 Docs: [`f7fd9e6`](https://github.com/EvolEcolGroup/tidysdm/commit/f7fd9e69356f208236810436ca40643cd532c37e) Fix the number of rows in the dataset documentation**
+- [X] MC **#29 Docs: [`f7fd9e6`](https://github.com/EvolEcolGroup/tidysdm/commit/f7fd9e69356f208236810436ca40643cd532c37e) Fix the number of rows in the dataset documentation**
   - All three datasets were documented as having 1,297 rows. The actual
     counts are:
     - `lacerta`: 1,268
     - `horses`: 788
     - `lacertidae_background`: 34,677
   - Adds `test_datasets.R`.
-- [ ] **#30 Docs: [`971b594`](https://github.com/EvolEcolGroup/tidysdm/commit/971b594919023c187157c4ee3324fc45989f5ddb) Fix formatting of several error and warning messages**
+- [ ] TODO **#30 Docs: [`971b594`](https://github.com/EvolEcolGroup/tidysdm/commit/971b594919023c187157c4ee3324fc45989f5ddb) Fix formatting of several error and warning messages**
   - Missing spaces ("numberof", "combinationof").
   - The `blockcv2rsample()` error did not list all supported classes.
   - `clamp_predictors()`:
@@ -356,15 +356,18 @@ testthat::test_file("tests/testthat/test_<name>.R")
       used `varnames()` rather than `names()`
   - Dates in `out_of_range_warning()` were not separated by commas.
   - Tests check each message.
-- [ ] **#31 Docs: [`85622e8`](https://github.com/EvolEcolGroup/tidysdm/commit/85622e8bb7be3b4da77849dad2cdc135fdc88867) Fix documentation of the time sampling functions**
+  - *Comment:* `out_of_range_warning()`, the commit also dropped `which()` (does not 
+    drop NA anymore - is this intended behviour?)
+- [X] MC **#31 Docs: [`85622e8`](https://github.com/EvolEcolGroup/tidysdm/commit/85622e8bb7be3b4da77849dad2cdc135fdc88867) Fix documentation of the time sampling functions**
   - A literal `#' @details` appeared in `sample_pseudoabs_time()`.
   - `time_buffer` referred to method `'max_dist'` (it is `'dist_max'`).
   - There were unbalanced backticks.
-- [ ] **#32 Docs: [`9f8cd6a`](https://github.com/EvolEcolGroup/tidysdm/commit/9f8cd6a9b344992a4268f6e81c92fb7be6f92786) Clarify the meaning of `prop` in `spatial_initial_split()`**
+- [X] MC **#32 Docs: [`9f8cd6a`](https://github.com/EvolEcolGroup/tidysdm/commit/9f8cd6a9b344992a4268f6e81c92fb7be6f92786) Clarify the meaning of `prop` in `spatial_initial_split()`**
   - The first sentence said `prop` was the training proportion, but the
     code, the rest of the docs and the tests all use it as the testing
     proportion (see the open questions).
-- [ ] **#33 Docs: [`1653f66`](https://github.com/EvolEcolGroup/tidysdm/commit/1653f667b76fa11cc97adc0b38bf8daef8c45e0e) Refer to existing functions in the ensemble documentation**
+  - *Comment:* see comment in the open questions section. The change is only in the documentation, not in the code.
+- [X] MC **#33 Docs: [`1653f66`](https://github.com/EvolEcolGroup/tidysdm/commit/1653f667b76fa11cc97adc0b38bf8daef8c45e0e) Refer to existing functions in the ensemble documentation**
   - `add_best_candidates()`, `add_members()` and `add_repeats()` do not
     exist; they are now `add_member()` and `add_repeat()`.
   - Adds a test on the print messages.
@@ -384,7 +387,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
   This is the opposite of `rsample::initial_split()`, where it is the
   training proportion. Only the docs were clarified (#32); changing the
   behaviour would break existing code.
-- [ ] **`tests/testthat/_test_predict_repeat_ensemble.R`** never runs
+- [X] **`tests/testthat/_test_predict_repeat_ensemble.R`** never runs
   (because of the leading underscore) and looks superseded by
   `test_predict_repeated_ensemble.R`. Delete it?
 - [ ] **`filter_caret_algorithm()`** keeps caret's quirk of comparing
