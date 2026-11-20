@@ -205,7 +205,7 @@ testthat::test_file("tests/testthat/test_<name>.R")
   - *Comment:* New small function `metric_direction` added at the end of the script.
     With this fix,if there are unknown/custom metrics they will still default to "maximize" only.
     qnorm(0.95)?
-- [ ] TODO MC **#13 Medium: [`5a095f1`](https://github.com/EvolEcolGroup/tidysdm/commit/5a095f19bc16c1bf1df1778b11c3a6a8ca1ce887) Error on invalid metrics in `optim_thresh()`**
+- [X] TODO MC **#13 Medium: [`5a095f1`](https://github.com/EvolEcolGroup/tidysdm/commit/5a095f19bc16c1bf1df1778b11c3a6a8ca1ce887) Error on invalid metrics in `optim_thresh()`**
   - *Problem:* the function returned the *string* `"invalid metric"` as
     the threshold.
   - *Test:* new `test_optim_thresh.R` covers valid metrics and invalid

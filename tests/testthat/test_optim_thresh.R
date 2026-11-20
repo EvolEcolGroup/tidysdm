@@ -1,4 +1,5 @@
 test_that("optim_thresh returns thresholds for valid metrics", {
+  # check the return value for maximisation and target sensitivity
   for (this_metric in list("tss_max", "kap_max", c("sens", 0.9))) {
     this_thresh <- optim_thresh(two_class_example$truth,
       two_class_example$Class1,
@@ -10,6 +11,7 @@ test_that("optim_thresh returns thresholds for valid metrics", {
 })
 
 test_that("optim_thresh gives an error for invalid metrics", {
+  # reject unsupported metrics with or without a target
   expect_error(
     optim_thresh(two_class_example$truth, two_class_example$Class1,
       metric = "blah"
@@ -22,12 +24,17 @@ test_that("optim_thresh gives an error for invalid metrics", {
     ),
     "invalid metric"
   )
+
+  # only one metric can be optimised per call
+  # check that several names trigger the metric validation error
   expect_error(
     optim_thresh(two_class_example$truth, two_class_example$Class1,
       metric = c("tss_max", "kap_max", "sens")
     ),
     "invalid metric"
   )
+
+  # check the errors for a non-factor truth and an invalid event level
   expect_error(
     optim_thresh(as.character(two_class_example$truth),
       two_class_example$Class1,
