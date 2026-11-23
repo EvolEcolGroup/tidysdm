@@ -15,7 +15,11 @@ the selected \code{strategy}. For example, if \code{prop = 0.2}, then 5 partitio
 will be created and one of these will be used as the testing set. Set to
 NULL for leave-one-out crossvalidation.}
 
-\item{strategy}{A sampling strategy from \code{spatialsample}}
+\item{strategy}{A sampling strategy from \code{spatialsample}, given either as a
+function (e.g. \code{spatial_block_cv} or \code{spatialsample::spatial_block_cv}) or
+as the name of that function (e.g. \code{"spatial_block_cv"}). A name is
+convenient when the strategy is chosen programmatically, for example from
+a configuration file.}
 
 \item{...}{parameters to be passed to the \code{strategy} function (with the
 exception of \code{v} which is calculated internally based on \code{prop})}
@@ -33,8 +37,14 @@ initial split.
 \examples{
 set.seed(123)
 block_initial <- spatial_initial_split(boston_canopy,
-  prop = 1 / 5, spatial_block_cv
+  prop = 1 / 5, strategy = spatial_block_cv
 )
 testing(block_initial)
 training(block_initial)
+
+# the strategy can also be given by name, e.g. from a configuration file
+cfg <- list(prop = 1 / 5, strategy = "spatial_block_cv")
+block_initial <- spatial_initial_split(boston_canopy,
+  prop = cfg$prop, strategy = cfg$strategy
+)
 }
