@@ -27,7 +27,12 @@ spatial_initial_split(data, prop, strategy, ...)
 
 - strategy:
 
-  A sampling strategy from `spatialsample`
+  A sampling strategy from `spatialsample`, given either as a function
+  (e.g. `spatial_block_cv` or
+  [`spatialsample::spatial_block_cv`](https://spatialsample.tidymodels.org/reference/spatial_block_cv.html))
+  or as the name of that function (e.g. `"spatial_block_cv"`). A name is
+  convenient when the strategy is chosen programmatically, for example
+  from a configuration file.
 
 - ...:
 
@@ -47,7 +52,7 @@ functions to extract the data in each split.
 ``` r
 set.seed(123)
 block_initial <- spatial_initial_split(boston_canopy,
-  prop = 1 / 5, spatial_block_cv
+  prop = 1 / 5, strategy = spatial_block_cv
 )
 testing(block_initial)
 #> Simple feature collection with 153 features and 18 fields
@@ -101,4 +106,10 @@ training(block_initial)
 #> #   mean_temp_morning <dbl>, mean_temp_evening <dbl>, mean_temp <dbl>,
 #> #   mean_heat_index_morning <dbl>, mean_heat_index_evening <dbl>,
 #> #   mean_heat_index <dbl>, geometry <MULTIPOLYGON [US_survey_foot]>
+
+# the strategy can also be given by name, e.g. from a configuration file
+cfg <- list(prop = 1 / 5, strategy = "spatial_block_cv")
+block_initial <- spatial_initial_split(boston_canopy,
+  prop = cfg$prop, strategy = cfg$strategy
+)
 ```

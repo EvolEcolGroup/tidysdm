@@ -74,7 +74,11 @@ NULL for leave-one-out crossvalidation.</p></dd>
 
 
 <dt id="arg-strategy">strategy<a class="anchor" aria-label="anchor" href="#arg-strategy"></a></dt>
-<dd><p>A sampling strategy from <code>spatialsample</code></p></dd>
+<dd><p>A sampling strategy from <code>spatialsample</code>, given either as a
+function (e.g. <code>spatial_block_cv</code> or <code><a href="https://spatialsample.tidymodels.org/reference/spatial_block_cv.html" class="external-link">spatialsample::spatial_block_cv</a></code>) or
+as the name of that function (e.g. <code>"spatial_block_cv"</code>). A name is
+convenient when the strategy is chosen programmatically, for example from
+a configuration file.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -92,7 +96,7 @@ exception of <code>v</code> which is calculated internally based on <code>prop</
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">block_initial</span> <span class="op">&lt;-</span> <span class="fu">spatial_initial_split</span><span class="op">(</span><span class="va">boston_canopy</span>,</span></span>
-<span class="r-in"><span>  prop <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">5</span>, <span class="va">spatial_block_cv</span></span></span>
+<span class="r-in"><span>  prop <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">5</span>, strategy <span class="op">=</span> <span class="va">spatial_block_cv</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">testing</span><span class="op">(</span><span class="va">block_initial</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 153 features and 18 fields</span>
@@ -146,6 +150,12 @@ exception of <code>v</code> which is calculated internally based on <code>prop</
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   mean_temp_morning &lt;dbl&gt;, mean_temp_evening &lt;dbl&gt;, mean_temp &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   mean_heat_index_morning &lt;dbl&gt;, mean_heat_index_evening &lt;dbl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   mean_heat_index &lt;dbl&gt;, geometry &lt;MULTIPOLYGON [US_survey_foot]&gt;</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the strategy can also be given by name, e.g. from a configuration file</span></span></span>
+<span class="r-in"><span><span class="va">cfg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>prop <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">5</span>, strategy <span class="op">=</span> <span class="st">"spatial_block_cv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">block_initial</span> <span class="op">&lt;-</span> <span class="fu">spatial_initial_split</span><span class="op">(</span><span class="va">boston_canopy</span>,</span></span>
+<span class="r-in"><span>  prop <span class="op">=</span> <span class="va">cfg</span><span class="op">$</span><span class="va">prop</span>, strategy <span class="op">=</span> <span class="va">cfg</span><span class="op">$</span><span class="va">strategy</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

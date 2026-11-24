@@ -23,7 +23,7 @@ library(tidysdm)
 #> ✔ infer        1.1.0      ✔ tune         2.1.0 
 #> ✔ modeldata    1.6.0      ✔ workflows    1.3.0 
 #> ✔ parsnip      1.6.1      ✔ workflowsets 1.1.1 
-#> ✔ purrr        1.2.2      ✔ yardstick    1.4.0
+#> ✔ purrr        1.2.2      ✔ yardstick    1.5.0
 #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
 #> ✖ purrr::discard() masks scales::discard()
 #> ✖ dplyr::filter()  masks stats::filter()
@@ -72,7 +72,6 @@ As a background to our presences, we will use the land mask for the
 present, taken from `pastclim`, and cut to cover only Europe:
 
     #> Loading required package: terra
-    #> terra 1.9.50
     #> 
     #> Attaching package: 'terra'
     #> The following object is masked from 'package:tidyr':
@@ -341,21 +340,21 @@ horses_models <-
   )
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 1 of 4 resampling: default_glm
-#> ✔ 1 of 4 resampling: default_glm (436ms)
+#> ✔ 1 of 4 resampling: default_glm (459ms)
 #> i  No tuning parameters. `fit_resamples()` will be attempted
 #> i 2 of 4 resampling: default_gam
-#> ✔ 2 of 4 resampling: default_gam (654ms)
+#> ✔ 2 of 4 resampling: default_gam (667ms)
 #> i 3 of 4 tuning:     default_rf
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
-#> ✔ 3 of 4 tuning:     default_rf (2.7s)
+#> ✔ 3 of 4 tuning:     default_rf (2.8s)
 #> i 4 of 4 tuning:     default_gbm
 #> i Creating pre-processing data to finalize 1 unknown parameter: "mtry"
 #> → A | warning: `early_stop` was reduced to 0.
 #> There were issues with some computations   A: x1
-#> There were issues with some computations   A: x2
 #> There were issues with some computations   A: x3
 #> → B | warning: boyce_cont: only 2 distinct window(s) with presences left, fewer than `min_windows` (3); returning NA. The predictions take too few distinct values for the Boyce index to be informative.
-#> There were issues with some computations   A: x3There were issues with some computations   A: x5   B: x1
+#> There were issues with some computations   A: x3There were issues with some computations   A: x4   B: x1
+#> There were issues with some computations   A: x6   B: x1
 #> There were issues with some computations   A: x6   B: x1
 #> 
 #> ✔ 4 of 4 tuning:     default_gbm (11.9s)
