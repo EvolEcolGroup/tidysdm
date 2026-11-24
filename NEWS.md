@@ -1,4 +1,8 @@
 # `tidysdm` dev
+* `spatial_initial_split()`: `strategy` can now also be given by name (e.g.
+  `"spatial_block_cv"`, from a configuration file), as
+  `spatialsample::spatial_block_cv`, or as a function stored in a variable
+  (#113)
 * `boyce_cont()` gains a `min_windows` argument (default 3): if fewer distinct
   windows are left, it now returns `NA` with a warning, rather than a
   meaningless value (with two windows, the index was always 1 or -1, however
